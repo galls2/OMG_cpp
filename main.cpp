@@ -5,4 +5,5 @@
 int main()
 {
     std::cout << "Hello, OMG in c++!" << std::endl;
+
 }
