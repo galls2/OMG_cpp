@@ -1,3 +1,8 @@
 cmake_minimum_required (VERSION 2.6)
+cmake_policy(SET CMP0048 NEW)
+
 project (OMG_CPP)
-add_executable(OMG main.cpp)
+#LINK_DIRECTORIES(/home/galls2/Desktop/z3/build/) #MAY BE NEEDED :O
+
+add_executable(OMG main.cpp code/parsers/aig_parser.cpp code/parsers/aig_parser.h code/utils/aiger-1.9.9/aigtoaig.o)
+target_link_libraries(OMG libz3.so)
