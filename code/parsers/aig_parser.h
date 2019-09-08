@@ -8,6 +8,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <z3++.h>
 
 enum AigMetadata{
     M = 0, I = 1, L = 2, O = 3, A = 4
@@ -33,7 +34,12 @@ private:
     std::string _aag_path;
 
     std::map<AigMetadata, size_t> _aig_metadata;
+    std::map<std::string, std::string> _ap_to_symb;
+    std::map<std::string, std::string> _symb_to_ap;
 
+    void extract_ap_mapping(const std::vector<std::string>& vector);
+
+    std::map<size_t, z3::expr> get_literal_formulas(const std::vector<std::string>& aag_lines);
 };
 
 
