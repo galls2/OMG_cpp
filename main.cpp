@@ -3,10 +3,10 @@
 //
 #include <iostream>
 #include "z3++.h"
-
+#include "code/parsers/aig_parser.h"
 using namespace z3;
-int main()
-{
+
+void test_z3() {
     std::cout << "Hello, OMG in c++!" << std::endl;
     context c;
 
@@ -24,5 +24,10 @@ int main()
         case sat:     std::cout << "de-Morgan is not valid\n"; break;
         case unknown: std::cout << "unknown\n"; break;
     }
+}
+int main()
+{
+    AigParser p(R"(/home/galls2/Desktop/af_ag.aig)");
+
 
 }

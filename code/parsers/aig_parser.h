@@ -6,6 +6,7 @@
 #define OMG_CPP_AIG_PARSER_H
 
 #include <map>
+#include <vector>
 #include <string>
 
 enum AigMetadata{
@@ -13,18 +14,20 @@ enum AigMetadata{
 };
 
 
+
 class AigParser {
 public:
 
     explicit AigParser(const std::string& aig_path);
     const std::map<AigMetadata, size_t>& get_aig_metadata();
-
+    ~AigParser() = default;
 
 
 
 private:
-    std::string aig_to_aag(const std::string& aig_path0;
-    void read_aag(const std::string& aag_path, std::vector<std::string>& aag_container) const;
+    std::string aig_to_aag(const std::string& aig_path0);
+    void read_aag(std::vector<std::string>& aag_container) const;
+    void extract_metadata(const std::string& first_aag_line);
 
     const std::string _aig_path;
     std::string _aag_path;
