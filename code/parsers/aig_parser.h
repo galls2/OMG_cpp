@@ -15,7 +15,6 @@ enum AigMetadata{
 };
 
 
-
 class AigParser {
 public:
 
@@ -29,13 +28,19 @@ private:
     std::string aig_to_aag(const std::string& aig_path0);
     void read_aag(std::vector<std::string>& aag_container) const;
     void extract_metadata(const std::string& first_aag_line);
+    void extract_literals(const std::vector<std::string>& aag_lines);
+    void dfs(const std::vector<std::string>& lines, size_t first_line, size_t target_lit);
 
     const std::string _aig_path;
     std::string _aag_path;
-
-    std::map<AigMetadata, size_t> _aig_metadata;
+    size_t _first_ap_index;
+    std::map<AigMetadata, size_t> _metadata;
     std::map<std::string, std::string> _ap_to_symb;
     std::map<std::string, std::string> _symb_to_ap;
+    std::vector<size_t> _in_literals;
+    std::vector<size_t> _out_literals;
+    std::vector<size_t> _prev_state_literals;
+    std::vector<size_t> _next_state_literals;
 
     void extract_ap_mapping(const std::vector<std::string>& vector);
 
