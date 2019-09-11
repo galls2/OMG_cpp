@@ -41,6 +41,7 @@ private:
     std::vector<size_t> _out_literals;
     std::vector<size_t> _prev_state_literals;
     std::vector<size_t> _next_state_literals;
+    std::map<size_t, z3::expr> _lit_formulas;
 
     void extract_ap_mapping(const std::vector<std::string>& vector);
 

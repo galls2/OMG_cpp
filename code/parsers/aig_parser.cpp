@@ -28,6 +28,11 @@ AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path)
   std::map<size_t, z3::expr> lit_formulas = get_literal_formulas(file_lines);
 
   std::cout << _metadata[AigMetadata::M] << " " << _metadata[AigMetadata::I]<< std::endl;
+
+  for (const auto & it : _lit_formulas)
+  {
+      std::cout << it.first << ":" << it.second << std::endl;
+  }
 }
 
 void AigParser::extract_literals(const std::vector<std::string>& aag_lines)
@@ -120,17 +125,16 @@ void AigParser::extract_ap_mapping(const std::vector<std::string>& aag_lines)
 
 std::map<size_t, z3::expr> AigParser::get_literal_formulas(const std::vector<std::string> &aag_lines)
 {
-    std::map<size_t, z3::expr> formulas;
     z3::context c;
 
-    formulas.emplace(0, c.bool_val(false));
-    formulas.emplace(1, c.bool_val(true));
-    for (auto lit : _in_literals) formulas.emplace(lit, c.bool_const(std::to_string(lit).data()));
-    for (auto lit : _prev_state_literals) formulas.emplace(lit, c.bool_const(std::to_string(lit).data()));
+    _lit_formulas.insert(std::make_pair(0, c.bool_val(false)));
+    _lit_formulas.insert(std::make_pair(1, c.bool_val(true)));
+    for (auto lit : _in_literals) _lit_formulas.insert(std::make_pair(lit, c.bool_const(std::to_string(lit).data())));
+    for (auto lit : _prev_state_literals) _lit_formulas.insert(std::make_pair(lit, c.bool_const(std::to_string(lit).data())));
 
     size_t first_and_line = _first_ap_index - _metadata[A];
-    for (auto lit : _next_state_literals) dfs(aag_lines, formulas, first_and_line, lit);
-    for (auto lit : _out_literals) dfs(aag_lines, formulas, first_and_line, lit);
+    for (auto lit : _next_state_literals) dfs(aag_lines, _lit_formulas, first_and_line, lit);
+    for (auto lit : _out_literals) dfs(aag_lines, _lit_formulas, first_and_line, lit);
 
 }
 
@@ -140,7 +144,7 @@ void AigParser::dfs(const std::vector<std::string> &lines, std::map<size_t, z3::
 
     if (target_lit % 2 == 1) {
         dfs(lines, formulas, first_line, target_lit - 1); // FOR NOW. DO OPT OF OR HERE!
-        formulas.emplace(target_lit, !formulas.at(target_lit - 1));
+        formulas.insert(std::make_pair(target_lit, !formulas.at(target_lit - 1)));
     } else {
         const std::string &and_line = lines[target_lit];
         std::vector<std::string> parts;
@@ -150,6 +154,6 @@ void AigParser::dfs(const std::vector<std::string> &lines, std::map<size_t, z3::
 
         dfs(lines, formulas, first_line, left_operand);
         dfs(lines, formulas, first_line, right_operand);
-        formulas.emplace(target_lit, formulas.at(left_operand) && formulas.at(right_operand));
+        formulas.insert(std::make_pair(target_lit, formulas.at(left_operand) && formulas.at(right_operand)));
     }
 }
