@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 2.6)
 cmake_policy(SET CMP0048 NEW)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 
 project (OMG_CPP)

@@ -29,7 +29,7 @@ private:
     void read_aag(std::vector<std::string>& aag_container) const;
     void extract_metadata(const std::string& first_aag_line);
     void extract_literals(const std::vector<std::string>& aag_lines);
-    void dfs(const std::vector<std::string>& lines, size_t first_line, size_t target_lit);
+    void dfs(const std::vector<std::string> &lines, std::map<size_t, z3::expr>& formulas, size_t first_line, size_t target_lit) const;
 
     const std::string _aig_path;
     std::string _aag_path;
