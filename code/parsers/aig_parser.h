@@ -36,6 +36,7 @@ private:
     const std::string _aig_path;
     std::string _aag_path;
     size_t _first_ap_index;
+    size_t _first_and_literal;
     std::map<AigMetadata, size_t> _metadata;
     std::map<std::string, std::string> _ap_to_symb;
     std::map<std::string, std::string> _symb_to_ap;

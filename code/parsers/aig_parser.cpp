@@ -91,6 +91,8 @@ AigParser& AigParser::extract_metadata(const std::string& first_aag_line)
     _metadata[O] = std::stoul(components[4]);
     _metadata[A] = std::stoul(components[5]);
 
+    _first_and_literal = (_metadata.at(AigMetadata::I) + _metadata.at(L) + 1) * 2;
+
     return *this;
 }
 
@@ -149,13 +151,20 @@ const AigParser& AigParser::dfs(const std::vector<std::string> &lines, std::map<
     if (formulas.find(target_lit) == formulas.end()) {
         if (target_lit % 2 == 1) {
             dfs(lines, formulas, first_line, target_lit - 1); // FOR NOW. DO OPT OF OR HERE!
-            formulas.insert(std::make_pair(target_lit, !formulas.at(target_lit - 1)));
+            if (formulas[target_lit - 1].is_and())
+            {
+                const size_t and_line_index = first_line + (target_lit - _first_and_literal) / 2;
+                const std::string &and_line = lines[and_line_index];
+
+            }
+            else {
+                formulas.insert(std::make_pair(target_lit, !formulas.at(target_lit - 1)));
+            }
         } else {
-            size_t first_and_literal = (_metadata.at(AigMetadata::I) + _metadata.at(L) + 1) * 2;
-            const size_t and_line_index = first_line + (target_lit - first_and_literal) / 2;
+            const size_t and_line_index = first_line + (target_lit - _first_and_literal) / 2;
             const std::string &and_line = lines[and_line_index];
             std::vector<std::string> parts;
-            split(and_line, ' ', parts);
+            split(and_line, ' ', parts); //      TODO CHANGE HEEEEEEEEEEEEEEEEERE AND EVERYWHERE TO SPLIT_TO
             size_t left_operand = std::stoul(parts[1]);
             size_t right_operand = std::stoul(parts[2]);
 
