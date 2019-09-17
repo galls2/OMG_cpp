@@ -134,6 +134,7 @@ std::map<size_t, z3::expr> AigParser::get_literal_formulas(const std::vector<std
 
 }
 
+
 void AigParser::dfs(const std::vector<std::string> &lines, std::map<size_t, z3::expr>& formulas, size_t first_line, size_t target_lit) {
     auto it = formulas.find(target_lit);
     if (it != formulas.end()) return it->second;
