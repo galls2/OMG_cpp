@@ -1,25 +1,22 @@
 #pragma once
 
 #include <sstream>
+#include <vector>
+#include <array>
+#include <cassert>
+#include <string>
 
-std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems)
-{
-    std::stringstream ss(s);
-    std::string item;
-    while(std::getline(ss, item, delim)) {
-        elems.push_back(item);
-    }
-    return elems;
-}
+std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems);
 
 
-template <typename T, size_t N>
-std::array<T, N> split_to(const std::string& s, char delim, const std::function<size_t(std::string)>& converter)
+template <size_t N>
+std::array<std::string, N> split_to(const std::string& s, char delim)
 {
     std::vector<std::string> items;
     split(s, delim, items);
-    std::array<T, N> arr_to_ret;
+    std::array<std::string, N> arr_to_ret;
     assert(items.size() == N);
-    for (size_t i = 0; i < N; ++i) { arr_to_ret[i] = converter(items[i]); }
+    for (size_t i = 0; i < N; ++i) { arr_to_ret[i] = items[i]; }
     return arr_to_ret;
 }
+

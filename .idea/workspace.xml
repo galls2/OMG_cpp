@@ -14,10 +14,17 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="">
+    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="Adde string_util, finalizing or optimization">
+      <change afterPath="$PROJECT_DIR$/code/utils/string_utils.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/code/utils/version_manager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/parsers/aig_parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/aig_parser.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/parsers/aig_parser.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/aig_parser.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/parsers/ctl_parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/ctl_parser.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/utils/string_utils.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/string_utils.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/utils/version_manager.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/version_manager.h" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -38,11 +45,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/parsers/aig_parser.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-22">
-              <caret line="144" column="1" lean-forward="true" selection-start-line="144" selection-start-column="1" selection-end-line="144" selection-end-column="1" />
+            <state>
               <folding>
                 <element signature="e#40#58#0" expanded="true" />
               </folding>
@@ -51,10 +57,64 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file:///usr/include/c++/5/ext/string_conversions.h">
+        <entry file="file://$PROJECT_DIR$/code/utils/version_manager.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="146">
-              <caret line="64" selection-start-line="64" selection-end-line="64" />
+            <state relative-caret-position="162">
+              <caret line="9" column="56" lean-forward="true" selection-start-line="9" selection-start-column="11" selection-end-line="9" selection-end-column="56" />
+              <folding>
+                <element signature="e#13#27#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.h">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="54">
+              <caret line="3" selection-start-line="3" selection-end-line="3" />
+              <folding>
+                <element signature="e#0#23#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/code/utils/string_utils.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="396">
+              <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
+              <folding>
+                <element signature="e#30#48#0" expanded="true" />
+                <element signature="e#217#227#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/code/utils/string_utils.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="306">
+              <caret line="17" selection-start-line="17" selection-end-line="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/code/utils/version_manager.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="72">
+              <caret line="4" column="9" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="9" />
+              <folding>
+                <element signature="e#41#59#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -62,11 +122,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/parsers/aig_parser.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="194">
-              <caret line="37" column="21" selection-start-line="37" selection-start-column="21" selection-end-line="37" selection-end-column="21" />
-              <folding>
-                <element signature="e#100#114#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="162">
+              <caret line="9" column="16" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -105,6 +162,7 @@
         <option value="Gal Sade &lt;31407570+galls2@users.noreply.github.com&gt;" />
       </list>
     </option>
+    <option name="UPDATE_TYPE" value="REBASE" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
@@ -113,14 +171,19 @@
         <option value="$PROJECT_DIR$/code/main.cpp" />
         <option value="$PROJECT_DIR$/code/aig_parser.h" />
         <option value="$PROJECT_DIR$/code/aig_parser.cpp" />
-        <option value="$PROJECT_DIR$/code/utils/string_utils.h" />
         <option value="$PROJECT_DIR$/main.cpp" />
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
-        <option value="$PROJECT_DIR$/code/parsers/aig_parser.h" />
+        <option value="$PROJECT_DIR$/code/parsers/ctl_parser.cpp" />
+        <option value="$PROJECT_DIR$/code/utils/version_manager.h" />
         <option value="$PROJECT_DIR$/code/parsers/aig_parser.cpp" />
+        <option value="$PROJECT_DIR$/code/parsers/aig_parser.h" />
+        <option value="$PROJECT_DIR$/code/utils/version_manager.cpp" />
+        <option value="$PROJECT_DIR$/code/utils/string_utils.cpp" />
+        <option value="$PROJECT_DIR$/code/utils/string_utils.h" />
       </list>
     </option>
   </component>
+  <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds">
     <option name="y" value="24" />
     <option name="width" value="1920" />
@@ -149,6 +212,12 @@
               <item name="OMG_cpp" type="462c0819:PsiDirectoryNode" />
               <item name="code" type="462c0819:PsiDirectoryNode" />
               <item name="parsers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="OMG_CPP" type="b2602c69:ProjectViewProjectNode" />
+              <item name="OMG_cpp" type="462c0819:PsiDirectoryNode" />
+              <item name="code" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -205,7 +274,7 @@
       <workItem from="1567964420892" duration="882000" />
       <workItem from="1567966973477" duration="615000" />
       <workItem from="1567974803853" duration="2611000" />
-      <workItem from="1568062104823" duration="7368000" />
+      <workItem from="1568062104823" duration="13857000" />
     </task>
     <task id="LOCAL-00001" summary="My first commit!">
       <created>1567197130912</created>
@@ -242,11 +311,25 @@
       <option name="project" value="LOCAL" />
       <updated>1568212012719</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Made API fluent&#10;Bugfixes in aigparser">
+      <created>1568263845393</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1568263845393</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Adde string_util, finalizing or optimization">
+      <created>1568264735777</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1568264735777</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17409000" />
+    <option name="totallyTimeSpent" value="23898000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="24" width="1920" height="1004" extended-state="0" />
@@ -256,14 +339,14 @@
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32844242" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3295711" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32844242" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39954853" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" />
-      <window_info anchor="bottom" id="Messages" order="8" weight="0.32844242" />
+      <window_info active="true" anchor="bottom" id="Messages" order="8" visible="true" weight="0.32844242" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="11" weight="0.3295711" />
@@ -282,32 +365,11 @@
     <MESSAGE value="Commiting to dev" />
     <MESSAGE value="compiling code on VM" />
     <MESSAGE value="refactor aig parser" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor aig parser" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/code/parsers/aig_parser.cpp</url>
-          <line>159</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/code/parsers/aig_parser.cpp</url>
-          <line>158</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Made API fluent&#10;Bugfixes in aigparser" />
+    <MESSAGE value="Adde string_util, finalizing or optimization" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adde string_util, finalizing or optimization" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/code/utils/string_utils.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="7" column="16" selection-start-line="7" selection-start-column="16" selection-end-line="7" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -315,13 +377,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="450">
           <caret line="25" column="22" selection-start-line="25" selection-start-column="22" selection-end-line="25" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="25" selection-start-line="2" selection-start-column="25" selection-end-line="2" selection-end-column="25" />
         </state>
       </provider>
     </entry>
@@ -384,22 +439,76 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.h">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/code/parsers/aig_parser.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="37" column="21" selection-start-line="37" selection-start-column="21" selection-end-line="37" selection-end-column="21" />
-          <folding>
-            <element signature="e#100#114#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="162">
+          <caret line="9" column="16" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/code/parsers/aig_parser.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-22">
-          <caret line="144" column="1" lean-forward="true" selection-start-line="144" selection-start-column="1" selection-end-line="144" selection-end-column="1" />
+        <state>
           <folding>
             <element signature="e#40#58#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/utils/version_manager.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="9" column="56" lean-forward="true" selection-start-line="9" selection-start-column="11" selection-end-line="9" selection-end-column="56" />
+          <folding>
+            <element signature="e#13#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="25" selection-start-line="2" selection-start-column="25" selection-end-line="2" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/utils/version_manager.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="4" column="9" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="9" />
+          <folding>
+            <element signature="e#41#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/utils/string_utils.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/utils/string_utils.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
+          <folding>
+            <element signature="e#30#48#0" expanded="true" />
+            <element signature="e#217#227#0" expanded="true" />
           </folding>
         </state>
       </provider>

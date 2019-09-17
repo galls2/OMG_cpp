@@ -8,7 +8,7 @@
 #include <regex>
 #include "../utils/aiger-1.9.9/aiger.h"
 #include "../utils/string_utils.h"
-
+#include "../utils/version_manager.h"
 #include "aig_parser.h"
 
 
@@ -35,23 +35,20 @@ AigParser& AigParser::extract_literals(const std::vector<std::string>& aag_lines
 {
     for (size_t i = 1; i < 1 + _metadata[I]; ++i)
     {
-        std::vector<std::string> parts;
-        split(aag_lines[i], ' ', parts);
+        std::array<std::string, 2> parts = split_to<2>(aag_lines[i], ' ');
         _in_literals.push_back(std::stoul(parts[0]));
     }
 
     for (size_t i = _metadata[I] + 1; i < 1 + _metadata[L] + _metadata[I]; ++i)
     {
-        std::vector<std::string> parts;
-        split(aag_lines[i], ' ', parts);
+        std::array<std::string, 2> parts = split_to<2>(aag_lines[i], ' ');
         _prev_state_literals.push_back(std::stoul(parts[0]));
         _next_state_literals.push_back(std::stoul(parts[1]));
     }
 
     for (size_t i = _metadata[I] + _metadata[L] + 1; i < 1 + _metadata[L] + _metadata[O] + _metadata[I]; ++i)
     {
-        std::vector<std::string> parts;
-        split(aag_lines[i], ' ', parts);
+        std::array<std::string, 2> parts = split_to<2>(aag_lines[i], ' ');
         _out_literals.push_back(std::stoul(parts[0]));
     }
 
@@ -82,8 +79,7 @@ const AigParser& AigParser::read_aag(std::vector<std::string>& aag_container) co
 
 AigParser& AigParser::extract_metadata(const std::string& first_aag_line)
 {
-    std::vector<std::string> components;
-    split(first_aag_line, ' ', components);
+    std::array<std::string, 6> components = split_to<6>(first_aag_line, ' ');
     assert(components[0] == std::string("aag"));
     _metadata[M] = std::stoul(components[1]);
     _metadata[I] = std::stoul(components[2]);
@@ -116,8 +112,7 @@ AigParser& AigParser::extract_ap_mapping(const std::vector<std::string>& aag_lin
         if (std::regex_match(aag_line, ap_line_regex))
         {
             if (!found_ap) { first_ap_index = i; found_ap = true; }
-            std::vector<std::string> parts;
-            split(aag_line, ' ', parts);
+            std::array<std::string, 2> parts =  split_to<2>(aag_line, ' ');
             _ap_to_symb[parts[1]] = parts[0];
             _symb_to_ap[parts[0]] = parts[1];
         }
@@ -151,7 +146,7 @@ const AigParser& AigParser::dfs(const std::vector<std::string> &lines, std::map<
     if (formulas.find(target_lit) == formulas.end()) {
         if (target_lit % 2 == 1) {
             dfs(lines, formulas, first_line, target_lit - 1); // FOR NOW. DO OPT OF OR HERE!
-            if (formulas[target_lit - 1].is_and())
+            if (formulas.at(target_lit - 1).is_and())
             {
                 const size_t and_line_index = first_line + (target_lit - _first_and_literal) / 2;
                 const std::string &and_line = lines[and_line_index];
@@ -163,8 +158,7 @@ const AigParser& AigParser::dfs(const std::vector<std::string> &lines, std::map<
         } else {
             const size_t and_line_index = first_line + (target_lit - _first_and_literal) / 2;
             const std::string &and_line = lines[and_line_index];
-            std::vector<std::string> parts;
-            split(and_line, ' ', parts); //      TODO CHANGE HEEEEEEEEEEEEEEEEERE AND EVERYWHERE TO SPLIT_TO
+            std::array<std::string, 3> parts = split_to<3>(and_line, ' ');
             size_t left_operand = std::stoul(parts[1]);
             size_t right_operand = std::stoul(parts[2]);
 

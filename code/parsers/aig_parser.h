@@ -7,6 +7,7 @@
 
 #include <map>
 #include <vector>
+#include <array>
 #include <string>
 #include <z3++.h>
 

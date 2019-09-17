@@ -6,5 +6,5 @@ set(CMAKE_CXX_STANDARD 17)
 project (OMG_CPP)
 #LINK_DIRECTORIES(/home/galls2/Desktop/z3/build/) #MAY BE NEEDED :O
 
-add_executable(OMG main.cpp code/parsers/aig_parser.cpp code/parsers/aig_parser.h)
+add_executable(OMG main.cpp code/parsers/aig_parser.cpp code/parsers/aig_parser.h code/utils/version_manager.cpp code/utils/string_utils.cpp)
 target_link_libraries(OMG libz3.so)
