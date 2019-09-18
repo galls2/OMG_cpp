@@ -3,7 +3,9 @@
 //
 #include <iostream>
 #include "z3++.h"
-#include "code/parsers/aig_parser.h"
+#include <parsers/aig_parser.h>
+#include <parsers/ctl_parser.h>
+#include <parsers/lexer.h>
 using namespace z3;
 
 void test_z3() {
@@ -27,7 +29,13 @@ void test_z3() {
 }
 int main()
 {
-    AigParser p(R"(/home/galls2/Desktop/af_ag.aig)");
+//    AigParser p(R"(/home/galls2/Desktop/af_ag.aig)");
 
-
+    Lexer lexer;
+    auto res = lexer.lex("AG(req1<0> & ack0 -> AX ack1)");
+    for (const auto &r : res)
+    {
+        std::cout << r << ".";
+    }
+    std::cout << std::endl;
 }

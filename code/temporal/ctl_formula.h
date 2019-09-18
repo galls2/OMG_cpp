@@ -1,3 +1,7 @@
+#include <utility>
+
+#include <utility>
+
 #pragma once
 #include <vector>
 #include <string>
@@ -16,8 +20,8 @@ enum class LogicalOperator
 class CtlFormula
 {
 public:
-  CtlFormula(const std::vector<FormulaComponent>& data, const std::vector<std::unique_ptr<CtlFormula>>& operands) :
-    _data(data), _operands(std::move(operands)) {}
+  CtlFormula(std::vector<FormulaComponent> data, std::vector<std::unique_ptr<CtlFormula>> operands) :
+    _data(std::move(data)), _operands(std::move(operands)) {}
 
 private:
   std::vector<FormulaComponent> _data;
