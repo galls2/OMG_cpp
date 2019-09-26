@@ -94,7 +94,7 @@ AigParser& AigParser::extract_metadata(const std::string& first_aag_line)
 
 
 
-const std::map<AigMetadata, size_t> &AigParser::get_aig_metadata()
+const std::unordered_map<AigMetadata, size_t, std::hash<size_t>> &AigParser::get_aig_metadata()
 {
     return _metadata;
 }
@@ -141,7 +141,7 @@ AigParser& AigParser::calc_literal_formulas(const std::vector<std::string> &aag_
     return *this;
 }
 
-const AigParser& AigParser::dfs(const std::vector<std::string> &lines, std::map<size_t, z3::expr>& formulas, size_t first_line, size_t target_lit) const
+const AigParser& AigParser::dfs(const std::vector<std::string> &lines, std::unordered_map<size_t, z3::expr>& formulas, size_t first_line, size_t target_lit) const
 {
     if (formulas.find(target_lit) == formulas.end()) {
         if (target_lit % 2 == 1) {

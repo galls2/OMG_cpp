@@ -15,6 +15,10 @@ public:
     explicit Token(std::string data) : _data(std::move(data)) {}
     explicit Token(char data) : _data(std::string(1, data)) {}
     std::string get_data() const { return _data; }
+    friend bool operator<(const Token& l, const Token& r)
+    {
+        return l < r;
+    }
     friend std::ostream& operator<<(std::ostream& os, const Token& token);
 private:
     std::string _data;

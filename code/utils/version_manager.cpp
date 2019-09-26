@@ -3,10 +3,11 @@
 //
 
 #include <cassert>
+#include <unordered_map>
 #include "version_manager.h"
 #include "string_utils.h"
 
-std::map<std::string, size_t> VersionManager::_copies_counter = {};
+std::unordered_map<std::string, size_t> VersionManager::_copies_counter = {};
 
 std::string VersionManager::new_version(const std::string &orig_name)
 {

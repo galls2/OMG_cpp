@@ -38,4 +38,6 @@ int main()
         std::cout << r << ".";
     }
     std::cout << std::endl;
+
+
 }

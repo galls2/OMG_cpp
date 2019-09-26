@@ -22,7 +22,7 @@ std::vector<Token> Lexer::lex(const std::string &input) const {
             continue;
         }
 
-        if (input[index] == '-' && input[index+1] == '>')
+        if (input.compare(index, 2, "->") == 0)
         {
             tokens.emplace_back(Token("->"));
             index += 2;

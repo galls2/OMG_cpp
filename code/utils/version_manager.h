@@ -1,5 +1,5 @@
 #pragma once
-#include <map>
+#include <unordered_map>
 #include <string>
 
 class VersionManager
@@ -7,5 +7,5 @@ class VersionManager
 public:
     static std::string new_version(const std::string& orig_name);
 private:
-    static std::map<std::string, size_t> _copies_counter;
+    static std::unordered_map<std::string, size_t> _copies_counter;
 };
