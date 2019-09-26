@@ -12,6 +12,8 @@
 class Token
 {
 public:
+    Token() : _data("") {}
+
     explicit Token(std::string data) : _data(std::move(data)) {}
     explicit Token(char data) : _data(std::string(1, data)) {}
     std::string get_data() const { return _data; }

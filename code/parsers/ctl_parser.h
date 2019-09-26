@@ -1,3 +1,5 @@
+#include <utility>
+
 #pragma once
 #include <string>
 #include <map>
@@ -10,7 +12,7 @@
 #include <experimental/optional>
 #include <temporal/ctl_formula.h>
 #include "lexer.h"
-
+#include <utils/omg_exception.h>
 
 class ACtlParser
 {
@@ -26,7 +28,7 @@ typedef size_t State;
 
 struct ActionTable
 {
-    enum class LrAction { SHIFT, REDUCE };
+    enum class LrAction { SHIFT, REDUCE, ACCEPT };
     struct LrTableEntry{
         LrAction _action;
         size_t _index;
@@ -73,10 +75,11 @@ public:
   typedef std::pair<VarName, std::vector<GrammarRuleEntity>> GrammarRule;
   typedef std::vector<GrammarRule> Grammar;
 
-  LR1CtlParser(Grammar grammar, ActionTable lr_table, GotoTable goto_table) :
-  _grammar(std::move(grammar)), _action_table(std::move(lr_table)), _goto_table(goto_table) {}
+  LR1CtlParser(Grammar grammar, ActionTable action_table, GotoTable goto_table) :
+  _grammar(std::move(grammar)), _action_table(std::move(action_table)), _goto_table(std::move(goto_table)) {}
 
   virtual std::unique_ptr<CtlFormula> parse(const std::vector<Token>& formula_tokens) override;
+    virtual ~LR1CtlParser() {}
 private:
     Grammar _grammar;
     ActionTable _action_table;
@@ -84,3 +87,4 @@ private:
     std::stack<std::pair<State, GrammarRuleEntity>> _parse_stack;
     std::stack<CtlFormula> _formula_stack;
 };
+

@@ -6,6 +6,7 @@
 #include <parsers/aig_parser.h>
 #include <parsers/ctl_parser.h>
 #include <parsers/lexer.h>
+#include <parsers/ctl_parser_data.h>
 using namespace z3;
 
 void test_z3() {
@@ -39,5 +40,7 @@ int main()
     }
     std::cout << std::endl;
 
+
+    LR1CtlParser parser(grammar, ActionTable(action_table_t), GotoTable(goto_table_t));
 
 }

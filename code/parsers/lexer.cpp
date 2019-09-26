@@ -16,9 +16,33 @@ std::vector<Token> Lexer::lex(const std::string &input) const {
     while (index < input.length())
     {
         if (input[index] == ' ') { ++index; continue; }
-        if (in_collection(input[index], {'(', ')', '|', '~', '!', '&', 'A', 'E', 'F', 'G', 'U', 'W', 'R', 'V', 'X'}))
+        if (in_collection(input[index], {'(', ')', 'A', 'E', 'F', 'G', 'U', 'W', 'R', 'X'}))
         {
             tokens.emplace_back(input[index++]);
+            continue;
+        }
+        if (input[index] == '|')
+        {
+            ++index;
+            tokens.emplace_back("OR");
+            continue;
+        }
+        if (input[index] == '&')
+        {
+            ++index;
+            tokens.emplace_back("AND");
+            continue;
+        }
+        if (in_collection(input[index], {'~', '!'}))
+        {
+            ++index;
+            tokens.emplace_back("NOT");
+            continue;
+        }
+        if (input[index] == '^')
+        {
+            ++index;
+            tokens.emplace_back("XOR");
             continue;
         }
 
