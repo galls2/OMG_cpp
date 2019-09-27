@@ -15,9 +15,11 @@ std::unique_ptr<CtlFormula> LR1CtlParser::parse(const std::vector<Token> &formul
         if (!action_table_entry_opt)
             throw std::runtime_error("Parsing failed!");
         ActionTable::LrTableEntry action_table_entry = action_table_entry_opt.value();
+        std::cout << action_table_entry << std::endl;
         if (action_table_entry.is_shift())
         {
-            _parse_stack.push(std::make_pair(current_state, current_token));
+            State next_state = action_table_entry.get_index();
+            _parse_stack.push(std::make_pair(next_state, current_token));
             ++current_token_index;
         }
         else

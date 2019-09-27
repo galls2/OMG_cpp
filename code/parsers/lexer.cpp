@@ -48,7 +48,7 @@ std::vector<Token> Lexer::lex(const std::string &input) const {
 
         if (input.compare(index, 2, "->") == 0)
         {
-            tokens.emplace_back(Token("->"));
+            tokens.emplace_back("ARROW");
             index += 2;
             continue;
         }
@@ -59,7 +59,7 @@ std::vector<Token> Lexer::lex(const std::string &input) const {
             ++count_to_delim;
         }
 
-        Token atomic_token(input.substr(index, count_to_delim));
+        Token atomic_token(input.substr(index, count_to_delim), true);
         tokens.emplace_back(atomic_token);
         index += count_to_delim;
 

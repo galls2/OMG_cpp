@@ -1,11 +1,8 @@
-#include <utility>
-
-#include <utility>
-
 #pragma once
 #include <vector>
 #include <string>
 #include <memory>
+#include <utility>
 
 class FormulaComponent{};
 enum class PathQuantifier

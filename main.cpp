@@ -7,27 +7,27 @@
 #include <parsers/ctl_parser.h>
 #include <parsers/lexer.h>
 #include <parsers/ctl_parser_data.h>
-using namespace z3;
-
-void test_z3() {
-    std::cout << "Hello, OMG in c++!" << std::endl;
-    context c;
-
-    expr x = c.bool_const("x");
-    expr y = c.bool_const("y");
-    expr conjecture = (!(x && y)) == (!x || !y);
-
-    solver s(c);
-    // adding the negation of the conjecture as a constraint.
-    s.add(!conjecture);
-    std::cout << s << "\n";
-    std::cout << s.to_smt2() << "\n";
-    switch (s.check()) {
-        case unsat:   std::cout << "de-Morgan is valid\n"; break;
-        case sat:     std::cout << "de-Morgan is not valid\n"; break;
-        case unknown: std::cout << "unknown\n"; break;
-    }
-}
+//using namespace z3;
+//
+//void test_z3() {
+//    std::cout << "Hello, OMG in c++!" << std::endl;
+//    context c;
+//
+//    expr x = c.bool_const("x");
+//    expr y = c.bool_const("y");
+//    expr conjecture = (!(x && y)) == (!x || !y);
+//
+//    solver s(c);
+//    // adding the negation of the conjecture as a constraint.
+//    s.add(!conjecture);
+//    std::cout << s << "\n";
+//    std::cout << s.to_smt2() << "\n";
+//    switch (s.check()) {
+//        case unsat:   std::cout << "de-Morgan is valid\n"; break;
+//        case sat:     std::cout << "de-Morgan is not valid\n"; break;
+//        case unknown: std::cout << "unknown\n"; break;
+//    }
+//}
 int main()
 {
 //    AigParser p(R"(/home/galls2/Desktop/af_ag.aig)");
@@ -41,6 +41,6 @@ int main()
     std::cout << std::endl;
 
 
-    LR1CtlParser parser(grammar, ActionTable(action_table_t), GotoTable(goto_table_t));
-
+    LR1CtlParser parser(CtlParserData::grammar_ctl, ActionTable(CtlParserData::action_table_ctl_parser), GotoTable(CtlParserData::goto_table_ctl_parser));
+    parser.parse(res);
 }

@@ -1,6 +1,5 @@
-#include <utility>
-
 #pragma once
+
 #include <string>
 #include <map>
 #include <memory>
@@ -11,8 +10,8 @@
 #include <vector>
 #include <experimental/optional>
 #include <temporal/ctl_formula.h>
-#include "lexer.h"
 #include <utils/omg_exception.h>
+#include "lexer.h"
 
 class ACtlParser
 {
@@ -36,15 +35,22 @@ struct ActionTable
         size_t get_index() const { return _index; }
         bool is_shift() const { return _action == LrAction::SHIFT; }
         bool is_reduce() const { return _action == LrAction::REDUCE; }
+        friend std::ostream& operator<<(std::ostream& os, const LrTableEntry& entry)
+        {
+            os << ((entry._action == LrAction::SHIFT) ? ("SHIFT") : (entry._action == LrAction::REDUCE ? "REDUCE" : "ACCEPT")) << entry._index;
+            return os;
+        }
     };
 
     typedef std::map<std::pair<State, Token>, LrTableEntry> ActionTable_t;
 
     std::experimental::optional<LrTableEntry> get_action(const State& state, const Token& token) const
     {
-        if (_table_data.find(std::make_pair(state, token)) != _table_data.end())
-            return std::experimental::optional<LrTableEntry>(_table_data.at(std::make_pair(state, token)));
-        return std::experimental::optional<LrTableEntry>();
+       if (_table_data.find(std::make_pair(state, token.get_token_type())) != _table_data.end())
+       {
+            return std::experimental::optional<LrTableEntry>(_table_data.at(std::make_pair(state, token.get_token_type())));
+       }
+       else return std::experimental::optional<LrTableEntry>();
     }
 
     explicit ActionTable(ActionTable_t table_data) : _table_data(std::move(table_data)) {}
@@ -71,6 +77,7 @@ private:
 
 class LR1CtlParser : public ACtlParser
 {
+
 public:
   typedef std::pair<VarName, std::vector<GrammarRuleEntity>> GrammarRule;
   typedef std::vector<GrammarRule> Grammar;
