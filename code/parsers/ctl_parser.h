@@ -35,6 +35,8 @@ struct ActionTable
         size_t get_index() const { return _index; }
         bool is_shift() const { return _action == LrAction::SHIFT; }
         bool is_reduce() const { return _action == LrAction::REDUCE; }
+        bool is_accept() const { return _action == LrAction::ACCEPT; }
+
         friend std::ostream& operator<<(std::ostream& os, const LrTableEntry& entry)
         {
             os << ((entry._action == LrAction::SHIFT) ? ("SHIFT") : (entry._action == LrAction::REDUCE ? "REDUCE" : "ACCEPT")) << entry._index;

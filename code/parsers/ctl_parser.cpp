@@ -10,7 +10,7 @@ std::unique_ptr<CtlFormula> LR1CtlParser::parse(const std::vector<Token> &formul
     while (!_parse_stack.empty())
     {
         State current_state = _parse_stack.top().first;
-        Token current_token = formula_tokens[current_token_index];
+        Token current_token = current_token_index < formula_tokens.size() ? formula_tokens[current_token_index] : Token("$");
         auto action_table_entry_opt = _action_table.get_action(current_state, current_token);
         if (!action_table_entry_opt)
             throw std::runtime_error("Parsing failed!");
@@ -22,9 +22,8 @@ std::unique_ptr<CtlFormula> LR1CtlParser::parse(const std::vector<Token> &formul
             _parse_stack.push(std::make_pair(next_state, current_token));
             ++current_token_index;
         }
-        else
+        else if (action_table_entry.is_reduce())
         {
-            assert(action_table_entry.is_reduce());
             GrammarRule& grammar_rule = _grammar[action_table_entry.get_index()];
             size_t rule_result_length = grammar_rule.second.size();
             VarName var_derived = grammar_rule.first;
@@ -36,6 +35,9 @@ std::unique_ptr<CtlFormula> LR1CtlParser::parse(const std::vector<Token> &formul
             _parse_stack.push(std::make_pair(new_state, var_derived));
 
             std::cout<< "Rule " << action_table_entry.get_index() << " was used!" << std::endl;
+        } else
+        {
+            assert (action_table_entry.is_accept());
 
         }
 
