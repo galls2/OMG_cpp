@@ -87,13 +87,18 @@ public:
   LR1CtlParser(Grammar grammar, ActionTable action_table, GotoTable goto_table) :
   _grammar(std::move(grammar)), _action_table(std::move(action_table)), _goto_table(std::move(goto_table)) {}
 
-  virtual std::unique_ptr<CtlFormula> parse(const std::vector<Token>& formula_tokens) override;
-    virtual ~LR1CtlParser() {}
+    std::unique_ptr<CtlFormula> parse(const std::vector<Token>& formula_tokens) override;
+    virtual ~LR1CtlParser() = default;
+
 private:
+
+    void handle_formula_stack(size_t rule_used, const std::vector<GrammarRuleEntity>& taken_out);
+    void get_operands_from_formula_stack(size_t num_operands, std::vector<std::unique_ptr<CtlFormula>>& to_fill);
+
     Grammar _grammar;
     ActionTable _action_table;
     GotoTable _goto_table;
     std::stack<std::pair<State, GrammarRuleEntity>> _parse_stack;
-    std::stack<CtlFormula> _formula_stack;
+    std::stack<std::unique_ptr<CtlFormula>> _formula_stack;
 };
 
