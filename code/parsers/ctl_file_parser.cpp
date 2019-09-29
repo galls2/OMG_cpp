@@ -60,7 +60,7 @@ FormulaChunk CtlFileParser::parse_raw_formula_chunk(const CtlFileParser::RawForm
     if (!is_multiple_properties)
     {
         std::string raw_formula;
-        for (size_t line_index = first_non_comment_line; line_index < raw_formula_chunk.size(); ++first_non_comment_line)
+        for (size_t line_index = first_non_comment_line; line_index < raw_formula_chunk.size(); ++line_index)
         {
             raw_formula.append(raw_formula_chunk[line_index]);
         }
