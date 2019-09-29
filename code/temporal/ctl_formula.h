@@ -11,6 +11,7 @@ public:
     _data(std::move(data)), _operands(std::move(operands)) {}
 
     std::string get_data() const { return _data; }
+    std::string to_string() const;
 private:
   std::string _data;
   std::vector<std::unique_ptr<CtlFormula>> _operands;

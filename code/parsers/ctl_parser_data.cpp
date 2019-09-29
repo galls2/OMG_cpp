@@ -2,6 +2,7 @@
 // Created by galls2 on 26/09/19.
 //
 #include "ctl_parser_data.h"
+
 /* Auto generated code starts here */
 ActionTable::ActionTable_t CtlParserData::action_table_ctl_parser = {
           { std::make_pair(0, Token("AP")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 2) }
@@ -158,25 +159,25 @@ ActionTable::ActionTable_t CtlParserData::action_table_ctl_parser = {
         , { std::make_pair(26, Token("A")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 6) }
         , { std::make_pair(26, Token("E")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 7) }
         , { std::make_pair(26, Token("(")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 26) }
-        , { std::make_pair(27, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 2) }
-        , { std::make_pair(27, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 2) }
-        , { std::make_pair(27, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 2) }
+        , { std::make_pair(27, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 8) }
+        , { std::make_pair(27, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 9) }
+        , { std::make_pair(27, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 10) }
         , { std::make_pair(27, Token("ARROW")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 2) }
         , { std::make_pair(27, Token("$")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 2) }
-        , { std::make_pair(28, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 8) }
-        , { std::make_pair(28, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 3) }
-        , { std::make_pair(28, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 3) }
-        , { std::make_pair(28, Token("ARROW")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 11) }
+        , { std::make_pair(28, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 3) }
+        , { std::make_pair(28, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 9) }
+        , { std::make_pair(28, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 10) }
+        , { std::make_pair(28, Token("ARROW")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 3) }
         , { std::make_pair(28, Token("$")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 3) }
-        , { std::make_pair(29, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 8) }
-        , { std::make_pair(29, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 9) }
-        , { std::make_pair(29, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 10) }
-        , { std::make_pair(29, Token("ARROW")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 11) }
+        , { std::make_pair(29, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 4) }
+        , { std::make_pair(29, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 4) }
+        , { std::make_pair(29, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 10) }
+        , { std::make_pair(29, Token("ARROW")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 4) }
         , { std::make_pair(29, Token("$")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 4) }
-        , { std::make_pair(30, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 5) }
-        , { std::make_pair(30, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 5) }
-        , { std::make_pair(30, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 5) }
-        , { std::make_pair(30, Token("ARROW")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 5) }
+        , { std::make_pair(30, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 5	) }
+        , { std::make_pair(30, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 9) }
+        , { std::make_pair(30, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 10) }
+        , { std::make_pair(30, Token("ARROW")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 11) }
         , { std::make_pair(30, Token("$")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 5) }
         , { std::make_pair(31, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 8) }
         , { std::make_pair(31, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 9) }
@@ -299,31 +300,31 @@ ActionTable::ActionTable_t CtlParserData::action_table_ctl_parser = {
         , { std::make_pair(53, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 10) }
         , { std::make_pair(53, Token("ARROW")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 11) }
         , { std::make_pair(53, Token("$")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 8) }
-        , { std::make_pair(54, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 2) }
-        , { std::make_pair(54, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 2) }
-        , { std::make_pair(54, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 2) }
+        , { std::make_pair(54, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 33) }
+        , { std::make_pair(54, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 34) }
+        , { std::make_pair(54, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 35) }
         , { std::make_pair(54, Token("ARROW")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 2) }
         , { std::make_pair(54, Token("U")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 2) }
         , { std::make_pair(54, Token("W")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 2) }
         , { std::make_pair(54, Token("R")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 2) }
-        , { std::make_pair(55, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 33) }
-        , { std::make_pair(55, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 3) }
-        , { std::make_pair(55, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 3) }
-        , { std::make_pair(55, Token("ARROW")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 36) }
+        , { std::make_pair(55, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 3) }
+        , { std::make_pair(55, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 34) }
+        , { std::make_pair(55, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 35) }
+        , { std::make_pair(56, Token("ARROW")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 3) }
         , { std::make_pair(55, Token("U")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 3) }
         , { std::make_pair(55, Token("W")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 3) }
         , { std::make_pair(55, Token("R")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 3) }
-        , { std::make_pair(56, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 33) }
-        , { std::make_pair(56, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 34) }
-        , { std::make_pair(56, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 4) }
-        , { std::make_pair(56, Token("ARROW")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 36) }
+        , { std::make_pair(56, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 4) }
+        , { std::make_pair(56, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 4) }
+        , { std::make_pair(56, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 35) }
+        , { std::make_pair(56, Token("ARROW")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 4) }
         , { std::make_pair(56, Token("U")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 4) }
         , { std::make_pair(56, Token("W")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 4) }
         , { std::make_pair(56, Token("R")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 4) }
         , { std::make_pair(57, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 5) }
-        , { std::make_pair(57, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 5) }
-        , { std::make_pair(57, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 5) }
-        , { std::make_pair(57, Token("ARROW")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 5) }
+        , { std::make_pair(57, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 34) }
+        , { std::make_pair(57, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 35) }
+        , { std::make_pair(57, Token("ARROW")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 36) }
         , { std::make_pair(57, Token("U")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 5) }
         , { std::make_pair(57, Token("W")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 5) }
         , { std::make_pair(57, Token("R")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 5) }
@@ -346,25 +347,25 @@ ActionTable::ActionTable_t CtlParserData::action_table_ctl_parser = {
         , { std::make_pair(60, Token("U")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 17) }
         , { std::make_pair(60, Token("W")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 17) }
         , { std::make_pair(60, Token("R")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 17) }
-        , { std::make_pair(61, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 2) }
-        , { std::make_pair(61, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 2) }
-        , { std::make_pair(61, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 2) }
+        , { std::make_pair(61, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 45) }
+        , { std::make_pair(61, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 46) }
+        , { std::make_pair(61, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 47) }
         , { std::make_pair(61, Token("ARROW")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 2) }
         , { std::make_pair(61, Token(")")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 2) }
-        , { std::make_pair(62, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 45) }
-        , { std::make_pair(62, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 3) }
-        , { std::make_pair(62, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 3) }
-        , { std::make_pair(62, Token("ARROW")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 48) }
+        , { std::make_pair(62, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 3) }
+        , { std::make_pair(62, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 46) }
+        , { std::make_pair(62, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 47) }
+        , { std::make_pair(62, Token("ARROW")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 3) }
         , { std::make_pair(62, Token(")")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 3) }
-        , { std::make_pair(63, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 45) }
-        , { std::make_pair(63, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 46) }
-        , { std::make_pair(63, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 4) }
-        , { std::make_pair(63, Token("ARROW")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 48) }
+        , { std::make_pair(63, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 4) }
+        , { std::make_pair(63, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 4) }
+        , { std::make_pair(63, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 47) }
+        , { std::make_pair(63, Token("ARROW")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 4) }
         , { std::make_pair(63, Token(")")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 4) }
         , { std::make_pair(64, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 5) }
-        , { std::make_pair(64, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 5) }
-        , { std::make_pair(64, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 5) }
-        , { std::make_pair(64, Token("ARROW")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 5) }
+        , { std::make_pair(64, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 46) }
+        , { std::make_pair(64, Token("AND")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 47) }
+        , { std::make_pair(64, Token("ARROW")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 48) }
         , { std::make_pair(64, Token(")")), ActionTable::LrTableEntry(ActionTable::LrAction::REDUCE, 5) }
         , { std::make_pair(65, Token("XOR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 45) }
         , { std::make_pair(65, Token("OR")), ActionTable::LrTableEntry(ActionTable::LrAction::SHIFT, 46) }
@@ -459,8 +460,9 @@ GotoTable::GotoTable_t CtlParserData::goto_table_ctl_parser = {
         , { std::make_pair(66, 'S'), 69  }
         , { std::make_pair(66, 'P'), 25  }
 };
-
+//f
 /* Auto generated code ends here */
+
 
 
 LR1CtlParser::Grammar CtlParserData::grammar_ctl = {

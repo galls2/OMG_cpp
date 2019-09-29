@@ -33,9 +33,9 @@ int main()
 //    AigParser p(R"(/home/galls2/Desktop/af_ag.aig)");
 
     Lexer lexer;
-    auto res = lexer.lex("AG ( p -> q)");
+ //   auto res = lexer.lex("AG ( p -> q)");
 
-//    auto res = lexer.lex("AG(req1<0> & ack0 -> AX ack1)");
+    auto res = lexer.lex("AG(req1<0> & ack0 -> AX ack1)");
     for (const auto &r : res)
     {
         std::cout << r << ".";
@@ -45,5 +45,5 @@ int main()
 
     LR1CtlParser parser(CtlParserData::grammar_ctl, ActionTable(CtlParserData::action_table_ctl_parser), GotoTable(CtlParserData::goto_table_ctl_parser));
     std::unique_ptr<CtlFormula> formula = parser.parse(res);
-    formula->
+    std::cout << formula->to_string() <<  std::endl;
 }
