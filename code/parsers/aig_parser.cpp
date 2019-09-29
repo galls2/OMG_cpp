@@ -19,7 +19,9 @@ AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path)
   std::vector<std::string> file_lines;
   read_aag(file_lines);
 
-  extract_metadata(file_lines[0]).extract_ap_mapping(file_lines).extract_literals(file_lines);
+  extract_metadata(file_lines[0]);
+  extract_ap_mapping(file_lines);
+  extract_literals(file_lines);
 
   calc_literal_formulas(file_lines);
 
