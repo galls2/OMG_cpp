@@ -23,14 +23,8 @@ AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path)
   extract_ap_mapping(file_lines);
   extract_literals(file_lines);
 
-  calc_literal_formulas(file_lines);
-
-  std::cout << _metadata[AigMetadata::M] << " " << _metadata[AigMetadata::I]<< std::endl;
-
-  for (const auto & it : _lit_formulas)
-  {
-      std::cout << it.first << ":" << it.second << std::endl;
-  }
+  std::unordered_map<size_t, z3::expr> lit_formulas = calc_literal_formulas(file_lines);
+  replace_variables(lit_formulas)
 }
 
 AigParser& AigParser::extract_literals(const std::vector<std::string>& aag_lines)
@@ -170,4 +164,14 @@ const AigParser& AigParser::dfs(const std::vector<std::string> &lines, std::unor
         }
     }
     return *this;
+}
+
+KripkeStructure AigParser::to_kripke() {
+    if (_kripke) return _kripke.value();
+
+
+
+// Don't forget to set the new kripke structure to _kripke
+
+
 }
