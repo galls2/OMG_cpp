@@ -8,6 +8,7 @@
 #include <parsers/lexer.h>
 #include <parsers/ctl_parser_data.h>
 #include <parsers/ctl_file_parser.h>
+#include <utils/aiger-1.9.9/aig_to_aag.h>
 //using namespace z3;
 //
 //void test_z3() {
@@ -30,6 +31,22 @@
 //    }
 //}
 
+void test_sub() {
+    z3::context c;
+
+    z3::expr x = c.bool_const("x");
+    z3::expr y = c.bool_const("y");
+    z3:: expr f = x && y;
+    Z3_ast from[]= {x};
+    Z3_ast to[] = {y};
+
+    z3::expr new_f(c);
+    new_f = z3::to_expr(c, Z3_substitute(c, f, 1, from, to));
+    std::cout << f << std::endl;
+    std::cout << new_f << std::endl;
+}
+
+
 void test_parser()
 {
     Lexer lexer;
@@ -47,10 +64,9 @@ void test_parser()
     std::unique_ptr<CtlFormula> formula = parser.parse(res);
     std::cout << formula->to_string() <<  std::endl;
 }
-int main()
-{
-//    AigParser p(R"(/home/galls2/Desktop/af_ag.aig)");
 
+void test_ctl_file_parser()
+{
     CtlFileParser ctl_file_parser;
     std::vector<FormulaChunk> formula_chunks;
     ctl_file_parser.parse_ctl_file("/home/galls2/Desktop/spm.ctl", formula_chunks);
@@ -60,5 +76,10 @@ int main()
         for (const auto& formula : chunk.get_formulas())
             std::cout << formula->to_string() << std::endl;
     }
- //   CtlFileParser f2(".home/galls2/Desktop/spm.ctl");
+}
+int main()
+{
+//    AigParser p(R"(/home/galls2/Desktop/af_ag.aig)");
+    test_sub();
+//    auto res = aig_to_aag("/home/galls2/Desktop/af_ag.aig");
 }

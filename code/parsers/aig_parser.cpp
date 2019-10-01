@@ -3,14 +3,16 @@
 //
 #include <fstream>
 #include <vector>
+#include <iterator>
 #include <iostream>
 #include <cassert>
 #include <regex>
-#include "../utils/aiger-1.9.9/aiger.h"
-#include "../utils/string_utils.h"
-#include "../utils/version_manager.h"
+#include <functional>
+#include <algorithm>
+#include <utils/aiger-1.9.9/aiger.h>
+#include <utils/string_utils.h>
+#include <utils/version_manager.h>
 #include "aig_parser.h"
-
 
 AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path)
 {
@@ -24,7 +26,7 @@ AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path)
   extract_literals(file_lines);
 
   std::unordered_map<size_t, z3::expr> lit_formulas = calc_literal_formulas(file_lines);
-  replace_variables(lit_formulas)
+  calculate_tr_formula(lit_formulas);
 }
 
 AigParser& AigParser::extract_literals(const std::vector<std::string>& aag_lines)
@@ -119,7 +121,7 @@ AigParser& AigParser::extract_ap_mapping(const std::vector<std::string>& aag_lin
 }
 
 
-AigParser& AigParser::calc_literal_formulas(const std::vector<std::string> &aag_lines)
+std::unordered_map<size_t, z3::expr> AigParser::calc_literal_formulas(const std::vector<std::string> &aag_lines)
 {
 
 
@@ -134,7 +136,7 @@ AigParser& AigParser::calc_literal_formulas(const std::vector<std::string> &aag_
 
 //    for (auto it : _lit_formulas) std::cout << it.first << " ~ " << it.second << std::endl;
 
-    return *this;
+    return _lit_formulas;
 }
 
 const AigParser& AigParser::dfs(const std::vector<std::string> &lines, std::unordered_map<size_t, z3::expr>& formulas, size_t first_line, size_t target_lit) const
@@ -166,12 +168,50 @@ const AigParser& AigParser::dfs(const std::vector<std::string> &lines, std::unor
     return *this;
 }
 
-KripkeStructure AigParser::to_kripke() {
-    if (_kripke) return _kripke.value();
+KripkeStructure AigParser::to_kripke(std::set<std::string> aps) {
+
+
 
 
 
 // Don't forget to set the new kripke structure to _kripke
 
 
+}
+
+void AigParser::calculate_tr_formula(const std::unordered_map<size_t, z3::expr> &formulas) {
+    const size_t max_var_index = (_metadata[AigMetadata::M] + 1) * 2;
+
+    std::unordered_map<size_t, z3::expr> fresh_formulas;
+
+    size_t new_var_index = max_var_index + 1;
+    for (const auto& it : _in_literals) _fresh_literal_names[it] = new_var_index++;
+    for (const auto& it : _prev_state_literals) _fresh_literal_names[it] = new_var_index++;
+    for (const auto& it : _next_state_literals) _fresh_literal_names[it] = new_var_index++;
+    for (const auto& it : _out_literals) _fresh_literal_names[it] = new_var_index++;
+
+    std::vector<z3::expr> old_names, new_names;
+
+    for (auto &fresh_literal_name : _fresh_literal_names) {
+        old_names.push_back(_formula_context.bool_const(VersionManager::new_version(fresh_literal_name.first).data()));
+        new_names.push_back(_formula_context.bool_const(VersionManager::new_version(fresh_literal_name.second).data()));
+    };
+
+    for (const auto &entry : formulas)
+    {
+        fresh_formulas.insert(std::make_pair(entry.first,
+                z3::to_expr(_formula_context,
+                Z3_substitute(_formula_context, entry.second, static_cast<unsigned int>(old_names.size()),
+                              (Z3_ast *)old_names.data(), (Z3_ast *)new_names.data()))));
+    }
+
+    z3::expr_vector tr_formula_parts(_formula_context);
+    for (size_t old_lit : _next_state_literals + _out_literals) // addition ?!
+    {
+        size_t fresh_lit = _fresh_literal_names[old_lit];
+        z3::expr tr_part = _formula_context.bool_const(std::to_string(fresh_lit).data()) == fresh_formulas[old_lit];
+    }
+
+    // Now init tr
+    z3::mk_and() for all equivs..
 }

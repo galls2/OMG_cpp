@@ -4,6 +4,7 @@
 
 #pragma once
 #include <exception>
+#include <stdexcept>
 
 class OmgException : public std::runtime_error {
 public:
