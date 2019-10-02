@@ -9,27 +9,27 @@
 #include <parsers/ctl_parser_data.h>
 #include <parsers/ctl_file_parser.h>
 #include <utils/aiger-1.9.9/aig_to_aag.h>
-//using namespace z3;
-//
-//void test_z3() {
-//    std::cout << "Hello, OMG in c++!" << std::endl;
-//    context c;
-//
-//    expr x = c.bool_const("x");
-//    expr y = c.bool_const("y");
-//    expr conjecture = (!(x && y)) == (!x || !y);
-//
-//    solver s(c);
-//    // adding the negation of the conjecture as a constraint.
-//    s.add(!conjecture);
-//    std::cout << s << "\n";
-//    std::cout << s.to_smt2() << "\n";
-//    switch (s.check()) {
-//        case unsat:   std::cout << "de-Morgan is valid\n"; break;
-//        case sat:     std::cout << "de-Morgan is not valid\n"; break;
-//        case unknown: std::cout << "unknown\n"; break;
-//    }
-//}
+using namespace z3;
+
+void test_z3() {
+    std::cout << "Hello, OMG in c++!" << std::endl;
+    context c;
+
+    expr x = c.bool_const("x");
+    expr y = c.bool_const("y");
+    expr conjecture = (!(x && y)) == (!x || !y);
+
+    solver s(c);
+    // adding the negation of the conjecture as a constraint.
+    s.add(!conjecture);
+    std::cout << s << "\n";
+    std::cout << s.to_smt2() << "\n";
+    switch (s.check()) {
+        case unsat:   std::cout << "de-Morgan is valid\n"; break;
+        case sat:     std::cout << "de-Morgan is not valid\n"; break;
+        case unknown: std::cout << "unknown\n"; break;
+    }
+}
 
 void test_sub() {
     z3::context c;
@@ -79,7 +79,13 @@ void test_ctl_file_parser()
 }
 int main()
 {
-//    AigParser p(R"(/home/galls2/Desktop/af_ag.aig)");
-    test_sub();
+    AigParser p(R"(/home/galls2/Desktop/af_ag.aig)");
+    auto val = p.to_kripke({});
+//
+//    std::cout << val.get_tr() << std::endl;
+//    int x = 0;
+//    x+=0;
+//    test_sub();
 //    auto res = aig_to_aag("/home/galls2/Desktop/af_ag.aig");
+    test_z3();
 }

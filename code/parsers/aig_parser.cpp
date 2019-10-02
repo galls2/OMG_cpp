@@ -1,3 +1,5 @@
+#include <utility>
+
 //
 // Created by galls2 on 07/09/19.
 //
@@ -8,225 +10,224 @@
 #include <cassert>
 #include <regex>
 #include <functional>
+#include <boost/range/join.hpp>
 #include <algorithm>
 #include <utils/aiger-1.9.9/aiger.h>
 #include <utils/string_utils.h>
 #include <utils/version_manager.h>
 #include "aig_parser.h"
 
-AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path)
-{
-  _aag_path = aig_to_aag(aig_path);
+AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path) {
 
-  std::vector<std::string> file_lines;
-  read_aag(file_lines);
+    _aag_path = aig_to_aag(aig_path);
 
-  extract_metadata(file_lines[0]);
-  extract_ap_mapping(file_lines);
-  extract_literals(file_lines);
+    std::vector<std::string> file_lines;
+    read_aag(file_lines);
 
-  std::unordered_map<size_t, z3::expr> lit_formulas = calc_literal_formulas(file_lines);
-  calculate_tr_formula(lit_formulas);
+    extract_metadata(file_lines[0]);
+    extract_ap_mapping(file_lines);
+    extract_literals(file_lines);
+
+    std::unordered_map<size_t, z3::expr> lit_formulas = calc_literal_formulas(file_lines);
+    calculate_tr_formula(lit_formulas);
+
 }
-
-AigParser& AigParser::extract_literals(const std::vector<std::string>& aag_lines)
-{
-    for (size_t i = 1; i < 1 + _metadata[I]; ++i)
-    {
-        std::array<std::string, 2> parts = split_to<2>(aag_lines[i], ' ');
-        _in_literals.push_back(std::stoul(parts[0]));
-    }
-
-    for (size_t i = _metadata[I] + 1; i < 1 + _metadata[L] + _metadata[I]; ++i)
-    {
-        std::array<std::string, 2> parts = split_to<2>(aag_lines[i], ' ');
-        _prev_state_literals.push_back(std::stoul(parts[0]));
-        _next_state_literals.push_back(std::stoul(parts[1]));
-    }
-
-    for (size_t i = _metadata[I] + _metadata[L] + 1; i < 1 + _metadata[L] + _metadata[O] + _metadata[I]; ++i)
-    {
-        std::array<std::string, 2> parts = split_to<2>(aag_lines[i], ' ');
-        _out_literals.push_back(std::stoul(parts[0]));
-    }
-
-    return *this;
-}
-
-std::string AigParser::aig_to_aag(const std::string& aig_path) // change someday to something less disgusting
-{
-  std::string PATH_TO_EXE = "/home/galls2/Desktop/OMG_cpp/code/utils/aiger-1.9.9/aigtoaig";
-  std::string out_path = std::string(aig_path).replace(aig_path.length()-2, 1, std::string("a"));
-  std::string conversion_cmd = PATH_TO_EXE + " " + aig_path + " " + out_path;
-  std::cout << conversion_cmd << std::endl;
-  system(conversion_cmd.c_str());
-  return out_path;
-}
-
-const AigParser& AigParser::read_aag(std::vector<std::string>& aag_container) const
-{
-    std::string line;
-    std::ifstream aag_file(_aag_path.c_str());
-    while (std::getline(aag_file, line))
-    {
-      aag_container.push_back(line);
-    }
-
-    return *this;
-}
-
-AigParser& AigParser::extract_metadata(const std::string& first_aag_line)
-{
-    std::array<std::string, 6> components = split_to<6>(first_aag_line, ' ');
-    assert(components[0] == std::string("aag"));
-    _metadata[M] = std::stoul(components[1]);
-    _metadata[I] = std::stoul(components[2]);
-    _metadata[L] = std::stoul(components[3]);
-    _metadata[O] = std::stoul(components[4]);
-    _metadata[A] = std::stoul(components[5]);
-
-    _first_and_literal = (_metadata.at(AigMetadata::I) + _metadata.at(L) + 1) * 2;
-
-    return *this;
-}
-
-
-
-const std::unordered_map<AigMetadata, size_t, std::hash<size_t>> &AigParser::get_aig_metadata()
-{
-    return _metadata;
-}
-
-AigParser& AigParser::extract_ap_mapping(const std::vector<std::string>& aag_lines)
-{
-    size_t first_ap_index = 0;
-    bool found_ap = false;
-
-    const std::regex ap_line_regex("^[ilo][0-9].*");
-    for (size_t i = 0; i < aag_lines.size(); ++i)
-    {
-        const std::string& aag_line = aag_lines[i];
-
-        if (std::regex_match(aag_line, ap_line_regex))
-        {
-            if (!found_ap) { first_ap_index = i; found_ap = true; }
-            std::array<std::string, 2> parts =  split_to<2>(aag_line, ' ');
-            _ap_to_symb[parts[1]] = parts[0];
-            _symb_to_ap[parts[0]] = parts[1];
+    AigParser &AigParser::extract_literals(const std::vector<std::string> &aag_lines) {
+        for (size_t i = 1; i < 1 + _metadata[I]; ++i) {
+            _in_literals.push_back(std::stoul(aag_lines[i]));
         }
+
+        for (size_t i = _metadata[I] + 1; i < 1 + _metadata[L] + _metadata[I]; ++i) {
+            std::array<std::string, 2> parts = split_to<2>(aag_lines[i], ' ');
+            _prev_state_literals.push_back(std::stoul(parts[0]));
+            _next_state_literals.push_back(std::stoul(parts[1]));
+        }
+
+        for (size_t i = _metadata[I] + _metadata[L] + 1; i < 1 + _metadata[L] + _metadata[O] + _metadata[I]; ++i) {
+            _out_literals.push_back(std::stoul(aag_lines[i]));
+        }
+
+        return *this;
     }
-    assert(found_ap);
-    _first_ap_index = first_ap_index;
-    return *this;
-}
+
+    std::string AigParser::aig_to_aag(const std::string &aig_path) // change someday to something less disgusting
+    {
+        std::string PATH_TO_EXE = "/home/galls2/Desktop/OMG_cpp/code/utils/aiger-1.9.9/aigtoaig";
+        std::string out_path = std::string(aig_path).replace(aig_path.length() - 2, 1, std::string("a"));
+        std::string conversion_cmd = PATH_TO_EXE + " " + aig_path + " " + out_path;
+        std::cout << conversion_cmd << std::endl;
+        system(conversion_cmd.c_str());
+        return out_path;
+    }
+
+    const AigParser &AigParser::read_aag(std::vector<std::string> &aag_container) const {
+        std::string line;
+        std::ifstream aag_file(_aag_path.c_str());
+        while (std::getline(aag_file, line)) {
+            aag_container.push_back(line);
+        }
+
+        return *this;
+    }
+
+    AigParser &AigParser::extract_metadata(const std::string &first_aag_line) {
+        std::array<std::string, 6> components = split_to<6>(first_aag_line, ' ');
+        assert(components[0] == std::string("aag"));
+        _metadata[M] = std::stoul(components[1]);
+        _metadata[I] = std::stoul(components[2]);
+        _metadata[L] = std::stoul(components[3]);
+        _metadata[O] = std::stoul(components[4]);
+        _metadata[A] = std::stoul(components[5]);
+
+        _first_and_literal = (_metadata.at(AigMetadata::I) + _metadata.at(L) + 1) * 2;
+
+        return *this;
+    }
 
 
-std::unordered_map<size_t, z3::expr> AigParser::calc_literal_formulas(const std::vector<std::string> &aag_lines)
-{
+    const std::unordered_map<AigMetadata, size_t, std::hash<size_t>> &AigParser::get_aig_metadata() {
+        return _metadata;
+    }
+
+    AigParser &AigParser::extract_ap_mapping(const std::vector<std::string> &aag_lines) {
+        size_t first_ap_index = 0;
+        bool found_ap = false;
+
+        const std::regex ap_line_regex("^[ilo][0-9].*");
+        for (size_t i = 0; i < aag_lines.size(); ++i) {
+            const std::string &aag_line = aag_lines[i];
+
+            if (std::regex_match(aag_line, ap_line_regex)) {
+                if (!found_ap) {
+                    first_ap_index = i;
+                    found_ap = true;
+                }
+                std::array<std::string, 2> parts = split_to<2>(aag_line, ' ');
+                _ap_to_symb[parts[1]] = parts[0];
+                _symb_to_ap[parts[0]] = parts[1];
+            }
+        }
+        assert(found_ap);
+        _first_ap_index = first_ap_index;
+        return *this;
+    }
 
 
-    _lit_formulas.insert(std::make_pair(0, _formula_context.bool_val(false)));
-    _lit_formulas.insert(std::make_pair(1, _formula_context.bool_val(true)));
-    for (auto lit : _in_literals) _lit_formulas.insert(std::make_pair(lit, _formula_context.bool_const(std::to_string(lit).data())));
-    for (auto lit : _prev_state_literals) _lit_formulas.insert(std::make_pair(lit, _formula_context.bool_const(std::to_string(lit).data())));
+    std::unordered_map<size_t, z3::expr> AigParser::calc_literal_formulas(const std::vector<std::string> &aag_lines) {
 
-    size_t first_and_line = _first_ap_index - _metadata[A];
-    for (auto lit : _next_state_literals) dfs(aag_lines, _lit_formulas, first_and_line, lit);
-    for (auto lit : _out_literals) dfs(aag_lines, _lit_formulas, first_and_line, lit);
+
+        _lit_formulas.insert(std::make_pair(0, _context.bool_val(false)));
+        _lit_formulas.insert(std::make_pair(1, _context.bool_val(true)));
+        for (auto lit : _in_literals)
+            _lit_formulas.insert(std::make_pair(lit, _context.bool_const(std::to_string(lit).data())));
+        for (auto lit : _prev_state_literals)
+            _lit_formulas.insert(std::make_pair(lit, _context.bool_const(std::to_string(lit).data())));
+
+        size_t first_and_line = _first_ap_index - _metadata[A];
+        for (auto lit : _next_state_literals) dfs(aag_lines, _lit_formulas, first_and_line, lit);
+        for (auto lit : _out_literals) dfs(aag_lines, _lit_formulas, first_and_line, lit);
 
 //    for (auto it : _lit_formulas) std::cout << it.first << " ~ " << it.second << std::endl;
 
-    return _lit_formulas;
-}
+        return _lit_formulas;
+    }
 
-const AigParser& AigParser::dfs(const std::vector<std::string> &lines, std::unordered_map<size_t, z3::expr>& formulas, size_t first_line, size_t target_lit) const
-{
-    if (formulas.find(target_lit) == formulas.end()) {
-        if (target_lit % 2 == 1) {
-            dfs(lines, formulas, first_line, target_lit - 1); // FOR NOW. DO OPT OF OR HERE!
-            if (formulas.at(target_lit - 1).is_and())
-            {
+    const AigParser &
+    AigParser::dfs(const std::vector<std::string> &lines, std::unordered_map<size_t, z3::expr> &formulas,
+                   size_t first_line, size_t target_lit) const {
+        if (formulas.find(target_lit) == formulas.end()) {
+            if (target_lit % 2 == 1) {
+                dfs(lines, formulas, first_line, target_lit - 1); // FOR NOW. DO OPT OF OR HERE!
+                if (formulas.at(target_lit - 1).is_and()) {
+                    const size_t and_line_index = first_line + (target_lit - _first_and_literal) / 2;
+                    const std::string &and_line = lines[and_line_index];
+                    std::array<std::string, 3> parts = split_to<3>(and_line, ' ');
+                    size_t left_operand = std::stoul(parts[1]);
+                    size_t right_operand = std::stoul(parts[2]);
+                    if (left_operand % 2 == 1 && right_operand % 2 == 1) {
+                        formulas.insert(std::make_pair(target_lit, formulas.at(left_operand - 1) ||
+                                                                   formulas.at(right_operand - 1)));
+                    } else {
+                        formulas.insert(std::make_pair(target_lit, !formulas.at(target_lit - 1)));
+                    }
+                } else {
+                    formulas.insert(std::make_pair(target_lit, !formulas.at(target_lit - 1)));
+                }
+            } else {
                 const size_t and_line_index = first_line + (target_lit - _first_and_literal) / 2;
                 const std::string &and_line = lines[and_line_index];
+                std::array<std::string, 3> parts = split_to<3>(and_line, ' ');
+                size_t left_operand = std::stoul(parts[1]);
+                size_t right_operand = std::stoul(parts[2]);
 
+                dfs(lines, formulas, first_line, left_operand);
+                dfs(lines, formulas, first_line, right_operand);
+                formulas.insert(std::make_pair(target_lit, formulas.at(left_operand) && formulas.at(right_operand)));
             }
-            else {
-                formulas.insert(std::make_pair(target_lit, !formulas.at(target_lit - 1)));
-            }
-        } else {
-            const size_t and_line_index = first_line + (target_lit - _first_and_literal) / 2;
-            const std::string &and_line = lines[and_line_index];
-            std::array<std::string, 3> parts = split_to<3>(and_line, ' ');
-            size_t left_operand = std::stoul(parts[1]);
-            size_t right_operand = std::stoul(parts[2]);
-
-            dfs(lines, formulas, first_line, left_operand);
-            dfs(lines, formulas, first_line, right_operand);
-            formulas.insert(std::make_pair(target_lit, formulas.at(left_operand) && formulas.at(right_operand)));
         }
+        return *this;
     }
-    return *this;
-}
 
-KripkeStructure AigParser::to_kripke(std::set<std::string> aps) {
+    KripkeStructure AigParser::to_kripke(std::set<std::string> aps) {
 
 
 
-
+        return KripkeStructure(*_tr_formula, std::move(aps));
 
 // Don't forget to set the new kripke structure to _kripke
 
 
-}
-
-void AigParser::calculate_tr_formula(const std::unordered_map<size_t, z3::expr> &formulas) {
-    const size_t max_var_index = (_metadata[AigMetadata::M] + 1) * 2;
-
-    std::unordered_map<size_t, z3::expr> fresh_formulas;
-
-    size_t new_var_index = max_var_index + 1;
-    for (const auto& it : _in_literals) _fresh_literal_names[it] = ++new_var_index;
-    size_t max_in_lit = new_var_index;
-    for (const auto& it : _prev_state_literals) _fresh_literal_names[it] = ++new_var_index;
-    size_t max_prev_lit = new_var_index;
-    for (const auto& it : _next_state_literals) _fresh_literal_names[it] = ++new_var_index;
-    size_t max_next_lit = new_var_index;
-    for (const auto& it : _out_literals) _fresh_literal_names[it] = ++new_var_index;
-    size_t max_out_lit = new_var_index;
-
-    std::vector<z3::expr> old_names, new_names;
-    std::vector<z3::expr> in, out, ps, ns;
-
-    for (auto &fresh_literal_name : _fresh_literal_names) {
-        old_names.push_back(_formula_context.bool_const(std::to_string(fresh_literal_name.first).data()));
-        z3::expr new_var = _formula_context.bool_const(VersionManager::new_version(fresh_literal_name.second).data());
-        new_names.push_back(new_var);
-        if (fresh_literal_name.second <= max_in_lit) in.push_back(new_var);
-        else if (fresh_literal_name.second <= max_prev_lit) ps.push_back(new_var);
-        else if (fresh_literal_name.second <= max_next_lit) ns.push_back(new_var);
-        else { assert(fresh_literal_name.second <= max_out_lit); out.push_back(new_var); }
-    };
-
-    for (const auto &entry : formulas) NOT ALL FORMULAS BUT THE RELEVANT ONES!!!!
-    {
-        fresh_formulas.insert(std::make_pair(entry.first,
-                z3::to_expr(_formula_context,
-                Z3_substitute(_formula_context, entry.second, static_cast<unsigned int>(old_names.size()),
-                              (Z3_ast *)old_names.data(), (Z3_ast *)new_names.data()))));
     }
 
-    z3::expr_vector tr_formula_parts(_formula_context);
-    for (const auto& it = _next_state_literals.begin(); it != _out_literals.end(); (++it == _next_state_literals.end()) ? it = _out_literals.begin() : it) // addition ?!
-    {
-        size_t old_lit = *it;
-        size_t fresh_lit = _fresh_literal_names[old_lit];
-        z3::expr tr_part = _formula_context.bool_const(std::to_string(fresh_lit).data()) == fresh_formulas[old_lit];
-        tr_formula_parts.push_back(tr_part);
-    }
+    void AigParser::calculate_tr_formula(const std::unordered_map<size_t, z3::expr> &formulas) {
+        const size_t max_var_index = (_metadata[AigMetadata::M] + 1) * 2;
 
-    // Now init tr
-    z3::expr and_result = z3::mk_and(tr_formula_parts);
-    PropFormula tr(and_result, {std::make_pair(in, "in"), std::make_pair(ps, "ps"), std::make_pair(ns, "ns"),
-                             std::make_pair(out, "out")});
-    _tr_formula = tr;
-}
+        std::unordered_map<size_t, z3::expr> fresh_formulas;
+
+        size_t new_var_index = max_var_index + 1;
+        for (const auto &it : _in_literals) _fresh_literal_names[it] = ++new_var_index;
+        size_t max_in_lit = new_var_index;
+        for (const auto &it : _prev_state_literals) _fresh_literal_names[it] = ++new_var_index;
+        size_t max_prev_lit = new_var_index;
+        for (const auto &it : _next_state_literals) _fresh_literal_names[it] = ++new_var_index;
+        size_t max_next_lit = new_var_index;
+        for (const auto &it : _out_literals) _fresh_literal_names[it] = ++new_var_index;
+        size_t max_out_lit = new_var_index;
+
+        std::vector<z3::expr> old_names, new_names;
+        auto num_vars = static_cast<unsigned int>(old_names.size());
+        std::vector<z3::expr> in, out, ps, ns;
+
+        for (auto &fresh_literal_name : _fresh_literal_names) {
+            old_names.push_back(_context.bool_const(std::to_string(fresh_literal_name.first).data()));
+            z3::expr new_var = _context.bool_const(VersionManager::new_version(fresh_literal_name.second).data());
+            new_names.push_back(new_var);
+            if (fresh_literal_name.second <= max_in_lit) in.push_back(new_var);
+            else if (fresh_literal_name.second <= max_prev_lit) ps.push_back(new_var);
+            else if (fresh_literal_name.second <= max_next_lit) ns.push_back(new_var);
+            else {
+                assert(fresh_literal_name.second <= max_out_lit);
+                out.push_back(new_var);
+            }
+        };
+        for (auto it : boost::join(_next_state_literals, _out_literals))
+        {
+            fresh_formulas.insert(std::make_pair(it, z3::to_expr(_context,
+                                                                  Z3_substitute(_context, formulas.at(it), num_vars,
+                                                                                (Z3_ast *) old_names.data(),
+                                                                                (Z3_ast *) new_names.data()))));
+        }
+
+        z3::expr_vector tr_formula_parts(_context);
+        for (auto it : boost::join(_next_state_literals, _out_literals))
+        {
+            size_t fresh_lit = _fresh_literal_names[it];
+            z3::expr tr_part = _context.bool_const(std::to_string(fresh_lit).data()) == fresh_formulas.at(it);
+            tr_formula_parts.push_back(tr_part);
+        }
+
+        z3::expr and_result = z3::mk_and(tr_formula_parts);
+        PropFormula tr(and_result, {std::make_pair(in, "in"), std::make_pair(ps, "ps"), std::make_pair(ns, "ns"),
+                                    std::make_pair(out, "out")});
+        _tr_formula = std::make_unique<PropFormula>(std::move(tr));
+    }

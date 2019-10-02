@@ -16,9 +16,11 @@ public:
     PropFormula(z3::expr& formula, std::vector<TaggedVariableList> variables) : _formula(formula), _variables(
             std::move(variables)) {}
 
+    const z3::expr& get_formula() const { return _formula; }
+
 
 private:
-    z3::expr _formula;
+    const z3::expr _formula;
     std::vector<TaggedVariableList> _variables;
 };
 

@@ -10,6 +10,7 @@
 #include <z3++.h>
 #include <experimental/optional>
 #include <structures/kripke_structure.h>
+#include <memory>
 
 enum AigMetadata{
     M = 0, I = 1, L = 2, O = 3, A = 4
@@ -50,7 +51,7 @@ private:
     std::vector<size_t> _prev_state_literals;
     std::vector<size_t> _next_state_literals;
     std::unordered_map<size_t, z3::expr> _lit_formulas;
-    z3::context _formula_context;
+    z3::context _context;
     std::map<size_t, size_t> _fresh_literal_names;
-    PropFormula _tr_formula;
+    std::unique_ptr<PropFormula> _tr_formula;
 };
