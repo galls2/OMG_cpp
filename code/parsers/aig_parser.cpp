@@ -185,19 +185,29 @@ void AigParser::calculate_tr_formula(const std::unordered_map<size_t, z3::expr> 
     std::unordered_map<size_t, z3::expr> fresh_formulas;
 
     size_t new_var_index = max_var_index + 1;
-    for (const auto& it : _in_literals) _fresh_literal_names[it] = new_var_index++;
-    for (const auto& it : _prev_state_literals) _fresh_literal_names[it] = new_var_index++;
-    for (const auto& it : _next_state_literals) _fresh_literal_names[it] = new_var_index++;
-    for (const auto& it : _out_literals) _fresh_literal_names[it] = new_var_index++;
+    for (const auto& it : _in_literals) _fresh_literal_names[it] = ++new_var_index;
+    size_t max_in_lit = new_var_index;
+    for (const auto& it : _prev_state_literals) _fresh_literal_names[it] = ++new_var_index;
+    size_t max_prev_lit = new_var_index;
+    for (const auto& it : _next_state_literals) _fresh_literal_names[it] = ++new_var_index;
+    size_t max_next_lit = new_var_index;
+    for (const auto& it : _out_literals) _fresh_literal_names[it] = ++new_var_index;
+    size_t max_out_lit = new_var_index;
 
     std::vector<z3::expr> old_names, new_names;
+    std::vector<z3::expr> in, out, ps, ns;
 
     for (auto &fresh_literal_name : _fresh_literal_names) {
-        old_names.push_back(_formula_context.bool_const(VersionManager::new_version(fresh_literal_name.first).data()));
-        new_names.push_back(_formula_context.bool_const(VersionManager::new_version(fresh_literal_name.second).data()));
+        old_names.push_back(_formula_context.bool_const(std::to_string(fresh_literal_name.first).data()));
+        z3::expr new_var = _formula_context.bool_const(VersionManager::new_version(fresh_literal_name.second).data());
+        new_names.push_back(new_var);
+        if (fresh_literal_name.second <= max_in_lit) in.push_back(new_var);
+        else if (fresh_literal_name.second <= max_prev_lit) ps.push_back(new_var);
+        else if (fresh_literal_name.second <= max_next_lit) ns.push_back(new_var);
+        else { assert(fresh_literal_name.second <= max_out_lit); out.push_back(new_var); }
     };
 
-    for (const auto &entry : formulas)
+    for (const auto &entry : formulas) NOT ALL FORMULAS BUT THE RELEVANT ONES!!!!
     {
         fresh_formulas.insert(std::make_pair(entry.first,
                 z3::to_expr(_formula_context,
@@ -206,12 +216,17 @@ void AigParser::calculate_tr_formula(const std::unordered_map<size_t, z3::expr> 
     }
 
     z3::expr_vector tr_formula_parts(_formula_context);
-    for (size_t old_lit : _next_state_literals + _out_literals) // addition ?!
+    for (const auto& it = _next_state_literals.begin(); it != _out_literals.end(); (++it == _next_state_literals.end()) ? it = _out_literals.begin() : it) // addition ?!
     {
+        size_t old_lit = *it;
         size_t fresh_lit = _fresh_literal_names[old_lit];
         z3::expr tr_part = _formula_context.bool_const(std::to_string(fresh_lit).data()) == fresh_formulas[old_lit];
+        tr_formula_parts.push_back(tr_part);
     }
 
     // Now init tr
-    z3::mk_and() for all equivs..
+    z3::expr and_result = z3::mk_and(tr_formula_parts);
+    PropFormula tr(and_result, {std::make_pair(in, "in"), std::make_pair(ps, "ps"), std::make_pair(ns, "ns"),
+                             std::make_pair(out, "out")});
+    _tr_formula = tr;
 }

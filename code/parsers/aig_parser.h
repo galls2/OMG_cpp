@@ -52,5 +52,5 @@ private:
     std::unordered_map<size_t, z3::expr> _lit_formulas;
     z3::context _formula_context;
     std::map<size_t, size_t> _fresh_literal_names;
-    PropFormula tr_formula;
+    PropFormula _tr_formula;
 };
