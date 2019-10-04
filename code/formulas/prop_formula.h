@@ -18,6 +18,10 @@ public:
 
     const z3::expr& get_formula() const { return _formula; }
 
+    std::string to_string() const {
+        return _formula.to_string();
+    }
+
 
 private:
     const z3::expr _formula;

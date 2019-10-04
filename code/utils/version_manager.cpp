@@ -16,12 +16,12 @@ std::string VersionManager::new_version(const std::string &orig_name)
     {
         assert(_copies_counter.find(orig_name) == _copies_counter.end());
         _copies_counter[orig_name] = 0;
-        return orig_name + std::to_string(DELIM) +"0";
+        return orig_name + std::string(1, DELIM) +"0";
     }
     else
     {
         std::array<std::string, 2> parts = split_to<2>(orig_name, DELIM);
-        return parts[0] + std::to_string(DELIM) + std::to_string(++_copies_counter[parts[0]]);
+        return parts[0] + std::string(1, DELIM) + std::to_string(++_copies_counter[parts[0]]);
     }
 }
 

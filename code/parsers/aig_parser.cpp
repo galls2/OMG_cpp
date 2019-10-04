@@ -194,14 +194,19 @@ AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path) {
         for (const auto &it : _out_literals) _fresh_literal_names[it] = ++new_var_index;
         size_t max_out_lit = new_var_index;
 
-        std::vector<z3::expr> old_names, new_names;
-        auto num_vars = static_cast<unsigned int>(old_names.size());
+        z3::expr_vector old_names(_context), new_names(_context);
         std::vector<z3::expr> in, out, ps, ns;
 
+        auto num_vars = static_cast<unsigned int>(_fresh_literal_names.size());
+
         for (auto &fresh_literal_name : _fresh_literal_names) {
-            old_names.push_back(_context.bool_const(std::to_string(fresh_literal_name.first).data()));
-            z3::expr new_var = _context.bool_const(VersionManager::new_version(fresh_literal_name.second).data());
+            z3::expr old_var = _context.bool_const(std::to_string(fresh_literal_name.first).data());
+            old_names.push_back(old_var);
+
+            std::string new_name = VersionManager::new_version(fresh_literal_name.second);
+            z3::expr new_var = _context.bool_const(new_name.data());
             new_names.push_back(new_var);
+
             if (fresh_literal_name.second <= max_in_lit) in.push_back(new_var);
             else if (fresh_literal_name.second <= max_prev_lit) ps.push_back(new_var);
             else if (fresh_literal_name.second <= max_next_lit) ns.push_back(new_var);
@@ -210,17 +215,16 @@ AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path) {
                 out.push_back(new_var);
             }
         };
-        for (auto it : boost::join(_next_state_literals, _out_literals))
-        {
-            fresh_formulas.insert(std::make_pair(it, z3::to_expr(_context,
-                                                                  Z3_substitute(_context, formulas.at(it), num_vars,
-                                                                                (Z3_ast *) old_names.data(),
-                                                                                (Z3_ast *) new_names.data()))));
+
+        for (auto it : boost::join(_next_state_literals,_out_literals)) {
+            auto &orig = const_cast<z3::expr&>(formulas.at(it));
+
+            z3::expr new_formula = orig.substitute(old_names, new_names);
+            fresh_formulas.insert(std::make_pair(it, new_formula));
         }
 
         z3::expr_vector tr_formula_parts(_context);
-        for (auto it : boost::join(_next_state_literals, _out_literals))
-        {
+        for (auto it : boost::join(_next_state_literals, _out_literals)) {
             size_t fresh_lit = _fresh_literal_names[it];
             z3::expr tr_part = _context.bool_const(std::to_string(fresh_lit).data()) == fresh_formulas.at(it);
             tr_formula_parts.push_back(tr_part);

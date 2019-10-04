@@ -81,11 +81,8 @@ int main()
 {
     AigParser p(R"(/home/galls2/Desktop/af_ag.aig)");
     auto val = p.to_kripke({});
-//
-//    std::cout << val.get_tr() << std::endl;
-//    int x = 0;
-//    x+=0;
-//    test_sub();
-//    auto res = aig_to_aag("/home/galls2/Desktop/af_ag.aig");
-    test_z3();
+
+    std::cout << val.get_tr().get_formula().to_string() << std::endl;
+    std::cout << "UPUU";
+
 }
