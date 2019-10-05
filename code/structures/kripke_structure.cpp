@@ -3,3 +3,8 @@
 //
 
 #include "kripke_structure.h"
+
+std::vector<ConcreteState> KripkeStructure::get_successors(const ConcreteState &state) {
+    std::vector<ConcreteState> successors;
+
+}

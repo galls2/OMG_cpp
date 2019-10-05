@@ -12,7 +12,9 @@
 #include <string>
 #include <unordered_map>
 
-class OmgConfigurationException : OmgException { using OmgException::OmgException; };
+//class OmgConfigurationException : OmgException { using OmgException::OmgException; };
+DECLARE_OMG_EXCEPTION(OmgConfigurationException)
+
 
 struct OmgConfiguration {
     std::unordered_map<std::string, std::string> configuration;

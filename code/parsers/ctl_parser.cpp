@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <utils/omg_exception.h>
+
 std::unique_ptr<CtlFormula> LR1CtlParser::parse(const std::vector<Token> &formula_tokens) {
     boost::variant<State, Token> initial_frame(Token(std::string("")));
     _parse_stack.push(std::make_pair(0, initial_frame));
@@ -15,7 +16,6 @@ std::unique_ptr<CtlFormula> LR1CtlParser::parse(const std::vector<Token> &formul
         if (!action_table_entry_opt)
             throw std::runtime_error("Parsing failed!");
         ActionTable::LrTableEntry action_table_entry = action_table_entry_opt.value();
-      //  std::cout << action_table_entry << std::endl;
         if (action_table_entry.is_shift())
         {
             State next_state = action_table_entry.get_index();
@@ -41,19 +41,14 @@ std::unique_ptr<CtlFormula> LR1CtlParser::parse(const std::vector<Token> &formul
 
             State new_state = _goto_table.go_to(stack_head_state, var_derived);
             _parse_stack.push(std::make_pair(new_state, var_derived));
-
-            std::cout<< "Rule " << action_table_entry.get_index() << " was used!" << std::endl;
         } else
         {
-            std::cout << "Accept" << std::endl;
             assert (action_table_entry.is_accept());
-//            CtlFormula full_formula = *_formula_stack.top();
             std::unique_ptr<CtlFormula> final_formula =  std::move(_formula_stack.top());
             _formula_stack.pop();
             assert(_formula_stack.empty());
             return final_formula;
         }
-
     }
 }
 void LR1CtlParser::get_operands_from_formula_stack(size_t num_operands, std::vector<std::unique_ptr<CtlFormula>>& to_fill)

@@ -71,7 +71,8 @@ struct GotoTable
     {
         return _table_data.at(std::make_pair(state, var_name));
     }
-    GotoTable(GotoTable_t table_data) : _table_data(std::move(table_data)) {}
+
+    explicit GotoTable(GotoTable_t table_data) : _table_data(std::move(table_data)) {}
 
 private:
     GotoTable_t _table_data;

@@ -460,7 +460,7 @@ GotoTable::GotoTable_t CtlParserData::goto_table_ctl_parser = {
         , { std::make_pair(66, 'S'), 69  }
         , { std::make_pair(66, 'P'), 25  }
 };
-//f
+
 /* Auto generated code ends here */
 
 
