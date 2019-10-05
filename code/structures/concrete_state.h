@@ -1,16 +1,26 @@
+#pragma once
+#include <utility>
+
 //
 // Created by galls2 on 04/10/19.
 //
 
-#ifndef OMG_CPP_CONCRETE_STATE_H
-#define OMG_CPP_CONCRETE_STATE_H
-
+#include <experimental/optional>
+#include <vector>
+#include <structures/kripke_structure.h>
+class KripkeStructure;
 
 class ConcreteState {
 public:
+    ConcreteState(const KripkeStructure& kripke, const z3::expr &conjunct)  : _kripke(kripke), _conjunct(conjunct) {}
 
+    std::vector<ConcreteState> get_successors();
 private:
+    const KripkeStructure& _kripke;
+    const z3::expr _conjunct;
+    std::experimental::optional<std::vector<ConcreteState>> _successors;
+
+
+    void compute_successors();
 };
 
-
-#endif //OMG_CPP_CONCRETE_STATE_H

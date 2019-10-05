@@ -195,9 +195,7 @@ AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path) {
         size_t max_out_lit = new_var_index;
 
         z3::expr_vector old_names(_context), new_names(_context);
-        std::vector<z3::expr> in, out, ps, ns;
-
-        auto num_vars = static_cast<unsigned int>(_fresh_literal_names.size());
+        z3::expr_vector in(_context), out(_context), ps(_context), ns(_context);
 
         for (auto &fresh_literal_name : _fresh_literal_names) {
             z3::expr old_var = _context.bool_const(std::to_string(fresh_literal_name.first).data());
@@ -231,7 +229,7 @@ AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path) {
         }
 
         z3::expr and_result = z3::mk_and(tr_formula_parts);
-        PropFormula tr(and_result, {std::make_pair(in, "in"), std::make_pair(ps, "ps"), std::make_pair(ns, "ns"),
-                                    std::make_pair(out, "out")});
+        std::map<std::string, z3::expr_vector> var_tags =  { {"in", in}, {"ps", ps}, {"ns", ns}, {"out", out} };
+        PropFormula tr(and_result, var_tags);
         _tr_formula = std::make_unique<PropFormula>(std::move(tr));
     }

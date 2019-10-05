@@ -5,12 +5,11 @@
 #include <unordered_map>
 #include <map>
 #include <vector>
-#include <array>
 #include <string>
-#include <z3++.h>
-#include <experimental/optional>
-#include <structures/kripke_structure.h>
 #include <memory>
+#include <experimental/optional>
+#include <z3++.h>
+#include <structures/kripke_structure.h>
 
 enum AigMetadata{
     M = 0, I = 1, L = 2, O = 3, A = 4

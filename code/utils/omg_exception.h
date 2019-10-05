@@ -16,5 +16,5 @@ public:
 
 };
 
-#define DECLARE_EXCEPTION_TYPE(derived, base) class (derived): public (base) { using (base)::(base); };
+#define DECLARE_EXCEPTION_TYPE(derived, base) class derived: public base { using base::base; };
 #define DECLARE_OMG_EXCEPTION(derived) DECLARE_EXCEPTION_TYPE(derived, OmgException)

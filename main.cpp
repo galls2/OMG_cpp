@@ -12,7 +12,7 @@
 using namespace z3;
 
 void test_z3() {
-    std::cout << "Hello, OMG in c++!" << std::endl;
+    std::cout << "Hello, OMG in C++!" << std::endl;
     context c;
 
     expr x = c.bool_const("x");
@@ -40,10 +40,17 @@ void test_sub() {
     Z3_ast from[]= {x};
     Z3_ast to[] = {y};
 
-    z3::expr new_f(c);
-    new_f = z3::to_expr(c, Z3_substitute(c, f, 1, from, to));
-    std::cout << f << std::endl;
-    std::cout << new_f << std::endl;
+//    z3::expr new_f(c);
+//    new_f = z3::to_expr(c, Z3_substitute(c, f, 1, from, to));
+//    std::cout << f << std::endl;
+//    std::cout << new_f << std::endl;
+
+    z3::solver solver1(c);
+    solver1.add(f);
+    std::cout << solver1.check() << std::endl;
+    std::cout << solver1.get_model() << std::endl;
+    z3::model m = solver1.get_model();
+    std::cout << "VAMV AMVAM:: " << z3::eq(m.eval(x), c.bool_val(true)) << std::endl;
 }
 
 
@@ -77,12 +84,13 @@ void test_ctl_file_parser()
             std::cout << formula->to_string() << std::endl;
     }
 }
+
 int main()
 {
-    AigParser p(R"(/home/galls2/Desktop/af_ag.aig)");
-    auto val = p.to_kripke({});
+//    AigParser p(R"(/home/galls2/Desktop/af_ag.aig)");
+  //  auto val = p.to_kripke({});
 
-    std::cout << val.get_tr().get_formula().to_string() << std::endl;
-    std::cout << "UPUU";
-
+//    std::cout << val.get_tr().get_formula().to_string() << std::endl;
+ //   std::cout << "UPUU";
+    test_sub();
 }
