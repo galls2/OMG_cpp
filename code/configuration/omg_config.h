@@ -11,6 +11,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <utils/omg_exception.h>
 
 //class OmgConfigurationException : OmgException { using OmgException::OmgException; };
 DECLARE_OMG_EXCEPTION(OmgConfigurationException)

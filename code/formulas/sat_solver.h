@@ -10,15 +10,21 @@
 
 DECLARE_OMG_EXCEPTION(SatSolverResultException)
 
+enum class SatResult {
+    FALSE, UNDEF, TRUE
+};
+
+
 struct SatSolverResult
 {
 public:
     SatSolverResult();
     SatSolverResult(const z3::model& model, const std::vector<z3::expr>& vars);
-    bool get_value(const z3::expr& var) const;
+    SatResult get_value(const z3::expr& var) const;
+    bool get_is_sat() const { return _is_sat; }
 private:
     bool _is_sat;
-    std::map<z3::expr, bool> _values;
+    std::map<z3::expr, Z3_lbool> _values;
 
 };
 
@@ -40,8 +46,10 @@ private:
     z3::solver _solver;
 
     z3::expr get_blocking_clause(const z3::model& model, const std::vector<z3::expr> &vector);
-};
 
-std::map<std::string, std::function<ISatSolver(z3::context&)>> SatSolverChooser = {
-        {"Z3", [](z3::context& ctx) { return Z3SatSolver(ctx); }}
+    void add_assignments(std::vector<SatSolverResult> &assignments, SatSolverResult result, const std::vector<z3::expr> &vars);
 };
+//
+//std::map<std::string, std::function<ISatSolver&&(z3::context&)>> SatSolverChooser = {
+//        {"Z3", [](z3::context& ctx) { return Z3SatSolver(ctx); }}
+//};

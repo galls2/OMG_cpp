@@ -18,10 +18,15 @@ std::vector<z3::expr> PropFormula::get_all_variables() const {
 }
 
 const z3::expr_vector &PropFormula::get_vars_by_tag(const std::string& tag) const {
-    return _variables[tag];
+    return _variables.at(tag);
 }
 
-static std::vector<z3::expr> PropFormula::get_vars_in_formula(z3::expr const & e) {
+const std::map<std::string, z3::expr_vector> &PropFormula::get_variables_map() const {
+    return _variables;
+}
+
+
+std::vector<z3::expr> PropFormula::get_vars_in_formula(z3::expr const & e) {
     std::vector<z3::expr> vars;
     if (e.is_app()) {
         unsigned num = e.num_args();
@@ -41,9 +46,5 @@ static std::vector<z3::expr> PropFormula::get_vars_in_formula(z3::expr const & e
         // do something
     }
     return vars;
-}
-
-const std::map<std::string, z3::expr_vector> &PropFormula::get_variables_map() const {
-    return _variables;
 }
 

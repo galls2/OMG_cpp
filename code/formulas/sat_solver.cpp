@@ -2,6 +2,7 @@
 // Created by galls2 on 05/10/19.
 //
 
+#include <z3.h>
 #include "sat_solver.h"
 
 SatSolverResult Z3SatSolver::solve_sat(const PropFormula &formula) {
@@ -21,7 +22,7 @@ std::vector<SatSolverResult> Z3SatSolver::all_sat(const PropFormula &formula, co
     {
         z3::model m = solver.get_model();
         SatSolverResult res(m, vars);
-        assignments.push_back(res);
+        add_assignments(assignments ,res, vars);
         z3::expr blocking_clause = get_blocking_clause(m, vars);
         solver.add(blocking_clause);
     }
@@ -38,6 +39,15 @@ z3::expr Z3SatSolver::get_blocking_clause(const z3::model& model, const std::vec
     return z3::mk_or(literals);
 }
 
+void Z3SatSolver::add_assignments(std::vector<SatSolverResult> &assignemnts, SatSolverResult result,
+                                  const std::vector<z3::expr> &vars) {
+    for (const auto& i : vars)
+        if (result.get_value(i) == SatResult ::UNDEF) throw SatSolverResultException("UPPUPU");
+
+        assignemnts.push_back(result);
+
+}
+
 SatSolverResult::SatSolverResult() : _is_sat(false) { }
 
 SatSolverResult::SatSolverResult(const z3::model& model, const std::vector<z3::expr>& vars) : _is_sat(true)
@@ -45,11 +55,24 @@ SatSolverResult::SatSolverResult(const z3::model& model, const std::vector<z3::e
     auto& context = model.ctx();
     for (const auto& var : vars)
     {
-        _values[var] = z3::eq(model.eval(var), context.bool_val(true));
+        _values[var] = model.eval(var).bool_value();
     }
 }
 
-bool SatSolverResult::get_value(const z3::expr& var ) const {
+SatResult SatSolverResult::get_value(const z3::expr& var ) const {
     if (!_is_sat) throw SatSolverResultException("Formula is unsat");
-    return _values.at(var);
+    if (_values.find(var) != _values.end())
+        switch (_values.at(var)) {
+            case Z3_lbool::Z3_L_UNDEF:
+                return SatResult::UNDEF;
+            case Z3_lbool::Z3_L_FALSE:
+                return SatResult::FALSE;
+            case Z3_lbool::Z3_L_TRUE:
+                return SatResult::TRUE;
+            default:
+                throw(SatSolverResultException("Illegal Sat value"));
+        }
+    else throw SatSolverResultException("Variables not in assignment");
+
+
 }
