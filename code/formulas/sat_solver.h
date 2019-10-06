@@ -42,3 +42,6 @@ private:
     z3::expr get_blocking_clause(const z3::model& model, const std::vector<z3::expr> &vector);
 };
 
+std::map<std::string, std::function<ISatSolver(z3::context&)>> SatSolverChooser = {
+        {"Z3", [](z3::context& ctx) { return Z3SatSolver(ctx); }}
+};

@@ -3,13 +3,13 @@
 //
 
 #include <fstream>
-#include <utils/omg_exception.h>
 #include <utils/string_utils.h>
 #include "omg_config.h"
 
 std::unordered_map<std::string, ValueType> OmgConfigurationBuilder::configuration_fields =
         {
-                {"Properties per specification", ValueType::BOOLEAN }
+                {"Properties per specification", ValueType::BOOLEAN},
+                {"Sat Solver", ValueType::STRING}
         };
 
 

@@ -9,6 +9,7 @@
 #include <utility>
 #include <unordered_map>
 #include <map>
+#include <cassert>
 
 
 class PropFormula {
@@ -22,10 +23,17 @@ public:
         return _formula.to_string();
     }
 
+    const z3::expr_vector& get_vars_by_tag(const std::string& tag) const;
     std::vector<z3::expr> get_all_variables() const;
+
+    static std::vector<z3::expr> get_vars_in_formula(z3::expr const & e);
+
+    const std::map<std::string, z3::expr_vector> & get_variables_map() const;
 
 private:
     const z3::expr _formula;
     const std::map<std::string, z3::expr_vector> & _variables;
+
 };
+
 
