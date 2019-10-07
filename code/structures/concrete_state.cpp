@@ -62,3 +62,8 @@ void ConcreteState::compute_successors() {
     }
     _successors.emplace(successors);
 }
+
+std::ostream& operator<< (std::ostream& stream, const ConcreteState& concrete_state) {
+    stream << concrete_state._conjunct.to_string();
+    return stream;
+}

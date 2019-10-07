@@ -10,6 +10,7 @@
 #include <experimental/optional>
 #include <z3++.h>
 #include <structures/kripke_structure.h>
+#include <utils/cartesian_product_generator.h>
 
 enum AigMetadata{
     M = 0, I = 1, L = 2, O = 3, A = 4
@@ -35,6 +36,7 @@ private:
     AigParser& extract_ap_mapping(const std::vector<std::string>& vector);
     std::unordered_map<size_t, z3::expr> calc_literal_formulas(const std::vector<std::string>& aag_lines);
     void calculate_tr_formula(const std::unordered_map<size_t, z3::expr>& fresh_formulas);
+    void extract_init(const std::vector<std::string> &file_lines);
 
 
     const std::string _aig_path;
@@ -53,4 +55,5 @@ private:
     z3::context _context;
     std::map<size_t, size_t> _fresh_literal_names;
     std::unique_ptr<PropFormula> _tr_formula;
+    std::unique_ptr<CartesianProductGenerator<z3::expr>> _init_gen;
 };

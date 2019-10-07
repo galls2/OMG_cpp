@@ -15,6 +15,8 @@ public:
     ConcreteState(const KripkeStructure& kripke, const z3::expr &conjunct);
 
     std::vector<ConcreteState> get_successors();
+    friend std::ostream& operator<< (std::ostream& stream, const ConcreteState& concrete_state);
+
 private:
     const KripkeStructure& _kripke;
     const z3::expr _conjunct;

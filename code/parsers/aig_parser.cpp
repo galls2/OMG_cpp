@@ -30,6 +30,8 @@ AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path) {
 
     std::unordered_map<size_t, z3::expr> lit_formulas = calc_literal_formulas(file_lines);
     calculate_tr_formula(lit_formulas);
+    extract_init(file_lines);
+
 
 }
     AigParser &AigParser::extract_literals(const std::vector<std::string> &aag_lines) {
@@ -169,14 +171,7 @@ AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path) {
     }
 
     KripkeStructure AigParser::to_kripke(std::set<std::string> aps) {
-
-
-
-        return KripkeStructure(*_tr_formula, std::move(aps));
-
-// Don't forget to set the new kripke structure to _kripke
-
-
+        return KripkeStructure(*_tr_formula, std::move(aps), *_init_gen);
     }
 
     void AigParser::calculate_tr_formula(const std::unordered_map<size_t, z3::expr> &formulas) {
@@ -233,3 +228,34 @@ AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path) {
         PropFormula tr(and_result, var_tags);
         _tr_formula = std::make_unique<PropFormula>(std::move(tr));
     }
+
+void AigParser::extract_init(const std::vector<std::string> &file_lines) {
+    std::vector<std::vector<z3::expr>> init_exprs;
+    z3::expr_vector ps_vars = _tr_formula->get_vars_by_tag("ps");
+    for (size_t i = 1; i < _metadata[AigMetadata::L] + 1; ++i)
+    {
+        z3::expr var = ps_vars[i];
+        std::vector<std::string> parts;
+        split(file_lines[i], ' ', parts);
+        std::vector<z3::expr> v;
+        if (parts.size() == 1) v.push_back(var);
+        else
+        {
+            assert(parts.size() == 2);
+            size_t init_val = std::stoul(parts[1]);
+            if (init_val < 2)
+            {
+                assert (init_val == 1);
+                v.push_back(!var);
+            }
+            else
+            {
+                assert(init_val == 2*i);
+                v.push_back(var);
+                v.push_back(!var);
+            }
+        }
+        init_exprs.emplace_back(v);
+    }
+    _init_gen = std::make_unique<CartesianProductGenerator<z3::expr>>(init_exprs);
+}
