@@ -4,27 +4,10 @@
 
 #include <cassert>
 #include <formulas/sat_solver.h>
+#include <utils/z3_utils.h>
 #include "concrete_state.h"
 
-template <typename T>
-std::set<T> vector_to_set(const std::vector<T>& vec)
-{
-    return std::set<T>(vec.begin(), vec.end());
-}
 
-std::set<z3::expr> expr_vector_to_set(const z3::expr_vector& expr_vec)
-{
-    std::set<z3::expr> s;
-    for (size_t i = 0;i<expr_vec.size(); ++i) s.insert(expr_vec[i]);
-    return s;
-}
-
-std::vector<z3::expr> expr_vector_to_vector(const z3::expr_vector& expr_vec)
-{
-    std::vector<z3::expr> s;
-    for (size_t i = 0;i<expr_vec.size(); ++i) s.push_back(expr_vec[i]);
-    return s;
-}
 
 ConcreteState::ConcreteState(const KripkeStructure& kripke, const z3::expr &conjunct)  : _kripke(kripke), _conjunct(conjunct)
 {
@@ -50,6 +33,7 @@ void ConcreteState::compute_successors() {
     std::vector<ConcreteState> successors;
     for (const auto& res : sat_results)
     {
+
         assert(res.get_is_sat());
         z3::expr_vector lits(raw_tr.ctx());
         for (size_t i = 0; i < ns_vars.size(); ++i) {

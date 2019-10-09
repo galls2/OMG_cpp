@@ -32,7 +32,7 @@ class ISatSolver
 {
 public:
     virtual SatSolverResult solve_sat(const PropFormula& formula) = 0;
-    virtual std::vector<SatSolverResult> all_sat(const PropFormula& formula, const std::vector<z3::expr> &vars) = 0;
+    virtual std::vector<SatSolverResult> all_sat(const PropFormula& formula, const std::vector<z3::expr> &vars, bool complete_assignments=false) = 0;
 };
 
 class Z3SatSolver : public ISatSolver
@@ -40,16 +40,13 @@ class Z3SatSolver : public ISatSolver
 public:
     explicit Z3SatSolver(z3::context& context) : _solver(context) {}
     SatSolverResult solve_sat(const PropFormula& formula) override;
-    virtual std::vector<SatSolverResult> all_sat(const PropFormula& formula, const std::vector<z3::expr> &vars) override;
+
+    std::vector<SatSolverResult> all_sat(const PropFormula& formula, const std::vector<z3::expr> &vars, bool complete_assignments) override;
 
 private:
     z3::solver _solver;
 
     z3::expr get_blocking_clause(const z3::model& model, const std::vector<z3::expr> &vector);
 
-    void add_assignments(std::vector<SatSolverResult> &assignments, SatSolverResult result, const std::vector<z3::expr> &vars);
+    void add_assignments(std::vector<SatSolverResult> &assignments, SatSolverResult result, const std::vector<z3::expr> &vars, bool complete_assignments);
 };
-//
-//std::map<std::string, std::function<ISatSolver&&(z3::context&)>> SatSolverChooser = {
-//        {"Z3", [](z3::context& ctx) { return Z3SatSolver(ctx); }}
-//};

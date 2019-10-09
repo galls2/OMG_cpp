@@ -11,6 +11,7 @@
 #include <z3++.h>
 #include <structures/kripke_structure.h>
 #include <utils/cartesian_product_generator.h>
+#include <bits/unordered_map.h>
 
 enum AigMetadata{
     M = 0, I = 1, L = 2, O = 3, A = 4
@@ -37,7 +38,7 @@ private:
     std::unordered_map<size_t, z3::expr> calc_literal_formulas(const std::vector<std::string>& aag_lines);
     void calculate_tr_formula(const std::unordered_map<size_t, z3::expr>& fresh_formulas);
     void extract_init(const std::vector<std::string> &file_lines);
-
+    void generate_new_names(std::vector<std::vector<z3::expr>>& vec_of_vecs, size_t& first_name, size_t vars_per_vec);
 
     const std::string _aig_path;
     std::string _aag_path;
@@ -52,8 +53,14 @@ private:
     std::vector<size_t> _prev_state_literals;
     std::vector<size_t> _next_state_literals;
     std::unordered_map<size_t, z3::expr> _lit_formulas;
-    z3::context _context;
+    z3::context _ctx;
     std::map<size_t, size_t> _fresh_literal_names;
     std::unique_ptr<PropFormula> _tr_formula;
     std::unique_ptr<CartesianProductGenerator<z3::expr>> _init_gen;
+    std::unique_ptr<z3::expr>  _state_formula;
+
+    void generate_state_formula(const std::unordered_map<size_t, z3::expr> &formulas, std::vector<z3::expr> &prev_out,
+                                const z3::expr_vector &orig_in, const z3::expr_vector &orig_ns,
+                                const z3::expr_vector &orig_out, std::vector<z3::expr> &prev_in,
+                                std::vector<z3::expr> &prev_latch);
 };

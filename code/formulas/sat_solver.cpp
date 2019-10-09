@@ -12,7 +12,7 @@ SatSolverResult Z3SatSolver::solve_sat(const PropFormula &formula) {
     return SatSolverResult(_solver.get_model(), formula.get_all_variables());
 }
 
-std::vector<SatSolverResult> Z3SatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr>& vars ) {
+std::vector<SatSolverResult> Z3SatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr>& vars, bool complete_assignments = false ) {
     std::vector<SatSolverResult> assignments;
     const z3::expr &raw_formula = formula.get_formula();
     z3::solver solver(raw_formula.ctx());
@@ -22,7 +22,7 @@ std::vector<SatSolverResult> Z3SatSolver::all_sat(const PropFormula &formula, co
     {
         z3::model m = solver.get_model();
         SatSolverResult res(m, vars);
-        add_assignments(assignments ,res, vars);
+        add_assignments(assignments ,res, vars, complete_assignments);
         z3::expr blocking_clause = get_blocking_clause(m, vars);
         solver.add(blocking_clause);
     }
@@ -40,12 +40,16 @@ z3::expr Z3SatSolver::get_blocking_clause(const z3::model& model, const std::vec
 }
 
 void Z3SatSolver::add_assignments(std::vector<SatSolverResult> &assignemnts, SatSolverResult result,
-                                  const std::vector<z3::expr> &vars) {
-    for (const auto& i : vars)
-        if (result.get_value(i) == SatResult ::UNDEF) throw SatSolverResultException("UPPUPU");
-
+                                  const std::vector<z3::expr> &vars, bool complete_assignment) {
+    assert(result.get_is_sat());
+    if (!complete_assignment) {
         assignemnts.push_back(result);
-
+        return;
+    }
+    else
+    {
+     COMPLETE ME!!
+    }
 }
 
 SatSolverResult::SatSolverResult() : _is_sat(false) { }
