@@ -2,23 +2,23 @@
 // Created by galls2 on 29/09/19.
 //
 
+#include <utils/z3_utils.h>
+#include <formulas/sat_solver.h>
 #include "kripke_structure.h"
 
 
 
-ConcreteState KripkeStructure::get_first_initial_state() {
-    std::vector<z3::expr> init = _init_gen.get_initial();
-    return literals_to_state(init);
-}
-
-std::experimental::optional<ConcreteState> KripkeStructure::get_next_initial_state() {
-    std::experimental::optional<std::vector<z3::expr>> init = _init_gen.get_next();
-    if (init) return literals_to_state(init.value());
-    return std::experimental::optional<ConcreteState>();
-}
-
-ConcreteState KripkeStructure::literals_to_state(const std::vector<z3::expr>& literals) const {
-    z3::expr_vector conj_parts(_transitions.get_formula().ctx());
-    for (const auto& it : literals) conj_parts.push_back(it);
-    return ConcreteState(*this, z3::mk_and(conj_parts));
+std::vector<ConcreteState> KripkeStructure::get_initial_states() const
+{
+    //CHANGE
+    Z3SatSolver solver(_transitions.get_formula().ctx());
+    const auto& ps_vars = _transitions.get_vars_by_tag("ps");
+    std::map<std::string, z3::expr_vector> mp = {"ps", ps_vars};
+    PropFormula p(_init_formula, mp);
+    std::vector<SatSolverResult> results = solver.all_sat(p, expr_vector_to_vector(ps_vars), true);
+    std::vector<ConcreteState> init_states;
+    for (const auto& result : results)
+    {
+        init_states.emplace_back(*this, result.to_conjunt());
+    }
 }

@@ -17,6 +17,7 @@
 #include <utils/version_manager.h>
 #include <utils/z3_utils.h>
 #include <bits/unordered_map.h>
+#include <formulas/sat_solver.h>
 #include "aig_parser.h"
 
 AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path) {
@@ -246,13 +247,18 @@ AigParser::generate_state_formula(const std::unordered_map<size_t, z3::expr> &fo
 void AigParser::extract_init(const std::vector<std::string> &file_lines) {
     std::vector<std::vector<z3::expr>> init_exprs;
     z3::expr_vector ps_vars = _tr_formula->get_vars_by_tag("ps");
+    z3::expr_vector latch_values(_ctx);
     for (size_t i = 1; i < _metadata[AigMetadata::L] + 1; ++i)
     {
         z3::expr var = ps_vars[i];
         std::vector<std::string> parts;
         split(file_lines[i], ' ', parts);
         std::vector<z3::expr> v;
-        if (parts.size() == 1) v.push_back(var);
+        if (parts.size() == 1)
+        {
+            v.push_back(var);
+            latch_values.push_back(_ctx.bool_val(false));
+        }
         else
         {
             assert(parts.size() == 2);
@@ -261,19 +267,23 @@ void AigParser::extract_init(const std::vector<std::string> &file_lines) {
             {
                 assert (init_val == 1);
                 v.push_back(!var);
+                latch_values.push_back(_ctx.bool_val(true));
             }
             else
             {
                 assert(init_val == 2*i);
                 v.push_back(var);
                 v.push_back(!var);
+                latch_values.push_back(var);
             }
         }
         init_exprs.emplace_back(v);
     }
-    z3::expr state_latches_assigned = _state_formula->substitute()
-    COMPLETE WITH THE OUTPUTS
-    _init_gen = std::make_unique<CartesianProductGenerator<z3::expr>>(init_exprs);
+    for (size_t j = _metadata[AigMetadata::L]; j < ps_vars.size(); ++j) latch_values.push_back(ps_vars[j]);
+
+
+    _init_formula = _state_formula->substitute(ps_vars, latch_values);
+
 }
 
 void AigParser::generate_new_names(std::vector<std::vector<z3::expr>> &vec_of_vecs, size_t &start_from,

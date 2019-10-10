@@ -56,7 +56,7 @@ private:
     z3::context _ctx;
     std::map<size_t, size_t> _fresh_literal_names;
     std::unique_ptr<PropFormula> _tr_formula;
-    std::unique_ptr<CartesianProductGenerator<z3::expr>> _init_gen;
+    std::unique_ptr<z3::expr> _init_formula;
     std::unique_ptr<z3::expr>  _state_formula;
 
     void generate_state_formula(const std::unordered_map<size_t, z3::expr> &formulas, std::vector<z3::expr> &prev_out,

@@ -20,8 +20,10 @@ struct SatSolverResult
 public:
     SatSolverResult();
     SatSolverResult(const z3::model& model, const std::vector<z3::expr>& vars);
+    explicit SatSolverResult(const std::map<z3::expr, Z3_lbool>& values);
     SatResult get_value(const z3::expr& var) const;
     bool get_is_sat() const { return _is_sat; }
+    z3::expr to_conjunt() const;
 private:
     bool _is_sat;
     std::map<z3::expr, Z3_lbool> _values;
@@ -49,4 +51,5 @@ private:
     z3::expr get_blocking_clause(const z3::model& model, const std::vector<z3::expr> &vector);
 
     void add_assignments(std::vector<SatSolverResult> &assignments, SatSolverResult result, const std::vector<z3::expr> &vars, bool complete_assignments);
+
 };

@@ -10,18 +10,17 @@ class ConcreteState;
 
 class KripkeStructure {
 public:
-    KripkeStructure(PropFormula tr, std::set<std::string> aps, CartesianProductGenerator<z3::expr>& init_gen)
-    : _transitions(std::move(tr)), _aps(std::move(aps)), _init_gen(init_gen) {}
+    KripkeStructure(PropFormula tr, std::set<std::string> aps, const z3::expr& init, const z3::expr& state_formula, const z3::expr& init)
+    : _transitions(std::move(tr)), _aps(std::move(aps)), _state_formula(state_formula), _init_formula(init_formula) {}
     const PropFormula& get_tr() const { return _transitions; }
-    ConcreteState get_first_initial_state();
-    std::experimental::optional<ConcreteState> get_next_initial_state();
+    std::vector<ConcreteState> get_initial_states() const;
 private:
     ConcreteState literals_to_state(const std::vector<z3::expr>& literals) const;
 
     const PropFormula _transitions;
     const std::set<std::string> _aps;
-    CartesianProductGenerator<z3::expr>& _init_gen;
-
+    const z3::expr _state_formula;
+    const z3::expr _init_formula;
 
 };
 

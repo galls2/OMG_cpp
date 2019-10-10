@@ -12,7 +12,7 @@ class KripkeStructure;
 
 class ConcreteState {
 public:
-    ConcreteState(const KripkeStructure& kripke, const z3::expr &conjunct);
+    ConcreteState(const KripkeStructure& kripke, z3::expr conjunct);
 
     std::vector<ConcreteState> get_successors();
     friend std::ostream& operator<< (std::ostream& stream, const ConcreteState& concrete_state);

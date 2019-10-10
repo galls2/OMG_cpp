@@ -5,11 +5,12 @@
 #include <cassert>
 #include <formulas/sat_solver.h>
 #include <utils/z3_utils.h>
+#include <memory>
 #include "concrete_state.h"
 
 
 
-ConcreteState::ConcreteState(const KripkeStructure& kripke, const z3::expr &conjunct)  : _kripke(kripke), _conjunct(conjunct)
+ConcreteState::ConcreteState(const KripkeStructure& kripke, z3::expr conjunct)  : _kripke(kripke), _conjunct(std::move(conjunct))
 {
     assert(vector_to_set<z3::expr>(PropFormula::get_vars_in_formula(_conjunct)) == expr_vector_to_set(_kripke.get_tr().get_vars_by_tag("ps")));
 }
@@ -33,7 +34,6 @@ void ConcreteState::compute_successors() {
     std::vector<ConcreteState> successors;
     for (const auto& res : sat_results)
     {
-
         assert(res.get_is_sat());
         z3::expr_vector lits(raw_tr.ctx());
         for (size_t i = 0; i < ns_vars.size(); ++i) {

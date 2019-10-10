@@ -3,6 +3,9 @@
 //
 
 #include <z3.h>
+#include <algorithm>
+#include <cmath>
+#include <set>
 #include "sat_solver.h"
 
 SatSolverResult Z3SatSolver::solve_sat(const PropFormula &formula) {
@@ -48,9 +51,28 @@ void Z3SatSolver::add_assignments(std::vector<SatSolverResult> &assignemnts, Sat
     }
     else
     {
-     COMPLETE ME!!
+        std::set<size_t> undef_idxs;
+        for (size_t i = 0; i < vars.size(); ++i) if (result.get_value(vars[i])) undef_idxs.insert(i);
+        for (size_t i = 0; i < (1 << undef_idxs.size()); ++i)
+        {
+            std::map<z3::expr, Z3_lbool> vals;
+            for (size_t j = 0; j < vars.size(); ++j)
+            {
+                if (undef_idxs.find(j) == undef_idxs.end())
+                    vals.insert(std::make_pair(vars[j], result.get_value(vars[j])));
+                else
+                {
+                    vals.insert(std::make_pair(vars[j], SatResult::TRUE));
+                    vals.insert(std::make_pair(vars[j], SatResult::FALSE));
+                }
+            }
+            assignemnts.emplace_back(std::move(vals));
+        }
     }
 }
+
+
+
 
 SatSolverResult::SatSolverResult() : _is_sat(false) { }
 
@@ -62,6 +84,9 @@ SatSolverResult::SatSolverResult(const z3::model& model, const std::vector<z3::e
         _values[var] = model.eval(var).bool_value();
     }
 }
+
+SatSolverResult::SatSolverResult(std::map<z3::expr, Z3_lbool> values) : _is_sat(true), _values(std::move(values)) {}
+
 
 SatResult SatSolverResult::get_value(const z3::expr& var ) const {
     if (!_is_sat) throw SatSolverResultException("Formula is unsat");
@@ -79,4 +104,14 @@ SatResult SatSolverResult::get_value(const z3::expr& var ) const {
     else throw SatSolverResultException("Variables not in assignment");
 
 
+}
+
+z3::expr SatSolverResult::to_conjunt(const z3::context& ctx) {
+    z3::expr_vector lits(ctx);
+    for (auto& it = _values.begin(); it != _values.end(); ++it)
+    {
+        if (it->second != SatResult::UNDEF)
+            lits.push_back(it->second == SatResult::TRUE ? (it->first) : (! it->first));
+    }
+    return z3::mk_and(lits);
 }
