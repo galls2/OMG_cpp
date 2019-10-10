@@ -10,9 +10,14 @@
 
 
 
-ConcreteState::ConcreteState(const KripkeStructure& kripke, z3::expr conjunct)  : _kripke(kripke), _conjunct(std::move(conjunct))
+ConcreteState::ConcreteState(const KripkeStructure& kripke, z3::expr conjunct)  : _kripke(kripke), _conjunct(conjunct)
 {
-    assert(vector_to_set<z3::expr>(PropFormula::get_vars_in_formula(_conjunct)) == expr_vector_to_set(_kripke.get_tr().get_vars_by_tag("ps")));
+#ifndef DEBUG
+    std::vector<z3::expr> conj_vars = PropFormula::get_vars_in_formula(_conjunct);
+    std::set<z3::expr> conj_vars_set(conj_vars.begin(), conj_vars.end());
+    assert(conj_vars_set ==
+            expr_vector_to_set(_kripke.get_tr().get_vars_by_tag("ps")));
+#endif
 }
 
 std::vector<ConcreteState> ConcreteState::get_successors() {

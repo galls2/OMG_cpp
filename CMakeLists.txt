@@ -15,7 +15,10 @@ add_executable(OMG main.cpp
         code/parsers/ctl_file_parser.cpp code/parsers/ctl_parser_data.cpp
         code/temporal/ctl_formula.cpp code/structures/kripke_structure.cpp
         code/formulas/prop_formula.cpp code/configuration/omg_config.cpp
-        code/structures/unwinding_tree.cpp code/structures/unwinding_tree.h code/structures/concrete_state.cpp code/structures/concrete_state.h code/model_checking/omg_model_checker.cpp code/model_checking/omg_model_checker.h code/abstraction/abstract_structure.cpp code/abstraction/abstract_structure.h code/formulas/sat_solver.cpp code/formulas/sat_solver.h code/utils/cartesian_product_generator.cpp code/utils/cartesian_product_generator.h code/utils/z3_utils.cpp code/utils/z3_utils.h)
+        code/structures/unwinding_tree.cpp code/structures/concrete_state.cpp
+        code/model_checking/omg_model_checker.cpp code/abstraction/abstract_structure.cpp
+        code/formulas/sat_solver.cpp code/utils/cartesian_product_generator.cpp
+        code/utils/z3_utils.cpp)
 
 
 

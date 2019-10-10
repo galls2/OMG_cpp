@@ -20,13 +20,15 @@ struct SatSolverResult
 public:
     SatSolverResult();
     SatSolverResult(const z3::model& model, const std::vector<z3::expr>& vars);
-    explicit SatSolverResult(const std::map<z3::expr, Z3_lbool>& values);
+    explicit SatSolverResult(const std::map<z3::expr, Z3_lbool >& values);
+    explicit SatSolverResult(std::map<z3::expr, SatResult > values);
+
     SatResult get_value(const z3::expr& var) const;
     bool get_is_sat() const { return _is_sat; }
-    z3::expr to_conjunt() const;
+    z3::expr to_conjunt(z3::context& ctx) const;
 private:
     bool _is_sat;
-    std::map<z3::expr, Z3_lbool> _values;
+    std::map<z3::expr, SatResult> _values;
 
 };
 

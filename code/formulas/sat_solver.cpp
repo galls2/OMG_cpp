@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cmath>
 #include <set>
+#include <utils/z3_utils.h>
 #include "sat_solver.h"
 
 SatSolverResult Z3SatSolver::solve_sat(const PropFormula &formula) {
@@ -52,13 +53,14 @@ void Z3SatSolver::add_assignments(std::vector<SatSolverResult> &assignemnts, Sat
     else
     {
         std::set<size_t> undef_idxs;
-        for (size_t i = 0; i < vars.size(); ++i) if (result.get_value(vars[i])) undef_idxs.insert(i);
+        for (size_t i = 0; i < vars.size(); ++i) if (result.get_value(vars[i]) == SatResult::UNDEF) undef_idxs.insert(i);
         for (size_t i = 0; i < (1 << undef_idxs.size()); ++i)
         {
-            std::map<z3::expr, Z3_lbool> vals;
+            std::map<z3::expr, SatResult> vals;
             for (size_t j = 0; j < vars.size(); ++j)
             {
                 if (undef_idxs.find(j) == undef_idxs.end())
+
                     vals.insert(std::make_pair(vars[j], result.get_value(vars[j])));
                 else
                 {
@@ -81,37 +83,34 @@ SatSolverResult::SatSolverResult(const z3::model& model, const std::vector<z3::e
     auto& context = model.ctx();
     for (const auto& var : vars)
     {
-        _values[var] = model.eval(var).bool_value();
+        _values[var] = Z3_val_to_sat_result(model.eval(var).bool_value());
     }
 }
 
-SatSolverResult::SatSolverResult(std::map<z3::expr, Z3_lbool> values) : _is_sat(true), _values(std::move(values)) {}
+SatSolverResult::SatSolverResult(const std::map<z3::expr, Z3_lbool> &values) : _is_sat(true)
+{
+    for (const auto& it : values)
+        _values.insert(std::make_pair(it.first, Z3_val_to_sat_result(it.second)));
+}
 
 
 SatResult SatSolverResult::get_value(const z3::expr& var ) const {
     if (!_is_sat) throw SatSolverResultException("Formula is unsat");
     if (_values.find(var) != _values.end())
-        switch (_values.at(var)) {
-            case Z3_lbool::Z3_L_UNDEF:
-                return SatResult::UNDEF;
-            case Z3_lbool::Z3_L_FALSE:
-                return SatResult::FALSE;
-            case Z3_lbool::Z3_L_TRUE:
-                return SatResult::TRUE;
-            default:
-                throw(SatSolverResultException("Illegal Sat value"));
-        }
+        return  _values.at(var);
+
     else throw SatSolverResultException("Variables not in assignment");
 
 
 }
 
-z3::expr SatSolverResult::to_conjunt(const z3::context& ctx) {
+z3::expr SatSolverResult::to_conjunt(z3::context& ctx) const {
     z3::expr_vector lits(ctx);
-    for (auto& it = _values.begin(); it != _values.end(); ++it)
-    {
-        if (it->second != SatResult::UNDEF)
-            lits.push_back(it->second == SatResult::TRUE ? (it->first) : (! it->first));
+    for (const auto & value : _values) {
+        if (value.second != SatResult::UNDEF)
+            lits.push_back(value.second == SatResult::TRUE ? (value.first) : (!value.first));
     }
     return z3::mk_and(lits);
 }
+
+SatSolverResult::SatSolverResult(std::map<z3::expr, SatResult> values) : _is_sat(true), _values(std::move(values)) {}

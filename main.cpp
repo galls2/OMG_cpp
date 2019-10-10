@@ -88,16 +88,6 @@ void test_ctl_file_parser()
 int main()
 {
     AigParser p(R"(/home/galls2/Desktop/af_ag.aig)");
-    auto val = p.to_kripke({});
-    auto init = val.get_first_initial_state();
-    std::cout << "Init: "<<init << std::endl;
-    auto succ = init.get_successors();
-    std:: cout << "Successors: ";
-    for (const auto &s : succ)
-        std::cout << s << std::endl;
+    KripkeStructure kripke = p.to_kripke({});
 
-
-//    std::cout << val.get_tr().get_formula().to_string() << std::endl;
- //   std::cout << "UPUU";
-    test_sub();
 }
