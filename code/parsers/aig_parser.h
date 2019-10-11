@@ -38,7 +38,7 @@ private:
     std::unordered_map<size_t, z3::expr> calc_literal_formulas(const std::vector<std::string>& aag_lines);
     void calculate_tr_formula(const std::unordered_map<size_t, z3::expr>& fresh_formulas);
     void extract_init(const std::vector<std::string> &file_lines);
-    void generate_new_names(std::vector<std::vector<z3::expr>>& vec_of_vecs, size_t& first_name, size_t vars_per_vec);
+    void generate_new_names(std::vector<std::reference_wrapper<std::vector<z3::expr>>>& vec_of_vecs, size_t& first_name, size_t vars_per_vec);
 
     const std::string _aig_path;
     std::string _aag_path;

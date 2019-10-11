@@ -181,7 +181,10 @@ AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path) {
         size_t new_var_index = (_metadata[AigMetadata::M] + 1) * 2 + 1;
 
         std::vector<z3::expr> prev_in, prev_latch, prev_out, next_in, next_latch, next_out;
-        std::vector<std::vector<z3::expr>> ins = {prev_in, next_in}, latches = {prev_latch, next_latch}, outs = {prev_out, next_out};
+        std::vector<std::reference_wrapper<std::vector<z3::expr>>>
+            ins = {std::reference_wrapper<std::vector<z3::expr>>(prev_in), std::reference_wrapper<std::vector<z3::expr>>(next_in)},
+            latches = {std::reference_wrapper<std::vector<z3::expr>>(prev_latch), std::reference_wrapper<std::vector<z3::expr>>(next_latch)},
+            outs = {std::reference_wrapper<std::vector<z3::expr>>(prev_out), std::reference_wrapper<std::vector<z3::expr>>(next_out)};
 
         generate_new_names(ins, new_var_index, _metadata[AigMetadata::I]);
         generate_new_names(latches, new_var_index, _metadata[AigMetadata::L]);
@@ -222,10 +225,13 @@ AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path) {
         for (const z3::expr& it : boost::join(next_latch, next_out))
             ns.push_back(it);
 
-        std::map<std::string, z3::expr_vector> var_tags =  { {"in0", vec_to_expr_vec(_ctx, prev_in)}, {"in1", vec_to_expr_vec(_ctx, next_in)},
-                                                             {"ps", ps}, {"ns", ns} };
-        PropFormula tr(tr_raw, var_tags);
-        _tr_formula = std::make_unique<PropFormula>(std::move(tr));
+        std::map<std::string, z3::expr_vector> var_tags;
+        var_tags.insert(std::make_pair(std::string("in0"), vec_to_expr_vec(_ctx, prev_in)));
+        var_tags.insert(std::make_pair(std::string("in1"), vec_to_expr_vec(_ctx, next_in)));
+        var_tags.insert(std::make_pair(std::string("ps"), ps));
+        var_tags.insert(std::make_pair(std::string("ns"), ns));
+
+        _tr_formula = std::make_unique<PropFormula>(tr_raw, var_tags);
     }
 
 void
@@ -236,7 +242,7 @@ AigParser::generate_state_formula(const std::unordered_map<size_t, z3::expr> &fo
     z3::expr_vector state_formula_parts(_ctx);
     for (size_t o_lit : _out_literals)
     {
-        z3::expr out_formula = to_var(_ctx, o_lit) == formulas.at(o_lit);
+        z3::expr out_formula = _ctx.bool_const(std::to_string(o_lit).data()) == formulas.at(o_lit);
         z3::expr named_out_formula =
                 out_formula.substitute(orig_in, vec_to_expr_vec(_ctx, prev_in))
                            .substitute(orig_ns, vec_to_expr_vec(_ctx, prev_latch)) // BUG?
@@ -248,7 +254,7 @@ AigParser::generate_state_formula(const std::unordered_map<size_t, z3::expr> &fo
 
 void AigParser::extract_init(const std::vector<std::string> &file_lines) {
     std::vector<std::vector<z3::expr>> init_exprs;
-    z3::expr_vector ps_vars = _tr_formula->get_vars_by_tag("ps");
+    z3::expr_vector ps_vars = _tr_formula->get_vars_by_tag(std::string("ps"));
     z3::expr_vector latch_values(_ctx);
     for (size_t i = 1; i < _metadata[AigMetadata::L] + 1; ++i)
     {
@@ -287,12 +293,12 @@ void AigParser::extract_init(const std::vector<std::string> &file_lines) {
     _init_formula = std::make_unique<z3::expr>(_state_formula->substitute(ps_vars, latch_values));
 }
 
-void AigParser::generate_new_names(std::vector<std::vector<z3::expr>> &vec_of_vecs, size_t &start_from,
+void AigParser::generate_new_names(std::vector<std::reference_wrapper<std::vector<z3::expr>>> &vec_of_vecs, size_t &start_from,
                                    size_t num_iters) {
     for (size_t i = 0; i < num_iters; ++i)
     {
         for (auto& vec : vec_of_vecs)
-            vec.push_back(to_var(_ctx, ++start_from));
+            vec.get().push_back(to_var(_ctx, ++start_from));
     }
 
 }

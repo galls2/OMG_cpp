@@ -89,5 +89,6 @@ int main()
 {
     AigParser p(R"(/home/galls2/Desktop/af_ag.aig)");
     KripkeStructure kripke = p.to_kripke({});
-
+    std::vector<ConcreteState> inits = kripke.get_initial_states();
+    for (const ConcreteState& init : inits) std::cout << init << std::endl;
 }
