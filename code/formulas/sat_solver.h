@@ -6,6 +6,7 @@
 #include <boost/variant.hpp>
 #include "prop_formula.h"
 #include <utils/omg_exception.h>
+#include <functional>
 
 
 DECLARE_OMG_EXCEPTION(SatSolverResultException)
@@ -15,20 +16,29 @@ enum class SatResult {
 };
 
 
+struct Z3ExprComp
+{
+    bool operator()(const z3::expr& a, const z3::expr& b) const
+    {
+        return a.to_string() < b.to_string();
+    }
+
+};
+
 struct SatSolverResult
 {
 public:
     SatSolverResult();
     SatSolverResult(const z3::model& model, const std::vector<z3::expr>& vars);
     explicit SatSolverResult(const std::map<z3::expr, Z3_lbool >& values);
-    explicit SatSolverResult(std::map<z3::expr, SatResult > values);
+    explicit SatSolverResult(std::map<z3::expr, SatResult, Z3ExprComp > values);
 
     SatResult get_value(const z3::expr& var) const;
     bool get_is_sat() const { return _is_sat; }
     z3::expr to_conjunt(z3::context& ctx) const;
 private:
     bool _is_sat;
-    std::map<z3::expr, SatResult> _values;
+    std::map<z3::expr, SatResult, Z3ExprComp> _values;
 
 };
 

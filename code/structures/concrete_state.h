@@ -15,6 +15,10 @@ public:
     ConcreteState(const KripkeStructure& kripke, z3::expr conjunct);
 
     std::vector<ConcreteState> get_successors();
+
+#ifndef DEBUG
+    std::vector<bool> to_bitvec() const;
+#endif
     friend std::ostream& operator<< (std::ostream& stream, const ConcreteState& concrete_state);
 
 private:

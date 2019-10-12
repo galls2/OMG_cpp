@@ -28,7 +28,7 @@ const std::map<std::string, z3::expr_vector> &PropFormula::get_variables_map() c
 
 std::vector<z3::expr> PropFormula::get_vars_in_formula(z3::expr const & e) {
     std::vector<z3::expr> vars;
-    if (e.is_app()) {
+    if (e.num_args() != 0) {
         unsigned num = e.num_args();
         for (unsigned i = 0; i < num; i++) {
             std::vector<z3::expr> sub_res = get_vars_in_formula(e.arg(i));
@@ -41,7 +41,7 @@ std::vector<z3::expr> PropFormula::get_vars_in_formula(z3::expr const & e) {
 //            vars.insert( vars.end(), sub_res.begin(), sub_res.end() );
 //        }
     else {
-        assert(e.is_var());
+ //       assert(e.is_var());
         vars.push_back(e);
         // do something
     }
@@ -49,7 +49,15 @@ std::vector<z3::expr> PropFormula::get_vars_in_formula(z3::expr const & e) {
 }
 
 std::string PropFormula::to_string() const {
-    return _formula.to_string();
+    std::string res = std::string("---------\n")+_formula.to_string() + std::string("\nThe vars are:\n");
+    for (const auto& it : _variables) {
+        res += it.first + std::string(" : ");
+        for (size_t i = 0; i < it.second.size(); ++i)
+            res += it.second[i].to_string() + std::string(" ");
+        res += '\n';
+    }
+    res += std::string("---------\n");
+    return res;
 }
 
 const z3::expr &PropFormula::get_formula() const {

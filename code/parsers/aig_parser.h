@@ -60,7 +60,7 @@ private:
     std::unique_ptr<z3::expr>  _state_formula;
 
     void generate_state_formula(const std::unordered_map<size_t, z3::expr> &formulas, std::vector<z3::expr> &prev_out,
-                                const z3::expr_vector &orig_in, const z3::expr_vector &orig_ns,
+                                const z3::expr_vector &orig_in, const z3::expr_vector &orig_ps,
                                 const z3::expr_vector &orig_out, std::vector<z3::expr> &prev_in,
                                 std::vector<z3::expr> &prev_latch);
 };

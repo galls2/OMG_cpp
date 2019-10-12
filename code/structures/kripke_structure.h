@@ -10,7 +10,7 @@ class ConcreteState;
 
 class KripkeStructure {
 public:
-    KripkeStructure(PropFormula tr, std::set<std::string> aps, z3::expr state_f, z3::expr init_f)
+    KripkeStructure(PropFormula tr, std::set<std::string> aps, const z3::expr &state_f, const z3::expr &init_f)
     : _transitions(std::move(tr)), _aps(std::move(aps)), _state_formula(state_f), _init_formula(init_f) {}
     const PropFormula& get_tr() const { return _transitions; }
     std::vector<ConcreteState> get_initial_states() const;

@@ -16,8 +16,13 @@ z3::expr_vector vec_to_expr_vec(z3::context& ctx, const std::vector<z3::expr>& v
 template <typename T>
 std::set<T> vector_to_set_debug(std::vector<T> vec);
 
-std::set<z3::expr> expr_vector_to_set(const z3::expr_vector& expr_vec);
+std::set<z3::expr, Z3ExprComp> expr_vector_to_set(const z3::expr_vector& expr_vec);
 
 std::vector<z3::expr> expr_vector_to_vector(const z3::expr_vector& expr_vec);
 
 SatResult Z3_val_to_sat_result(Z3_lbool v);
+
+std::string expr_vector_to_string(const z3::expr_vector& vec);
+
+
+std::string z3_expr_to_string(const std::vector<z3::expr>& vec);

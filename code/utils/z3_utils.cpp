@@ -2,6 +2,7 @@
 // Created by galls2 on 08/10/19.
 //
 
+#include <unordered_set>
 #include "z3_utils.h"
 #include "version_manager.h"
 
@@ -29,9 +30,9 @@ std::set<T> vector_to_set_debug(std::vector<T> vec)
     return std::set<T>(vec.begin(), vec.end());
 }
 
-std::set<z3::expr> expr_vector_to_set(const z3::expr_vector& expr_vec)
+std::set<z3::expr, Z3ExprComp> expr_vector_to_set(const z3::expr_vector& expr_vec)
 {
-    std::set<z3::expr> s;
+    std::set<z3::expr, Z3ExprComp> s;
     for (size_t i = 0;i<expr_vec.size(); ++i) s.insert(expr_vec[i]);
     return s;
 }
@@ -54,4 +55,18 @@ SatResult Z3_val_to_sat_result(Z3_lbool v) {
         default:
             throw(SatSolverResultException("Illegal Sat value"));
     }
+}
+
+std::string expr_vector_to_string(const z3::expr_vector &vec) {
+    std::string res;
+    for (size_t i = 0; i< vec.size(); ++i)
+        res += vec[i].to_string()  + std::string(" ");
+    return res;
+}
+
+std::string z3_expr_to_string(const std::vector<z3::expr> &vec) {
+    std::string res;
+    for (const auto &i : vec)
+        res += i.to_string()  + std::string(" ");
+    return res;
 }

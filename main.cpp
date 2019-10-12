@@ -85,10 +85,24 @@ void test_ctl_file_parser()
     }
 }
 
+template <typename T>
+void print_vec(const std::vector<T>& v, const std::function<std::string(const T&)>& convert)
+{
+    std::cout << "[";
+    for (size_t i=0;i<v.size();++i) std::cout << (i>0 ? "," :"") << convert(v[i]);
+    std::cout << "]" << std::endl;
+}
+
 int main()
 {
     AigParser p(R"(/home/galls2/Desktop/af_ag.aig)");
     KripkeStructure kripke = p.to_kripke({});
+    std::cout << "TR: " << kripke.get_tr().to_string() << std::endl;
+
     std::vector<ConcreteState> inits = kripke.get_initial_states();
-    for (const ConcreteState& init : inits) std::cout << init << std::endl;
+    for (const auto& it : inits) print_vec<bool>(it.to_bitvec(), [](bool b){return (b?"1":"0");});
+
+    ConcreteState& init = inits[0];
+    std::vector<ConcreteState> nexts = init.get_successors();
+    for (const auto& it : nexts) print_vec<bool>(it.to_bitvec(), [](bool b){return (b?"1":"0");});
 }

@@ -11,6 +11,7 @@
 std::vector<ConcreteState> KripkeStructure::get_initial_states() const
 {
     //CHANGE
+    std::cout << "init formula is: "<<_init_formula.to_string() << std::endl;
     z3::context& ctx = _transitions.get_formula().ctx();
     Z3SatSolver solver(ctx);
     const auto& ps_vars = _transitions.get_vars_by_tag("ps");

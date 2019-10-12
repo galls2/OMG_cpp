@@ -56,7 +56,7 @@ void Z3SatSolver::add_assignments(std::vector<SatSolverResult> &assignemnts, Sat
         for (size_t i = 0; i < vars.size(); ++i) if (result.get_value(vars[i]) == SatResult::UNDEF) undef_idxs.insert(i);
         for (size_t i = 0; i < (1 << undef_idxs.size()); ++i)
         {
-            std::map<z3::expr, SatResult> vals;
+            std::map<z3::expr, SatResult, Z3ExprComp> vals;
             for (size_t j = 0; j < vars.size(); ++j)
             {
                 if (undef_idxs.find(j) == undef_idxs.end())
@@ -83,7 +83,8 @@ SatSolverResult::SatSolverResult(const z3::model& model, const std::vector<z3::e
     auto& context = model.ctx();
     for (const auto& var : vars)
     {
-        _values[var] = Z3_val_to_sat_result(model.eval(var).bool_value());
+        SatResult var_value = Z3_val_to_sat_result(model.eval(var).bool_value());
+        _values.insert(std::make_pair(var, var_value));
     }
 }
 
@@ -113,4 +114,4 @@ z3::expr SatSolverResult::to_conjunt(z3::context& ctx) const {
     return z3::mk_and(lits);
 }
 
-SatSolverResult::SatSolverResult(std::map<z3::expr, SatResult> values) : _is_sat(true), _values(std::move(values)) {}
+SatSolverResult::SatSolverResult(std::map<z3::expr, SatResult, Z3ExprComp> values) : _is_sat(true), _values(std::move(values)) {}
