@@ -18,7 +18,7 @@ add_executable(OMG main.cpp
         code/structures/unwinding_tree.cpp code/structures/concrete_state.cpp
         code/model_checking/omg_model_checker.cpp code/abstraction/abstract_structure.cpp
         code/formulas/sat_solver.cpp code/utils/cartesian_product_generator.cpp
-        code/utils/z3_utils.cpp)
+        code/utils/z3_utils.cpp code/abstraction/abstract_state.cpp code/abstraction/abstract_state.h)
 
 
 

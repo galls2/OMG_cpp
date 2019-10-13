@@ -60,7 +60,7 @@ AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path) {
         std::string PATH_TO_EXE = "/home/galls2/Desktop/OMG_cpp/code/utils/aiger-1.9.9/aigtoaig";
         std::string out_path = std::string(aig_path).replace(aig_path.length() - 2, 1, std::string("a"));
         std::string conversion_cmd = PATH_TO_EXE + " " + aig_path + " " + out_path;
-        std::cout << conversion_cmd << std::endl;
+   //     std::cout << conversion_cmd << std::endl;
         system(conversion_cmd.c_str());
         return out_path;
     }
@@ -173,8 +173,8 @@ AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path) {
         return *this;
     }
 
-    KripkeStructure AigParser::to_kripke(std::set<std::string> aps) {
-        return KripkeStructure(*_tr_formula, std::move(aps), *_state_formula, *_init_formula);
+    std::unique_ptr<KripkeStructure> AigParser::to_kripke(std::unique_ptr<CtlFormula::PropertySet> aps) {
+        return std::make_unique<KripkeStructure>(*_tr_formula, std::move(aps), *_state_formula, *_init_formula);
     }
 
     void AigParser::calculate_tr_formula(const std::unordered_map<size_t, z3::expr> &formulas) {
@@ -297,7 +297,7 @@ void AigParser::extract_init(const std::vector<std::string> &file_lines) {
 
   //  _init_formula = std::make_unique<z3::expr>(_state_formula->substitute(ps_vars, latch_values).simplify());
     _init_formula = std::make_unique<z3::expr>(((*_state_formula) && latch_constraints).simplify());
-    std::cout << "INIT IN AIG-PARSER:: "<< _init_formula->to_string() << std::endl;
+   // std::cout << "INIT IN AIG-PARSER:: "<< _init_formula->to_string() << std::endl;
 }
 
 void AigParser::generate_new_names(std::vector<std::reference_wrapper<std::vector<z3::expr>>> &vec_of_vecs, size_t &start_from,
