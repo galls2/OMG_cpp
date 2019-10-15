@@ -27,7 +27,7 @@ private:
 class AbstractClassificationNode
 {
 public:
-    AbstractClassificationNode(const AbstractionClassifier& classifier, const AbstractState& abs_state, const AbstractClassificationNode* parent=nullptr);
+    AbstractClassificationNode(const AbstractionClassifier& classifier, AbstractState* abs_state, const AbstractClassificationNode* parent=nullptr);
     size_t get_depth() const;
     bool is_leaf() const;
     AbstractState& classify(const ConcreteState& cstate) const;
@@ -39,7 +39,7 @@ private:
     const AbstractionClassifier& _classifier;
     const std::experimental::optional<std::function<bool(const ConcreteState&)>> _query;
     const std::map<bool, std::unique_ptr<AbstractClassificationNode>> _successors;
-    std::experimental::optional<AbstractState&> _abs_state;
+    std::experimental::optional<AbstractState*> _abs_state;
     const AbstractClassificationNode* _parent;
     const size_t _depth;
 #ifndef DEBUG

@@ -29,3 +29,11 @@ KripkeStructure::KripkeStructure(PropFormula tr, std::unique_ptr<CtlFormula::Pro
         const z3::expr &init_f, const std::map<std::string, size_t>& ap_to_var_idx)
 : _transitions(std::move(tr)), _aps(std::move(aps)), _state_formula(state_f), _init_formula(init_f), _ap_to_var_idx(ap_to_var_idx)
 { }
+
+size_t KripkeStructure::get_var_num_by_ap(const std::string &ap_text) const {
+    if (_ap_to_var_idx.find(ap_text) == _ap_to_var_idx.end())
+    {
+        throw AtomicPropositionDoesNotExist(ap_text.data());
+    }
+    return _ap_to_var_idx.at(ap_text);
+}

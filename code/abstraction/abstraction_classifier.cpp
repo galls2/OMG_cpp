@@ -22,7 +22,7 @@ void AbstractClassificationNode::set_split_string(const std::string& str) {
 #endif
 
 AbstractClassificationNode::AbstractClassificationNode(const AbstractionClassifier &classifier,
-        const AbstractState &abs_state, const AbstractClassificationNode *parent)
+        AbstractState* abs_state, const AbstractClassificationNode *parent)
         : _classifier(classifier), _abs_state(abs_state), _parent(parent),
         _depth(_parent == nullptr ? 0 : _parent->get_depth() + 1)
 { }
@@ -39,7 +39,7 @@ AbstractState &AbstractClassificationNode::classify(const ConcreteState &cstate)
     if (_successors.empty())
     {
         assert(_abs_state);
-        return _abs_state.value();
+        return *_abs_state.value();
     }
     else
     {

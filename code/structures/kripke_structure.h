@@ -10,8 +10,11 @@
 #include <utils/cartesian_product_generator.h>
 #include <temporal/ctl_formula.h>
 #include <unordered_set>
+#include <utils/omg_exception.h>
 
 class ConcreteState;
+
+DECLARE_OMG_EXCEPTION(AtomicPropositionDoesNotExist)
 
 class KripkeStructure {
 public:
