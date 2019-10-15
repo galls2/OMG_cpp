@@ -173,8 +173,18 @@ AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path) {
         return *this;
     }
 
-    std::unique_ptr<KripkeStructure> AigParser::to_kripke(std::unique_ptr<CtlFormula::PropertySet> aps) {
-        return std::make_unique<KripkeStructure>(*_tr_formula, std::move(aps), *_state_formula, *_init_formula);
+
+    std::unique_ptr<KripkeStructure> AigParser::to_kripke(std::unique_ptr<CtlFormula::PropertySet> aps)
+    {
+        std::map<std::string, size_t> ap_to_var_idx;
+        for (const auto &it : _ap_to_symb)
+        {
+            char ap_type = it.second[0];
+            size_t raw_idx = std::stoul(it.second.substr(1));
+            size_t idx = raw_idx + (ap_type == 'o' ? _metadata[AigMetadata::L] : 0);
+            ap_to_var_idx.insert(std::make_pair(it.first, idx));
+        }
+        return std::make_unique<KripkeStructure>(*_tr_formula, std::move(aps), *_state_formula, *_init_formula, ap_to_var_idx);
     }
 
     void AigParser::calculate_tr_formula(const std::unordered_map<size_t, z3::expr> &formulas) {

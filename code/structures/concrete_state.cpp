@@ -86,4 +86,17 @@ std::vector<bool> ConcreteState::to_bitvec() const
     return bits;
 
 }
+
+bool ConcreteState::is_labeled_with(const std::string &ap) const {
+    size_t var_idx = _kripke.get_var_num_by_ap(ap);
+    const z3::expr_vector& state_vars = _kripke.get_tr().get_vars_by_tag("ps");
+    z3::expr conj_with_var = _conjunct && state_vars[var_idx];
+
+    z3::solver solver(state_vars.ctx());
+
+    solver.add(conj_with_var);
+    bool res = solver.check() == z3::sat;
+    return res;
+}
+
 #endif

@@ -15,7 +15,7 @@ public:
     ConcreteState(const KripkeStructure& kripke, z3::expr conjunct);
 
     std::vector<ConcreteState> get_successors();
-
+    bool is_labeled_with(const std::string& ap) const;
 #ifndef DEBUG
     std::vector<bool> to_bitvec() const;
 #endif

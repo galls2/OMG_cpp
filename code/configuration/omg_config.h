@@ -18,10 +18,14 @@ DECLARE_OMG_EXCEPTION(OmgConfigurationException)
 
 
 struct OmgConfiguration {
-    std::unordered_map<std::string, std::string> configuration;
+    std::unordered_map<std::string, std::string> _configuration;
+
+    bool get_bool_value(const std::string& key) const;
+    int get_integer_value(const std::string& key) const;
+    const std::string& get_string_value(const std::string& key) const;
 
 private:
-    explicit OmgConfiguration(std::unordered_map<std::string, std::string> configuration_data) : configuration(
+    explicit OmgConfiguration(std::unordered_map<std::string, std::string> configuration_data) : _configuration(
             std::move(configuration_data)) {}
 
 };
