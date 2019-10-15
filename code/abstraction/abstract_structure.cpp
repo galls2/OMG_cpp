@@ -3,3 +3,6 @@
 //
 
 #include "abstract_structure.h"
+
+AbstractStructure::AbstractStructure(const KripkeStructure &kripke) : _kripke(kripke)
+{}

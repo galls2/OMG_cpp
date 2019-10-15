@@ -8,25 +8,29 @@
 #include <structures/kripke_structure.h>
 #include "abstract_state.h"
 
-class AbstractClassificationTree;
+class AbstractClassificationNode;
 
 class AbstractionClassifier {
 public:
     explicit AbstractionClassifier(const KripkeStructure& kripke);
 
+    bool exists_classification(const ConcreteState& cstate) const;
+    AbstractClassificationNode& add_classification_tree(const ConcreteState& cstate);
+    AbstractState& classify();
     const KripkeStructure& get_kripke() const;
 private:
     const KripkeStructure& _kripke;
-    std::map<std::set<std::string>, AbstractClassificationTree> _classification_trees;
+    std::map<std::set<std::string>, AbstractClassificationNode> _classification_trees;
 
 };
 
-class AbstractClassificationTree
+class AbstractClassificationNode
 {
 public:
-    AbstractClassificationTree(const AbstractionClassifier& classifier, const AbstractState& abs_state, const AbstractClassificationTree* parent=nullptr);
+    AbstractClassificationNode(const AbstractionClassifier& classifier, const AbstractState& abs_state, const AbstractClassificationNode* parent=nullptr);
     size_t get_depth() const;
     bool is_leaf() const;
+    AbstractState& classify(const ConcreteState& cstate) const;
 
 #ifndef DEBUG
     void set_split_string(const std::string& str);
@@ -34,9 +38,9 @@ public:
 private:
     const AbstractionClassifier& _classifier;
     const std::experimental::optional<std::function<bool(const ConcreteState&)>> _query;
-    const std::map<bool, std::unique_ptr<AbstractClassificationTree>> _successors;
-    const AbstractState& _abs_state;
-    const AbstractClassificationTree* _parent;
+    const std::map<bool, std::unique_ptr<AbstractClassificationNode>> _successors;
+    std::experimental::optional<AbstractState&> _abs_state;
+    const AbstractClassificationNode* _parent;
     const size_t _depth;
 #ifndef DEBUG
     std::string _split_string;

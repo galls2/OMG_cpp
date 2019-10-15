@@ -6,8 +6,15 @@
 #define OMG_CPP_ABSTRACT_STRUCTURE_H
 
 
-class AbstractStructure {
+#include <structures/kripke_structure.h>
 
+class AbstractStructure {
+public:
+    explicit AbstractStructure(const KripkeStructure& kripke);
+private:
+    const KripkeStructure& _kripke;
+
+    //NE MAY , E MAY OVER, , NE MAY OVER, E MUST
 };
 
 

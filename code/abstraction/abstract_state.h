@@ -5,17 +5,21 @@
 
 #include <structures/kripke_structure.h>
 
+
+class AbstractClassificationNode;
+
 class AbstractState {
-//public:
-//    AbstractState(const KripkeStructure& kripke, CtlFormula::PropertySet pos_labels, PropertySet atomic_labels, PropFormula sym_rep);
-//
-//private:
-//    const KripkeStructure& _kripke;
-//    PropertySet _pos_labels;
-//    PropertySet _neg_labels;
-//    PropertySet _atomic_labels;
-//    // classssssssificatin node
-//    PropFormula _sym_rep;
+public:
+    AbstractState(const KripkeStructure& kripke, std::unique_ptr<CtlFormula::PropertySet> pos_labels,
+            std::unique_ptr<CtlFormula::PropertySet> atomic_labels, PropFormula sym_rep);
+
+private:
+    const KripkeStructure& _kripke;
+    std::unique_ptr<CtlFormula::PropertySet> _pos_labels;
+    std::unique_ptr<CtlFormula::PropertySet> _neg_labels;
+    std::unique_ptr<CtlFormula::PropertySet> _atomic_labels;
+    AbstractClassificationNode* _cl_node;
+    PropFormula _sym_rep;
 #ifndef DEBUG
     std::string _debug_name;
 #endif
