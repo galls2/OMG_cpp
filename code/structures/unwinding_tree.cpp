@@ -15,3 +15,9 @@ const std::vector<std::unique_ptr<UnwindingTree>> &UnwindingTree::unwind_further
     // Computing the successors
 
 }
+
+void UnwindingTree::reset_developed_in_tree()
+{
+    _developed.clear();
+    for (const auto &it : _successors) it->reset_developed_in_tree();
+}
