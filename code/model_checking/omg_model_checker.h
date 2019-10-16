@@ -12,20 +12,23 @@
 #include <structures/unwinding_tree.h>
 #include <configuration/omg_config.h>
 
+class UnwindingTree;
+
+struct Goal
+{
+    Goal(const UnwindingTree& node, const CtlFormula& spec, const std::map<std::string, bool>& properties);
+    const UnwindingTree &get_node() const;
+    const CtlFormula &get_spec() const;
+    const std::map<std::string, bool> &get_properties() const;
+private:
+    const UnwindingTree& _node;
+    const CtlFormula& _spec;
+    const std::map<std::string, bool> _properties;
+};
+
 class OmgModelChecker {
 public:
-    struct Goal
-    {
-        const UnwindingTree &get_node() const;
-        const CtlFormula &get_spec() const;
-        const std::set<CtlFormula *> &get_spec_components() const;
-        const std::map<std::string, bool> &get_properties() const;
 
-        const UnwindingTree& _node;
-        const CtlFormula& _spec;
-        const std::set<CtlFormula*> _spec_components;
-        const std::map<std::string, bool> _properties;
-    };
 
     typedef bool (OmgModelChecker::*handler_t)(const Goal& goal);
 
@@ -35,7 +38,7 @@ private:
     const KripkeStructure& _kripke;
     std::unique_ptr<AbstractStructure> _abs_structure;
     std::unique_ptr<AbstractionClassifier> _abs_classifier;
-    std::set<std::unique_ptr<UnwindingTree>> _unwinding_trees;
+   // std::map<std::unique_ptr<UnwindingTree>> _unwinding_trees;
 
 
     /*
@@ -47,6 +50,7 @@ private:
     /*
      * Model Checking
      */
+    bool model_checking(const ConcreteState& cstate, const CtlFormula& specification);
     bool recur_ctl(const Goal& g);
 
     /*
@@ -60,8 +64,6 @@ private:
     bool handle_av(const Goal& goal);
     bool handle_ev(const Goal& goal);
     bool handle_ex(const Goal& goal);
-
-    bool handle_ap(const Goal& goal);
 
     void initialize_abstraction();
 

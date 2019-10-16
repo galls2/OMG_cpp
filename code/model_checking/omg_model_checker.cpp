@@ -18,39 +18,35 @@ const std::map<std::string, OmgModelChecker::handler_t> OmgModelChecker::_handle
 
         };
 
-bool OmgModelChecker::handle_and(const OmgModelChecker::Goal &goal) {
+bool OmgModelChecker::handle_and(const Goal &goal) {
         return false;
 }
 
-bool OmgModelChecker::handle_or(const OmgModelChecker::Goal &goal) {
+bool OmgModelChecker::handle_or(const Goal &goal) {
         return false;
 }
 
-bool OmgModelChecker::handle_not(const OmgModelChecker::Goal &goal) {
+bool OmgModelChecker::handle_not(const Goal &goal) {
         return false;
 }
 
-bool OmgModelChecker::handle_xor(const OmgModelChecker::Goal &goal) {
+bool OmgModelChecker::handle_xor(const Goal &goal) {
         return false;
 }
 
-bool OmgModelChecker::handle_arrow(const OmgModelChecker::Goal &goal) {
+bool OmgModelChecker::handle_arrow(const Goal &goal) {
         return false;
 }
 
-bool OmgModelChecker::handle_av(const OmgModelChecker::Goal &goal) {
+bool OmgModelChecker::handle_av(const Goal &goal) {
         return false;
 }
 
-bool OmgModelChecker::handle_ev(const OmgModelChecker::Goal &goal) {
+bool OmgModelChecker::handle_ev(const Goal &goal) {
         return false;
 }
 
-bool OmgModelChecker::handle_ex(const OmgModelChecker::Goal &goal) {
-        return false;
-}
-
-bool OmgModelChecker::handle_ap(const OmgModelChecker::Goal &goal) {
+bool OmgModelChecker::handle_ex(const Goal &goal) {
         return false;
 }
 
@@ -68,19 +64,51 @@ void OmgModelChecker::initialize_abstraction()
         _abs_classifier = std::make_unique<AbstractionClassifier>(_kripke);
 }
 
+bool OmgModelChecker::model_checking(const ConcreteState &cstate, const CtlFormula &specification) {
 
-const UnwindingTree &OmgModelChecker::Goal::get_node() const {
+        // In the future - unwinding tree cache is to be used here
+        std::unique_ptr<UnwindingTree> root = std::make_unique<UnwindingTree>(_kripke, cstate, nullptr);
+
+        root->reset_developed_in_tree();
+
+        Goal goal(*root, specification, {});
+        bool result = recur_ctl(goal);
+        return result;
+}
+
+bool OmgModelChecker::recur_ctl(const Goal &g) {
+        // Find abs classification
+
+        // Is already true/false - return it
+        if (g.get_spec().is_boolean())
+        {
+                return g.get_spec().get_boolean_value();
+        }
+
+        assert(!g.get_spec().get_operands().empty())
+        std::string main_connective = g.get_spec().get_data();
+        bool result = _handlers[main_connective](this, g);
+
+        // If is strengthen
+
+        return result;
+
+}
+
+
+const UnwindingTree &Goal::get_node() const {
         return _node;
 }
 
-const CtlFormula &OmgModelChecker::Goal::get_spec() const {
+const CtlFormula &Goal::get_spec() const {
         return _spec;
 }
 
-const std::set<CtlFormula *> &OmgModelChecker::Goal::get_spec_components() const {
-        return _spec_components;
-}
-
-const std::map<std::string, bool> &OmgModelChecker::Goal::get_properties() const {
+const std::map<std::string, bool> &Goal::get_properties() const {
         return _properties;
 }
+
+Goal::Goal(const UnwindingTree &node, const CtlFormula &spec,
+                            const std::map<std::string, bool>& properties)
+ : _node(node), _spec(spec), _properties(properties)
+{}

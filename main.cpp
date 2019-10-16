@@ -61,7 +61,7 @@ void test_parser()
     Lexer lexer;
     //   auto res = lexer.lex("AG ( p -> q)");
 
-    auto res = lexer.lex("AG(req1<0> & ack0 -> AX ack1)");
+    auto res = lexer.lex("True");
     for (const auto &r : res)
     {
         std::cout << r << ".";
@@ -97,22 +97,23 @@ void print_vec(const std::vector<T>& v, const std::function<std::string(const T&
 
 int main()
 {
-    CtlFileParser ctl_file_parser;
-    std::vector<FormulaChunk> formula_chunks;
-    ctl_file_parser.parse_ctl_file("/home/galls2/Desktop/af_ag.ctl", formula_chunks);
-    CtlFormula& formula =  *formula_chunks[0].get_formulas()[0];
-    std::cout << "SPEC: "<< formula.to_string() << std::endl;
-    std::unique_ptr<CtlFormula::PropertySet> aps = formula.get_aps();
-    for (const auto &it : *aps) std::cout << "AP: " << it.to_string() << std::endl;
-
-    AigParser p(R"(/home/galls2/Desktop/af_ag.aig)");
-    std::unique_ptr<KripkeStructure> kripke = p.to_kripke(std::move(aps));
-  //  std::cout << "TR: " << kripke->get_tr().to_string() << std::endl;
-
-    std::vector<ConcreteState> inits = kripke->get_initial_states();
-    for (const auto& it : inits) print_vec<bool>(it.to_bitvec(), [](bool b){return (b?"1":"0");});
-
-    ConcreteState& init = inits[0];
-    std::vector<ConcreteState> nexts = init.get_successors();
-    for (const auto& it : nexts) print_vec<bool>(it.to_bitvec(), [](bool b){return (b?"1":"0");});
+    test_parser();
+//    CtlFileParser ctl_file_parser;
+//    std::vector<FormulaChunk> formula_chunks;
+//    ctl_file_parser.parse_ctl_file("/home/galls2/Desktop/af_ag.ctl", formula_chunks);
+//    CtlFormula& formula =  *formula_chunks[0].get_formulas()[0];
+//    std::cout << "SPEC: "<< formula.to_string() << std::endl;
+//    std::unique_ptr<CtlFormula::PropertySet> aps = formula.get_aps();
+//    for (const auto &it : *aps) std::cout << "AP: " << it.to_string() << std::endl;
+//
+//    AigParser p(R"(/home/galls2/Desktop/af_ag.aig)");
+//    std::unique_ptr<KripkeStructure> kripke = p.to_kripke(std::move(aps));
+//  //  std::cout << "TR: " << kripke->get_tr().to_string() << std::endl;
+//
+//    std::vector<ConcreteState> inits = kripke->get_initial_states();
+//    for (const auto& it : inits) print_vec<bool>(it.to_bitvec(), [](bool b){return (b?"1":"0");});
+//
+//    ConcreteState& init = inits[0];
+//    std::vector<ConcreteState> nexts = init.get_successors();
+//    for (const auto& it : nexts) print_vec<bool>(it.to_bitvec(), [](bool b){return (b?"1":"0");});
 }
