@@ -16,21 +16,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/abstraction/abstract_state.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstract_state.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/abstraction/abstract_structure.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstract_structure.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/abstraction/abstract_structure.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstract_structure.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/abstraction/abstraction_classifier.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstraction_classifier.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/abstraction/abstraction_classifier.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstraction_classifier.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/configuration/omg_config.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/configuration/omg_config.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/configuration/omg_config.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/configuration/omg_config.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/model_checking/omg_model_checker.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/omg_model_checker.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/parsers/aig_parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/aig_parser.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/structures/concrete_state.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/concrete_state.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/structures/concrete_state.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/concrete_state.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/structures/kripke_structure.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/kripke_structure.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/structures/kripke_structure.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/kripke_structure.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/structures/unwinding_tree.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/unwinding_tree.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/structures/unwinding_tree.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/unwinding_tree.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/temporal/ctl_formula.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/temporal/ctl_formula.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/temporal/ctl_formula.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/temporal/ctl_formula.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -42,89 +35,58 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/parsers/aig_parser.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="378">
-              <caret line="182" column="35" lean-forward="true" selection-start-line="182" selection-start-column="35" selection-end-line="182" selection-end-column="35" />
-              <folding>
-                <element signature="e#20#22#0" />
-                <element signature="e#60#78#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/abstraction/abstraction_classifier.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="16" column="43" selection-start-line="16" selection-start-column="43" selection-end-line="16" selection-end-column="43" />
-              <folding>
-                <element signature="e#56#96#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/abstraction/abstraction_classifier.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-45">
-              <caret line="22" selection-start-line="22" selection-end-line="22" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/structures/kripke_structure.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="495">
-              <caret line="30" column="2" selection-start-line="30" selection-start-column="2" selection-end-line="30" selection-end-column="2" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/structures/concrete_state.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="17" column="28" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="28" />
-              <folding>
-                <element signature="e#74#106#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/code/structures/concrete_state.cpp">
+        <entry file="file://$PROJECT_DIR$/code/model_checking/omg_model_checker.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="379">
+              <caret line="66" column="4" selection-start-line="66" selection-start-column="4" selection-end-line="66" selection-end-column="4" />
+              <folding>
+                <element signature="e#115#155#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/code/temporal/ctl_formula.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="423">
+              <caret line="31" column="42" lean-forward="true" selection-start-line="31" selection-start-column="42" selection-end-line="31" selection-end-column="42" />
+              <folding>
+                <element signature="e#13#30#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/code/temporal/ctl_formula.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="387">
-              <caret line="92" lean-forward="true" selection-start-line="92" selection-end-line="92" />
+              <caret line="71" lean-forward="true" selection-start-line="71" selection-end-line="71" />
               <folding>
-                <element signature="e#41#59#0" expanded="true" />
+                <element signature="e#41#57#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/structures/kripke_structure.h">
+        <entry file="file://$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="15" column="23" lean-forward="true" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
+            <state relative-caret-position="81">
+              <caret line="50" column="1" selection-start-line="50" selection-start-column="1" selection-end-line="50" selection-end-column="1" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/parsers/aig_parser.h">
+        <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="45" column="60" selection-start-line="45" selection-start-column="49" selection-end-line="45" selection-end-column="60" />
+            <state relative-caret-position="288">
+              <caret line="73" selection-start-line="73" selection-end-line="73" />
               <folding>
-                <element signature="e#53#77#0" expanded="true" />
+                <element signature="e#40#59#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -200,9 +162,7 @@
         <option value="$PROJECT_DIR$/code/utils/version_manager.cpp" />
         <option value="$PROJECT_DIR$/code/parsers/ctl_parser_data.cpp" />
         <option value="$PROJECT_DIR$/code/parsers/ctl_parser.h" />
-        <option value="$PROJECT_DIR$/code/structures/unwinding_tree.h" />
         <option value="$PROJECT_DIR$/code/utils/omg_exception.h" />
-        <option value="$PROJECT_DIR$/code/structures/unwinding_tree.cpp" />
         <option value="$PROJECT_DIR$/code/utils/cartesian_product_generator.h" />
         <option value="$PROJECT_DIR$/code/formulas/prop_formula.h" />
         <option value="$PROJECT_DIR$/code/utils/z3_utils.cpp" />
@@ -213,33 +173,34 @@
         <option value="$PROJECT_DIR$/code/parsers/aig_parser.h" />
         <option value="$PROJECT_DIR$/code/parsers/ctl_parser.cpp" />
         <option value="$PROJECT_DIR$/code/abstraction/abstract_state.cpp" />
-        <option value="$PROJECT_DIR$/code/temporal/ctl_formula.h" />
-        <option value="$PROJECT_DIR$/code/temporal/ctl_formula.cpp" />
-        <option value="$PROJECT_DIR$/main.cpp" />
         <option value="$PROJECT_DIR$/code/configuration/omg_config.cpp" />
         <option value="$PROJECT_DIR$/code/abstraction/abstract_structure.h" />
         <option value="$PROJECT_DIR$/code/abstraction/abstract_structure.cpp" />
-        <option value="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" />
         <option value="$PROJECT_DIR$/code/configuration/omg_config.h" />
         <option value="$PROJECT_DIR$/code/abstraction/abstract_state.h" />
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
-        <option value="$PROJECT_DIR$/code/model_checking/omg_model_checker.h" />
-        <option value="$PROJECT_DIR$/code/abstraction/abstraction_classifier.h" />
-        <option value="$PROJECT_DIR$/code/abstraction/abstraction_classifier.cpp" />
-        <option value="$PROJECT_DIR$/code/structures/kripke_structure.h" />
-        <option value="$PROJECT_DIR$/code/structures/kripke_structure.cpp" />
         <option value="$PROJECT_DIR$/code/parsers/aig_parser.cpp" />
         <option value="$PROJECT_DIR$/code/structures/concrete_state.h" />
         <option value="$PROJECT_DIR$/code/structures/concrete_state.cpp" />
+        <option value="$PROJECT_DIR$/code/abstraction/abstraction_classifier.h" />
+        <option value="$PROJECT_DIR$/code/abstraction/abstraction_classifier.cpp" />
+        <option value="$PROJECT_DIR$/code/structures/kripke_structure.cpp" />
+        <option value="$PROJECT_DIR$/code/structures/kripke_structure.h" />
+        <option value="$PROJECT_DIR$/code/structures/unwinding_tree.cpp" />
+        <option value="$PROJECT_DIR$/code/structures/unwinding_tree.h" />
+        <option value="$PROJECT_DIR$/main.cpp" />
+        <option value="$PROJECT_DIR$/code/temporal/ctl_formula.h" />
+        <option value="$PROJECT_DIR$/code/temporal/ctl_formula.cpp" />
+        <option value="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" />
+        <option value="$PROJECT_DIR$/code/model_checking/omg_model_checker.h" />
       </list>
     </option>
   </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="1920" />
     <option name="y" value="24" />
     <option name="width" value="1920" />
-    <option name="height" value="1056" />
+    <option name="height" value="1004" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -371,7 +332,7 @@
       <workItem from="1569993080925" duration="2323000" />
       <workItem from="1570037966927" duration="23677000" />
       <workItem from="1570338874303" duration="2606000" />
-      <workItem from="1570390388176" duration="88502000" />
+      <workItem from="1570390388176" duration="95928000" />
     </task>
     <task id="LOCAL-00001" summary="My first commit!">
       <created>1567197130912</created>
@@ -569,11 +530,32 @@
       <option name="project" value="LOCAL" />
       <updated>1571061298138</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="Working on abstraction">
+      <created>1571163856276</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1571163856276</updated>
+    </task>
+    <task id="LOCAL-00030" summary="- Added functionality to config&#10;- Worked on AP parsing">
+      <created>1571163958750</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1571163958750</updated>
+    </task>
+    <task id="LOCAL-00031" summary="- Change optional&lt;ref&gt; to optional&lt;ptr&gt; in abs. classifier&#10;- Impl part of model checker&#10;- Fixed AP parsing in Kripke">
+      <created>1571166460770</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1571166460770</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="231849000" />
+    <option name="totallyTimeSpent" value="239275000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -585,26 +567,26 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1920" y="24" width="1920" height="1056" extended-state="0" />
+    <frame x="0" y="24" width="1920" height="1004" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14576635" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14576635" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3295711" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4989282" weight="0.19074492" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49839228" weight="0.34537247" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.49839228" visible="true" weight="0.34537247" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3295711" />
       <window_info anchor="bottom" id="Database Changes" order="7" />
       <window_info anchor="bottom" id="Inspection Results" order="8" sideWeight="0.4994641" weight="0.3295711" />
-      <window_info anchor="bottom" id="Messages" order="9" sideWeight="0.49839228" weight="0.24379233" />
+      <window_info anchor="bottom" id="Messages" order="9" sideWeight="0.49839228" weight="0.25733635" />
       <window_info anchor="bottom" id="Terminal" order="10" weight="0.3295711" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5016077" side_tool="true" weight="0.36681715" />
       <window_info anchor="bottom" id="Version Control" order="12" weight="0.3295711" />
-      <window_info anchor="bottom" id="CMake" order="13" visible="true" weight="0.29424307" />
+      <window_info anchor="bottom" id="CMake" order="13" weight="0.29424307" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -637,9 +619,6 @@
     <option name="version" value="1" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="refactor aig parser" />
-    <MESSAGE value="Made API fluent&#10;Bugfixes in aigparser" />
-    <MESSAGE value="Adde string_util, finalizing or optimization" />
     <MESSAGE value="- Impl and using new string util: split_to&#10;- Solving compilation and linkage problems" />
     <MESSAGE value="- Created lexer&#10;- Updated ctl_part class&#10;- Cmake now includes src dir" />
     <MESSAGE value="Wrote proto-ctl-parser&#10;Fixed map/unordered map messup" />
@@ -662,7 +641,10 @@
     <MESSAGE value="Bug fixes in INIT calc and TR calc&#10;simple unwinding now works (checked 1 iter of the &quot;af_ag&quot; example)" />
     <MESSAGE value="-Obtaining APs from formula&#10;-Fixing ap mechanism in Kripke Structure&#10;- Starting impl of Abstract states" />
     <MESSAGE value="Written initial prototype for abstraction_classifier" />
-    <option name="LAST_COMMIT_MESSAGE" value="Written initial prototype for abstraction_classifier" />
+    <MESSAGE value="Working on abstraction" />
+    <MESSAGE value="- Added functionality to config&#10;- Worked on AP parsing" />
+    <MESSAGE value="- Change optional&lt;ref&gt; to optional&lt;ptr&gt; in abs. classifier&#10;- Impl part of model checker&#10;- Fixed AP parsing in Kripke" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Change optional&lt;ref&gt; to optional&lt;ptr&gt; in abs. classifier&#10;- Impl part of model checker&#10;- Fixed AP parsing in Kripke" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -725,6 +707,16 @@
     </expressions>
     <expressions id="evaluateExpression">
       <expression>
+        <expression-string>formula-&gt;is_boolean()</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>formula-&gt;get_aps()</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
         <expression-string>formula.to_string()</expression-string>
         <language-id>ObjectiveC</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
@@ -759,33 +751,9 @@
         <language-id>ObjectiveC</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
-      <expression>
-        <expression-string>conj_vars_set.operator==(tr_ps_vars)</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>conj_vars_set == tr_ps_vars</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file:///usr/include/c++/5/bits/stl_pair.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
-          <caret line="124" selection-start-line="124" selection-end-line="124" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/include/c++/5/bits/stl_map.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="620" selection-start-line="620" selection-end-line="620" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/include/c++/5/bits/vector.tcc">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="173">
@@ -856,13 +824,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="155">
           <caret line="1276" column="19" lean-forward="true" selection-start-line="1276" selection-start-column="19" selection-end-line="1276" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/formulas/prop_formula.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="251">
-          <caret line="43" column="3" selection-start-line="43" selection-start-column="3" selection-end-line="43" selection-end-column="3" />
         </state>
       </provider>
     </entry>
@@ -1001,29 +962,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/temporal/ctl_formula.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="233">
-          <caret line="26" selection-start-line="26" selection-end-line="26" />
-          <folding>
-            <element signature="e#41#57#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/structures/unwinding_tree.h">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/temporal/ctl_formula.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="28" column="32" selection-start-line="28" selection-start-column="32" selection-end-line="28" selection-end-column="32" />
-          <folding>
-            <element signature="e#13#30#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/code/configuration/omg_config.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
@@ -1035,13 +973,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="6" column="85" selection-start-line="6" selection-start-column="85" selection-end-line="6" selection-end-column="85" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="269">
-          <caret line="71" column="58" selection-start-line="71" selection-start-column="58" selection-end-line="71" selection-end-column="58" />
         </state>
       </provider>
     </entry>
@@ -1076,74 +1007,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/model_checking/omg_model_checker.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="515">
-          <caret line="62" lean-forward="true" selection-start-line="62" selection-end-line="62" />
-          <folding>
-            <element signature="e#115#155#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="112" column="98" lean-forward="true" selection-start-line="112" selection-start-column="98" selection-end-line="112" selection-end-column="98" />
-          <folding>
-            <element signature="e#40#59#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/code/parsers/aig_parser.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
           <caret line="45" column="60" selection-start-line="45" selection-start-column="49" selection-end-line="45" selection-end-column="60" />
           <folding>
             <element signature="e#53#77#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/structures/kripke_structure.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="15" column="23" lean-forward="true" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/structures/kripke_structure.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="30" column="2" selection-start-line="30" selection-start-column="2" selection-end-line="30" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/abstraction/abstraction_classifier.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="16" column="43" selection-start-line="16" selection-start-column="43" selection-end-line="16" selection-end-column="43" />
-          <folding>
-            <element signature="e#56#96#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/abstraction/abstraction_classifier.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-45">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/parsers/aig_parser.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="182" column="35" lean-forward="true" selection-start-line="182" selection-start-column="35" selection-end-line="182" selection-end-column="35" />
-          <folding>
-            <element signature="e#20#22#0" />
-            <element signature="e#60#78#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1158,12 +1027,132 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/code/parsers/aig_parser.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="182" column="35" selection-start-line="182" selection-start-column="35" selection-end-line="182" selection-end-column="35" />
+          <folding>
+            <element signature="e#20#22#0" />
+            <element signature="e#60#78#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/abstraction/abstraction_classifier.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="33" selection-start-line="33" selection-end-line="33" />
+          <folding>
+            <element signature="e#56#96#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/structures/kripke_structure.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="471">
+          <caret line="35" column="43" selection-start-line="35" selection-start-column="14" selection-end-line="35" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/utils/omg_exception.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="19" column="8" selection-start-line="19" selection-start-column="8" selection-end-line="19" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/structures/kripke_structure.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="237">
+          <caret line="18" column="23" selection-start-line="18" selection-start-column="23" selection-end-line="18" selection-end-column="23" />
+          <folding>
+            <element signature="e#34#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/code/structures/concrete_state.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="387">
-          <caret line="92" lean-forward="true" selection-start-line="92" selection-end-line="92" />
+        <state relative-caret-position="327">
+          <caret line="90" column="37" selection-start-line="90" selection-start-column="37" selection-end-line="90" selection-end-column="37" />
           <folding>
             <element signature="e#41#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/formulas/prop_formula.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="217">
+          <caret line="19" column="36" selection-start-line="19" selection-start-column="36" selection-end-line="19" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/abstraction/abstraction_classifier.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="44" column="5" selection-start-line="44" selection-start-column="5" selection-end-line="44" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/structures/unwinding_tree.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="21" column="69" selection-start-line="21" selection-start-column="69" selection-end-line="21" selection-end-column="69" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/structures/unwinding_tree.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="13" column="6" selection-start-line="13" selection-start-column="6" selection-end-line="13" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="73" selection-start-line="73" selection-end-line="73" />
+          <folding>
+            <element signature="e#40#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/temporal/ctl_formula.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="423">
+          <caret line="31" column="42" lean-forward="true" selection-start-line="31" selection-start-column="42" selection-end-line="31" selection-end-column="42" />
+          <folding>
+            <element signature="e#13#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/temporal/ctl_formula.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="387">
+          <caret line="71" lean-forward="true" selection-start-line="71" selection-end-line="71" />
+          <folding>
+            <element signature="e#41#57#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="81">
+          <caret line="50" column="1" selection-start-line="50" selection-start-column="1" selection-end-line="50" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/model_checking/omg_model_checker.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="379">
+          <caret line="66" column="4" selection-start-line="66" selection-start-column="4" selection-end-line="66" selection-end-column="4" />
+          <folding>
+            <element signature="e#115#155#0" expanded="true" />
           </folding>
         </state>
       </provider>

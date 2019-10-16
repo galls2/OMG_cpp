@@ -3,6 +3,7 @@
 //
 
 #include <queue>
+#include <cassert>
 #include "ctl_formula.h"
 
 std::string CtlFormula::to_string() const {
@@ -49,5 +50,22 @@ std::unique_ptr<CtlFormula::PropertySet> CtlFormula::get_aps() const {
         }
     }
     return pset;
+}
+
+std::string CtlFormula::get_data() const {
+    return _data;
+}
+
+bool CtlFormula::is_boolean() const {
+    return ((_data == "True") || (_data == "False"));
+}
+
+bool CtlFormula::get_boolean_value() const {
+    assert(is_boolean());
+    return _data == "True";
+}
+
+const std::vector<std::unique_ptr<CtlFormula>> &CtlFormula::get_operands() const {
+    return _operands;
 }
 
