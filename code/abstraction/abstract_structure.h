@@ -7,13 +7,15 @@
 
 
 #include <structures/kripke_structure.h>
+#include "abstract_state.h"
 
 class AbstractStructure {
 public:
     explicit AbstractStructure(const KripkeStructure& kripke);
+    AbstractState& create_abs_state(const ConcreteState& cstate);
 private:
     const KripkeStructure& _kripke;
-
+    std::set<AbstractState> _abs_states;
     //NE MAY , E MAY OVER, , NE MAY OVER, E MUST
 };
 

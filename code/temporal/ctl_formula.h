@@ -1,9 +1,11 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <set>
 #include <memory>
 #include <utility>
 #include <unordered_set>
+
 
 class CtlFormula
 {
@@ -30,6 +32,11 @@ public:
     bool is_boolean() const;
     bool get_boolean_value() const;
     const std::vector<std::unique_ptr<CtlFormula>>& get_operands() const;
+
+    bool operator<(const CtlFormula& other) const;
+
+
+    static std::set<std::string> property_set_to_string_set(const PropertySet& property_set);
 private:
   std::string _data;
   std::vector<std::unique_ptr<CtlFormula>> _operands;

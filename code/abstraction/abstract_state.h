@@ -11,13 +11,13 @@ class AbstractClassificationNode;
 class AbstractState {
 public:
     AbstractState(const KripkeStructure& kripke, std::unique_ptr<CtlFormula::PropertySet> pos_labels,
-            std::unique_ptr<CtlFormula::PropertySet> atomic_labels, PropFormula sym_rep);
-
+                  const CtlFormula::PropertySet& atomic_labels, PropFormula sym_rep);
+    bool operator<(const AbstractState& other) const;
 private:
     const KripkeStructure& _kripke;
     std::unique_ptr<CtlFormula::PropertySet> _pos_labels;
     std::unique_ptr<CtlFormula::PropertySet> _neg_labels;
-    std::unique_ptr<CtlFormula::PropertySet> _atomic_labels;
+    const CtlFormula::PropertySet& _atomic_labels;
     AbstractClassificationNode* _cl_node;
     PropFormula _sym_rep;
 #ifndef DEBUG

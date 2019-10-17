@@ -67,6 +67,7 @@ private:
 
     void initialize_abstraction();
 
+    AbstractState& find_abs(const UnwindingTree& node);
     static const std::map<std::string, handler_t> _handlers;
 };
 

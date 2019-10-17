@@ -23,6 +23,7 @@ public:
     const PropFormula& get_tr() const { return _transitions; }
     std::vector<ConcreteState> get_initial_states() const;
     size_t get_var_num_by_ap(const std::string& ap_text) const;
+    const CtlFormula::PropertySet& get_aps() const;
 private:
 
     const PropFormula _transitions;

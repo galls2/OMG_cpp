@@ -85,14 +85,30 @@ bool OmgModelChecker::recur_ctl(const Goal &g) {
                 return g.get_spec().get_boolean_value();
         }
 
-        assert(!g.get_spec().get_operands().empty())
+        assert(!g.get_spec().get_operands().empty());
         std::string main_connective = g.get_spec().get_data();
-        bool result = _handlers[main_connective](this, g);
+        handler_t handler = _handlers.at(main_connective);
+        bool result = (this->*handler)(g);
 
         // If is strengthen
 
         return result;
 
+}
+
+AbstractState &OmgModelChecker::find_abs(const UnwindingTree &node) {
+        const ConcreteState& cstate = node.get_concrete_state();
+        if (!_abs_classifier->exists_classification(cstate))
+        {
+                AbstractState& astate = _abs_structure->create_abs_state(cstate);
+                _abs_classifier->add_classification_tree(cstate, astate);
+                return astate;
+        }
+        else
+        {
+                AbstractState& abs = _abs_classifier->classify(cstate);
+                return abs;
+        }
 }
 
 

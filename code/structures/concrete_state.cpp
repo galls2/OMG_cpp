@@ -99,4 +99,70 @@ bool ConcreteState::is_labeled_with(const std::string &ap) const {
     return res;
 }
 
+void ConcreteState::aps_by_sat(CtlFormula::PropertySet& pos, CtlFormula::PropertySet& neg) const
+{
+    z3::context& ctx = _kripke.get_tr().get_formula().ctx();
+    z3::solver solver(ctx);
+
+    solver.add(_conjunct);
+    assert(solver.check() == z3::sat);
+    z3::model m = solver.get_model();
+
+    z3::expr_vector ps_vars = _kripke.get_tr().get_vars_by_tag("ps");
+    for (const CtlFormula& ap : _kripke.get_aps())
+    {
+        size_t var_idx = _kripke.get_var_num_by_ap(ap.get_data());
+        const z3::expr var = ps_vars[var_idx];
+        if (z3::eq(m.eval(var), ctx.bool_val(true)))
+            pos.emplace(ap.get_data());
+        else
+            neg.emplace(ap.get_data());
+    }
+}
+
+PropFormula ConcreteState::get_bis0_formula() const {
+    z3::context& ctx = _kripke.get_tr().get_formula().ctx();
+    z3::expr_vector bis0_parts(ctx);
+    z3::solver solver(ctx);
+
+    solver.add(_conjunct);
+    assert(solver.check() == z3::sat);
+    z3::model m = solver.get_model();
+
+    z3::expr_vector ps_vars = _kripke.get_tr().get_vars_by_tag("ps");
+    for (const CtlFormula& ap : _kripke.get_aps())
+    {
+        size_t var_idx = _kripke.get_var_num_by_ap(ap.get_data());
+        const z3::expr var = ps_vars[var_idx];
+        if (z3::eq(m.eval(var), ctx.bool_val(true)))
+            bis0_parts.push_back(var);
+        else
+            bis0_parts.push_back(!var);
+    }
+    z3::expr raw_bis0 = z3::mk_and(bis0_parts);
+    PropFormula bis0(raw_bis0, {{"ps", ps_vars}});
+    return bis0;
+}
+
+std::set<std::string> ConcreteState::string_sat_aps() const {
+    std::set<std::string> sat_strs;
+    z3::context& ctx = _kripke.get_tr().get_formula().ctx();
+    z3::solver solver(ctx);
+
+    solver.add(_conjunct);
+    assert(solver.check() == z3::sat);
+    z3::model m = solver.get_model();
+
+    z3::expr_vector ps_vars = _kripke.get_tr().get_vars_by_tag("ps");
+    for (const CtlFormula& ap : _kripke.get_aps())
+    {
+        size_t var_idx = _kripke.get_var_num_by_ap(ap.get_data());
+        const z3::expr var = ps_vars[var_idx];
+        if (z3::eq(m.eval(var), ctx.bool_val(true)))
+            sat_strs.insert(ap.get_data());
+    }
+    return sat_strs;
+}
+
+
 #endif

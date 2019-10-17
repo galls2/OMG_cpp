@@ -4,6 +4,7 @@
 
 #include <queue>
 #include <cassert>
+#include <set>
 #include "ctl_formula.h"
 
 std::string CtlFormula::to_string() const {
@@ -67,5 +68,20 @@ bool CtlFormula::get_boolean_value() const {
 
 const std::vector<std::unique_ptr<CtlFormula>> &CtlFormula::get_operands() const {
     return _operands;
+}
+
+std::set<std::string> CtlFormula::property_set_to_string_set(
+        const std::unordered_set<CtlFormula, CtlFormula::CtlFormulaHasher> &property_set) {
+    std::set<std::string> strs;
+    for (const CtlFormula& prop : property_set)
+    {
+        strs.insert(prop.to_string());
+    }
+    return strs;
+}
+
+bool CtlFormula::operator<(const CtlFormula &other) const {
+    return _data < other._data;
+
 }
 

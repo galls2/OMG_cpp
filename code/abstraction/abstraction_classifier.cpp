@@ -3,6 +3,7 @@
 //
 
 #include "abstraction_classifier.h"
+#include <utility>
 
 AbstractionClassifier::AbstractionClassifier(const KripkeStructure &kripke) : _kripke(kripke) {}
 
@@ -11,8 +12,28 @@ const KripkeStructure &AbstractionClassifier::get_kripke() const {
 }
 
 bool AbstractionClassifier::exists_classification(const ConcreteState &cstate) const {
-    std::set<std::string> ap_strings;
 
+    std::set<std::string> ap_strings = cstate.string_sat_aps();
+    const auto& it = _classification_trees.find(ap_strings);
+    bool found = (it != _classification_trees.end());
+    return found;
+}
+
+AbstractState &AbstractionClassifier::classify(const ConcreteState &cstate) {
+    std::set<std::string> ap_strings = cstate.string_sat_aps();
+    assert(exists_classification(cstate));
+    const AbstractClassificationNode& cl_tree_root = *_classification_trees.at(ap_strings);
+    AbstractState& abs_state = cl_tree_root.classify(cstate);
+    return abs_state;
+}
+
+AbstractClassificationNode &AbstractionClassifier::add_classification_tree(const ConcreteState &cstate, AbstractState& astate) {
+    std::set<std::string> ap_strings = cstate.string_sat_aps();
+
+    std::unique_ptr<AbstractClassificationNode> cl = std::make_unique<AbstractClassificationNode>(*this, &astate);
+    const auto res = _classification_trees.emplace(std::move(ap_strings), std::move(cl));
+    assert(res.second);
+    return *((res.first)->second);
 }
 
 #ifndef DEBUG
@@ -21,7 +42,7 @@ void AbstractClassificationNode::set_split_string(const std::string& str) {
 }
 #endif
 
-AbstractClassificationNode::AbstractClassificationNode(const AbstractionClassifier &classifier,
+AbstractClassificationNode::AbstractClassificationNode(AbstractionClassifier &classifier,
         AbstractState* abs_state, const AbstractClassificationNode *parent)
         : _classifier(classifier), _abs_state(abs_state), _parent(parent),
         _depth(_parent == nullptr ? 0 : _parent->get_depth() + 1)
@@ -39,7 +60,7 @@ AbstractState &AbstractClassificationNode::classify(const ConcreteState &cstate)
     if (_successors.empty())
     {
         assert(_abs_state);
-        return *_abs_state.value();
+        return *_abs_state;
     }
     else
     {

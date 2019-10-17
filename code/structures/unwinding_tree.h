@@ -15,13 +15,9 @@ class Goal;
 
 class UnwindingTree {
 public:
-    UnwindingTree(const KripkeStructure& kripke, const ConcreteState& concrete_state, std::unique_ptr<UnwindingTree> parent) :
-    _kripke(kripke), _concrete_label(concrete_state), _parent(std::move(parent))
-    {
-        _depth = (_parent) ? _parent->get_depth() + 1 : 0;
-    }
-    size_t get_depth() const { return  _depth; }
-
+    UnwindingTree(const KripkeStructure& kripke, const ConcreteState& concrete_state, std::unique_ptr<UnwindingTree> parent);
+    size_t get_depth() const;
+    const ConcreteState& get_concrete_state() const;
     const std::vector<std::unique_ptr<UnwindingTree>>& unwind_further();
     void reset_developed_in_tree();
 
