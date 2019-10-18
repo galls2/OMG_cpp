@@ -52,8 +52,8 @@ bool OmgModelChecker::handle_ex(const Goal &goal) {
 
 OmgModelChecker::OmgModelChecker(const KripkeStructure &kripke, const OmgConfiguration &config)
 : _kripke(kripke),
-        _opt_trivial_splits(config.get_bool_value("Trivial Split Elimination")),
-        _opt_brother_unif(config.get_bool_value("Brother Unification"))
+        _opt_trivial_splits(config.get<bool>("Trivial Split Elimination")),
+        _opt_brother_unif(config.get<bool>("Brother Unification"))
 {
         initialize_abstraction();
 }
@@ -89,7 +89,6 @@ bool OmgModelChecker::recur_ctl(const Goal &g) {
         std::string main_connective = g.get_spec().get_data();
         handler_t handler = _handlers.at(main_connective);
         bool result = (this->*handler)(g);
-
         // If is strengthen
 
         return result;

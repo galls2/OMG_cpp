@@ -1,44 +1,40 @@
-#include <utility>
-
-#include <utility>
-
-//
-// Created by galls2 on 29/09/19.
-//
-
-#ifndef OMG_CPP_OMG_CONFIG_H
-#define OMG_CPP_OMG_CONFIG_H
+#pragma once
 
 #include <string>
 #include <unordered_map>
 #include <utils/omg_exception.h>
+#include <boost/variant.hpp>
+#include <utility>
 
-//class OmgConfigurationException : OmgException { using OmgException::OmgException; };
+
 DECLARE_OMG_EXCEPTION(OmgConfigurationException)
 
+typedef std::unordered_map<std::string, boost::variant<bool, int, std::string>> ConfigTable;
+
+class OmgConfigurationBuilder;
 
 struct OmgConfiguration {
-    std::unordered_map<std::string, std::string> _configuration;
+    ConfigTable _configuration;
+    friend class OmgConfigurationBuilder;
 
-    bool get_bool_value(const std::string& key) const;
-    int get_integer_value(const std::string& key) const;
-    const std::string& get_string_value(const std::string& key) const;
+    template <typename T>
+    const T& get(const std::string& key) const;
 
 private:
-    explicit OmgConfiguration(std::unordered_map<std::string, std::string> configuration_data) : _configuration(
-            std::move(configuration_data)) {}
+    explicit OmgConfiguration(ConfigTable configuration_data) : _configuration(std::move(configuration_data)) {}
 
 };
 
 enum class ConfigurationSource
 {
-    STDIN, FILE
+    STDIN, FILE, DEFAULT
 };
 
 enum class ValueType
 {
     BOOLEAN, NUMERIC, STRING
 };
+
 
 class OmgConfigurationBuilder
 {
@@ -52,9 +48,13 @@ public:
 private:
     ConfigurationSource _config_src;
     std::string _config_file_path;
+
     static std::unordered_map<std::string, ValueType> configuration_fields;
+
+    OmgConfiguration get_config_from_file() const;
 };
 
-
-
-#endif //OMG_CPP_OMG_CONFIG_H
+template<typename T>
+const T &OmgConfiguration::get(const std::string &key) const {
+    return boost::get<T>(_configuration.at(key));
+}

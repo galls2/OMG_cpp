@@ -31,6 +31,7 @@ public:
 
 
     typedef bool (OmgModelChecker::*handler_t)(const Goal& goal);
+    bool model_checking(const ConcreteState& cstate, const CtlFormula& specification);
 
     OmgModelChecker(const KripkeStructure& kripke, const OmgConfiguration& config);
 
@@ -50,7 +51,6 @@ private:
     /*
      * Model Checking
      */
-    bool model_checking(const ConcreteState& cstate, const CtlFormula& specification);
     bool recur_ctl(const Goal& g);
 
     /*
