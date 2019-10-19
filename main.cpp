@@ -105,10 +105,10 @@ int main()
     ctl_file_parser.parse_ctl_file("/home/galls2/Desktop/af_ag_ap.ctl", formula_chunks);
     CtlFormula& formula =  *formula_chunks[0].get_formulas()[0];
     std::cout << "SPEC: "<< formula.to_string() << std::endl;
-    std::unique_ptr<CtlFormula::PropertySet> aps = formula.get_aps();
+    std::set<const CtlFormula*> aps = formula.get_aps();
 
     AigParser p(R"(/home/galls2/Desktop/af_ag.aig)");
-    std::unique_ptr<KripkeStructure> kripke = p.to_kripke(std::move(aps));
+    std::unique_ptr<KripkeStructure> kripke = p.to_kripke(aps);
 
     std::vector<ConcreteState> inits = kripke->get_initial_states();
     for (const auto& it : inits) print_vec<bool>(it.to_bitvec(), [](bool b){return (b?"1":"0");});

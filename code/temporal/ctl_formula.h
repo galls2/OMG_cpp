@@ -28,7 +28,7 @@ public:
     std::string get_data() const;
     std::string to_string() const;
     bool operator==(const CtlFormula& other) const;
-    std::unique_ptr<PropertySet> get_aps() const;
+    std::set<const CtlFormula*> get_aps() const;
     bool is_boolean() const;
     bool get_boolean_value() const;
     const std::vector<std::unique_ptr<CtlFormula>>& get_operands() const;

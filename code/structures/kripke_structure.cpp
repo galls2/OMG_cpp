@@ -25,7 +25,7 @@ std::vector<ConcreteState> KripkeStructure::get_initial_states() const
     return init_states;
 }
 
-KripkeStructure::KripkeStructure(PropFormula tr, std::unique_ptr<CtlFormula::PropertySet> aps, const z3::expr &state_f,
+KripkeStructure::KripkeStructure(PropFormula tr, std::set<const CtlFormula*> aps, const z3::expr &state_f,
         const z3::expr &init_f, const std::map<std::string, size_t>& ap_to_var_idx)
 : _transitions(std::move(tr)), _aps(std::move(aps)), _state_formula(state_f), _init_formula(init_f), _ap_to_var_idx(ap_to_var_idx)
 { }
@@ -38,6 +38,6 @@ size_t KripkeStructure::get_var_num_by_ap(const std::string &ap_text) const {
     return _ap_to_var_idx.at(ap_text);
 }
 
-const CtlFormula::PropertySet &KripkeStructure::get_aps() const {
-    return *_aps;
+const std::set<const CtlFormula*> &KripkeStructure::get_aps() const {
+    return _aps;
 }

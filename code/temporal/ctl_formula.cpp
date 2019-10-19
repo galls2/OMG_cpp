@@ -27,8 +27,8 @@ bool CtlFormula::operator==(const CtlFormula &other) const {
     return true;
 }
 
-std::unique_ptr<CtlFormula::PropertySet> CtlFormula::get_aps() const {
-    std::unique_ptr<CtlFormula::PropertySet> pset = std::make_unique<CtlFormula::PropertySet>();
+std::set<const CtlFormula*> CtlFormula::get_aps() const {
+    std::set<const CtlFormula*> pset;
 
     std::vector<const CtlFormula*> queue;
     queue.insert(queue.begin(), this);
@@ -40,7 +40,7 @@ std::unique_ptr<CtlFormula::PropertySet> CtlFormula::get_aps() const {
 
         if (current->_operands.empty())
         {
-            pset->emplace(current->get_data());
+            pset.emplace(current);
         }
         else
         {

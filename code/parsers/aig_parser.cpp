@@ -174,7 +174,7 @@ AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path) {
     }
 
 
-    std::unique_ptr<KripkeStructure> AigParser::to_kripke(std::unique_ptr<CtlFormula::PropertySet> aps)
+    std::unique_ptr<KripkeStructure> AigParser::to_kripke(const std::set<const CtlFormula*>& aps)
     {
         std::map<std::string, size_t> ap_to_var_idx;
         for (const auto &it : _ap_to_symb)
@@ -184,7 +184,7 @@ AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path) {
             size_t idx = raw_idx + (ap_type == 'o' ? _metadata[AigMetadata::L] : 0);
             ap_to_var_idx.insert(std::make_pair(it.first, idx));
         }
-        return std::make_unique<KripkeStructure>(*_tr_formula, std::move(aps), *_state_formula, *_init_formula, ap_to_var_idx);
+        return std::make_unique<KripkeStructure>(*_tr_formula, aps, *_state_formula, *_init_formula, ap_to_var_idx);
     }
 
     void AigParser::calculate_tr_formula(const std::unordered_map<size_t, z3::expr> &formulas) {
@@ -192,48 +192,48 @@ AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path) {
 
         std::vector<z3::expr> prev_in, prev_latch, prev_out, next_in, next_latch, next_out;
         std::vector<std::reference_wrapper<std::vector<z3::expr>>>
-            ins = {std::reference_wrapper<std::vector<z3::expr>>(prev_in), std::reference_wrapper<std::vector<z3::expr>>(next_in)},
-            latches = {std::reference_wrapper<std::vector<z3::expr>>(prev_latch), std::reference_wrapper<std::vector<z3::expr>>(next_latch)},
-            outs = {std::reference_wrapper<std::vector<z3::expr>>(prev_out), std::reference_wrapper<std::vector<z3::expr>>(next_out)};
+                ins = {std::reference_wrapper<std::vector<z3::expr>>(prev_in),
+                       std::reference_wrapper<std::vector<z3::expr>>(next_in)},
+                latches = {std::reference_wrapper<std::vector<z3::expr>>(prev_latch),
+                           std::reference_wrapper<std::vector<z3::expr>>(next_latch)},
+                outs = {std::reference_wrapper<std::vector<z3::expr>>(prev_out),
+                        std::reference_wrapper<std::vector<z3::expr>>(next_out)};
 
         generate_new_names(ins, new_var_index, _metadata[AigMetadata::I]);
         generate_new_names(latches, new_var_index, _metadata[AigMetadata::L]);
         generate_new_names(outs, new_var_index, _metadata[AigMetadata::O]);
 
         z3::expr_vector orig_in(_ctx), orig_ps(_ctx), orig_ns(_ctx), orig_out(_ctx);
-        for (size_t i_lit : _in_literals)  orig_in.push_back(_ctx.bool_const(std::to_string(i_lit).data()));
-        for (size_t ps_lit : _prev_state_literals)  orig_ps.push_back(_ctx.bool_const(std::to_string(ps_lit).data()));
-        for (size_t ns_lit : _next_state_literals)  orig_ns.push_back(_ctx.bool_const(std::to_string(ns_lit).data()));
-        for (size_t o_lit : _out_literals)  orig_out.push_back(_ctx.bool_const(std::to_string(o_lit).data()));
+        for (size_t i_lit : _in_literals) orig_in.push_back(_ctx.bool_const(std::to_string(i_lit).data()));
+        for (size_t ps_lit : _prev_state_literals) orig_ps.push_back(_ctx.bool_const(std::to_string(ps_lit).data()));
+        for (size_t ns_lit : _next_state_literals) orig_ns.push_back(_ctx.bool_const(std::to_string(ns_lit).data()));
+        for (size_t o_lit : _out_literals) orig_out.push_back(_ctx.bool_const(std::to_string(o_lit).data()));
 
         generate_state_formula(formulas, prev_out, orig_in, orig_ps, orig_out, prev_in, prev_latch);
 
         z3::expr_vector ltr_parts(_ctx);
-        for (size_t i = 0; i < _next_state_literals.size(); ++i)
-        {
-            auto &orig = const_cast<z3::expr&>(formulas.at(_next_state_literals[i]));
+        for (size_t i = 0; i < _next_state_literals.size(); ++i) {
+            auto &orig = const_cast<z3::expr &>(formulas.at(_next_state_literals[i]));
             z3::expr named_ltr_formula = orig.substitute(orig_in, vec_to_expr_vec(_ctx, prev_in))
-                                        .substitute(orig_ps, vec_to_expr_vec(_ctx, prev_latch));
-            z3::expr constraint = next_latch[i] ==  named_ltr_formula;
+                    .substitute(orig_ps, vec_to_expr_vec(_ctx, prev_latch));
+            z3::expr constraint = next_latch[i] == named_ltr_formula;
             ltr_parts.push_back(constraint);
         }
         z3::expr ltr = z3::mk_and(ltr_parts);
 
         z3::expr state_next = _state_formula->substitute(vec_to_expr_vec(_ctx, prev_in), vec_to_expr_vec(_ctx, next_in))
-                                            .substitute(vec_to_expr_vec(_ctx, prev_latch), vec_to_expr_vec(_ctx, next_latch))
-                                            .substitute(vec_to_expr_vec(_ctx, prev_out), vec_to_expr_vec(_ctx, next_out));
+                .substitute(vec_to_expr_vec(_ctx, prev_latch), vec_to_expr_vec(_ctx, next_latch))
+                .substitute(vec_to_expr_vec(_ctx, prev_out), vec_to_expr_vec(_ctx, next_out));
 
         z3::expr_vector tr_parts(_ctx);
-        tr_parts.push_back(ltr); tr_parts.push_back(*_state_formula); tr_parts.push_back(state_next);
+        tr_parts.push_back(ltr);
+        tr_parts.push_back(*_state_formula);
+        tr_parts.push_back(state_next);
         z3::expr tr_raw = z3::mk_and(tr_parts);
 
-        z3::expr_vector ps(_ctx);
-        for (const z3::expr& it : boost::join(prev_latch, prev_out))
-            ps.push_back(it);
-
-        z3::expr_vector ns(_ctx);
-        for (const z3::expr& it : boost::join(next_latch, next_out))
-            ns.push_back(it);
+        z3::expr_vector ps(_ctx), ns(_ctx);
+        for (const z3::expr &it : boost::join(prev_latch, prev_out)) ps.push_back(it);
+        for (const z3::expr &it : boost::join(next_latch, next_out)) ns.push_back(it);
 
         std::map<std::string, z3::expr_vector> var_tags;
         var_tags.insert(std::make_pair(std::string("in0"), vec_to_expr_vec(_ctx, prev_in)));
@@ -263,7 +263,6 @@ AigParser::generate_state_formula(const std::unordered_map<size_t, z3::expr> &fo
 }
 
 void AigParser::extract_init(const std::vector<std::string> &file_lines) {
- //   std::vector<std::vector<z3::expr>> init_exprs;
     z3::expr_vector ps_vars = _tr_formula->get_vars_by_tag(std::string("ps"));
     z3::expr_vector latch_values(_ctx);
 

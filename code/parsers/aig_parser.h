@@ -23,10 +23,10 @@ public:
 
     explicit AigParser(const std::string& aig_path);
     const std::unordered_map<AigMetadata, size_t, std::hash<size_t>>& get_aig_metadata();
-    std::unique_ptr<KripkeStructure> to_kripke(std::unique_ptr<CtlFormula::PropertySet> aps);
+    std::unique_ptr<KripkeStructure> to_kripke(const std::set<const CtlFormula*>& aps);
 
 private:
-    std::string aig_to_aag(const std::string& aig_path0);
+    std::string aig_to_aag(const std::string& aig_path);
     const AigParser& read_aag(std::vector<std::string>& aag_container) const;
     AigParser& extract_metadata(const std::string& first_aag_line);
     AigParser& extract_literals(const std::vector<std::string>& aag_lines);
@@ -51,7 +51,6 @@ private:
     std::vector<size_t> _next_state_literals;
     std::unordered_map<size_t, z3::expr> _lit_formulas;
     z3::context _ctx;
-    std::map<size_t, size_t> _fresh_literal_names;
     std::unique_ptr<PropFormula> _tr_formula;
     std::unique_ptr<z3::expr> _init_formula;
     std::unique_ptr<z3::expr>  _state_formula;
