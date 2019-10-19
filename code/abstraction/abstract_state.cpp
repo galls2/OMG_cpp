@@ -22,3 +22,23 @@ AbstractState::AbstractState(const KripkeStructure &kripke, std::unique_ptr<CtlF
 bool AbstractState::operator<(const AbstractState &other) const {
     return _cl_node < other._cl_node;
 }
+
+bool AbstractState::is_neg_labeled(const CtlFormula &spec) const {
+    return _neg_labels->find(spec) != _neg_labels->end();
+}
+
+bool AbstractState::is_pos_labeled(const CtlFormula &spec) const {
+    return _pos_labels->find(spec) != _pos_labels->end();
+}
+
+void AbstractState::add_label(bool positivity, const CtlFormula &spec)
+{
+//    if (positivity)
+//    {
+//        _pos_labels->insert(spec);
+//    }
+//    else
+//    {
+//        _neg_labels->insert(spec);
+//    }
+}

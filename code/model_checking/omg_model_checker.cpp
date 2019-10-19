@@ -77,19 +77,26 @@ bool OmgModelChecker::model_checking(const ConcreteState &cstate, const CtlFormu
 }
 
 bool OmgModelChecker::recur_ctl(const Goal &g) {
-        // Find abs classification
+        AbstractState& astate = find_abs(g.get_node());
+        const CtlFormula& spec = g.get_spec();
 
-        // Is already true/false - return it
-        if (g.get_spec().is_boolean())
+        if (astate.is_pos_labeled(spec)) return true;
+        if (astate.is_neg_labeled(spec)) return false;
+
+        if (spec.is_boolean())
         {
-                return g.get_spec().get_boolean_value();
+                return spec.get_boolean_value();
         }
 
-        assert(!g.get_spec().get_operands().empty());
-        std::string main_connective = g.get_spec().get_data();
+        assert(!spec.get_operands().empty());
+        std::string main_connective = spec.get_data();
         handler_t handler = _handlers.at(main_connective);
         bool result = (this->*handler)(g);
-        // If is strengthen
+
+        if (g.get_properties().at("strengthen"))
+        {
+                astate.add_label(result, spec);
+        }
 
         return result;
 
