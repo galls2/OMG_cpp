@@ -27,8 +27,8 @@ bool CtlFormula::operator==(const CtlFormula &other) const {
     return true;
 }
 
-std::set<const CtlFormula*> CtlFormula::get_aps() const {
-    std::set<const CtlFormula*> pset;
+const CtlFormula::PropertySet CtlFormula::get_aps() const {
+    CtlFormula::PropertySet pset;
 
     std::vector<const CtlFormula*> queue;
     queue.insert(queue.begin(), this);
@@ -68,16 +68,6 @@ bool CtlFormula::get_boolean_value() const {
 
 const std::vector<std::unique_ptr<CtlFormula>> &CtlFormula::get_operands() const {
     return _operands;
-}
-
-std::set<std::string> CtlFormula::property_set_to_string_set(
-        const std::unordered_set<CtlFormula, CtlFormula::CtlFormulaHasher> &property_set) {
-    std::set<std::string> strs;
-    for (const CtlFormula& prop : property_set)
-    {
-        strs.insert(prop.to_string());
-    }
-    return strs;
 }
 
 bool CtlFormula::operator<(const CtlFormula &other) const {

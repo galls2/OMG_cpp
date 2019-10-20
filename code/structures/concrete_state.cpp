@@ -100,7 +100,7 @@ bool ConcreteState::is_labeled_with(const std::string &ap) const {
     return res;
 }
 
-void ConcreteState::aps_by_sat(std::set<const CtlFormula*>& pos, std::set<const CtlFormula*>& neg) const
+void ConcreteState::aps_by_sat(CtlFormula::PropertySet& pos, CtlFormula::PropertySet& neg) const
 {
     z3::context& ctx = _kripke.get_tr().get_formula().ctx();
     z3::solver solver(ctx);
@@ -110,7 +110,7 @@ void ConcreteState::aps_by_sat(std::set<const CtlFormula*>& pos, std::set<const 
     z3::model m = solver.get_model();
 
     z3::expr_vector ps_vars = _kripke.get_tr().get_vars_by_tag("ps");
-    const std::set<const CtlFormula*>& aps = _kripke.get_aps();
+    const auto& aps = _kripke.get_aps();
     for (const CtlFormula* ap : aps)
     {
         size_t var_idx = _kripke.get_var_num_by_ap(ap->get_data());

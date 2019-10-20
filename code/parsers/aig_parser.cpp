@@ -174,7 +174,7 @@ AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path) {
     }
 
 
-    std::unique_ptr<KripkeStructure> AigParser::to_kripke(const std::set<const CtlFormula*>& aps)
+    std::unique_ptr<KripkeStructure> AigParser::to_kripke(const CtlFormula::PropertySet& aps)
     {
         std::map<std::string, size_t> ap_to_var_idx;
         for (const auto &it : _ap_to_symb)

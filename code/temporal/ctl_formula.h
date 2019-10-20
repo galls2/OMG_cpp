@@ -6,37 +6,40 @@
 #include <utility>
 #include <unordered_set>
 
-
 class CtlFormula
 {
 public:
 
-    struct CtlFormulaHasher
+    struct CtlFormulaPtrHasher
     {
-        size_t operator()(const CtlFormula& a) const
+        size_t operator()(const CtlFormula* const& a) const
         {
             std::hash<std::string> hasher;
-            return hasher(a.to_string());
+            return hasher(a->to_string());
         }
-
+    };
+    struct CtlFormulaPtrComp
+    {
+        bool operator()(const CtlFormula* const& obj1, const CtlFormula* const& obj2) const
+        {
+            return (*obj1) == (*obj2);
+        }
     };
 
-    typedef std::unordered_set<CtlFormula, CtlFormulaHasher> PropertySet;
+    typedef std::unordered_set<const CtlFormula*, CtlFormulaPtrHasher, CtlFormulaPtrComp> PropertySet;
 
     explicit CtlFormula(std::string data, std::vector<std::unique_ptr<CtlFormula>> operands = {});
 
     std::string get_data() const;
     std::string to_string() const;
     bool operator==(const CtlFormula& other) const;
-    std::set<const CtlFormula*> get_aps() const;
+    const CtlFormula::PropertySet get_aps() const;
     bool is_boolean() const;
     bool get_boolean_value() const;
     const std::vector<std::unique_ptr<CtlFormula>>& get_operands() const;
 
     bool operator<(const CtlFormula& other) const;
 
-
-    static std::set<std::string> property_set_to_string_set(const PropertySet& property_set);
 private:
   std::string _data;
   std::vector<std::unique_ptr<CtlFormula>> _operands;

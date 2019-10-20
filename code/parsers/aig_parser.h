@@ -23,7 +23,7 @@ public:
 
     explicit AigParser(const std::string& aig_path);
     const std::unordered_map<AigMetadata, size_t, std::hash<size_t>>& get_aig_metadata();
-    std::unique_ptr<KripkeStructure> to_kripke(const std::set<const CtlFormula*>& aps);
+    std::unique_ptr<KripkeStructure> to_kripke(const CtlFormula::PropertySet& aps);
 
 private:
     std::string aig_to_aag(const std::string& aig_path);

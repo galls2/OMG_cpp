@@ -8,7 +8,7 @@ AbstractStructure::AbstractStructure(const KripkeStructure &kripke) : _kripke(kr
 {}
 
 AbstractState &AbstractStructure::create_abs_state(const ConcreteState &cstate) {
-    std::set<const CtlFormula*> pos, neg;
+    CtlFormula::PropertySet pos, neg;
     cstate.aps_by_sat(pos, neg);
 
     auto res =_abs_states.emplace(_kripke, pos, _kripke.get_aps(), cstate.get_bis0_formula());
