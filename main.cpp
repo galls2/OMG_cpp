@@ -9,6 +9,14 @@
 #include <parsers/ctl_file_parser.h>
 #include <unordered_set>
 #include <model_checking/omg_model_checker.h>
+#include <utils/omg_utils.h>
+
+
+#define TEST(aig_path, raw_ctl_string, expected) \
+    do \
+        assert(expected == test_formula(std::string(aig_path), std::string(raw_ctl_string))); \
+    while(0)
+
 
 void test_ctl_file_parser()
 {
@@ -42,8 +50,9 @@ std::unique_ptr<CtlFormula> get_formula(const std::string& formula_str)
 
 bool test_formula(const std::string& aig_path, const std::string& formula_str)
 {
+    std::cout << "Testing ##" << formula_str << "## against ##" << aig_path << "##... ";
+
     std::unique_ptr<CtlFormula> formula = get_formula(formula_str);
-    std::cout << formula->to_string() << std::endl;
     auto aps = formula->get_aps();
 
     AigParser p(aig_path);
@@ -56,11 +65,20 @@ bool test_formula(const std::string& aig_path, const std::string& formula_str)
     OmgConfiguration config = builder.set_config_src(ConfigurationSource::DEFAULT).build();
     OmgModelChecker omg(*kripke, config);
     bool res = omg.model_checking(init, *formula);
+
+    std::cout << "Done!";
     return res;
+
+}
+
+void unit_tests()
+{
+        TEST("/home/galls2/Desktop/af_ag.aig", "(p & state<0>) | (state<1> ^ state<0>)", false);
 }
 int main()
 {
-    bool res = test_formula(std::string(R"(/home/galls2/Desktop/af_ag.aig)"), std::string("(p & state<0>) | (state<1> ^ state<0>)"));
-    std::cout << "M, s0 |" << (res ? "" : "/") << "= phi" << std::endl;
-
+    unit_tests();
+//    constexpr auto arr = make_array(5, 7, 9);
+//    static_assert(arr.size() == 3);
+ //   for (int x : arr) std::cout << x << std::endl;
 }

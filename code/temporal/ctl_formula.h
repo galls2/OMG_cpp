@@ -37,7 +37,7 @@ public:
     bool is_boolean() const;
     bool get_boolean_value() const;
     const std::vector<std::unique_ptr<CtlFormula>>& get_operands() const;
-
+    std::unique_ptr<CtlFormula> clone() const;
     bool operator<(const CtlFormula& other) const;
 
 private:

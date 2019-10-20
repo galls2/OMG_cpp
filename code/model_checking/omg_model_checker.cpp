@@ -12,8 +12,8 @@ const std::map<std::string, OmgModelChecker::handler_t> OmgModelChecker::_handle
                 {"NOT", &OmgModelChecker::handle_not},
                 {"XOR", &OmgModelChecker::handle_xor},
                 {"ARROW", &OmgModelChecker::handle_arrow},
-                {"AV", &OmgModelChecker::handle_av},
-                {"EV", &OmgModelChecker::handle_ev},
+                {"AR", &OmgModelChecker::handle_ar},
+                {"ER", &OmgModelChecker::handle_er},
                 {"EX", &OmgModelChecker::handle_ex},
 
         };
@@ -59,11 +59,11 @@ bool OmgModelChecker::handle_arrow(const Goal &goal) {
         return second_res;
 }
 
-bool OmgModelChecker::handle_av(const Goal &goal) {
+bool OmgModelChecker::handle_ar(const Goal &goal) {
         throw OmgMcException("Not implemented!");
 }
 
-bool OmgModelChecker::handle_ev(const Goal &goal) {
+bool OmgModelChecker::handle_er(const Goal &goal) {
         throw OmgMcException("Not implemented!");
 }
 

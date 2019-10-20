@@ -61,8 +61,8 @@ private:
     bool handle_not(const Goal& goal);
     bool handle_xor(const Goal& goal);
     bool handle_arrow(const Goal& goal);
-    bool handle_av(const Goal& goal);
-    bool handle_ev(const Goal& goal);
+    bool handle_ar(const Goal& goal);
+    bool handle_er(const Goal& goal);
     bool handle_ex(const Goal& goal);
 
     void initialize_abstraction();

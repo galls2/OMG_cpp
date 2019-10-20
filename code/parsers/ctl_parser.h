@@ -13,6 +13,8 @@
 #include <utils/omg_exception.h>
 #include "lexer.h"
 
+DECLARE_OMG_EXCEPTION(CtlParserException)
+
 class ACtlParser
 {
 public:
@@ -88,6 +90,7 @@ public:
   LR1CtlParser(Grammar grammar, ActionTable action_table, GotoTable goto_table) :
   _grammar(std::move(grammar)), _action_table(std::move(action_table)), _goto_table(std::move(goto_table)) {}
 
+    std::unique_ptr<CtlFormula> parse_lr(const std::vector<Token>& formula_tokens);
     std::unique_ptr<CtlFormula> parse(const std::vector<Token>& formula_tokens) override;
     virtual ~LR1CtlParser() = default;
 
@@ -101,5 +104,7 @@ private:
     GotoTable _goto_table;
     std::stack<std::pair<State, GrammarRuleEntity>> _parse_stack;
     std::stack<std::unique_ptr<CtlFormula>> _formula_stack;
+    std::unique_ptr<CtlFormula> do_not(std::unique_ptr<CtlFormula> f) const;
+    std::unique_ptr<CtlFormula> transform_ctl_to_omg(const CtlFormula& lr_parsed_formula) const;
 };
 

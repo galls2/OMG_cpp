@@ -55,8 +55,8 @@ OmgConfiguration OmgConfigurationBuilder::get_config_from_file() const {
             switch (configuration_fields[parts[0]]) {
                 case ValueType::BOOLEAN: {
                     if (parts[1] == "True") config_data[parts[0]] = true;
-                    if (parts[1] == "False") config_data[parts[0]] = false;
-                    throw OmgConfigurationException(
+                    else if (parts[1] == "False") config_data[parts[0]] = false;
+                    else throw OmgConfigurationException(
                             std::string("Illegal boolean value ").append(parts[0]).append(
                                     ". Must be True/False").data());
                     break;

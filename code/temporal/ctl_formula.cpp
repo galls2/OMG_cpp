@@ -75,3 +75,10 @@ bool CtlFormula::operator<(const CtlFormula &other) const {
 
 }
 
+std::unique_ptr<CtlFormula> CtlFormula::clone() const {
+    std::vector<std::unique_ptr<CtlFormula>> cloned_ops;
+    for (const auto& op : _operands)
+        cloned_ops.emplace_back(op->clone());
+    return std::make_unique<CtlFormula>(_data, std::move(cloned_ops));
+}
+
