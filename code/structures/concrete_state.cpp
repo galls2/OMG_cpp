@@ -110,7 +110,8 @@ void ConcreteState::aps_by_sat(std::set<const CtlFormula*>& pos, std::set<const 
     z3::model m = solver.get_model();
 
     z3::expr_vector ps_vars = _kripke.get_tr().get_vars_by_tag("ps");
-    for (const CtlFormula* ap : _kripke.get_aps())
+    const std::set<const CtlFormula*>& aps = _kripke.get_aps();
+    for (const CtlFormula* ap : aps)
     {
         size_t var_idx = _kripke.get_var_num_by_ap(ap->get_data());
         const z3::expr var = ps_vars[var_idx];

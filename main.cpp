@@ -14,49 +14,6 @@
 
 using namespace z3;
 
-void test_z3() {
-    std::cout << "Hello, OMG in C++!" << std::endl;
-    context c;
-
-    expr x = c.bool_const("x");
-    expr y = c.bool_const("y");
-    expr conjecture = (!(x && y)) == (!x || !y);
-
-    solver s(c);
-    // adding the negation of the conjecture as a constraint.
-    s.add(!conjecture);
-    std::cout << s << "\n";
-    std::cout << s.to_smt2() << "\n";
-    switch (s.check()) {
-        case unsat:   std::cout << "de-Morgan is valid\n"; break;
-        case sat:     std::cout << "de-Morgan is not valid\n"; break;
-        case unknown: std::cout << "unknown\n"; break;
-    }
-}
-
-void test_sub() {
-    z3::context c;
-
-    z3::expr x = c.bool_const("x");
-    z3::expr y = c.bool_const("y");
-    z3:: expr f = x && y;
-    Z3_ast from[]= {x};
-    Z3_ast to[] = {y};
-
-//    z3::expr new_f(c);
-//    new_f = z3::to_expr(c, Z3_substitute(c, f, 1, from, to));
-//    std::cout << f << std::endl;
-//    std::cout << new_f << std::endl;
-
-    z3::solver solver1(c);
-    solver1.add(f);
-    std::cout << solver1.check() << std::endl;
-    std::cout << solver1.get_model() << std::endl;
-    z3::model m = solver1.get_model();
-    std::cout << "VAMV AMVAM:: " << z3::eq(m.eval(x), c.bool_val(true)) << std::endl;
-}
-
-
 void test_parser()
 {
     Lexer lexer;
@@ -97,26 +54,45 @@ void print_vec(const std::vector<T>& v, const std::function<std::string(const T&
     std::cout << "]" << std::endl;
 }
 
-int main()
+std::unique_ptr<CtlFormula> get_formula(const std::string& formula_str)
 {
-//    test_parser();
-    CtlFileParser ctl_file_parser;
-    std::vector<FormulaChunk> formula_chunks;
-    ctl_file_parser.parse_ctl_file("/home/galls2/Desktop/af_ag_ap.ctl", formula_chunks);
-    CtlFormula& formula =  *formula_chunks[0].get_formulas()[0];
-    std::cout << "SPEC: "<< formula.to_string() << std::endl;
-    std::set<const CtlFormula*> aps = formula.get_aps();
+    Lexer lexer;
+    auto lex_res = lexer.lex(formula_str);
+    LR1CtlParser parser(CtlParserData::grammar_ctl, ActionTable(CtlParserData::action_table_ctl_parser), GotoTable(CtlParserData::goto_table_ctl_parser));
+    std::unique_ptr<CtlFormula> formula = parser.parse(lex_res);
+    return formula;
+}
+
+bool test_formula(const std::string& formula_str)
+{
+    std::unique_ptr<CtlFormula> formula = get_formula(formula_str);
+    std::cout << formula->to_string() << std::endl;
+    auto aps = formula->get_aps();
 
     AigParser p(R"(/home/galls2/Desktop/af_ag.aig)");
     std::unique_ptr<KripkeStructure> kripke = p.to_kripke(aps);
 
     std::vector<ConcreteState> inits = kripke->get_initial_states();
-    for (const auto& it : inits) print_vec<bool>(it.to_bitvec(), [](bool b){return (b?"1":"0");});
     ConcreteState& init = inits[0];
 
     OmgConfigurationBuilder builder;
     OmgConfiguration config = builder.set_config_src(ConfigurationSource::DEFAULT).build();
     OmgModelChecker omg(*kripke, config);
-    bool res = omg.model_checking(init, formula);
-    std::cout << "M, s0 |" << (res ? "" : "/") << "= phi" << std::endl;
+    bool res = omg.model_checking(init, *formula);
+    return res;
+}
+int main()
+{
+    const auto r1 = get_formula("p");
+    const auto r2 = get_formula("p");
+    int n1 = 5;
+    int n2 = 5;
+    auto nn1 = std::ref(n1); auto nn2 = std::ref(n2);
+    std::cout << (nn1 == nn2) << std::endl;
+    auto rr1 = std::reference_wrapper<const CtlFormula>(*r1);
+    auto rr2 = std::reference_wrapper<const CtlFormula>(*r2);
+    std::cout << (rr1 == rr2) << std::endl;
+    //    bool res = test_formula(std::string("(p & state<0>) | (state<1> ^ state<0>)"));
+//    std::cout << "M, s0 |" << (res ? "" : "/") << "= phi" << std::endl;
+
 }

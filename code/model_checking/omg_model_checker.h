@@ -1,9 +1,7 @@
+#pragma once
 //
 // Created by galls2 on 04/10/19.
 //
-
-#ifndef OMG_CPP_OMG_MODEL_CHECKER_H
-#define OMG_CPP_OMG_MODEL_CHECKER_H
 
 
 #include <structures/kripke_structure.h>
@@ -11,6 +9,8 @@
 #include <abstraction/abstraction_classifier.h>
 #include <structures/unwinding_tree.h>
 #include <configuration/omg_config.h>
+
+DECLARE_OMG_EXCEPTION(OmgMcException)
 
 class UnwindingTree;
 
@@ -71,5 +71,3 @@ private:
     static const std::map<std::string, handler_t> _handlers;
 };
 
-
-#endif //OMG_CPP_OMG_MODEL_CHECKER_H

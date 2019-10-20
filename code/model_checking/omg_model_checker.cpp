@@ -19,35 +19,56 @@ const std::map<std::string, OmgModelChecker::handler_t> OmgModelChecker::_handle
         };
 
 bool OmgModelChecker::handle_and(const Goal &goal) {
-        return false;
+        Goal first_subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
+        bool first_res = recur_ctl(first_subgoal);
+        if (!first_res) return false;
+        Goal second_subgoal(goal.get_node(), *goal.get_spec().get_operands()[1], goal.get_properties());
+        bool second_res = recur_ctl(second_subgoal);
+        return second_res;
 }
 
 bool OmgModelChecker::handle_or(const Goal &goal) {
-        return false;
+        Goal first_subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
+        bool first_res = recur_ctl(first_subgoal);
+        if (first_res) return true;
+        Goal second_subgoal(goal.get_node(), *goal.get_spec().get_operands()[1], goal.get_properties());
+        bool second_res = recur_ctl(second_subgoal);
+        return second_res;
 }
 
 bool OmgModelChecker::handle_not(const Goal &goal) {
-        return false;
+        Goal subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
+        bool result = recur_ctl(subgoal);
+        return !result;
 }
 
 bool OmgModelChecker::handle_xor(const Goal &goal) {
-        return false;
+        Goal first_subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
+        bool first_res = recur_ctl(first_subgoal);
+        Goal second_subgoal(goal.get_node(), *goal.get_spec().get_operands()[1], goal.get_properties());
+        bool second_res = recur_ctl(second_subgoal);
+        return first_res ^ second_res;
 }
 
 bool OmgModelChecker::handle_arrow(const Goal &goal) {
-        return false;
+        Goal first_subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
+        bool first_res = recur_ctl(first_subgoal);
+        if (!first_res) return true;
+        Goal second_subgoal(goal.get_node(), *goal.get_spec().get_operands()[1], goal.get_properties());
+        bool second_res = recur_ctl(second_subgoal);
+        return second_res;
 }
 
 bool OmgModelChecker::handle_av(const Goal &goal) {
-        return false;
+        throw OmgMcException("Not implemented!");
 }
 
 bool OmgModelChecker::handle_ev(const Goal &goal) {
-        return false;
+        throw OmgMcException("Not implemented!");
 }
 
 bool OmgModelChecker::handle_ex(const Goal &goal) {
-        return false;
+        throw OmgMcException("Not implemented!");
 }
 
 OmgModelChecker::OmgModelChecker(const KripkeStructure &kripke, const OmgConfiguration &config)
@@ -71,7 +92,7 @@ bool OmgModelChecker::model_checking(const ConcreteState &cstate, const CtlFormu
 
         root->reset_developed_in_tree();
 
-        Goal goal(*root, specification, {});
+        Goal goal(*root, specification, {{"strengthen", true}});
         bool result = recur_ctl(goal);
         return result;
 }
