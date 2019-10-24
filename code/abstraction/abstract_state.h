@@ -15,6 +15,9 @@ public:
     bool is_pos_labeled(const CtlFormula& spec) const;
     bool is_neg_labeled(const CtlFormula& spec) const;
     void add_label(bool positivity, const CtlFormula& spec);
+    bool is_final_classification() const;
+    AbstractClassificationNode* get_cl_node() const;
+
 private:
     const KripkeStructure& _kripke;
     CtlFormula::PropertySet _pos_labels;

@@ -36,6 +36,11 @@ AbstractClassificationNode &AbstractionClassifier::add_classification_tree(const
     return *((res.first)->second);
 }
 
+AbstractState &AbstractionClassifier::update_classification(const AbstractState &astate, const ConcreteState &cstate) {
+    AbstractClassificationNode* cl = astate.get_cl_node();
+    return cl->classify(cstate);
+}
+
 #ifndef DEBUG
 void AbstractClassificationNode::set_split_string(const std::string& str) {
     _split_string = str;

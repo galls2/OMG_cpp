@@ -18,6 +18,7 @@ public:
     AbstractClassificationNode& add_classification_tree(const ConcreteState& cstate, AbstractState& astate);
     AbstractState& classify(const ConcreteState &cstate);
     const KripkeStructure& get_kripke() const;
+    AbstractState& update_classification(const AbstractState& astate, const ConcreteState& cstate);
 private:
     const KripkeStructure& _kripke;
     std::map<std::set<std::string>, std::unique_ptr<AbstractClassificationNode>> _classification_trees;

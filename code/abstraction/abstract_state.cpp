@@ -8,6 +8,8 @@
 #include <iterator>
 #include "abstract_state.h"
 
+#include <abstraction/abstraction_classifier.h>
+
 AbstractState::AbstractState(const KripkeStructure &kripke, CtlFormula::PropertySet pos_labels,
                              CtlFormula::PropertySet atomic_labels, PropFormula sym_rep)
                              : _kripke(kripke), _pos_labels(std::move(pos_labels)),
@@ -39,4 +41,12 @@ void AbstractState::add_label(bool positivity, const CtlFormula &spec)
     {
         _neg_labels.insert(&spec);
     }
+}
+
+bool AbstractState::is_final_classification() const {
+    return _cl_node->is_leaf();
+}
+
+AbstractClassificationNode *AbstractState::get_cl_node() const {
+    return _cl_node;
 }
