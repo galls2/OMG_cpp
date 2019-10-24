@@ -28,3 +28,7 @@ std::string VersionManager::new_version(const std::string &orig_name)
 std::string VersionManager::new_version(const size_t orig_name) {
     return VersionManager::new_version(std::to_string(orig_name));
 }
+
+void VersionManager::reset() {
+    _copies_counter.clear();
+}

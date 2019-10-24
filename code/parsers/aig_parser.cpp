@@ -21,6 +21,7 @@
 #include "aig_parser.h"
 
 AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path) {
+    VersionManager::reset();
 
     _aag_path = aig_to_aag(aig_path);
 
@@ -61,7 +62,7 @@ AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path) {
         std::string out_path = std::string(aig_path).replace(aig_path.length() - 2, 1, std::string("a"));
         std::string conversion_cmd = PATH_TO_EXE + " " + aig_path + " " + out_path;
    //     std::cout << conversion_cmd << std::endl;
-        system(conversion_cmd.c_str());
+        (void) system(conversion_cmd.c_str());
         return out_path;
     }
 

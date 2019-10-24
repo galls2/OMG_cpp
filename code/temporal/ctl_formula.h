@@ -22,7 +22,7 @@ public:
     {
         bool operator()(const CtlFormula* const& obj1, const CtlFormula* const& obj2) const
         {
-            return (*obj1) == (*obj2);
+            return (obj1 == obj2) || ((*obj1) == (*obj2));
         }
     };
 

@@ -74,6 +74,8 @@ bool test_formula(const std::string& aig_path, const std::string& formula_str)
 void unit_tests()
 {
         TEST("/home/galls2/Desktop/af_ag.aig", "(p & state<0>) | (state<1> ^ state<0>)", false);
+        TEST("/home/galls2/Desktop/af_ag.aig", "AX (p)", false);
+
 }
 int main()
 {
