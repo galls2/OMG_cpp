@@ -22,6 +22,8 @@ public:
     void aps_by_sat(CtlFormula::PropertySet& pos, CtlFormula::PropertySet& neg) const;
     std::set<std::string> string_sat_aps() const;
     PropFormula get_bis0_formula() const;
+    bool operator==(const ConcreteState& other) const;
+
 #ifndef DEBUG
     std::vector<bool> to_bitvec() const;
 #endif

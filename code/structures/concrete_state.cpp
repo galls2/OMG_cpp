@@ -165,3 +165,7 @@ std::set<std::string> ConcreteState::string_sat_aps() const {
     }
     return sat_strs;
 }
+
+bool ConcreteState::operator==(const ConcreteState &other) const {
+    return z3::eq(other._conjunct, _conjunct);
+}
