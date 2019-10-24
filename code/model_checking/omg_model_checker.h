@@ -16,12 +16,12 @@ class UnwindingTree;
 
 struct Goal
 {
-    Goal(const UnwindingTree& node, const CtlFormula& spec, const std::map<std::string, bool>& properties);
-    const UnwindingTree &get_node() const;
+    Goal(UnwindingTree& node, const CtlFormula& spec, std::map<std::string, bool> properties);
+    UnwindingTree &get_node();
     const CtlFormula &get_spec() const;
     const std::map<std::string, bool> &get_properties() const;
 private:
-    const UnwindingTree& _node;
+    UnwindingTree& _node;
     const CtlFormula& _spec;
     const std::map<std::string, bool> _properties;
 };
@@ -30,8 +30,8 @@ class OmgModelChecker {
 public:
 
 
-    typedef bool (OmgModelChecker::*handler_t)(const Goal& goal);
-    bool model_checking(const ConcreteState& cstate, const CtlFormula& specification);
+    typedef bool (OmgModelChecker::*handler_t)(Goal& goal);
+    bool model_checking(ConcreteState& cstate, const CtlFormula& specification);
 
     OmgModelChecker(const KripkeStructure& kripke, const OmgConfiguration& config);
 
@@ -51,23 +51,29 @@ private:
     /*
      * Model Checking
      */
-    bool recur_ctl(const Goal& g);
+    bool recur_ctl(Goal& g);
 
     /*
      * Handlers
      */
-    bool handle_and(const Goal& goal);
-    bool handle_or(const Goal& goal);
-    bool handle_not(const Goal& goal);
-    bool handle_xor(const Goal& goal);
-    bool handle_arrow(const Goal& goal);
-    bool handle_ar(const Goal& goal);
-    bool handle_er(const Goal& goal);
-    bool handle_ex(const Goal& goal);
+    bool handle_and(Goal& goal);
+    bool handle_or(Goal& goal);
+    bool handle_not(Goal& goal);
+    bool handle_xor(Goal& goal);
+    bool handle_arrow(Goal& goal);
+    bool handle_ar(Goal& goal);
+    bool handle_er(Goal& goal);
+    bool handle_ex(Goal& goal);
 
     void initialize_abstraction();
 
-    AbstractState& find_abs(const UnwindingTree& node);
+    AbstractState& find_abs(UnwindingTree& node);
     static const std::map<std::string, handler_t> _handlers;
+
+    bool check_inductive_av(Goal& goal, NodePriorityQueue& to_visit);
+    void strengthen_subtree(Goal& goal, const std::function<bool(const UnwindingTree&)>& stop_condition);
+    void handle_proving_trace(bool is_strengthen, Goal& goal, UnwindingTree& node_to_explore);
+
+    void label_subtree(UnwindingTree &node, const CtlFormula& spec, bool positivity);
 };
 

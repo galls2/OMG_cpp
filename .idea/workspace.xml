@@ -15,22 +15,13 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/code/abstraction/abstract_state.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstract_state.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/abstraction/abstract_state.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstract_state.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/abstraction/abstraction_classifier.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstraction_classifier.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/abstraction/abstraction_classifier.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstraction_classifier.h" afterDir="false" />
+    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="-Refactor aig parser, version manager">
       <change beforePath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/model_checking/omg_model_checker.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/omg_model_checker.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/parsers/aig_parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/aig_parser.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/structures/concrete_state.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/concrete_state.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/structures/concrete_state.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/concrete_state.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/structures/unwinding_tree.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/unwinding_tree.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/structures/unwinding_tree.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/unwinding_tree.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/temporal/ctl_formula.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/temporal/ctl_formula.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/utils/version_manager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/version_manager.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/utils/version_manager.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/version_manager.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -399,7 +390,7 @@
       <workItem from="1569993080925" duration="2323000" />
       <workItem from="1570037966927" duration="23677000" />
       <workItem from="1570338874303" duration="2606000" />
-      <workItem from="1570390388176" duration="170694000" />
+      <workItem from="1570390388176" duration="170983000" />
     </task>
     <task id="LOCAL-00001" summary="My first commit!">
       <created>1567197130912</created>
@@ -695,11 +686,25 @@
       <option name="project" value="LOCAL" />
       <updated>1571598396978</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="-Refactor aig parser, version manager&#10;- Added comparator to Ctl&#10;- main refactored">
+      <created>1571930464143</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1571930464143</updated>
+    </task>
+    <task id="LOCAL-00044" summary="-Added reclassification to abs classifier&#10;-Added methods in abs_state to link with abs_classifier">
+      <created>1571930565457</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1571930565457</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="314041000" />
+    <option name="totallyTimeSpent" value="314330000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -763,10 +768,6 @@
     <option name="version" value="1" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Finished AIG parser" />
-    <MESSAGE value="Bugfix in aig parser, version manager&#10;Added print functionality to PropFormula" />
-    <MESSAGE value="Adding classes, directories and refactoring" />
-    <MESSAGE value="Finalized proto-successor computation" />
     <MESSAGE value="Refactor&#10;Parsing initial states" />
     <MESSAGE value="Creating more Z3 utils&#10;Improving Successor finding&#10;Fixing bugs in aig parse" />
     <MESSAGE value="Fixing compilation errors in AigParser &amp; Z3utils" />
@@ -788,7 +789,11 @@
     <MESSAGE value="Fixed property set def and integrated -- now works with multi-appearant formulas." />
     <MESSAGE value="Main is now more accessible" />
     <MESSAGE value="-Created algorithm for converting general CTL specs to CTL specs with only ER, AR, EX, logical ops and APs.&#10;-Refactoring" />
-    <option name="LAST_COMMIT_MESSAGE" value="-Created algorithm for converting general CTL specs to CTL specs with only ER, AR, EX, logical ops and APs.&#10;-Refactoring" />
+    <MESSAGE value="-Refactor aig parser, version manager" />
+    <MESSAGE value="-Refactor aig parser, version manager&#10;- Added comparator to Ctl" />
+    <MESSAGE value="-Refactor aig parser, version manager&#10;- Added comparator to Ctl&#10;- main refactored" />
+    <MESSAGE value="-Added reclassification to abs classifier&#10;-Added methods in abs_state to link with abs_classifier" />
+    <option name="LAST_COMMIT_MESSAGE" value="-Added reclassification to abs classifier&#10;-Added methods in abs_state to link with abs_classifier" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
