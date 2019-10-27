@@ -76,3 +76,11 @@ AbstractState &AbstractClassificationNode::classify(const ConcreteState &cstate)
         return classification_result;
     }
 }
+
+AbstractState *AbstractClassificationNode::get_abs() const {
+    return _abs_state;
+}
+
+const AbstractClassificationNode *AbstractClassificationNode::get_parent() const {
+    return _parent;
+}

@@ -5,6 +5,7 @@
 //
 
 #include <queue>
+#include <unordered_set>
 #include "omg_model_checker.h"
 
 
@@ -143,8 +144,96 @@ void OmgModelChecker::strengthen_subtree(Goal& goal, const std::function<bool(co
 
 bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit)
 {
-        throw OmgMcException("Not implemented!");
+    CandidateSet candidates = compute_candidate_set(goal, _opt_brother_unif);
+
+    return true;
 }
+
+CandidateSet OmgModelChecker::compute_candidate_set(Goal& goal, bool brother_unif)
+{
+    CandidateSet cands;
+    UnwindingTree& root = goal.get_node();
+    auto inserter = [&cands] (const UnwindingTree& node)
+    {
+        auto abs = node.get_abs();
+        assert(abs);
+
+        AbstractState* p_abs = &(abs->get());
+        std::unordered_set<const UnwindingTree*> node_set;
+        node_set.insert(&node);
+        if (cands.find(p_abs) == cands.end())
+        {
+
+            cands.emplace(p_abs, node_set);
+        } else
+            cands[p_abs].emplace(&node);
+    };
+    root.map(inserter, [&goal](const UnwindingTree& node) { return node.is_developed(goal);  });
+
+    if (brother_unif)
+        return brother_unification(cands, *(goal.get_spec().get_operands()[1]));
+    else return cands;
+}
+
+void unify_same_level(CandidateSet& src, const CtlFormula& agree_upon, CandidateSet& unchanged, CandidateSet& next_level) {
+    std::map<const AbstractClassificationNode *, std::pair<AbstractState*, std::vector<std::unordered_set<const UnwindingTree*>>>> parents_mapping;
+
+    for (const std::pair<AbstractState* const, std::unordered_set<const UnwindingTree*>>& it : src) {
+        const AbstractClassificationNode* parent = it.first->get_cl_node()->get_parent();
+        assert(parent != nullptr);
+        if (parents_mapping.find(parent) == parents_mapping.end())
+            parents_mapping[parent] = std::pair<AbstractState*, std::vector<std::unordered_set<const UnwindingTree*>>>();
+        parents_mapping[parent].second.push_back(it.second);
+        parents_mapping[parent].first = it.first;
+    }
+
+    for (const std::pair<const AbstractClassificationNode* const, std::pair<AbstractState*, std::vector<std::unordered_set<const UnwindingTree*>>>> &it : parents_mapping)
+    {
+        if (it.second.second.size() == 2)
+        {
+            AbstractState* new_abs = it.first->get_abs();
+
+            std::unordered_set<const UnwindingTree*> new_set;
+            for (const auto& p_cand : it.second.second) {
+                new_set.insert(p_cand.begin(), p_cand.end());
+            }
+            next_level.emplace(new_abs, new_set);
+        }
+        else
+        {
+            assert(it.second.second.size() == 1);
+            unchanged.emplace(it.second.first, it.second.second[0]);
+        }
+    }
+
+}
+
+CandidateSet OmgModelChecker::brother_unification(const CandidateSet &cands, const CtlFormula& agree_upon)
+{
+    std::map<size_t, CandidateSet> levels;
+    size_t max_depth = cands.begin()->first->get_cl_node()->get_depth();
+    for (const std::pair<AbstractState* const, std::unordered_set<const UnwindingTree*>>& it : cands)
+    {
+        size_t depth = it.first->get_cl_node()->get_depth();
+        max_depth = max_depth >= depth ? max_depth : depth;
+        if (levels.find(depth) == levels.end()) levels[depth] = {it};
+        else levels[depth].emplace(it);
+    }
+
+    CandidateSet reduced;
+    for (size_t depth = max_depth; depth > 0; --depth)
+    {
+        if (levels.find(depth) == levels.end() || levels[depth].empty()) continue;
+
+        CandidateSet unchanged, next_level;
+        unify_same_level(levels[depth], agree_upon, unchanged, next_level);
+    }
+
+    if (levels.find(0) != levels.end()) reduced.insert(levels[0].begin(), levels[0].end());
+
+    return reduced;
+}
+
 
 bool OmgModelChecker::handle_er(Goal &goal)
 {

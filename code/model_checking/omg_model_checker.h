@@ -3,7 +3,8 @@
 // Created by galls2 on 04/10/19.
 //
 
-
+#include <unordered_map>
+#include <unordered_set>
 #include <structures/kripke_structure.h>
 #include <abstraction/abstract_structure.h>
 #include <abstraction/abstraction_classifier.h>
@@ -25,6 +26,8 @@ private:
     const CtlFormula& _spec;
     const std::map<std::string, bool> _properties;
 };
+
+typedef std::unordered_map<AbstractState*, std::unordered_set<const UnwindingTree*>> CandidateSet;
 
 class OmgModelChecker {
 public:
@@ -73,7 +76,8 @@ private:
     bool check_inductive_av(Goal& goal, NodePriorityQueue& to_visit);
     void strengthen_subtree(Goal& goal, const std::function<bool(const UnwindingTree&)>& stop_condition);
     void handle_proving_trace(bool is_strengthen, Goal& goal, UnwindingTree& node_to_explore);
-
+    CandidateSet compute_candidate_set(Goal& goal, bool brother_unif);
+    CandidateSet brother_unification(const CandidateSet &cands, const CtlFormula& agree_upon);
     void label_subtree(UnwindingTree &node, const CtlFormula& spec, bool positivity);
 };
 

@@ -31,6 +31,8 @@ public:
     AbstractClassificationNode(AbstractionClassifier& classifier, AbstractState* abs_state, const AbstractClassificationNode* parent=nullptr);
     size_t get_depth() const;
     bool is_leaf() const;
+    const AbstractClassificationNode* get_parent() const;
+    AbstractState* get_abs() const;
     AbstractState& classify(const ConcreteState& cstate) const;
 
 #ifndef DEBUG
