@@ -29,6 +29,13 @@ private:
 
 typedef std::unordered_map<AbstractState*, std::unordered_set<const UnwindingTree*>> CandidateSet;
 
+struct EEClosureResult
+{
+    bool is_closed;
+    ConcreteState* src;
+    ConcreteState* dst;
+};
+
 class OmgModelChecker {
 public:
 

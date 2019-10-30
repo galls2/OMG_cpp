@@ -49,3 +49,4 @@ private:
     std::string _split_string;
 #endif
 };
+

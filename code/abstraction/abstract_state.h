@@ -11,7 +11,6 @@ class AbstractClassificationNode;
 class AbstractState {
 public:
     AbstractState(const KripkeStructure& kripke, CtlFormula::PropertySet pos_labels, CtlFormula::PropertySet atomic_labels, PropFormula sym_rep);
-    bool operator<(const AbstractState& other) const;
     bool is_pos_labeled(const CtlFormula& spec) const;
     bool is_neg_labeled(const CtlFormula& spec) const;
     void add_label(bool positivity, const CtlFormula& spec);
@@ -29,3 +28,5 @@ private:
     std::string _debug_name;
 #endif
 };
+
+bool operator<(const AbstractState& lhs, const AbstractState& rhs);

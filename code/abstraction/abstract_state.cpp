@@ -19,10 +19,6 @@ AbstractState::AbstractState(const KripkeStructure &kripke, CtlFormula::Property
                         std::inserter(_neg_labels, _neg_labels.end()));
 }
 
-bool AbstractState::operator<(const AbstractState &other) const {
-    return _cl_node < other._cl_node;
-}
-
 bool AbstractState::is_neg_labeled(const CtlFormula &spec) const {
     return _neg_labels.find(&spec) != _neg_labels.end();
 }
@@ -49,4 +45,8 @@ bool AbstractState::is_final_classification() const {
 
 AbstractClassificationNode *AbstractState::get_cl_node() const {
     return _cl_node;
+}
+
+bool operator<(const AbstractState &lhs, const AbstractState &rhs) {
+    return lhs.get_cl_node() < rhs.get_cl_node();
 }
