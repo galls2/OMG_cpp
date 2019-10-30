@@ -9,7 +9,13 @@
 #include <structures/kripke_structure.h>
 #include "abstract_state.h"
 
-struct EEClosureResult;
+struct EEClosureResult
+{
+    bool is_closed;
+    ConcreteState* src;
+    ConcreteState* dst;
+};
+
 
 class AbstractStructure {
 public:
@@ -20,8 +26,10 @@ private:
     const KripkeStructure& _kripke;
     std::set<AbstractState> _abs_states;
 
-    std::map<const AbstractState* const, std::set<const AbstractState* const>> _NE_may;
+    std::map<AbstractState* const, std::set<AbstractState*>> _NE_may;
     std::map<const AbstractState* const, std::set<const AbstractState* const>> _E_must;
+    std::map<AbstractState* const, std::vector<std::set<AbstractState*>>> _E_may_over;
+    std::map<AbstractState* const, std::vector<std::pair<std::set<AbstractState*>, EEClosureResult>>> _NE_may_over;
 
     //E MAY OVER, , NE MAY OVER
 };
