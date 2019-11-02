@@ -47,6 +47,15 @@ AbstractClassificationNode *AbstractState::get_cl_node() const {
     return _cl_node;
 }
 
+const KripkeStructure &AbstractState::get_kripke() const {
+    return _kripke;
+}
+
 bool operator<(const AbstractState &lhs, const AbstractState &rhs) {
     return lhs.get_cl_node() < rhs.get_cl_node();
+}
+
+PropFormula AbstractState::get_formula() const
+{
+    return _sym_rep;
 }

@@ -3,8 +3,10 @@
 //
 #include <algorithm>
 #include "abstract_structure.h"
+#include <utils/z3_utils.h>
+#include <model_checking/omg_model_checker.h>
 
-AbstractStructure::AbstractStructure(const KripkeStructure &kripke) : _kripke(kripke)
+AbstractStructure::AbstractStructure(const KripkeStructure &kripke, const OmgModelChecker* omg) : _kripke(kripke), _omg(omg)
 {}
 
 AbstractState &AbstractStructure::create_abs_state(const ConcreteState &cstate) {
@@ -50,6 +52,21 @@ EEClosureResult AbstractStructure::is_EE_closure(AbstractState &to_close,
         }
     }
 
- //   auto closure_result =
-  return {};
+    EEClosureResult closure_result = FormulaInductiveUtils::is_EE_inductive(to_close, p_closers, get_omg()->_sat_solver);
+
+    if (closure_result.is_closed)
+    {
+        if (_E_may_over.find(&to_close) == _E_may_over.end()) _E_may_over[&to_close] = {p_closers};
+        else _E_may_over[&to_close].emplace_back(p_closers);
+    } else
+    {
+        if (_NE_may_over.find(&to_close) == _NE_may_over.end()) _NE_may_over[&to_close] = {{p_closers, closure_result}};
+        else _NE_may_over[&to_close].push_back({p_closers, closure_result});
+    }
+
+    return closure_result;
+}
+
+OmgModelChecker *AbstractStructure::get_omg() const{
+    return _omg;
 }

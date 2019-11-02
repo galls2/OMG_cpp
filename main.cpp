@@ -10,7 +10,7 @@
 #include <unordered_set>
 #include <model_checking/omg_model_checker.h>
 #include <utils/omg_utils.h>
-
+#include <utils/z3_utils.h>
 
 #define TEST(aig_path, raw_ctl_string, expected) \
     do \
@@ -66,7 +66,7 @@ bool test_formula(const std::string& aig_path, const std::string& formula_str)
     OmgModelChecker omg(*kripke, config);
     bool res = omg.model_checking(init, *formula);
 
-    std::cout << "Done!";
+    std::cout << "Done!" << std::endl;
     return res;
 
 }
@@ -74,12 +74,13 @@ bool test_formula(const std::string& aig_path, const std::string& formula_str)
 void unit_tests()
 {
         TEST("/home/galls2/Desktop/af_ag.aig", "(p & state<0>) | (state<1> ^ state<0>)", false);
-        TEST("/home/galls2/Desktop/af_ag.aig", "AX (p)", false);
+     //   TEST("/home/galls2/Desktop/af_ag.aig", "AX (p)", false);
 
 }
 int main()
 {
     unit_tests();
+
 //    constexpr auto arr = make_array(5, 7, 9);
 //    static_assert(arr.size() == 3);
  //   for (int x : arr) std::cout << x << std::endl;

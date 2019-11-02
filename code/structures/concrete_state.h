@@ -36,5 +36,6 @@ private:
 
 
     void compute_successors();
+
 };
 

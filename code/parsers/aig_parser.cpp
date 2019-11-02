@@ -62,7 +62,8 @@ AigParser::AigParser(const std::string &aig_path) : _aig_path(aig_path) {
         std::string out_path = std::string(aig_path).replace(aig_path.length() - 2, 1, std::string("a"));
         std::string conversion_cmd = PATH_TO_EXE + " " + aig_path + " " + out_path;
    //     std::cout << conversion_cmd << std::endl;
-        (void) system(conversion_cmd.c_str());
+        size_t conversion_result = system(conversion_cmd.c_str());
+        assert(conversion_result == 0);
         return out_path;
     }
 

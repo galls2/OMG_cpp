@@ -179,7 +179,7 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
 
         EEClosureResult res = _abs_structure->is_EE_closure(abs_lead, abs_states);
 
-
+        throw "Gal Sade Sade";
 
     }
 }
@@ -283,14 +283,15 @@ bool OmgModelChecker::handle_ex(Goal &goal)
 OmgModelChecker::OmgModelChecker(const KripkeStructure &kripke, const OmgConfiguration &config)
 : _kripke(kripke),
         _opt_trivial_splits(config.get<bool>("Trivial Split Elimination")),
-        _opt_brother_unif(config.get<bool>("Brother Unification"))
+        _opt_brother_unif(config.get<bool>("Brother Unification")),
+        _sat_solver(config.get<std::string>("Sat Solver"))
 {
         initialize_abstraction();
 }
 
 void OmgModelChecker::initialize_abstraction()
 {
-        _abs_structure = std::make_unique<AbstractStructure>(_kripke);
+        _abs_structure = std::make_unique<AbstractStructure>(_kripke, this);
         _abs_classifier = std::make_unique<AbstractionClassifier>(_kripke);
 }
 

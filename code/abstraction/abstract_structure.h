@@ -16,14 +16,17 @@ struct EEClosureResult
     ConcreteState* dst;
 };
 
+class OmgModelChecker;
 
 class AbstractStructure {
 public:
-    explicit AbstractStructure(const KripkeStructure& kripke);
+    explicit AbstractStructure(const KripkeStructure& kripke, const OmgModelChecker* omg);
     AbstractState& create_abs_state(const ConcreteState& cstate);
     EEClosureResult is_EE_closure(AbstractState& to_close , const std::set<std::reference_wrapper<AbstractState>>& close_with);
+    OmgModelChecker* get_omg() const;
 private:
     const KripkeStructure& _kripke;
+    const OmgModelChecker* _omg;
     std::set<AbstractState> _abs_states;
 
     std::map<AbstractState* const, std::set<AbstractState*>> _NE_may;

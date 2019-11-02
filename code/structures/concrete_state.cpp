@@ -40,6 +40,8 @@ void ConcreteState::compute_successors() {
     const PropFormula& tr = _kripke.get_tr();
 
     const z3::expr& raw_tr = tr.get_formula();
+    const z3::context& ctx = raw_tr.ctx();
+
     const z3::expr ns_raw_formula = _conjunct && raw_tr;
     const std::map<std::string, z3::expr_vector> & variables_map = tr.get_variables_map();
     PropFormula ns_formula = PropFormula(ns_raw_formula, variables_map);
@@ -51,18 +53,14 @@ void ConcreteState::compute_successors() {
     for (const auto& res : sat_results)
     {
         assert(res.get_is_sat());
-        z3::expr_vector lits(raw_tr.ctx());
-        for (size_t i = 0; i < ns_vars.size(); ++i) {
-            z3::expr var = ns_vars[i];
-            lits.push_back(res.get_value(var) == SatResult::TRUE ? var : !var);
-        }
-        z3::expr conj = z3::mk_and(lits);
+        z3::expr conj = FormulaUtils::get_conj_from_sat_result(ctx, ns_vars, res);
         z3::expr named_conj = conj.substitute(tr.get_vars_by_tag("ns"), tr.get_vars_by_tag("ps"));
         ConcreteState cstate(_kripke, named_conj);
         successors.push_back(cstate);
     }
     _successors.emplace(successors);
 }
+
 
 std::ostream& operator<< (std::ostream& stream, const ConcreteState& concrete_state) {
     stream << concrete_state._conjunct.to_string();

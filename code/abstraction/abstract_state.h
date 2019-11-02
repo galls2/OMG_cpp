@@ -16,6 +16,8 @@ public:
     void add_label(bool positivity, const CtlFormula& spec);
     bool is_final_classification() const;
     AbstractClassificationNode* get_cl_node() const;
+    const KripkeStructure& get_kripke() const;
+    PropFormula get_formula() const;
 
 private:
     const KripkeStructure& _kripke;

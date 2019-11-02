@@ -16,6 +16,8 @@ class PropFormula {
 public:
     PropFormula(const z3::expr& formula, const std::map<std::string, z3::expr_vector> &variables);
     const z3::expr& get_formula() const;
+    z3::expr get_formula();
+
     std::string to_string() const;
     const z3::expr_vector& get_vars_by_tag(const std::string& tag) const;
     std::vector<z3::expr> get_all_variables() const;

@@ -64,6 +64,11 @@ const z3::expr &PropFormula::get_formula() const {
     return _formula;
 }
 
+z3::expr PropFormula::get_formula() {
+    return _formula;
+}
+
+
 PropFormula::PropFormula(const z3::expr &formula, const std::map<std::string, z3::expr_vector> &variables)  : _formula(formula), _variables(
         variables) {}
 

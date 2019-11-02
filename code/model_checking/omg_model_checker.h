@@ -40,6 +40,13 @@ public:
 
     OmgModelChecker(const KripkeStructure& kripke, const OmgConfiguration& config);
 
+    /*
+    * Configurable Properties
+    */
+    const bool _opt_trivial_splits; // Is the Trivial Split Elimination optimization activated
+    const bool _opt_brother_unif; // Is the Trivial Split Elimination optimization activated
+    const std::string _sat_solver; // What SAT solver to use
+
 private:
     const KripkeStructure& _kripke;
     std::unique_ptr<AbstractStructure> _abs_structure;
@@ -47,11 +54,6 @@ private:
    // std::map<std::unique_ptr<UnwindingTree>> _unwinding_trees;
 
 
-    /*
-     * Configurable Properties
-     */
-    const bool _opt_trivial_splits; // Is the Trivial Split Elimination optimization activated
-    const bool _opt_brother_unif; // Is the Trivial Split Elimination optimization activated
 
     /*
      * Model Checking

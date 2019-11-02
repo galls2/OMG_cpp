@@ -4,6 +4,18 @@
 #include <vector>
 #include <set>
 #include <formulas/sat_solver.h>
+#include <abstraction/abstract_structure.h>
+
+class AbstractState;
+
+class FormulaUtils
+{
+public:
+    static z3::expr negate(const z3::expr& expr);
+
+    static z3::expr get_conj_from_sat_result(const z3::context &ctx, const z3::expr_vector &conj_vars,
+                                                     const SatSolverResult &sat_result);
+};
 
 z3::expr to_var(z3::context& ctx, size_t val);
 
@@ -26,3 +38,9 @@ std::string expr_vector_to_string(const z3::expr_vector& vec);
 
 
 std::string z3_expr_to_string(const std::vector<z3::expr>& vec);
+
+class FormulaInductiveUtils
+{
+public:
+    static EEClosureResult is_EE_inductive(AbstractState& to_close, const std::set<AbstractState*>& close_with, const std::string& sat_solver_str);
+};
