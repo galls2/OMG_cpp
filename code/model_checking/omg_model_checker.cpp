@@ -166,16 +166,32 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
     std::set<std::reference_wrapper<AbstractState>> abs_states;
     for (const auto& it : candidates) abs_states.emplace(*it.first);
 
-    std::map<std::reference_wrapper<AbstractState>, std::unordered_set<const UnwindingTree*>> abs_states_lead{};
-    for (const auto &it: candidates) {
+    struct InductiveCandidate
+    {
+        AbstractState& abs_state;
+        std::unordered_set<const UnwindingTree*> nodes;
+        double avg_depth;
+        InductiveCandidate(AbstractState& _abs_state, std::unordered_set<const UnwindingTree*> _nodes) : abs_state(_abs_state), nodes(_nodes)
+        {
+            double avg = 0;
+            for (const UnwindingTree* const& node : nodes)
+                avg += node->get_depth();
+            avg /= nodes.size();
+            avg_depth = avg;
+        }
+    };
+    auto comp_ind_cands = [](const InductiveCandidate& a, const InductiveCandidate& b) { a.avg_depth < b.avg_depth; };
+    std::priority_queue<InductiveCandidate, decltype(comp_ind_cands)> abs_states_lead;
+    for (const auto &it: candidates)
+    {
         if (it.first->is_neg_labeled(*goal.get_spec().get_operands()[1]))
-            abs_states_lead.emplace(std::make_pair(std::ref(*it.first), it.second));
+            abs_states_lead.emplace(*it.first, it.second);
     }
 
     while (!abs_states_lead.empty())
     {
-        AbstractState abs_lead = next_to_av_close(abs_states_lead);
-        // remove from abs_states_lead
+        auto abs_lead = abs_states_lead.top();
+        abs_states_lead.pop();
 
         EEClosureResult res = _abs_structure->is_EE_closure(abs_lead, abs_states);
 
