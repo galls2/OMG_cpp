@@ -177,7 +177,7 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
         AbstractState abs_lead = next_to_av_close(abs_states_lead);
         // remove from abs_states_lead
 
-        EEClosureResult res = _abs_structure.is_EE_closure(abs_lead, abs_states);
+        EEClosureResult res = _abs_structure->is_EE_closure(abs_lead, abs_states);
 
 
 

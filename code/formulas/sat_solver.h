@@ -2,7 +2,7 @@
 //
 // Created by galls2 on 05/10/19.
 //
-
+#include <memory>
 #include <boost/variant.hpp>
 #include "prop_formula.h"
 #include <utils/omg_exception.h>
@@ -42,11 +42,16 @@ private:
 
 };
 
+class ISatSolver;
+typedef std::function<std::unique_ptr<ISatSolver>(z3::context&)> SatSolverFactory;
+
 class ISatSolver
 {
 public:
     virtual SatSolverResult solve_sat(const PropFormula& formula) = 0;
     virtual std::vector<SatSolverResult> all_sat(const PropFormula& formula, const std::vector<z3::expr> &vars, bool complete_assignments=false) = 0;
+    static const std::map<std::string, SatSolverFactory> s_sat_solvers;
+
 };
 
 class Z3SatSolver : public ISatSolver
@@ -57,6 +62,8 @@ public:
 
     std::vector<SatSolverResult> all_sat(const PropFormula& formula, const std::vector<z3::expr> &vars, bool complete_assignments) override;
 
+
+
 private:
     z3::solver _solver;
 
@@ -65,3 +72,5 @@ private:
     void add_assignments(std::vector<SatSolverResult> &assignments, SatSolverResult result, const std::vector<z3::expr> &vars, bool complete_assignments);
 
 };
+
+std::unique_ptr<ISatSolver> create_z3_sat_solver(z3::context& ctx);
