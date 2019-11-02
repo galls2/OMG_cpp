@@ -12,8 +12,8 @@
 struct EEClosureResult
 {
     bool is_closed;
-    ConcreteState* src;
-    ConcreteState* dst;
+    ConcreteState src;
+    ConcreteState dst;
 };
 
 class OmgModelChecker;

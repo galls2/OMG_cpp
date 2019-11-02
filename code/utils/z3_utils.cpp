@@ -108,8 +108,9 @@ FormulaInductiveUtils::is_EE_inductive(AbstractState &to_close, const std::set<A
     }
     else
     {
-        ConcreteState cstate_src = ConcreteState(kripke, )
-        return {false, nullptr, nullptr};
+        auto cstate_src = ConcreteState(kripke, FormulaUtils::get_conj_from_sat_result(ps_tr.ctx(), ps_tr, res));
+        auto nstate_src = ConcreteState(kripke, FormulaUtils::get_conj_from_sat_result(ps_tr.ctx(), ps_tr, res));
+        return {false, cstate_src, nstate_src};
     }
 }
 
