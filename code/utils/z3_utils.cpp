@@ -104,7 +104,7 @@ FormulaInductiveUtils::is_EE_inductive(AbstractState &to_close, const std::set<A
     SatSolverResult res = solver->solve_sat(inductive_formula);
     if (res.get_is_sat())
     {
-        return {true, nullptr, nullptr};
+        return {true, std::experimental::optional<ConcreteState>(), std::experimental::optional<ConcreteState>()};
     }
     else
     {
@@ -121,7 +121,7 @@ z3::expr FormulaUtils::negate(const z3::expr &expr) {
     } else return !expr;
 }
 
-z3::expr FormulaUtils::get_conj_from_sat_result(const z3::context &ctx, const z3::expr_vector &conj_vars,
+z3::expr FormulaUtils::get_conj_from_sat_result(z3::context &ctx, const z3::expr_vector &conj_vars,
                                                 const SatSolverResult &sat_result) {
     z3::expr_vector lits(ctx);
     for (size_t i = 0; i < conj_vars.size(); ++i) {

@@ -13,7 +13,7 @@ class FormulaUtils
 public:
     static z3::expr negate(const z3::expr& expr);
 
-    static z3::expr get_conj_from_sat_result(const z3::context &ctx, const z3::expr_vector &conj_vars,
+    static z3::expr get_conj_from_sat_result(z3::context &ctx, const z3::expr_vector &conj_vars,
                                                      const SatSolverResult &sat_result);
 };
 

@@ -40,7 +40,7 @@ void ConcreteState::compute_successors() {
     const PropFormula& tr = _kripke.get_tr();
 
     const z3::expr& raw_tr = tr.get_formula();
-    const z3::context& ctx = raw_tr.ctx();
+    z3::context& ctx = raw_tr.ctx();
 
     const z3::expr ns_raw_formula = _conjunct && raw_tr;
     const std::map<std::string, z3::expr_vector> & variables_map = tr.get_variables_map();

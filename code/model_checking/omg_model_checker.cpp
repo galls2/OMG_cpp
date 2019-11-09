@@ -166,35 +166,26 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
     std::set<std::reference_wrapper<AbstractState>> abs_states;
     for (const auto& it : candidates) abs_states.emplace(*it.first);
 
-    struct InductiveCandidate
-    {
-        AbstractState& abs_state;
-        std::unordered_set<const UnwindingTree*> nodes;
-        double avg_depth;
-        InductiveCandidate(AbstractState& _abs_state, std::unordered_set<const UnwindingTree*> _nodes) : abs_state(_abs_state), nodes(_nodes)
-        {
-            double avg = 0;
-            for (const UnwindingTree* const& node : nodes)
-                avg += node->get_depth();
-            avg /= nodes.size();
-            avg_depth = avg;
-        }
-    };
-    auto comp_ind_cands = [](const InductiveCandidate& a, const InductiveCandidate& b) { a.avg_depth < b.avg_depth; };
-    std::priority_queue<InductiveCandidate, decltype(comp_ind_cands)> abs_states_lead;
-    for (const auto &it: candidates)
-    {
+    auto comp_ind_cands = [](const InductiveCandidate& a, const InductiveCandidate& b) { return a.avg_depth < b.avg_depth; };
+    std::priority_queue<InductiveCandidate, std::vector<InductiveCandidate>, decltype(comp_ind_cands)> abs_states_lead(comp_ind_cands);
+    for (const auto &it: candidates) {
         if (it.first->is_neg_labeled(*goal.get_spec().get_operands()[1]))
-            abs_states_lead.emplace(*it.first, it.second);
+        {
+            abs_states_lead.emplace(it.first, it.second);
+        }
     }
 
     while (!abs_states_lead.empty())
     {
-        auto abs_lead = abs_states_lead.top();
-        abs_states_lead.pop();
+        InductiveCandidate ind_candidate = abs_states_lead.top();
+        AbstractState* abs_lead = ind_candidate.abs_state;
 
-        EEClosureResult res = _abs_structure->is_EE_closure(abs_lead, abs_states);
+        EEClosureResult res = _abs_structure->is_EE_closure(*abs_lead, abs_states);
+        if (res.is_closed) { abs_states_lead.pop(); }
+        else
+            {
 
+        }
         throw "Gal Sade Sade";
 
     }

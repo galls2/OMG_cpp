@@ -37,7 +37,7 @@ EEClosureResult AbstractStructure::is_EE_closure(AbstractState &to_close,
         {
             bool is_subset = std::includes(p_closers.begin(), p_closers.end(), closer_set.begin(), closer_set.end());
             if (is_subset)
-                return {true, nullptr, nullptr};
+                return {true, std::experimental::optional<ConcreteState>(), std::experimental::optional<ConcreteState>()};
         }
     }
 
@@ -60,13 +60,19 @@ EEClosureResult AbstractStructure::is_EE_closure(AbstractState &to_close,
         else _E_may_over[&to_close].emplace_back(p_closers);
     } else
     {
-        if (_NE_may_over.find(&to_close) == _NE_may_over.end()) _NE_may_over[&to_close] = {{p_closers, closure_result}};
-        else _NE_may_over[&to_close].push_back({p_closers, closure_result});
+        if (_NE_may_over.find(&to_close) == _NE_may_over.end())
+        {
+            AbstractState* src = &to_close;
+            std::pair<std::set<AbstractState*>, EEClosureResult> new_entry = std::make_pair(std::move(p_closers), std::move(closure_result));
+            std::vector<std::pair<std::set<AbstractState*>, EEClosureResult>> new_entry_vec = {new_entry};
+            _NE_may_over.emplace(src, new_entry_vec);
+        }
+        else _NE_may_over[&to_close].emplace_back(p_closers, closure_result);
     }
 
     return closure_result;
 }
 
-OmgModelChecker *AbstractStructure::get_omg() const{
+const OmgModelChecker *AbstractStructure::get_omg() const{
     return _omg;
 }

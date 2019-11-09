@@ -1,3 +1,5 @@
+#include <utility>
+
 #pragma once
 //
 // Created by galls2 on 04/10/19.
@@ -29,7 +31,21 @@ private:
 
 typedef std::unordered_map<AbstractState*, std::unordered_set<const UnwindingTree*>> CandidateSet;
 
-
+struct InductiveCandidate
+{
+    AbstractState* abs_state;
+    std::unordered_set<const UnwindingTree*> nodes;
+    double avg_depth;
+    InductiveCandidate(AbstractState* _abs_state, std::unordered_set<const UnwindingTree*> _nodes) : abs_state(_abs_state), nodes(
+            std::move(_nodes))
+    {
+        double avg = 0;
+        for (const UnwindingTree* const& node : nodes)
+            avg += node->get_depth();
+        avg /= nodes.size();
+        avg_depth = avg;
+    }
+};
 
 class OmgModelChecker {
 public:
