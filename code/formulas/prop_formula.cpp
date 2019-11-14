@@ -60,11 +60,11 @@ std::string PropFormula::to_string() const {
     return res;
 }
 
-const z3::expr &PropFormula::get_formula() const {
+const z3::expr &PropFormula::get_raw_formula() const {
     return _formula;
 }
 
-z3::expr PropFormula::get_formula() {
+z3::expr PropFormula::get_raw_formula() {
     return _formula;
 }
 

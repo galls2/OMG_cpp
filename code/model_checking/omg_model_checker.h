@@ -47,6 +47,12 @@ struct InductiveCandidate
     }
 };
 
+struct ConcretizationResult
+{
+    UnwindingTree* src_node;
+    ConcreteState dst_cstate;
+};
+
 class OmgModelChecker {
 public:
 
@@ -91,6 +97,7 @@ private:
     void initialize_abstraction();
 
     AbstractState& find_abs(UnwindingTree& node);
+    AbstractState& find_abs(const ConcreteState& node);
     static const std::map<std::string, handler_t> _handlers;
 
     bool check_inductive_av(Goal& goal, NodePriorityQueue& to_visit);
@@ -99,5 +106,8 @@ private:
     CandidateSet compute_candidate_set(Goal& goal, bool brother_unif);
     CandidateSet brother_unification(const CandidateSet &cands, const CtlFormula& agree_upon);
     void label_subtree(UnwindingTree &node, const CtlFormula& spec, bool positivity);
+
+    ConcretizationResult
+    is_concrete_violation(const std::unordered_set<const UnwindingTree *> &to_close_nodes, AbstractState &abs_witness);
 };
 

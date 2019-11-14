@@ -6,6 +6,7 @@
 
 #include <queue>
 #include <unordered_set>
+#include <utils/z3_utils.h>
 #include "omg_model_checker.h"
 
 
@@ -184,7 +185,15 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
         if (res.is_closed) { abs_states_lead.pop(); }
         else
             {
+            assert(res.src);
+            assert(res.dst);
 
+            ConcreteState src = *(res.src), dst = *(res.dst);
+            AbstractState& abs_dst = find_abs(dst);
+
+            ConcretizationResult concretization_result = is_concrete_violation(ind_candidate.nodes, abs_dst);
+   //         AbstractState&
+     //       ConcretizationResult concretization_result = is_concrete_violation(ind_candidate.nodes, )
         }
         throw "Gal Sade Sade";
 
@@ -340,35 +349,43 @@ bool OmgModelChecker::recur_ctl(Goal &g) {
 
 }
 
+
 AbstractState &OmgModelChecker::find_abs(UnwindingTree &node)
 {
-        const ConcreteState& cstate = node.get_concrete_state();
-        if (!_abs_classifier->exists_classification(cstate))
+    const ConcreteState& cstate = node.get_concrete_state();
+    if (node.get_abs())
+    {
+        AbstractState &astate = *node.get_abs();
+        if (astate.is_final_classification())
         {
-                if (node.get_abs())
-                {
-                        AbstractState &astate = *node.get_abs();
-                        if (astate.is_final_classification()) return astate;
-                        else {
-                                AbstractState &updated_abs = _abs_classifier->update_classification(astate,
-                                                                                                   node.get_concrete_state());
-                                node.set_abs(updated_abs);
-                                return updated_abs;
-                        }
-                }
-                else {
-                        AbstractState &astate = _abs_structure->create_abs_state(cstate);
-                        _abs_classifier->add_classification_tree(cstate, astate);
-                        node.set_abs(astate);
-                        return astate;
-                }
+            return astate;
         }
         else
         {
-                AbstractState& abs = _abs_classifier->classify(cstate);
-                node.set_abs(abs);
-                return abs;
+            AbstractState &updated_abs = _abs_classifier->update_classification(astate, cstate);
+            return updated_abs;
         }
+    }
+    else
+    {
+        AbstractState &astate = find_abs(cstate);
+        node.set_abs(astate);
+        return astate;
+    }
+}
+
+AbstractState &OmgModelChecker::find_abs(const ConcreteState &cstate) {
+    if (!_abs_classifier->exists_classification(cstate))
+    {
+        AbstractState &astate = _abs_structure->create_abs_state(cstate);
+        _abs_classifier->add_classification_tree(cstate, astate);
+        return astate;
+    }
+    else
+    {
+        AbstractState& abs = _abs_classifier->classify(cstate);
+        return abs;
+    }
 }
 
 void OmgModelChecker::handle_proving_trace(bool is_strengthen, Goal &goal, UnwindingTree &node) {
@@ -381,6 +398,12 @@ void OmgModelChecker::label_subtree(UnwindingTree &node, const CtlFormula& spec,
         assert(n.get_abs());
         n.get_abs()->get().add_label(positivity, spec);
         }, [](const UnwindingTree&) { return true; });
+}
+
+ConcretizationResult
+OmgModelChecker::is_concrete_violation(const std::unordered_set<const UnwindingTree *> &to_close_nodes,
+                                       AbstractState &abs_witness) {
+    return FormulaInductiveUtils::concrete_transition_to_abs(to_close_nodes, abs_witness, _sat_solver);
 }
 
 

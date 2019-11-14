@@ -10,7 +10,7 @@
 #include "sat_solver.h"
 
 SatSolverResult Z3SatSolver::solve_sat(const PropFormula &formula) {
-    const z3::expr& raw_formula = formula.get_formula();
+    const z3::expr& raw_formula = formula.get_raw_formula();
     _solver.add(raw_formula);
     if (_solver.check()) return SatSolverResult();
     return SatSolverResult(_solver.get_model(), formula.get_all_variables());
@@ -18,7 +18,7 @@ SatSolverResult Z3SatSolver::solve_sat(const PropFormula &formula) {
 
 std::vector<SatSolverResult> Z3SatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr>& vars, bool complete_assignments = false ) {
     std::vector<SatSolverResult> assignments;
-    const z3::expr &raw_formula = formula.get_formula();
+    const z3::expr &raw_formula = formula.get_raw_formula();
     z3::solver solver(raw_formula.ctx());
 
     solver.add(raw_formula);
