@@ -23,7 +23,7 @@ public:
     std::set<std::string> string_sat_aps() const;
     PropFormula get_bis0_formula() const;
     bool operator==(const ConcreteState& other) const;
-
+    const z3::expr& get_conjunct() const;
 #ifndef DEBUG
     std::vector<bool> to_bitvec() const;
 #endif

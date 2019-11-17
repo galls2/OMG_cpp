@@ -73,6 +73,20 @@ void Z3SatSolver::add_assignments(std::vector<SatSolverResult> &assignemnts, Sat
     }
 }
 
+std::pair<int, SatSolverResult> Z3SatSolver::inc_solve_sat(const PropFormula& formula, const std::vector<z3::expr>& flags) {
+    const z3::expr &raw_formula = formula.get_raw_formula();
+    _solver.add(raw_formula);
+
+    z3::expr_vector assumptions(raw_formula.ctx());
+
+    for (size_t i = 0; i < flags.size(); ++i) {
+        assumptions.push_back(flags[i]);
+        if (_solver.check(assumptions))
+            return {i, SatSolverResult(_solver.get_model(), formula.get_all_variables())};
+        assumptions.pop_back();
+    }
+    return {-1, SatSolverResult()};
+}
 
 
 

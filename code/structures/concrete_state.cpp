@@ -167,3 +167,7 @@ std::set<std::string> ConcreteState::string_sat_aps() const {
 bool ConcreteState::operator==(const ConcreteState &other) const {
     return z3::eq(other._conjunct, _conjunct);
 }
+
+const z3::expr &ConcreteState::get_conjunct() const {
+    return _conjunct;
+}

@@ -49,6 +49,7 @@ class ISatSolver
 {
 public:
     virtual SatSolverResult solve_sat(const PropFormula& formula) = 0;
+    virtual std::pair<int, SatSolverResult> inc_solve_sat(const PropFormula& formula, const std::vector<z3::expr>& flags) = 0;
     virtual std::vector<SatSolverResult> all_sat(const PropFormula& formula, const std::vector<z3::expr> &vars, bool complete_assignments=false) = 0;
     static const std::map<std::string, SatSolverFactory> s_sat_solvers;
 
@@ -61,7 +62,7 @@ public:
     SatSolverResult solve_sat(const PropFormula& formula) override;
 
     std::vector<SatSolverResult> all_sat(const PropFormula& formula, const std::vector<z3::expr> &vars, bool complete_assignments) override;
-
+    virtual std::pair<int, SatSolverResult> inc_solve_sat(const PropFormula& formula, const std::vector<z3::expr>& flags) override;
 
 
 private:

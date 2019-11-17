@@ -27,6 +27,8 @@ public:
     std::experimental::optional<std::reference_wrapper<AbstractState>>  get_abs() const;
     void set_abs(AbstractState& astate);
     bool is_urgent() const;
+    const std::vector<std::unique_ptr<UnwindingTree>>& get_successors() const;
+    bool exist_successors() const;
     void map(const std::function<void(UnwindingTree&)>& mapper, const std::function<bool(const UnwindingTree&)>& activation_condition);
 private:
     const KripkeStructure& _kripke;

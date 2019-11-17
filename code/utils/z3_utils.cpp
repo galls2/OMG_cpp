@@ -116,17 +116,51 @@ FormulaInductiveUtils::is_EE_inductive(AbstractState &to_close, const std::set<A
 }
 
 ConcretizationResult
-FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<const UnwindingTree *> &src_nodes,
-                                                  const AbstractState &astate, const std::string &sat_solver_str)
-{
-    return {nullptr, ConcreteState(astate.get_kripke(), astate.get_formula().get_raw_formula())};
+FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<UnwindingTree *> &src_nodes,
+                                                  const AbstractState &astate, const std::string &sat_solver_str) {
+    const KripkeStructure &kripke = astate.get_kripke();
+    const PropFormula &tr = kripke.get_tr();
+
+    const z3::expr_vector ps_tr = tr.get_vars_by_tag("ps"), ns_tr = tr.get_vars_by_tag("ns"),
+            in_0 = tr.get_vars_by_tag("in0"), in_1 = tr.get_vars_by_tag("in1");
+
+    PropFormula astate_formula = astate.get_formula();
+    const z3::expr dst_part = astate_formula.get_raw_formula()
+            .substitute(astate_formula.get_vars_by_tag("ps"), ns_tr)
+            .substitute(astate_formula.get_vars_by_tag("in0"), in_1);
+
+    z3::context &ctx = dst_part.ctx();
+    z3::expr_vector src_parts(ctx);
+
+    size_t count_flags = 0;
+    std::vector<z3::expr> flags;
+    for (const UnwindingTree *src_node : src_nodes) {
+        const z3::expr &src_formula = src_node->get_concrete_state().get_conjunct();
+        z3::expr flag = ctx.bool_const(std::to_string(count_flags++).data());
+        z3::expr flagged_src = (!flag) || src_formula;
+        flags.push_back(flag);
+        src_parts.push_back(flagged_src);
+    }
+    z3::expr src = z3::mk_or(src_parts);
+
+    z3::expr raw_formula = src && tr.get_raw_formula() && dst_part;
+    PropFormula is_tr_formula = PropFormula(raw_formula, {{"ps", ps_tr},
+                                                          {"ns", ns_tr}});
+
+    std::unique_ptr<ISatSolver> solver = ISatSolver::s_sat_solvers.at(sat_solver_str)(ctx);
+
+    std::pair<int, SatSolverResult> res = solver->inc_solve_sat(is_tr_formula, flags);
+    if (res.first < 0) {
+        return ConcretizationResult(nullptr);
+    } else {
+        auto first_node_it = src_nodes.begin();
+        std::advance(first_node_it, static_cast<size_t>(res.first));
+        return ConcretizationResult(*first_node_it , ConcreteState(kripke, FormulaUtils::get_conj_from_sat_result(ps_tr.ctx(), ps_tr, res.second)));
+    }
 }
 
 z3::expr FormulaUtils::negate(const z3::expr &expr) {
-    if (expr.is_not())
-    {
-        return expr.arg(0);
-    } else return !expr;
+    return expr.is_not() ? expr.arg(0) : !expr;
 }
 
 z3::expr FormulaUtils::get_conj_from_sat_result(z3::context &ctx, const z3::expr_vector &conj_vars,

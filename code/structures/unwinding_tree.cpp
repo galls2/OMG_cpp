@@ -75,3 +75,11 @@ void UnwindingTree::map(const std::function<void(UnwindingTree &)> &mapper,
             successor->map(mapper, activation_condition);
     }
 }
+
+bool UnwindingTree::exist_successors() const {
+    return !_successors.empty();
+}
+
+const std::vector<std::unique_ptr<UnwindingTree>> &UnwindingTree::get_successors() const {
+    return _successors;
+}

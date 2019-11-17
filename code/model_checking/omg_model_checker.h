@@ -1,5 +1,7 @@
 #include <utility>
 
+#include <utility>
+
 #pragma once
 //
 // Created by galls2 on 04/10/19.
@@ -29,18 +31,18 @@ private:
     const std::map<std::string, bool> _properties;
 };
 
-typedef std::unordered_map<AbstractState*, std::unordered_set<const UnwindingTree*>> CandidateSet;
+typedef std::unordered_map<AbstractState*, std::unordered_set<UnwindingTree*>> CandidateSet;
 
 struct InductiveCandidate
 {
     AbstractState* abs_state;
-    std::unordered_set<const UnwindingTree*> nodes;
+    std::unordered_set<UnwindingTree*> nodes;
     double avg_depth;
-    InductiveCandidate(AbstractState* _abs_state, std::unordered_set<const UnwindingTree*> _nodes) : abs_state(_abs_state), nodes(
+    InductiveCandidate(AbstractState* _abs_state, std::unordered_set<UnwindingTree*> _nodes) : abs_state(_abs_state), nodes(
             std::move(_nodes))
     {
         double avg = 0;
-        for (const UnwindingTree* const& node : nodes)
+        for (UnwindingTree* const& node : nodes)
             avg += node->get_depth();
         avg /= nodes.size();
         avg_depth = avg;
@@ -49,8 +51,10 @@ struct InductiveCandidate
 
 struct ConcretizationResult
 {
-    UnwindingTree* src_node;
-    ConcreteState dst_cstate;
+    explicit ConcretizationResult(UnwindingTree* const src_node_, std::experimental::optional<ConcreteState> dst_cstate = std::experimental::optional<ConcreteState>())
+    : src_node(src_node_), dst_cstate(std::move(dst_cstate)) {}
+    UnwindingTree* const src_node;
+    std::experimental::optional<ConcreteState> dst_cstate;
 };
 
 class OmgModelChecker {
@@ -108,6 +112,6 @@ private:
     void label_subtree(UnwindingTree &node, const CtlFormula& spec, bool positivity);
 
     ConcretizationResult
-    is_concrete_violation(const std::unordered_set<const UnwindingTree *> &to_close_nodes, AbstractState &abs_witness);
+    is_concrete_violation(const std::unordered_set<UnwindingTree *> &to_close_nodes, AbstractState &abs_witness);
 };
 
