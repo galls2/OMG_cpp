@@ -14,7 +14,11 @@
 
 #define TEST(aig_path, raw_ctl_string, expected) \
     do \
-        assert(expected == test_formula(std::string(aig_path), std::string(raw_ctl_string))); \
+        { \
+            bool passed = ((expected) == test_formula(std::string((aig_path)), std::string((raw_ctl_string)))); \
+            if (passed) std::cout << "PASS! :)" << std::endl; \
+            else std::cout << "\tFAIL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl; \
+        } \
     while(0)
 
 
@@ -66,15 +70,33 @@ bool test_formula(const std::string& aig_path, const std::string& formula_str)
     OmgModelChecker omg(*kripke, config);
     bool res = omg.model_checking(init, *formula);
 
-    std::cout << "Done!" << std::endl;
+    std::cout << "Done. ";
     return res;
 
 }
 
+void unit_tests_aps()
+{
+    TEST("/home/galls2/Desktop/af_ag.aig", "!state<0>", true);
+    TEST("/home/galls2/Desktop/af_ag.aig", "!state<1>", true);
+    TEST("/home/galls2/Desktop/af_ag.aig", "state<0>", false);
+    TEST("/home/galls2/Desktop/af_ag.aig", "state<1>", false);
+    TEST("/home/galls2/Desktop/af_ag.aig", "p", true);
+    TEST("/home/galls2/Desktop/af_ag.aig", "(state<1> | state<0>)", false);
+    TEST("/home/galls2/Desktop/af_ag.aig", "(p | state<0>)", true);
+    TEST("/home/galls2/Desktop/af_ag.aig", "!p", false);
+    TEST("/home/galls2/Desktop/af_ag.aig", "(p & state<0>)", false); //
+    TEST("/home/galls2/Desktop/af_ag.aig", "(state<1> ^ state<0>)", false);
+    TEST("/home/galls2/Desktop/af_ag.aig", "((((((state<1>)) ^ (state<0>)))))", false);
+    TEST("/home/galls2/Desktop/af_ag.aig", "(p & state<0>) | (state<1> ^ state<0>)", false);
+    TEST("/home/galls2/Desktop/af_ag.aig", " (~state<0>) | state<1>", true);
+    TEST("/home/galls2/Desktop/af_ag.aig", " (~state<0>) & state<1>", false);
+    TEST("/home/galls2/Desktop/af_ag.aig", " (~state<0>) &  (!state<1>)", true);
+}
+
 void unit_tests()
 {
-
-    TEST("/home/galls2/Desktop/af_ag.aig", "(p & state<0>) | (state<1> ^ state<0>)", false);
+    unit_tests_aps();
      //   TEST("/home/galls2/Desktop/af_ag.aig", "AX (p)", false);
 
 }
@@ -82,14 +104,11 @@ int main()
 {
     unit_tests();
 //    TEST("/home/galls2/Desktop/af_ag.aig", "AG ((~state<0>) & (~state<1>))", false);
-//    constexpr auto arr = make_array(5, 7, 9);
-//    static_assert(arr.size() == 3);
- //   for (int x : arr) std::cout << x << std::endl;
+
 }
 
 
 /*
  * To do:
- * Add new model and prop unit tests and see that they pass
  * TDD the AV - start with simple examples that work, move on to others that do not and then go to the cases which are not yet implemented.
  */
