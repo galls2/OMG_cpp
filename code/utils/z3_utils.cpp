@@ -144,6 +144,7 @@ FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<Unwin
     z3::expr src = z3::mk_or(src_parts);
 
     z3::expr raw_formula = src && tr.get_raw_formula() && dst_part;
+
     PropFormula is_tr_formula = PropFormula(raw_formula, {{"ps", ps_tr},
                                                           {"ns", ns_tr}});
 

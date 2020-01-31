@@ -73,15 +73,23 @@ bool test_formula(const std::string& aig_path, const std::string& formula_str)
 
 void unit_tests()
 {
-        TEST("/home/galls2/Desktop/af_ag.aig", "(p & state<0>) | (state<1> ^ state<0>)", false);
+
+    TEST("/home/galls2/Desktop/af_ag.aig", "(p & state<0>) | (state<1> ^ state<0>)", false);
      //   TEST("/home/galls2/Desktop/af_ag.aig", "AX (p)", false);
 
 }
 int main()
 {
     unit_tests();
-
+//    TEST("/home/galls2/Desktop/af_ag.aig", "AG ((~state<0>) & (~state<1>))", false);
 //    constexpr auto arr = make_array(5, 7, 9);
 //    static_assert(arr.size() == 3);
  //   for (int x : arr) std::cout << x << std::endl;
 }
+
+
+/*
+ * To do:
+ * Add new model and prop unit tests and see that they pass
+ * TDD the AV - start with simple examples that work, move on to others that do not and then go to the cases which are not yet implemented.
+ */

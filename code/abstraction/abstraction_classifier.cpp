@@ -31,8 +31,9 @@ AbstractClassificationNode &AbstractionClassifier::add_classification_tree(const
     std::set<std::string> ap_strings = cstate.string_sat_aps();
 
     std::unique_ptr<AbstractClassificationNode> cl = std::make_unique<AbstractClassificationNode>(*this, &astate);
-    const auto res = _classification_trees.emplace(std::move(ap_strings), std::move(cl));
+    const auto res = _classification_trees.emplace(ap_strings, std::move(cl));
     assert(res.second);
+    astate.set_cl_node(_classification_trees[ap_strings].get());
     return *((res.first)->second);
 }
 

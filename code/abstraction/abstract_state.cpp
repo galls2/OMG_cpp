@@ -59,3 +59,7 @@ PropFormula AbstractState::get_formula() const
 {
     return _sym_rep;
 }
+
+void AbstractState::set_cl_node(AbstractClassificationNode *const cl_node) {
+    _cl_node = cl_node;
+}

@@ -192,8 +192,7 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
             AbstractState& abs_dst = find_abs(dst);
 
             ConcretizationResult concretization_result = is_concrete_violation(ind_candidate.nodes, abs_dst);
-   //         AbstractState&
-     //       ConcretizationResult concretization_result = is_concrete_violation(ind_candidate.nodes, )
+
             if (concretization_result.dst_cstate)
             {
                 // More Unwinding
@@ -207,12 +206,12 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
                                 : *to_close_node;
 
                 node_to_set.set_urgent(true);
+                to_visit.emplace(std::ref(node_to_set));
 
-
-            //    UnwindingTree* node_to_set = to_close_node.
             }
             else
             {
+                throw "Need to implement (EX-) refinement";
                 // (EX-) refinement
 
             }
@@ -322,7 +321,7 @@ OmgModelChecker::OmgModelChecker(const KripkeStructure &kripke, const OmgConfigu
 : _kripke(kripke),
         _opt_trivial_splits(config.get<bool>("Trivial Split Elimination")),
         _opt_brother_unif(config.get<bool>("Brother Unification")),
-        _sat_solver(config.get<std::string>("Sat Solver"))
+        _sat_solver(config.get<std::string>(std::string("Sat Solver")))
 {
         initialize_abstraction();
 }

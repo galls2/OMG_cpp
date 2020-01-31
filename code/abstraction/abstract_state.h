@@ -15,6 +15,7 @@ public:
     bool is_neg_labeled(const CtlFormula& spec) const;
     void add_label(bool positivity, const CtlFormula& spec);
     bool is_final_classification() const;
+    void set_cl_node(AbstractClassificationNode* const cl_node);
     AbstractClassificationNode* get_cl_node() const;
     const KripkeStructure& get_kripke() const;
     PropFormula get_formula() const;

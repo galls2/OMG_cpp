@@ -30,7 +30,7 @@ OmgConfiguration OmgConfigurationBuilder::build() {
                             {"Properties per specification", true},
                             {"Brother Unification", true},
                             {"Trivial Split Elimination", true},
-                            {"Sat Solver", "z3"}
+                            {"Sat Solver", std::string("z3")}
                     };
             return OmgConfiguration(config_table);
         }

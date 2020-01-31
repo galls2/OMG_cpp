@@ -9,7 +9,7 @@
 
 DECLARE_OMG_EXCEPTION(OmgConfigurationException)
 
-typedef std::unordered_map<std::string, boost::variant<bool, int, std::string>> ConfigTable;
+typedef std::unordered_map<std::string, boost::variant<std::string, bool, int>> ConfigTable;
 
 class OmgConfigurationBuilder;
 
