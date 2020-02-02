@@ -12,11 +12,15 @@ std::vector<std::string> &split(const std::string &s, char delim, std::vector<st
 template <size_t N>
 std::array<std::string, N> split_to(const std::string& s, char delim)
 {
-    std::vector<std::string> items;
-    split(s, delim, items);
     std::array<std::string, N> arr_to_ret;
-    assert(items.size() == N);
-    for (size_t i = 0; i < N; ++i) { arr_to_ret[i] = items[i]; }
+    size_t elements_inserted = 0;
+
+    std::stringstream ss(s);
+    std::string item;
+
+    while(std::getline(ss, item, delim) && elements_inserted < N) {
+        arr_to_ret[elements_inserted++] = item;
+    }
+    assert(elements_inserted == N);
     return arr_to_ret;
 }
-

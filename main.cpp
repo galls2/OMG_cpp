@@ -94,16 +94,22 @@ void unit_tests_aps()
     TEST("/home/galls2/Desktop/af_ag.aig", " (~state<0>) &  (!state<1>)", true);
 }
 
+void unit_tests_ag()
+{
+    TEST("/home/galls2/Desktop/af_ag.aig", "AG ((~state<0>) & (~state<1>))", false); // ctl parser produces a wrong set of APs -- False is considered an AP and it should not be thAt way.
+
+
+}
 void unit_tests()
 {
     unit_tests_aps();
      //   TEST("/home/galls2/Desktop/af_ag.aig", "AX (p)", false);
+     unit_tests_ag();
 
 }
 int main()
 {
     unit_tests();
-//    TEST("/home/galls2/Desktop/af_ag.aig", "AG ((~state<0>) & (~state<1>))", false);
 
 }
 

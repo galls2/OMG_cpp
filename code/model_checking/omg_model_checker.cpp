@@ -87,7 +87,7 @@ bool OmgModelChecker::handle_ar(Goal &goal)
         (void) find_abs(node_to_explore);
         node_to_explore.set_developed(goal);
 
-        const CtlFormula& q = *goal.get_spec().get_operands()[0];
+        const CtlFormula& q = *goal.get_spec().get_operands()[1];
         Goal subgoal_q(goal.get_node(), q, goal.get_properties());
         bool res_q = recur_ctl(subgoal_q);
         if (!res_q) // nte |/= q
@@ -99,7 +99,7 @@ bool OmgModelChecker::handle_ar(Goal &goal)
             return false;
         }
 
-        const CtlFormula& p = *goal.get_spec().get_operands()[1];
+        const CtlFormula& p = *goal.get_spec().get_operands()[0];
         Goal subgoal_p(goal.get_node(), p, goal.get_properties());
         bool res_p = recur_ctl(subgoal_p);
         if (res_p) {
@@ -345,16 +345,18 @@ bool OmgModelChecker::model_checking(ConcreteState &cstate, const CtlFormula &sp
 }
 
 bool OmgModelChecker::recur_ctl(Goal &g) {
-        AbstractState& astate = find_abs(g.get_node());
-        const CtlFormula& spec = g.get_spec();
 
-        if (astate.is_pos_labeled(spec)) return true;
-        if (astate.is_neg_labeled(spec)) return false;
+        const CtlFormula& spec = g.get_spec();
 
         if (spec.is_boolean())
         {
-                return spec.get_boolean_value();
+            return spec.get_boolean_value();
         }
+
+        AbstractState& astate = find_abs(g.get_node());
+
+        if (astate.is_pos_labeled(spec)) return true;
+        if (astate.is_neg_labeled(spec)) return false;
 
         assert(!spec.get_operands().empty());
         std::string main_connective = spec.get_data();

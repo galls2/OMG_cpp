@@ -38,7 +38,7 @@ const CtlFormula::PropertySet CtlFormula::get_aps() const {
         const CtlFormula* current = queue.back();
         queue.pop_back();
 
-        if (current->_operands.empty())
+        if (current->_operands.empty() && !current->is_boolean())
         {
             pset.emplace(current);
         }
