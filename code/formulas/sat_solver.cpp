@@ -12,8 +12,10 @@
 SatSolverResult Z3SatSolver::solve_sat(const PropFormula &formula) {
     const z3::expr& raw_formula = formula.get_raw_formula();
     _solver.add(raw_formula);
-    if (_solver.check()) return SatSolverResult();
-    return SatSolverResult(_solver.get_model(), formula.get_all_variables());
+    z3::check_result sat_res = _solver.check();
+    if (sat_res == z3::unsat) return SatSolverResult();
+    else if (sat_res == z3::sat) return SatSolverResult(_solver.get_model(), formula.get_all_variables());
+    else { assert(sat_res == z3::unknown); throw SatSolverResultException("SAT result is unknown"); }
 }
 
 std::vector<SatSolverResult> Z3SatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr>& vars, bool complete_assignments = false ) {

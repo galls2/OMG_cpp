@@ -109,7 +109,7 @@ private:
     void handle_proving_trace(bool is_strengthen, Goal& goal, UnwindingTree& node_to_explore);
     CandidateSet compute_candidate_set(Goal& goal, bool brother_unif);
     CandidateSet brother_unification(const CandidateSet &cands, const CtlFormula& agree_upon);
-    void label_subtree(UnwindingTree &node, const CtlFormula& spec, bool positivity);
+    void label_subtree(Goal& goal, bool positivity);
 
     ConcretizationResult
     is_concrete_violation(const std::unordered_set<UnwindingTree *> &to_close_nodes, AbstractState &abs_witness);

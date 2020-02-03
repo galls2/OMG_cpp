@@ -70,16 +70,14 @@ bool OmgModelChecker::handle_ar(Goal &goal)
     to_visit.emplace(std::ref(goal.get_node()));
     std::set<const ConcreteState*> visited;
 
-    while (!to_visit.empty())
-    {
-        UnwindingTree& node_to_explore = to_visit.top();
+    while (!to_visit.empty()) {
+        UnwindingTree &node_to_explore = to_visit.top();
         to_visit.pop();
         node_to_explore.set_urgent(false);
 
         // CHECK - we will delete this later. This checks for twice for the same concrete state
-        assert(!std::any_of(visited.begin(), visited.end(), [&](const ConcreteState* const& visitedee)
-        {
-                return node_to_explore.get_concrete_state().to_bitvec() == visitedee->to_bitvec();
+        assert(!std::any_of(visited.begin(), visited.end(), [&](const ConcreteState *const &visitedee) {
+            return node_to_explore.get_concrete_state().to_bitvec() == visitedee->to_bitvec();
         }));
 
         visited.emplace(&node_to_explore.get_concrete_state());
@@ -87,7 +85,7 @@ bool OmgModelChecker::handle_ar(Goal &goal)
         (void) find_abs(node_to_explore);
         node_to_explore.set_developed(goal);
 
-        const CtlFormula& q = *goal.get_spec().get_operands()[1];
+        const CtlFormula &q = *goal.get_spec().get_operands()[1];
         Goal subgoal_q(goal.get_node(), q, goal.get_properties());
         bool res_q = recur_ctl(subgoal_q);
         if (!res_q) // nte |/= q
@@ -99,40 +97,39 @@ bool OmgModelChecker::handle_ar(Goal &goal)
             return false;
         }
 
-        const CtlFormula& p = *goal.get_spec().get_operands()[0];
+        const CtlFormula &p = *goal.get_spec().get_operands()[0];
         Goal subgoal_p(goal.get_node(), p, goal.get_properties());
         bool res_p = recur_ctl(subgoal_p);
         if (res_p) {
-                AbstractState &astate = find_abs(node_to_explore);
-                astate.add_label(true, p);
+            AbstractState &astate = find_abs(node_to_explore);
+            astate.add_label(true, p);
         } else {
-                const std::vector<std::unique_ptr<UnwindingTree>> &successors = node_to_explore.unwind_further();
-                for (const std::unique_ptr<UnwindingTree> &succ : successors) {
-                        if (std::all_of(visited.begin(), visited.end(), [&succ](const ConcreteState *const &visitedee)
-                        {
-                            return !(visitedee == &(succ->get_concrete_state()) ||
-                                     (*visitedee == succ->get_concrete_state()));
-                        })) {
-                                to_visit.emplace(std::ref(*succ));
-                        }
+            const std::vector<std::unique_ptr<UnwindingTree>> &successors = node_to_explore.unwind_further();
+            for (const std::unique_ptr<UnwindingTree> &succ : successors) {
+                if (std::all_of(visited.begin(), visited.end(), [&succ](const ConcreteState *const &visitedee) {
+                    return !(visitedee == &(succ->get_concrete_state()) ||
+                             (*visitedee == succ->get_concrete_state()));
+                })) {
+                    to_visit.emplace(std::ref(*succ));
                 }
+            }
         }
 
         bool inductive_res = check_inductive_av(goal, to_visit);
         if (inductive_res) {
-                label_subtree(goal.get_node(), goal.get_spec(), true);
-                return true;
+            label_subtree(goal, true);
+            return true;
         }
-}
-        if (goal.get_properties().at("strengthen"))
-        {
-                strengthen_subtree(goal, [goal](const UnwindingTree& n) { return n.is_developed(goal); });
-                label_subtree(goal.get_node(), goal.get_spec(), true);
-                return true;
-        }
-        else {
-                return true;
-        }
+    }
+    if (goal.get_properties().at("strengthen"))
+    {
+            strengthen_subtree(goal, [goal](const UnwindingTree& n) { return n.is_developed(goal); });
+            label_subtree(goal, true);
+            return true;
+    }
+    else {
+            return true;
+    }
 }
 
 void OmgModelChecker::strengthen_subtree(Goal& goal, const std::function<bool(const UnwindingTree&)>& stop_condition)
@@ -219,6 +216,7 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
             return false;
         }
     }
+    return true;
 }
 
 CandidateSet OmgModelChecker::compute_candidate_set(Goal& goal, bool brother_unif)
@@ -418,11 +416,13 @@ void OmgModelChecker::handle_proving_trace(bool is_strengthen, Goal &goal, Unwin
                 throw OmgMcException("Not implemented");
 }
 
-void OmgModelChecker::label_subtree(UnwindingTree &node, const CtlFormula& spec, bool positivity) {
+void OmgModelChecker::label_subtree(Goal &goal, bool positivity) {
+    UnwindingTree& node = goal.get_node();
+    const CtlFormula& spec = goal.get_spec();
     node.map([positivity, &spec](UnwindingTree& n) {
         assert(n.get_abs());
         n.get_abs()->get().add_label(positivity, spec);
-        }, [](const UnwindingTree&) { return true; });
+        }, [&goal](const UnwindingTree& m) { return m.is_developed(goal); });
 }
 
 ConcretizationResult
