@@ -170,7 +170,7 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
     auto comp_ind_cands = [](const InductiveCandidate& a, const InductiveCandidate& b) { return a.avg_depth < b.avg_depth; };
     std::priority_queue<InductiveCandidate, std::vector<InductiveCandidate>, decltype(comp_ind_cands)> abs_states_lead(comp_ind_cands);
     for (const auto &it: candidates) {
-        if (it.first->is_neg_labeled(*goal.get_spec().get_operands()[1]))
+        if (it.first->is_neg_labeled(*goal.get_spec().get_operands()[0]))
         {
             abs_states_lead.emplace(it.first, it.second);
         }
@@ -240,7 +240,9 @@ CandidateSet OmgModelChecker::compute_candidate_set(Goal& goal, bool brother_uni
         } else
             cands[p_abs].emplace(&node);
     };
-    root.map(inserter, [&goal](const UnwindingTree& node) { return node.is_developed(goal);  });
+    root.map(inserter, [&goal](const UnwindingTree& node) {
+
+        return node.is_developed(goal);  });
 
     if (brother_unif)
         return brother_unification(cands, *(goal.get_spec().get_operands()[1]));

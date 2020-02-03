@@ -1,22 +1,23 @@
+#pragma once
 //
 // Created by galls2 on 04/10/19.
 //
 
-#ifndef OMG_CPP_UNWINDING_TREE_H
-#define OMG_CPP_UNWINDING_TREE_H
-
 #include <queue>
 #include <memory>
 #include <vector>
-#include "kripke_structure.h"
+#include <experimental/optional>
+#include <set>
+
 #include "concrete_state.h"
 
+class KripkeStructure;
 class Goal;
 class AbstractState;
 
 class UnwindingTree {
 public:
-    UnwindingTree(const KripkeStructure& kripke, ConcreteState& concrete_state, std::unique_ptr<UnwindingTree> parent);
+    UnwindingTree(const KripkeStructure& kripke, ConcreteState& concrete_state, UnwindingTree * parent);
     size_t get_depth() const;
     const ConcreteState& get_concrete_state() const;
     const std::vector<std::unique_ptr<UnwindingTree>>& unwind_further();
@@ -34,7 +35,7 @@ private:
     const KripkeStructure& _kripke;
     ConcreteState& _cstate;
     std::experimental::optional<std::reference_wrapper<AbstractState>> _astate;
-    const std::unique_ptr<UnwindingTree> _parent;
+    UnwindingTree * const _parent;
     size_t _depth;
     bool _URGENT;
     std::vector<std::unique_ptr<UnwindingTree>> _successors;
@@ -50,5 +51,3 @@ auto cmp_nodes = [](const std::reference_wrapper<UnwindingTree>& a, const std::r
 
 typedef std::priority_queue <std::reference_wrapper<UnwindingTree>,
         std::vector<std::reference_wrapper<UnwindingTree>>, decltype(cmp_nodes)> NodePriorityQueue;
-
-#endif //OMG_CPP_UNWINDING_TREE_H

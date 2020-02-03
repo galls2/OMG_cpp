@@ -20,11 +20,11 @@ AbstractState::AbstractState(const KripkeStructure &kripke, CtlFormula::Property
 }
 
 bool AbstractState::is_neg_labeled(const CtlFormula &spec) const {
-    return _neg_labels.find(&spec) != _neg_labels.end();
+    return spec.is_boolean() ? !spec.get_boolean_value() : _neg_labels.find(&spec) != _neg_labels.end();
 }
 
 bool AbstractState::is_pos_labeled(const CtlFormula &spec) const {
-    return _pos_labels.find(&spec) != _pos_labels.end();
+    return spec.is_boolean() ? spec.get_boolean_value() : _pos_labels.find(&spec) != _pos_labels.end();
 }
 
 void AbstractState::add_label(bool positivity, const CtlFormula &spec)

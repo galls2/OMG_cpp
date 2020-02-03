@@ -10,10 +10,13 @@ const std::vector<std::unique_ptr<UnwindingTree>> &UnwindingTree::unwind_further
         return _successors;
     }
 
-    const std::vector<ConcreteState> csuccessors = _cstate.get_successors();
+    std::vector<ConcreteState> csuccessors = _cstate.get_successors();
+    for (ConcreteState& cstate : csuccessors)
+    {
+        _successors.emplace_back(std::make_unique<UnwindingTree>(_kripke, cstate, this));
+    }
 
-    // Computing the successors
-
+    return _successors;
 }
 
 void UnwindingTree::reset_developed_in_tree()
@@ -32,8 +35,8 @@ size_t UnwindingTree::get_depth() const {
 }
 
 UnwindingTree::UnwindingTree(const KripkeStructure &kripke, ConcreteState &concrete_state,
-                             std::unique_ptr<UnwindingTree> parent): _kripke(kripke),
-                             _cstate(concrete_state), _parent(std::move(parent)), _URGENT(false)
+                             UnwindingTree * parent): _kripke(kripke),
+                             _cstate(concrete_state), _parent(parent), _URGENT(false)
 {
     _depth = (_parent) ? _parent->get_depth() + 1 : 0;
 }
@@ -62,7 +65,8 @@ std::experimental::optional<std::reference_wrapper<AbstractState>> UnwindingTree
 }
 
 bool UnwindingTree::is_developed(const Goal &goal) const {
-    bool exists = _developed.find(&goal) == _developed.end();
+    bool exists = _developed.find(&goal) != _developed.end();
+   // std::cout << "exists: " << exists << &goal << " " << *_developed.begin() << std::endl;
     return exists;
 }
 
