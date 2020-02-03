@@ -140,7 +140,7 @@ PropFormula ConcreteState::get_bis0_formula() const {
             bis0_parts.push_back(!var);
     }
     z3::expr raw_bis0 = z3::mk_and(bis0_parts);
-    PropFormula bis0(raw_bis0, {{"ps", ps_vars}});
+    PropFormula bis0(raw_bis0, {{"ps", ps_vars}, {"in0", _kripke.get_tr().get_vars_by_tag("in0")} });
     return bis0;
 }
 
