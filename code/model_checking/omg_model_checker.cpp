@@ -1,14 +1,14 @@
-#include <utility>
+
 
 //
 // Created by galls2 on 04/10/19.
 //
-
+#include <utility>
 #include <queue>
 #include <unordered_set>
 #include <utils/z3_utils.h>
 #include "omg_model_checker.h"
-
+#include <utils/omg_utils.h>
 
 const std::map<std::string, OmgModelChecker::handler_t> OmgModelChecker::_handlers =
         {
@@ -105,6 +105,7 @@ bool OmgModelChecker::handle_ar(Goal &goal)
             astate.add_label(true, p);
         } else {
             const std::vector<std::unique_ptr<UnwindingTree>> &successors = node_to_explore.unwind_further();
+
             for (const std::unique_ptr<UnwindingTree> &succ : successors) {
                 if (std::all_of(visited.begin(), visited.end(), [&succ](const ConcreteState *const &visitedee) {
                     return !(visitedee == &(succ->get_concrete_state()) ||
@@ -114,6 +115,8 @@ bool OmgModelChecker::handle_ar(Goal &goal)
                 }
             }
         }
+
+
 
         bool inductive_res = check_inductive_av(goal, to_visit);
         if (inductive_res) {
@@ -157,6 +160,31 @@ AbstractState next_to_av_close(const std::map<std::reference_wrapper<AbstractSta
     return *max_abs;
 }
 
+
+UnwindingTree& get_concretization_successor(UnwindingTree* to_close_node, const ConcreteState& dst_cstate)
+{
+    if (to_close_node->exist_successors())
+    {
+        const auto& successors = to_close_node->get_successors();
+        auto res = std::find_if(successors.begin(), successors.end(),
+                                [&dst_cstate](const std::unique_ptr<UnwindingTree> &successor) {
+                                    return successor->get_concrete_state() == dst_cstate;
+                                });
+        for (const auto& it : successors)
+        {
+  //          for (auto iit : it->get_concrete_state().to_bitvec()) std::cout << iit << " ";
+            std::cout << std::endl;
+            std::cout << (it->get_concrete_state() == dst_cstate) << std::endl;
+        }
+//        for (auto iit : dst_cstate.to_bitvec()) std::cout << iit << " ";
+         assert(res != successors.end());
+        return **res;
+    }
+    else
+        {
+        return *to_close_node;
+    }
+}
 bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit)
 {
     CandidateSet candidates = compute_candidate_set(goal, _opt_brother_unif);
@@ -182,8 +210,7 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
         if (res.is_closed) { abs_states_lead.pop(); }
         else
             {
-            assert(res.src);
-            assert(res.dst);
+            assert(res.src); assert(res.dst);
 
             ConcreteState src = *(res.src), dst = *(res.dst);
             AbstractState& abs_dst = find_abs(dst);
@@ -195,13 +222,7 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
                 // More Unwinding
                 const ConcreteState& dst_cstate = *concretization_result.dst_cstate;
                 UnwindingTree* const to_close_node = concretization_result.src_node;
-
-                UnwindingTree& node_to_set =
-                        to_close_node->exist_successors() ?
-                            **std::find_if(to_close_node->get_successors().begin(), to_close_node->get_successors().end(),
-                                [&dst_cstate](const std::unique_ptr<UnwindingTree>& successor) {return successor->get_concrete_state() == dst_cstate;})
-                                : *to_close_node;
-
+                UnwindingTree& node_to_set = get_concretization_successor(to_close_node, dst_cstate);
                 node_to_set.set_urgent(true);
                 to_visit.emplace(std::ref(node_to_set));
 

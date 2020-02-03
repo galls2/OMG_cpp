@@ -41,3 +41,7 @@ size_t KripkeStructure::get_var_num_by_ap(const std::string &ap_text) const {
 const CtlFormula::PropertySet &KripkeStructure::get_aps() const {
     return _aps;
 }
+
+const PropFormula &KripkeStructure::get_tr() const {
+    return _transitions;
+}

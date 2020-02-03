@@ -17,7 +17,7 @@ class AbstractState;
 
 class UnwindingTree {
 public:
-    UnwindingTree(const KripkeStructure& kripke, ConcreteState& concrete_state, UnwindingTree * parent);
+    UnwindingTree(const KripkeStructure& kripke, ConcreteState concrete_state, UnwindingTree * parent);
     size_t get_depth() const;
     const ConcreteState& get_concrete_state() const;
     const std::vector<std::unique_ptr<UnwindingTree>>& unwind_further();
@@ -33,7 +33,7 @@ public:
     void map(const std::function<void(UnwindingTree&)>& mapper, const std::function<bool(const UnwindingTree&)>& activation_condition);
 private:
     const KripkeStructure& _kripke;
-    ConcreteState& _cstate;
+    ConcreteState _cstate;
     std::experimental::optional<std::reference_wrapper<AbstractState>> _astate;
     UnwindingTree * const _parent;
     size_t _depth;
