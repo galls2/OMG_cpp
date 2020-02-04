@@ -73,7 +73,9 @@ bool OmgModelChecker::handle_ar(Goal &goal)
     while (!to_visit.empty()) {
         UnwindingTree &node_to_explore = to_visit.top();
         to_visit.pop();
+        DEBUG_PRINT("AR: exploring %s\n", node_to_explore.get_concrete_state().to_bitvec_str().data());
         node_to_explore.set_urgent(false);
+
 
         // CHECK - we will delete this later. This checks for twice for the same concrete state
         assert(!std::any_of(visited.begin(), visited.end(), [&](const ConcreteState *const &visitedee) {
@@ -104,9 +106,11 @@ bool OmgModelChecker::handle_ar(Goal &goal)
             AbstractState &astate = find_abs(node_to_explore);
             astate.add_label(true, p);
         } else {
+            DEBUG_PRINT("Unwinding successors of node: CSTATE %s depth %u:\n", node_to_explore.get_concrete_state().to_bitvec_str().data(), node_to_explore.get_depth());
             const std::vector<std::unique_ptr<UnwindingTree>> &successors = node_to_explore.unwind_further();
 
             for (const std::unique_ptr<UnwindingTree> &succ : successors) {
+                DEBUG_PRINT("SUCCESSOR: %s\n", succ->get_concrete_state().to_bitvec_str().data());
                 if (std::all_of(visited.begin(), visited.end(), [&succ](const ConcreteState *const &visitedee) {
                     return !(visitedee == &(succ->get_concrete_state()) ||
                              (*visitedee == succ->get_concrete_state()));
@@ -170,14 +174,7 @@ UnwindingTree& get_concretization_successor(UnwindingTree* to_close_node, const 
                                 [&dst_cstate](const std::unique_ptr<UnwindingTree> &successor) {
                                     return successor->get_concrete_state() == dst_cstate;
                                 });
-        for (const auto& it : successors)
-        {
-  //          for (auto iit : it->get_concrete_state().to_bitvec()) std::cout << iit << " ";
-            std::cout << std::endl;
-            std::cout << (it->get_concrete_state() == dst_cstate) << std::endl;
-        }
-//        for (auto iit : dst_cstate.to_bitvec()) std::cout << iit << " ";
-         assert(res != successors.end());
+        assert(res != successors.end());
         return **res;
     }
     else
@@ -213,6 +210,7 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
             assert(res.src); assert(res.dst);
 
             ConcreteState src = *(res.src), dst = *(res.dst);
+            DEBUG_PRINT("CEX to AR-inductiveness: src=%s, dst=%s\n", src.to_bitvec_str().data(), dst.to_bitvec_str().data());
             AbstractState& abs_dst = find_abs(dst);
 
             ConcretizationResult concretization_result = is_concrete_violation(ind_candidate.nodes, abs_dst);

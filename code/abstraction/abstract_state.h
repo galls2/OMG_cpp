@@ -19,7 +19,9 @@ public:
     AbstractClassificationNode* get_cl_node() const;
     const KripkeStructure& get_kripke() const;
     PropFormula get_formula() const;
-
+#ifdef DEBUG
+    std::string _debug_name;
+#endif
 private:
     const KripkeStructure& _kripke;
     CtlFormula::PropertySet _pos_labels;
@@ -27,9 +29,7 @@ private:
     CtlFormula::PropertySet _atomic_labels;
     AbstractClassificationNode* _cl_node;
     PropFormula _sym_rep;
-#ifndef DEBUG
-    std::string _debug_name;
-#endif
+
 };
 
 bool operator<(const AbstractState& lhs, const AbstractState& rhs);

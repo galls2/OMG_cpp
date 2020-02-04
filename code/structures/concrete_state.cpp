@@ -12,7 +12,7 @@
 
 ConcreteState::ConcreteState(const KripkeStructure& kripke, z3::expr conjunct)  : _kripke(kripke), _conjunct(conjunct)
 {
-#ifndef DEBUG
+#ifdef DEBUG
     std::vector<z3::expr> conj_vars = PropFormula::get_vars_in_formula(_conjunct);
     std::set<z3::expr, Z3ExprComp> conj_vars_set(conj_vars.begin(), conj_vars.end());
     std::set<z3::expr, Z3ExprComp> tr_ps_vars = expr_vector_to_set(_kripke.get_tr().get_vars_by_tag("ps"));
@@ -68,7 +68,7 @@ std::ostream& operator<< (std::ostream& stream, const ConcreteState& concrete_st
 }
 
 
-#ifndef DEBUG
+#ifdef DEBUG
 std::vector<bool> ConcreteState::to_bitvec() const
 {
     z3::expr_vector vars = _kripke.get_tr().get_vars_by_tag("ps");
@@ -170,4 +170,11 @@ bool ConcreteState::operator==(const ConcreteState &other) const {
 
 const z3::expr &ConcreteState::get_conjunct() const {
     return _conjunct;
+}
+
+std::string ConcreteState::to_bitvec_str() const {
+    const auto bitvec = to_bitvec();
+    std::string res = "";
+    for (bool b : bitvec) res += (b ? "1 " : "0 ");
+    return res;
 }

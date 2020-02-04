@@ -68,6 +68,7 @@ bool UnwindingTree::is_developed(const Goal &goal) const {
     bool exists = _developed.find(&goal) != _developed.end();
    // std::cout << "exists: " << exists << &goal << " " << *_developed.begin() << std::endl;
     return exists;
+//    assert
 }
 
 void UnwindingTree::map(const std::function<void(UnwindingTree &)> &mapper,

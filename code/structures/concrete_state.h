@@ -24,8 +24,9 @@ public:
     PropFormula get_bis0_formula() const;
     bool operator==(const ConcreteState& other) const;
     const z3::expr& get_conjunct() const;
-#ifndef DEBUG
+#ifdef DEBUG
     std::vector<bool> to_bitvec() const;
+    std::string to_bitvec_str() const;
 #endif
     friend std::ostream& operator<< (std::ostream& stream, const ConcreteState& concrete_state);
 

@@ -32,3 +32,16 @@ std::string VersionManager::new_version(const size_t orig_name) {
 void VersionManager::reset() {
     _copies_counter.clear();
 }
+
+std::string VersionManager::next_version(const std::string &key) {
+    assert(key.find(DELIM) == key.npos);
+    if (_copies_counter.find(key) == _copies_counter.end())
+    {
+        _copies_counter[key] = 0;
+        return key +std::string(1, DELIM)+"0";
+    }
+    else
+    {
+        return key + std::string(1, DELIM) + std::to_string(++_copies_counter[key]);
+    }
+}

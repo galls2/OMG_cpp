@@ -9,6 +9,7 @@
 #include "abstract_state.h"
 
 #include <abstraction/abstraction_classifier.h>
+#include <utils/version_manager.h>
 
 AbstractState::AbstractState(const KripkeStructure &kripke, CtlFormula::PropertySet pos_labels,
                              CtlFormula::PropertySet atomic_labels, PropFormula sym_rep)
@@ -17,6 +18,9 @@ AbstractState::AbstractState(const KripkeStructure &kripke, CtlFormula::Property
 {
     std::set_difference(_atomic_labels.begin(), _atomic_labels.end(), _pos_labels.begin(), _pos_labels.end(),
                         std::inserter(_neg_labels, _neg_labels.end()));
+#ifdef DEBUG
+    _debug_name = VersionManager::next_version("Abs");
+#endif
 }
 
 bool AbstractState::is_neg_labeled(const CtlFormula &spec) const {

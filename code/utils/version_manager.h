@@ -7,6 +7,7 @@ class VersionManager
 public:
     static std::string new_version(const std::string& orig_name);
     static std::string new_version(const size_t orig_name);
+    static std::string next_version(const std::string& key);
     static void reset();
     static const char DELIM = '$';
 private:

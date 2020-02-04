@@ -115,6 +115,21 @@ int main()
 
 
 /*
- * To do:
- * TDD the AV - start with simple examples that work, move on to others that do not and then go to the cases which are not yet implemented.
+Based on /home/galls2/Desktop/OMG_cpp/cmake-build-debug/OMG
+AR: exploring 0 0 1
+Unwinding successors of node: CSTATE 0 0 1  depth 0:
+SUCCESSOR: 1 0 0
+SUCCESSOR: 0 0 1
+CEX to AR-inductiveness: src=0 0 1 , dst=0 0 1   (&&)
+AR: exploring 1 0 0
+Unwinding successors of node: CSTATE 1 0 0  depth 1:
+SUCCESSOR: 0 1 1
+CEX to AR-inductiveness: src=1 0 0 , dst=1 0 0 (&&&)
+terminate called after throwing an instance of 'char const*'
+Testing ##AG ((~state<0>) & (~state<1>))## against ##/home/galls2/Desktop/af_ag.aig##...
+Process finished with exit code 134 (interrupted by signal 6: SIGABRT)
+
+
+2) First, fix why is (&&) causes unwinding.
+3) Then, find out why (&&) and (&&&) are cexs in the first place (EE).
  */

@@ -24,4 +24,12 @@ add_executable(OMG main.cpp
 
 
 target_link_libraries(OMG libz3.so)
+
+
+if(CMAKE_BUILD_TYPE MATCHES Debug)
+    target_compile_definitions(OMG PUBLIC DEBUG=1)
+elseif(CMAKE_BUILD_TYPE MATCHES Release)
+    target_compile_definitions(OMG PUBLIC DEBUG=0)
+endif()
+
 #target_link_libraries(aig_to_aig)
