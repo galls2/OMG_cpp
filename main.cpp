@@ -130,6 +130,5 @@ Testing ##AG ((~state<0>) & (~state<1>))## against ##/home/galls2/Desktop/af_ag.
 Process finished with exit code 134 (interrupted by signal 6: SIGABRT)
 
 
-2) First, fix why is (&&) causes unwinding.
-3) Then, find out why (&&) and (&&&) are cexs in the first place (EE).
+3) Find out why (&&) and (&&&) are cexs in the first place (EE) -- cex is not a cex.
  */

@@ -88,7 +88,7 @@ bool OmgModelChecker::handle_ar(Goal &goal)
         node_to_explore.set_developed(goal);
 
         const CtlFormula &q = *goal.get_spec().get_operands()[1];
-        Goal subgoal_q(goal.get_node(), q, goal.get_properties());
+        Goal subgoal_q(node_to_explore, q, goal.get_properties());
         bool res_q = recur_ctl(subgoal_q);
         if (!res_q) // nte |/= q
         {
@@ -100,13 +100,13 @@ bool OmgModelChecker::handle_ar(Goal &goal)
         }
 
         const CtlFormula &p = *goal.get_spec().get_operands()[0];
-        Goal subgoal_p(goal.get_node(), p, goal.get_properties());
+        Goal subgoal_p(node_to_explore, p, goal.get_properties());
         bool res_p = recur_ctl(subgoal_p);
         if (res_p) {
             AbstractState &astate = find_abs(node_to_explore);
             astate.add_label(true, p);
         } else {
-            DEBUG_PRINT("Unwinding successors of node: CSTATE %s depth %u:\n", node_to_explore.get_concrete_state().to_bitvec_str().data(), node_to_explore.get_depth());
+            DEBUG_PRINT("Unwinding successors of node: CSTATE %s depth %zu:\n", node_to_explore.get_concrete_state().to_bitvec_str().data(), node_to_explore.get_depth());
             const std::vector<std::unique_ptr<UnwindingTree>> &successors = node_to_explore.unwind_further();
 
             for (const std::unique_ptr<UnwindingTree> &succ : successors) {
@@ -217,6 +217,8 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
 
             if (concretization_result.dst_cstate)
             {
+                DEBUG_PRINT("More unwinding due to concretization witness %s!\n", concretization_result.dst_cstate->to_bitvec_str().data());
+
                 // More Unwinding
                 const ConcreteState& dst_cstate = *concretization_result.dst_cstate;
                 UnwindingTree* const to_close_node = concretization_result.src_node;
@@ -227,6 +229,7 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
             }
             else
             {
+                DEBUG_PRINT("Refinement -- no concretization witness!\n");
                 throw "Need to implement (EX-) refinement";
                 // (EX-) refinement
 
