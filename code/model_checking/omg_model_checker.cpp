@@ -202,11 +202,17 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
     {
         InductiveCandidate ind_candidate = abs_states_lead.top();
         AbstractState* abs_lead = ind_candidate.abs_state;
+        DEBUG_PRINT("Is there inductiveness for abs state %s?... ", abs_lead->_debug_name.data());
 
         EEClosureResult res = _abs_structure->is_EE_closure(*abs_lead, abs_states);
-        if (res.is_closed) { abs_states_lead.pop(); }
+        if (res.is_closed)
+        {
+            DEBUG_PRINT("Yes!\n");
+            abs_states_lead.pop();
+        }
         else
-            {
+        {
+            DEBUG_PRINT("No!\n");
             assert(res.src); assert(res.dst);
 
             ConcreteState src = *(res.src), dst = *(res.dst);
@@ -238,6 +244,7 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
             return false;
         }
     }
+    DEBUG_PRINT("Found EE-inductiveness!\n");
     return true;
 }
 
@@ -441,10 +448,15 @@ void OmgModelChecker::handle_proving_trace(bool is_strengthen, Goal &goal, Unwin
 void OmgModelChecker::label_subtree(Goal &goal, bool positivity) {
     UnwindingTree& node = goal.get_node();
     const CtlFormula& spec = goal.get_spec();
-    node.map([positivity, &spec](UnwindingTree& n) {
-        assert(n.get_abs());
-        n.get_abs()->get().add_label(positivity, spec);
-        }, [&goal](const UnwindingTree& m) { return m.is_developed(goal); });
+
+    auto labeler =
+                 [positivity, &spec](UnwindingTree& n) {
+                     assert(n.get_abs());
+                     n.get_abs()->get().add_label(positivity, spec);
+                 };
+    auto activation_condition = [&goal](const UnwindingTree& m) { return m.is_developed(goal); };
+
+    node.map(labeler, activation_condition);
 }
 
 ConcretizationResult

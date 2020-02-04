@@ -96,7 +96,9 @@ void unit_tests_aps()
 
 void unit_tests_ag()
 {
-    TEST("/home/galls2/Desktop/af_ag.aig", "AG ((~state<0>) & (~state<1>))", false); // ctl parser produces a wrong set of APs -- False is considered an AP and it should not be thAt way.
+    TEST("/home/galls2/Desktop/af_ag.aig", "AG ((~state<0>) | (~state<1>))", true);
+
+//    TEST("/home/galls2/Desktop/af_ag.aig", "AG ((~state<0>) & (~state<1>))", false);
 
 
 }
@@ -112,23 +114,3 @@ int main()
     unit_tests();
 
 }
-
-
-/*
-Based on /home/galls2/Desktop/OMG_cpp/cmake-build-debug/OMG
-AR: exploring 0 0 1
-Unwinding successors of node: CSTATE 0 0 1  depth 0:
-SUCCESSOR: 1 0 0
-SUCCESSOR: 0 0 1
-CEX to AR-inductiveness: src=0 0 1 , dst=0 0 1   (&&)
-AR: exploring 1 0 0
-Unwinding successors of node: CSTATE 1 0 0  depth 1:
-SUCCESSOR: 0 1 1
-CEX to AR-inductiveness: src=1 0 0 , dst=1 0 0 (&&&)
-terminate called after throwing an instance of 'char const*'
-Testing ##AG ((~state<0>) & (~state<1>))## against ##/home/galls2/Desktop/af_ag.aig##...
-Process finished with exit code 134 (interrupted by signal 6: SIGABRT)
-
-
-3) Find out why (&&) and (&&&) are cexs in the first place (EE) -- cex is not a cex.
- */

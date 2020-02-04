@@ -20,8 +20,8 @@
   <component name="ChangeListManager">
     <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/abstraction/abstract_structure.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstract_structure.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/utils/z3_utils.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/z3_utils.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -36,20 +36,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="201">
-              <caret line="437" selection-start-line="437" selection-end-line="437" />
+            <state relative-caret-position="162">
+              <caret line="204" column="64" selection-start-line="204" selection-start-column="64" selection-end-line="204" selection-end-column="64" />
               <folding>
                 <element signature="e#42#60#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="mock:///OMG (disassembly)">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="5" selection-start-line="5" selection-end-line="5" />
             </state>
           </provider>
         </entry>
@@ -61,6 +52,18 @@
               <caret line="64" selection-start-line="64" selection-end-line="64" />
               <folding>
                 <element signature="e#41#59#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="359">
+              <caret line="96" column="20" lean-forward="true" selection-start-line="96" selection-start-column="20" selection-end-line="96" selection-end-column="20" />
+              <folding>
+                <element signature="e#40#59#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -218,11 +221,11 @@
         <option value="$PROJECT_DIR$/code/utils/version_manager.h" />
         <option value="$PROJECT_DIR$/code/utils/version_manager.cpp" />
         <option value="$PROJECT_DIR$/code/abstraction/abstract_state.cpp" />
-        <option value="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" />
-        <option value="$PROJECT_DIR$/main.cpp" />
         <option value="$PROJECT_DIR$/code/structures/concrete_state.cpp" />
         <option value="$PROJECT_DIR$/code/abstraction/abstract_structure.cpp" />
         <option value="$PROJECT_DIR$/code/utils/z3_utils.cpp" />
+        <option value="$PROJECT_DIR$/main.cpp" />
+        <option value="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" />
       </list>
     </option>
   </component>
@@ -367,14 +370,7 @@
       <workItem from="1572716828056" duration="2585000" />
       <workItem from="1572722091400" duration="20925000" />
       <workItem from="1576322596048" duration="1851000" />
-      <workItem from="1580376891038" duration="42072000" />
-    </task>
-    <task id="LOCAL-00013" summary="Fixed minor bug - current functionality now works">
-      <created>1569608666450</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1569608666450</updated>
+      <workItem from="1580376891038" duration="42733000" />
     </task>
     <task id="LOCAL-00014" summary="Fixed parser, now works">
       <created>1569668771730</created>
@@ -712,11 +708,18 @@
       <option name="project" value="LOCAL" />
       <updated>1580830661947</updated>
     </task>
-    <option name="localTasksCounter" value="62" />
+    <task id="LOCAL-00062" summary="-Bugfix in z3Util: cocnrete state was returned with a conj over the wrong var_Vec&#10;-Bugfix in abs_structure">
+      <created>1580832486414</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1580832486414</updated>
+    </task>
+    <option name="localTasksCounter" value="63" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="429218000" />
+    <option name="totallyTimeSpent" value="429879000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -729,14 +732,15 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="24" width="1920" height="1004" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49861112" visible="true" weight="0.1511254" />
       <window_info id="Structure" order="1" sideWeight="0.5013889" side_tool="true" weight="0.1511254" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3295711" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4989282" weight="0.19751693" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.49839228" visible="true" weight="0.251693" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4989282" visible="true" weight="0.19751693" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49839228" weight="0.251693" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Database Changes" order="6" />
@@ -780,7 +784,6 @@
     <option name="version" value="1" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fixed property set def and integrated -- now works with multi-appearant formulas." />
     <MESSAGE value="Main is now more accessible" />
     <MESSAGE value="-Created algorithm for converting general CTL specs to CTL specs with only ER, AR, EX, logical ops and APs.&#10;-Refactoring" />
     <MESSAGE value="-Refactor aig parser, version manager" />
@@ -805,7 +808,8 @@
     <MESSAGE value="-Refactor&#10;-Bugfix -- unwindingTree now has a ConcreteState as a member and not a ConcreteState&amp;" />
     <MESSAGE value="-Added debug_name to abs states, upgraded VersionManager as a result&#10;-Refactoring&#10;-Added debugging util: DEBUG_PRINT" />
     <MESSAGE value="Bugfix in goal creation" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bugfix in goal creation" />
+    <MESSAGE value="-Bugfix in z3Util: cocnrete state was returned with a conj over the wrong var_Vec&#10;-Bugfix in abs_structure" />
+    <option name="LAST_COMMIT_MESSAGE" value="-Bugfix in z3Util: cocnrete state was returned with a conj over the wrong var_Vec&#10;-Bugfix in abs_structure" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1224,16 +1228,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="460">
-          <caret line="133" selection-start-line="133" selection-end-line="133" />
-          <folding>
-            <element signature="e#40#59#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/code/structures/unwinding_tree.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="554">
@@ -1320,10 +1314,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="359">
+          <caret line="96" column="20" lean-forward="true" selection-start-line="96" selection-start-column="20" selection-end-line="96" selection-end-column="20" />
+          <folding>
+            <element signature="e#40#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
-          <caret line="437" selection-start-line="437" selection-end-line="437" />
+        <state relative-caret-position="162">
+          <caret line="204" column="64" selection-start-line="204" selection-start-column="64" selection-end-line="204" selection-end-column="64" />
           <folding>
             <element signature="e#42#60#0" expanded="true" />
           </folding>
