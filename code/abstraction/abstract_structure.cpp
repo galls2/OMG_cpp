@@ -63,7 +63,7 @@ EEClosureResult AbstractStructure::is_EE_closure(AbstractState &to_close,
         if (_NE_may_over.find(&to_close) == _NE_may_over.end())
         {
             AbstractState* src = &to_close;
-            std::pair<std::set<AbstractState*>, EEClosureResult> new_entry = std::make_pair(std::move(p_closers), std::move(closure_result));
+            std::pair<std::set<AbstractState*>, EEClosureResult> new_entry = std::make_pair(std::move(p_closers), closure_result);
             std::vector<std::pair<std::set<AbstractState*>, EEClosureResult>> new_entry_vec = {new_entry};
             _NE_may_over.emplace(src, new_entry_vec);
         }

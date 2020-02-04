@@ -102,15 +102,17 @@ FormulaInductiveUtils::is_EE_inductive(AbstractState &to_close, const std::set<A
     z3::expr inductive_raw_formula = src_part && tr.get_raw_formula() && dst_part;
     PropFormula inductive_formula(inductive_raw_formula, {{"ps", ps_tr}, {"ns", ns_tr}});
     std::unique_ptr<ISatSolver> solver = ISatSolver::s_sat_solvers.at(sat_solver_str)(ps_tr.ctx());
-    SatSolverResult res = solver->solve_sat(inductive_formula);
-    if (!res.get_is_sat()) // if the formula is UNSAT, there is NO cex to the inductiveness, so we have inductiveness
+    SatSolverResult sat_res = solver->solve_sat(inductive_formula);
+    if (!sat_res.get_is_sat()) // if the formula is UNSAT, there is NO cex to the inductiveness, so we have inductiveness
     {
         return {true, std::experimental::optional<ConcreteState>(), std::experimental::optional<ConcreteState>()};
     }
     else
     {
-        auto cstate_src = ConcreteState(kripke, FormulaUtils::get_conj_from_sat_result(ps_tr.ctx(), ps_tr, res));
-        auto nstate_src = ConcreteState(kripke, FormulaUtils::get_conj_from_sat_result(ps_tr.ctx(), ps_tr, res));
+        z3::expr cstate_conj = FormulaUtils::get_conj_from_sat_result(ps_tr.ctx(), ps_tr, sat_res);
+        auto cstate_src = ConcreteState(kripke, cstate_conj);
+        z3::expr nstate_conj = FormulaUtils::get_conj_from_sat_result(ps_tr.ctx(), ns_tr, sat_res).substitute(ns_tr, ps_tr);
+        auto nstate_src = ConcreteState(kripke, nstate_conj);
         return {false, cstate_src, nstate_src};
     }
 }
@@ -156,7 +158,8 @@ FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<Unwin
     } else {
         auto first_node_it = src_nodes.begin();
         std::advance(first_node_it, static_cast<size_t>(res.first));
-        return ConcretizationResult(*first_node_it , ConcreteState(kripke, FormulaUtils::get_conj_from_sat_result(ps_tr.ctx(), ps_tr, res.second)));
+        z3::expr nstate_conj = FormulaUtils::get_conj_from_sat_result(ps_tr.ctx(), ns_tr, res.second).substitute(ns_tr, ps_tr);
+        return ConcretizationResult(*first_node_it , ConcreteState(kripke, nstate_conj));
     }
 }
 
