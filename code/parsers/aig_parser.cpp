@@ -242,46 +242,38 @@ void AigParser::extract_init(const std::vector<std::string> &file_lines) {
     z3::expr_vector latch_values(_ctx);
 
     size_t first_line_idx = _metadata[AigMetadata::I] + 1;
+
+    std::array<std::string, 3> parts;
     for (size_t i = first_line_idx ; i < first_line_idx + _metadata[AigMetadata::L]; ++i)
     {
         z3::expr var = ps_vars[i - first_line_idx];
-        std::vector<std::string> parts;
-        split(file_lines[i], ' ', parts);
-  //      std::vector<z3::expr> v;
-        if (parts.size() == 2)
+
+        size_t num_parts = split<3>(file_lines[i], ' ', parts);
+
+        if (num_parts == 2)
         {
-    //        v.push_back(var);
             latch_values.push_back(! var);
         }
         else
         {
-            assert(parts.size() == 3);
+            assert(num_parts == 3);
             size_t init_val = std::stoul(parts[1]);
             if (init_val < 2)
             {
                 assert (init_val == 1);
-      //          v.push_back(!var);
                 latch_values.push_back(var);
             }
             else
             {
                 assert(init_val == 2*i);
-          //      v.push_back(var);
-        //        v.push_back(!var);
-                latch_values.push_back(var);
+     //           latch_values.push_back(var);
             }
         }
-  //      init_exprs.emplace_back(v);
     }
 
     z3::expr latch_constraints = z3::mk_and(latch_values);
-//    assert(latch_values.size() == _metadata[AigMetadata::L]);
-//    for (size_t j = _metadata[AigMetadata::L]; j < ps_vars.size(); ++j) latch_values.push_back(ps_vars[j]);
-//    assert(latch_values.size() == _metadata[AigMetadata::L]+_metadata[AigMetadata::O]);
 
-  //  _init_formula = std::make_unique<z3::expr>(_state_formula->substitute(ps_vars, latch_values).simplify());
     _init_formula = std::make_unique<z3::expr>(((*_state_formula) && latch_constraints).simplify());
-   // std::cout << "INIT IN AIG-PARSER:: "<< _init_formula->to_string() << std::endl;
 }
 
 void AigParser::generate_new_names(std::vector<std::reference_wrapper<std::vector<z3::expr>>> &vec_of_vecs, size_t &start_from,

@@ -6,8 +6,22 @@
 #include <cassert>
 #include <string>
 
-std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems);
+template <size_t MAX_SIZE>
+size_t split(const std::string &s, char delim, std::array<std::string, MAX_SIZE> &elems)
+{
+    std::stringstream ss(s);
+    std::string item;
+    size_t count = 0;
 
+    while(std::getline(ss, item, delim))
+    {
+#ifdef DEBUG
+        assert(count < MAX_SIZE);
+#endif
+        elems[count++] = item;
+    }
+    return count;
+}
 
 template <size_t N>
 std::array<std::string, N> split_to(const std::string& s, char delim)
