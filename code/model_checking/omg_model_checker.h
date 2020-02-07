@@ -106,7 +106,7 @@ private:
 
     bool check_inductive_av(Goal& goal, NodePriorityQueue& to_visit);
     void strengthen_subtree(Goal& goal, const std::function<bool(const UnwindingTree&)>& stop_condition);
-    void handle_proving_trace(bool is_strengthen, Goal& goal, UnwindingTree& node_to_explore);
+    void handle_proving_trace(bool is_strengthen, Goal& goal, UnwindingTree& node_to_explore, bool positivity);
     CandidateSet compute_candidate_set(Goal& goal, bool brother_unif);
     CandidateSet brother_unification(const CandidateSet &cands, const CtlFormula& agree_upon);
     void label_subtree(Goal& goal, bool positivity);

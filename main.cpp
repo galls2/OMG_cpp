@@ -97,8 +97,7 @@ void unit_tests_aps()
 void unit_tests_ag()
 {
     TEST("/home/galls2/Desktop/af_ag.aig", "AG ((~state<0>) | (~state<1>))", true);
-
-//    TEST("/home/galls2/Desktop/af_ag.aig", "AG ((~state<0>) & (~state<1>))", false);
+    TEST("/home/galls2/Desktop/af_ag.aig", "AG ((~state<0>) & (~state<1>))", false);
 
 
 }

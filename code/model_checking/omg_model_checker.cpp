@@ -95,7 +95,7 @@ bool OmgModelChecker::handle_ar(Goal &goal)
             /*
              * This is the case of a refuting path!
              */
-            handle_proving_trace(goal.get_properties().at("strengthen"), goal, node_to_explore);
+            handle_proving_trace(goal.get_properties().at("strengthen"), goal, node_to_explore, false);
             return false;
         }
 
@@ -440,9 +440,19 @@ AbstractState &OmgModelChecker::find_abs(const ConcreteState &cstate) {
     }
 }
 
-void OmgModelChecker::handle_proving_trace(bool is_strengthen, Goal &goal, UnwindingTree &node) {
+void OmgModelChecker::handle_proving_trace(bool is_strengthen, Goal &goal, UnwindingTree &node, bool positivity) {
         if (is_strengthen)
+        {
+            const CtlFormula& spec = goal.get_spec();
+//            strength_trace(goal.get_node(), node, positivity);
+//            map_upward(node, [&spec, positivity] (UnwindingTree& n) {n.})
+        }
                 throw OmgMcException("Not implemented");
+//    if is_strengthen:
+//        self._strengthen_trace(node, node_to_explore)
+//    _map_upward(node_to_explore, lambda curr: curr.add_label(spec, to_return), node.get_parent())
+//    return to_return
+
 }
 
 void OmgModelChecker::label_subtree(Goal &goal, bool positivity) {
