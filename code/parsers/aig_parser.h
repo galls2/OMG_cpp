@@ -26,8 +26,7 @@ public:
     std::unique_ptr<KripkeStructure> to_kripke(const CtlFormula::PropertySet& aps);
 
 private:
-    std::string aig_to_aag(const std::string& aig_path);
-    const AigParser& read_aag(std::vector<std::string>& aag_container) const;
+   // std::string read_aag_to_aig(const std::string& aig_path) const;
     AigParser& extract_metadata(const std::string& first_aag_line);
     AigParser& extract_literals(const std::vector<std::string>& aag_lines);
     const AigParser& dfs(const std::vector<std::string> &lines, std::unordered_map<size_t, z3::expr>& formulas, size_t first_line, size_t target_lit) const;
@@ -37,10 +36,8 @@ private:
     void extract_init(const std::vector<std::string> &file_lines);
     void generate_new_names(std::vector<std::reference_wrapper<std::vector<z3::expr>>>& vec_of_vecs, size_t& first_name, size_t vars_per_vec);
 
-    const std::string _aig_path;
-    std::string _aag_path;
-    size_t _first_ap_index;
-    size_t _first_and_literal;
+    size_t _first_ap_index = 0;
+    size_t _first_and_literal = 0;
     std::unordered_map<AigMetadata, size_t, std::hash<size_t>> _metadata;
     std::unordered_map<std::string, std::string> _ap_to_symb;
     std::unordered_map<std::string, std::string> _symb_to_ap;

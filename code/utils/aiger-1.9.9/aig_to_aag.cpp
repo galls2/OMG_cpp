@@ -140,7 +140,7 @@ int string_writer_put(char to_write, StringWriter* write_to)
     return (int) to_write;
 }
 
-std::vector<std::string> aig_to_aag(std::string aig_path) {
+std::vector<std::string> aig_to_aag_lines(const std::string& aig_path) {
 
     const char *src = aig_path.data(), *error;
     aiger_mode mode;
@@ -161,10 +161,9 @@ std::vector<std::string> aig_to_aag(std::string aig_path) {
 
     StringWriter string_writer;
 
-
     mode = aiger_ascii_mode;
 
-    if (!aiger_write_generic(aiger, mode,
+    if (!aiger_write_generic(aiger, aiger_ascii_mode,
                              &string_writer, (aiger_put) string_writer_put))
         throw OmgException("Aig Write error!");
 

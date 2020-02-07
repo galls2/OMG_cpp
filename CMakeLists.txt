@@ -5,9 +5,6 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
 set(CMAKE_CXX_FLAGS "-O3")
 include_directories(code)
 project (OMG_CPP)
-#LINK_DIRECTORIES(/home/galls2/Desktop/z3/build/) #MAY BE NEEDED :O
-
-#add_subdirectory(code/utils/aiger-1.9.9)
 
 add_executable(OMG main.cpp
 
@@ -19,17 +16,13 @@ add_executable(OMG main.cpp
         code/structures/unwinding_tree.cpp code/structures/concrete_state.cpp
         code/model_checking/omg_model_checker.cpp code/abstraction/abstract_structure.cpp
         code/formulas/sat_solver.cpp code/utils/cartesian_product_generator.cpp
-        code/utils/z3_utils.cpp code/abstraction/abstract_state.cpp code/abstraction/abstraction_classifier.cpp code/utils/omg_utils.cpp code/utils/omg_utils.h)
-
-
+        code/utils/z3_utils.cpp code/abstraction/abstract_state.cpp code/abstraction/abstraction_classifier.cpp
+        code/utils/omg_utils.cpp code/utils/aiger-1.9.9/aig_to_aag.cpp code/utils/aiger-1.9.9/aiger.c)
 
 target_link_libraries(OMG libz3.so)
-
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
     target_compile_definitions(OMG PUBLIC DEBUG=1)
 elseif(CMAKE_BUILD_TYPE MATCHES Release)
     target_compile_definitions(OMG PUBLIC DEBUG=0)
 endif()
-
-#target_link_libraries(aig_to_aig)
