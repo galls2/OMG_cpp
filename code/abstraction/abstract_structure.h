@@ -30,7 +30,7 @@ private:
     std::set<AbstractState> _abs_states;
 
     std::map<AbstractState* const, std::set<AbstractState*>> _NE_may;
-   // std::map<const AbstractState* const, std::set<const AbstractState* const>> _E_must;
+   // std::map_subtree<const AbstractState* const, std::set<const AbstractState* const>> _E_must;
     std::map<AbstractState* const, std::vector<std::set<AbstractState*>>> _E_may_over;
     std::map<AbstractState* const, std::vector<std::pair<std::set<AbstractState*>, EEClosureResult>>> _NE_may_over;
 

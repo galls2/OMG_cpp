@@ -30,7 +30,15 @@ public:
     bool is_urgent() const;
     const std::vector<std::unique_ptr<UnwindingTree>>& get_successors() const;
     bool exist_successors() const;
-    void map(const std::function<void(UnwindingTree&)>& mapper, const std::function<bool(const UnwindingTree&)>& activation_condition);
+    void map_subtree(const std::function<void(UnwindingTree &)> &mapper,
+                     const std::function<bool(const UnwindingTree &)> &activation_condition);
+    void map_upwards(const std::function<void(UnwindingTree &)> &mapper,
+                     const std::function<bool(const UnwindingTree &)> &last_node_pred);
+
+    void add_label(bool positivity, const CtlFormula& spec);
+
+    UnwindingTree* get_parent() const;
+
 private:
     const KripkeStructure& _kripke;
     ConcreteState _cstate;
