@@ -76,8 +76,9 @@ const std::unordered_map<AigMetadata, size_t, std::hash<size_t>> &AigParser::get
 AigParser &AigParser::extract_ap_mapping(const std::vector<std::string> &aag_lines) {
 
     const std::regex ap_line_regex("^[ilo][0-9].*");
-    const size_t start_search_idx = _metadata[AigMetadata::A]+_metadata[AigMetadata::L]+_metadata[AigMetadata::I] + _metadata[AigMetadata::O];
-    for (size_t i = start_search_idx; i < aag_lines.size(); ++i) {
+    const size_t start_search_idx = _metadata[A]+_metadata[L]+_metadata[I] + _metadata[O];
+    for (size_t i = start_search_idx; i < aag_lines.size(); ++i)
+    {
         const std::string &aag_line = aag_lines[i];
 
         if (std::regex_match(aag_line, ap_line_regex))
@@ -93,8 +94,8 @@ AigParser &AigParser::extract_ap_mapping(const std::vector<std::string> &aag_lin
 }
 
 
-std::unordered_map<size_t, z3::expr> AigParser::calc_literal_formulas(const std::vector<std::string> &aag_lines) {
-
+std::unordered_map<size_t, z3::expr> AigParser::calc_literal_formulas(const std::vector<std::string> &aag_lines)
+{
 
     _lit_formulas.insert(std::make_pair(0, _ctx.bool_val(false)));
     _lit_formulas.insert(std::make_pair(1, _ctx.bool_val(true)));
@@ -106,8 +107,6 @@ std::unordered_map<size_t, z3::expr> AigParser::calc_literal_formulas(const std:
     size_t first_and_line = _first_ap_index - _metadata[A];
     for (auto lit : _next_state_literals) dfs(aag_lines, _lit_formulas, first_and_line, lit);
     for (auto lit : _out_literals) dfs(aag_lines, _lit_formulas, first_and_line, lit);
-
-//    for (auto it : _lit_formulas) std::cout << it.first << " ~ " << it.second << std::endl;
 
     return _lit_formulas;
 }
@@ -285,5 +284,4 @@ void AigParser::generate_new_names(std::vector<std::reference_wrapper<std::vecto
     }
 
 }
-
 
