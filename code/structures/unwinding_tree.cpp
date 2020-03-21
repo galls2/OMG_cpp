@@ -5,7 +5,7 @@
 #include <utility>
 #include <utils/omg_utils.h>
 #include "unwinding_tree.h"
-
+#include <abstraction/abstract_state.h>
 const std::vector<std::unique_ptr<UnwindingTree>> &UnwindingTree::unwind_further() {
     if (!_successors.empty()) // Works as the Kripke structure is total
     {

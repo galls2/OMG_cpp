@@ -9,7 +9,7 @@
 template <size_t MAX_SIZE>
 size_t split(const std::string &s, char delim, std::array<std::string, MAX_SIZE> &elems)
 {
-    static_assert(MAX_SIZE > 0);
+    static_assert(MAX_SIZE > 0, "Size must be positive");
     
     std::stringstream ss(s);
     std::string item;

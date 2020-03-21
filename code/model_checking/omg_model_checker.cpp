@@ -446,10 +446,10 @@ void OmgModelChecker::handle_proving_trace(bool is_strengthen, Goal &goal, Unwin
         if (is_strengthen)
         {
             const CtlFormula& spec = goal.get_spec();
-            strength_trace(goal.get_node(), node);
+            strengthen_trace(goal.get_node(), node);
             node.map_upwards(
                        [&spec, positivity] (UnwindingTree& n) { n.add_label(positivity, spec); },
-                       [](UnwindingTree& m) { return m.get_parent() == nullptr; }
+                       [](const UnwindingTree& m) { return m.get_parent() == nullptr; }
             );
         }
                 throw OmgMcException("Not implemented");
@@ -483,10 +483,10 @@ OmgModelChecker::is_concrete_violation(const std::unordered_set<UnwindingTree *>
 void OmgModelChecker::strengthen_trace(UnwindingTree &start, UnwindingTree &end) const
 {
     UnwindingTree* current = &end;
-    std::set<ConcreteState*> dsts;
+    std::set<const ConcreteState*> dsts;
     while (current != &start)
     {
-        dsts.emplace(current);
+        dsts.emplace(&current->get_concrete_state());
         // Is check_trivial relevant in a quantifier free world?
         // TODO continue impl
         throw 5;
