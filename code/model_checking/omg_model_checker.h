@@ -19,17 +19,6 @@ DECLARE_OMG_EXCEPTION(OmgMcException)
 
 class UnwindingTree;
 
-struct Goal
-{
-    Goal(UnwindingTree& node, const CtlFormula& spec, std::map<std::string, bool> properties);
-    UnwindingTree &get_node();
-    const CtlFormula &get_spec() const;
-    const std::map<std::string, bool> &get_properties() const;
-private:
-    UnwindingTree& _node;
-    const CtlFormula& _spec;
-    const std::map<std::string, bool> _properties;
-};
 
 typedef std::unordered_map<AbstractState*, std::unordered_set<UnwindingTree*>> CandidateSet;
 
@@ -106,6 +95,7 @@ private:
 
     bool check_inductive_av(Goal& goal, NodePriorityQueue& to_visit);
     void strengthen_subtree(Goal& goal, const std::function<bool(const UnwindingTree&)>& stop_condition);
+//    void strengthen_trace(Goal& goal, const std::function<bool(const UnwindingTree&)>& stop_condition);
     void handle_proving_trace(bool is_strengthen, Goal& goal, UnwindingTree& node_to_explore, bool positivity);
     CandidateSet compute_candidate_set(Goal& goal, bool brother_unif);
     CandidateSet brother_unification(const CandidateSet &cands, const CtlFormula& agree_upon);

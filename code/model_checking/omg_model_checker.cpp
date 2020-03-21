@@ -9,6 +9,7 @@
 #include <utils/z3_utils.h>
 #include "omg_model_checker.h"
 #include <utils/omg_utils.h>
+#include <model_checking/goal.h>
 
 const std::map<std::string, OmgModelChecker::handler_t> OmgModelChecker::_handlers =
         {
@@ -475,20 +476,3 @@ OmgModelChecker::is_concrete_violation(const std::unordered_set<UnwindingTree *>
     return FormulaInductiveUtils::concrete_transition_to_abs(to_close_nodes, abs_witness, _sat_solver);
 }
 
-
-UnwindingTree &Goal::get_node() {
-        return _node;
-}
-
-const CtlFormula &Goal::get_spec() const {
-        return _spec;
-}
-
-const std::map<std::string, bool> &Goal::get_properties() const {
-        return _properties;
-}
-
-Goal::Goal(UnwindingTree &node, const CtlFormula &spec,
-           std::map<std::string, bool> properties)
- : _node(node), _spec(spec), _properties(std::move(properties))
-{}

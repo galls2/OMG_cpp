@@ -17,7 +17,7 @@ add_executable(OMG main.cpp
         code/model_checking/omg_model_checker.cpp code/abstraction/abstract_structure.cpp
         code/formulas/sat_solver.cpp code/utils/cartesian_product_generator.cpp
         code/utils/z3_utils.cpp code/abstraction/abstract_state.cpp code/abstraction/abstraction_classifier.cpp
-        code/utils/omg_utils.cpp code/utils/aiger-1.9.9/aig_to_aag.cpp code/utils/aiger-1.9.9/aiger.c)
+        code/utils/omg_utils.cpp code/utils/aiger-1.9.9/aig_to_aag.cpp code/utils/aiger-1.9.9/aiger.c code/model_checking/goal.h code/model_checking/goal.cpp)
 
 target_link_libraries(OMG libz3.so)
 
