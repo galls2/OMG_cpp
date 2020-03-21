@@ -143,7 +143,7 @@ bool OmgModelChecker::handle_ar(Goal &goal)
 void OmgModelChecker::strengthen_subtree(Goal& goal, const std::function<bool(const UnwindingTree&)>& stop_condition)
 {
         throw OmgMcException("Not implemented!");
-    // use unwinding tree map method
+    // use unwinding tree map_subtree method
 
 
 }
@@ -268,9 +268,10 @@ CandidateSet OmgModelChecker::compute_candidate_set(Goal& goal, bool brother_uni
         } else
             cands[p_abs].emplace(&node);
     };
-    root.map(inserter, [&goal](const UnwindingTree& node) {
+    root.map_subtree(inserter, [&goal](const UnwindingTree &node) {
 
-        return node.is_developed(goal);  });
+        return node.is_developed(goal);
+    });
 
     if (brother_unif)
         return brother_unification(cands, *(goal.get_spec().get_operands()[1]));
@@ -445,8 +446,11 @@ void OmgModelChecker::handle_proving_trace(bool is_strengthen, Goal &goal, Unwin
         if (is_strengthen)
         {
             const CtlFormula& spec = goal.get_spec();
-//            strength_trace(goal.get_node(), node, positivity);
-//            map_upward(node, [&spec, positivity] (UnwindingTree& n) {n.})
+            strength_trace(goal.get_node(), node);
+            node.map_upwards(
+                       [&spec, positivity] (UnwindingTree& n) { n.add_label(positivity, spec); },
+                       [](UnwindingTree& m) { return m.get_parent() == nullptr; }
+            );
         }
                 throw OmgMcException("Not implemented");
 //    if is_strengthen:
@@ -467,7 +471,7 @@ void OmgModelChecker::label_subtree(Goal &goal, bool positivity) {
                  };
     auto activation_condition = [&goal](const UnwindingTree& m) { return m.is_developed(goal); };
 
-    node.map(labeler, activation_condition);
+    node.map_subtree(labeler, activation_condition);
 }
 
 ConcretizationResult
@@ -475,4 +479,19 @@ OmgModelChecker::is_concrete_violation(const std::unordered_set<UnwindingTree *>
                                        AbstractState &abs_witness) {
     return FormulaInductiveUtils::concrete_transition_to_abs(to_close_nodes, abs_witness, _sat_solver);
 }
+
+void OmgModelChecker::strengthen_trace(UnwindingTree &start, UnwindingTree &end) const
+{
+    UnwindingTree* current = &end;
+    std::set<ConcreteState*> dsts;
+    while (current != &start)
+    {
+        dsts.emplace(current);
+        // Is check_trivial relevant in a quantifier free world?
+        // TODO continue impl
+        throw 5;
+        current = current->get_parent();
+    }
+}
+
 

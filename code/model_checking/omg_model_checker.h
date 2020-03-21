@@ -66,7 +66,7 @@ private:
     const KripkeStructure& _kripke;
     std::unique_ptr<AbstractStructure> _abs_structure;
     std::unique_ptr<AbstractionClassifier> _abs_classifier;
-   // std::map<std::unique_ptr<UnwindingTree>> _unwinding_trees;
+   // std::map_subtree<std::unique_ptr<UnwindingTree>> _unwinding_trees;
 
 
 
@@ -95,6 +95,7 @@ private:
 
     bool check_inductive_av(Goal& goal, NodePriorityQueue& to_visit);
     void strengthen_subtree(Goal& goal, const std::function<bool(const UnwindingTree&)>& stop_condition);
+    void strengthen_trace(UnwindingTree& start, UnwindingTree& end) const;
 //    void strengthen_trace(Goal& goal, const std::function<bool(const UnwindingTree&)>& stop_condition);
     void handle_proving_trace(bool is_strengthen, Goal& goal, UnwindingTree& node_to_explore, bool positivity);
     CandidateSet compute_candidate_set(Goal& goal, bool brother_unif);

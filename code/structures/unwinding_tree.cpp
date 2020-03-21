@@ -23,7 +23,7 @@ const std::vector<std::unique_ptr<UnwindingTree>> &UnwindingTree::unwind_further
 
 void UnwindingTree::reset_developed_in_tree()
 {
-    map([](UnwindingTree& node){node._developed.clear();}, [](const UnwindingTree&) {return true;});
+    map_subtree([](UnwindingTree &node) { node._developed.clear(); }, [](const UnwindingTree &) { return true; });
 }
 
 const ConcreteState &UnwindingTree::get_concrete_state() const {
@@ -71,13 +71,13 @@ bool UnwindingTree::is_developed(const Goal &goal) const {
 //    assert
 }
 
-void UnwindingTree::map(const std::function<void(UnwindingTree &)> &mapper,
-                        const std::function<bool(const UnwindingTree &)> &activation_condition)
+void UnwindingTree::map_subtree(const std::function<void(UnwindingTree &)> &mapper,
+                                const std::function<bool(const UnwindingTree &)> &activation_condition)
                         {
     if (activation_condition(*this)) {
         mapper(*this);
         for (const std::unique_ptr<UnwindingTree> &successor : _successors)
-            successor->map(mapper, activation_condition);
+            successor->map_subtree(mapper, activation_condition);
     }
 }
 
@@ -87,4 +87,27 @@ bool UnwindingTree::exist_successors() const {
 
 const std::vector<std::unique_ptr<UnwindingTree>> &UnwindingTree::get_successors() const {
     return _successors;
+}
+
+void UnwindingTree::map_upwards(const std::function<void(UnwindingTree &)> &mapper,
+                                const std::function<bool(const UnwindingTree &)> &last_node_pred) {
+    mapper(*this);
+    if (!last_node_pred(*this))
+    {
+#ifdef DEBUG
+      assert(_parent != nullptr);
+#endif
+      _parent->map_upwards(mapper, last_node_pred);
+    }
+}
+
+void UnwindingTree::add_label(bool positivity, const CtlFormula &spec) {
+#ifdef DEBUG
+    assert(_astate);
+#endif
+    _astate->get().add_label(positivity, spec);
+}
+
+UnwindingTree *UnwindingTree::get_parent() const {
+    return _parent;
 }
