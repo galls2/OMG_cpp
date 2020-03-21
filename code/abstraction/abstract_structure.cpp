@@ -76,3 +76,22 @@ EEClosureResult AbstractStructure::is_EE_closure(AbstractState &to_close,
 const OmgModelChecker *AbstractStructure::get_omg() const{
     return _omg;
 }
+
+void AbstractStructure::split_abs_state_by_son(const ConcreteState &src_cstate, AbstractState &src_abs,
+                                               const std::set<const AbstractState *>& dsts_abs) {
+    if (_E_must.find(&src_abs) != _E_must.end())
+    {
+        auto& must_options = _E_must[&src_abs];
+        if (std::any_of(must_options.begin(), must_options.end(),
+                [&dsts_abs](const std::set<const AbstractState*>& opt)
+                {
+                    return std::includes(dsts_abs.begin(), dsts_abs.end(), opt.begin(), opt.end());
+                }
+                ))
+        {
+            return;
+        }
+    }
+
+
+}

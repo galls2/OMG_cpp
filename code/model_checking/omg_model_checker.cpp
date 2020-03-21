@@ -20,11 +20,11 @@ const std::map<std::string, OmgModelChecker::handler_t> OmgModelChecker::_handle
                 {"ARROW", &OmgModelChecker::handle_arrow},
                 {"AR", &OmgModelChecker::handle_ar},
                 {"ER", &OmgModelChecker::handle_er},
-                {"EX", &OmgModelChecker::handle_ex},
-
+                {"EX", &OmgModelChecker::handle_ex}
         };
 
-bool OmgModelChecker::handle_and(Goal &goal) {
+bool OmgModelChecker::handle_and(Goal &goal)
+{
         Goal first_subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
         bool first_res = recur_ctl(first_subgoal);
         if (!first_res) return false;
@@ -33,7 +33,8 @@ bool OmgModelChecker::handle_and(Goal &goal) {
         return second_res;
 }
 
-bool OmgModelChecker::handle_or(Goal &goal) {
+bool OmgModelChecker::handle_or(Goal &goal)
+{
         Goal first_subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
         bool first_res = recur_ctl(first_subgoal);
         if (first_res) return true;
@@ -42,13 +43,15 @@ bool OmgModelChecker::handle_or(Goal &goal) {
         return second_res;
 }
 
-bool OmgModelChecker::handle_not(Goal &goal) {
+bool OmgModelChecker::handle_not(Goal &goal)
+{
         Goal subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
         bool result = recur_ctl(subgoal);
         return !result;
 }
 
-bool OmgModelChecker::handle_xor(Goal &goal) {
+bool OmgModelChecker::handle_xor(Goal &goal)
+{
         Goal first_subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
         bool first_res = recur_ctl(first_subgoal);
         Goal second_subgoal(goal.get_node(), *goal.get_spec().get_operands()[1], goal.get_properties());
@@ -56,7 +59,8 @@ bool OmgModelChecker::handle_xor(Goal &goal) {
         return first_res ^ second_res;
 }
 
-bool OmgModelChecker::handle_arrow(Goal &goal) {
+bool OmgModelChecker::handle_arrow(Goal &goal)
+{
         Goal first_subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
         bool first_res = recur_ctl(first_subgoal);
         if (!first_res) return true;
@@ -278,7 +282,8 @@ CandidateSet OmgModelChecker::compute_candidate_set(Goal& goal, bool brother_uni
     else return cands;
 }
 
-void unify_same_level(CandidateSet& src, const CtlFormula& agree_upon, CandidateSet& unchanged, CandidateSet& next_level) {
+void unify_same_level(CandidateSet& src, const CtlFormula& agree_upon, CandidateSet& unchanged, CandidateSet& next_level)
+{
     std::map<const AbstractClassificationNode *, std::pair<AbstractState*, std::vector<std::unordered_set<UnwindingTree*>>>> parents_mapping;
 
     for (const std::pair<AbstractState* const, std::unordered_set<UnwindingTree*>>& it : src) {
@@ -308,7 +313,6 @@ void unify_same_level(CandidateSet& src, const CtlFormula& agree_upon, Candidate
             unchanged.emplace(it.second.first, it.second.second[0]);
         }
     }
-
 }
 
 CandidateSet OmgModelChecker::brother_unification(const CandidateSet &cands, const CtlFormula& agree_upon)
@@ -363,8 +367,8 @@ void OmgModelChecker::initialize_abstraction()
         _abs_classifier = std::make_unique<AbstractionClassifier>(_kripke);
 }
 
-bool OmgModelChecker::model_checking(ConcreteState &cstate, const CtlFormula &specification) {
-
+bool OmgModelChecker::model_checking(ConcreteState &cstate, const CtlFormula &specification)
+{
         // In the future - unwinding tree cache is to be used here
         std::unique_ptr<UnwindingTree> root = std::make_unique<UnwindingTree>(_kripke, cstate, nullptr);
 
@@ -375,8 +379,8 @@ bool OmgModelChecker::model_checking(ConcreteState &cstate, const CtlFormula &sp
         return result;
 }
 
-bool OmgModelChecker::recur_ctl(Goal &g) {
-
+bool OmgModelChecker::recur_ctl(Goal &g)
+{
         const CtlFormula& spec = g.get_spec();
 
         if (spec.is_boolean())
@@ -400,7 +404,6 @@ bool OmgModelChecker::recur_ctl(Goal &g) {
         }
 
         return result;
-
 }
 
 
@@ -428,7 +431,8 @@ AbstractState &OmgModelChecker::find_abs(UnwindingTree &node)
     }
 }
 
-AbstractState &OmgModelChecker::find_abs(const ConcreteState &cstate) {
+AbstractState &OmgModelChecker::find_abs(const ConcreteState &cstate)
+{
     if (!_abs_classifier->exists_classification(cstate))
     {
         AbstractState &astate = _abs_structure->create_abs_state(cstate);
@@ -442,7 +446,8 @@ AbstractState &OmgModelChecker::find_abs(const ConcreteState &cstate) {
     }
 }
 
-void OmgModelChecker::handle_proving_trace(bool is_strengthen, Goal &goal, UnwindingTree &node, bool positivity) {
+void OmgModelChecker::handle_proving_trace(bool is_strengthen, Goal &goal, UnwindingTree &node, bool positivity)
+{
         if (is_strengthen)
         {
             const CtlFormula& spec = goal.get_spec();
@@ -476,7 +481,8 @@ void OmgModelChecker::label_subtree(Goal &goal, bool positivity) {
 
 ConcretizationResult
 OmgModelChecker::is_concrete_violation(const std::unordered_set<UnwindingTree *> &to_close_nodes,
-                                       AbstractState &abs_witness) {
+                                       AbstractState &abs_witness)
+{
     return FormulaInductiveUtils::concrete_transition_to_abs(to_close_nodes, abs_witness, _sat_solver);
 }
 
@@ -487,11 +493,23 @@ void OmgModelChecker::strengthen_trace(UnwindingTree &start, UnwindingTree &end)
     while (current != &start)
     {
         dsts.emplace(&current->get_concrete_state());
-        // Is check_trivial relevant in a quantifier free world?
-        // TODO continue impl
+
         throw 5;
         current = current->get_parent();
     }
+}
+
+void OmgModelChecker::refine_exists_successor(const ConcreteState *src_cstate,
+                                              const std::set<const ConcreteState *> &dsts_cstate)
+{
+    std::set<AbstractState*> dsts_abs;
+    std::transform(dsts_cstate.begin(), dsts_cstate.end(), dsts_abs.begin(),
+            [this] (const ConcreteState* dst_cstate) { return find_abs(*dst_cstate); });
+
+    AbstractState& src_abs = find_abs(*src_cstate);
+
+
+
 }
 
 

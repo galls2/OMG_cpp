@@ -104,5 +104,7 @@ private:
 
     ConcretizationResult
     is_concrete_violation(const std::unordered_set<UnwindingTree *> &to_close_nodes, AbstractState &abs_witness);
+
+    void refine_exists_successor(const ConcreteState* src_cstate, const std::set<const ConcreteState*>& dsts_cstate);
 };
 
