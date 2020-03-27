@@ -90,6 +90,17 @@ std::pair<int, SatSolverResult> Z3SatSolver::inc_solve_sat(const PropFormula& fo
     return {-1, SatSolverResult()};
 }
 
+void Z3SatSolver::get_unsat_core(const PropFormula& formula, z3::expr_vector& assumptions)
+{
+    const z3::expr& raw_formula = formula.get_raw_formula();
+    _solver.add(raw_formula);
+    std::cout << _solver.check(assumptions) << std::endl;
+    z3::expr_vector res = _solver.unsat_core();
+    for (size_t i =0;i < res.size(); ++i)
+    {
+        std::cout << res[i] << std::endl;
+    }
+}
 
 
 SatSolverResult::SatSolverResult() : _is_sat(false) { }

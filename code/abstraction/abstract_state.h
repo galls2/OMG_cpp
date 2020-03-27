@@ -18,7 +18,7 @@ public:
     void set_cl_node(AbstractClassificationNode* const cl_node);
     AbstractClassificationNode* get_cl_node() const;
     const KripkeStructure& get_kripke() const;
-    PropFormula get_formula() const;
+    const PropFormula& get_formula() const;
 #ifdef DEBUG
     std::string _debug_name;
 #endif
@@ -28,7 +28,7 @@ private:
     CtlFormula::PropertySet _neg_labels;
     CtlFormula::PropertySet _atomic_labels;
     AbstractClassificationNode* _cl_node;
-    PropFormula _sym_rep;
+    const PropFormula _sym_rep;
 
 };
 

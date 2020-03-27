@@ -77,13 +77,13 @@ const OmgModelChecker *AbstractStructure::get_omg() const{
     return _omg;
 }
 
-void AbstractStructure::split_abs_state_by_son(const ConcreteState &src_cstate, AbstractState &src_abs,
-                                               const std::set<const AbstractState *>& dsts_abs) {
+void AbstractStructure::refine_exists_successor(const ConcreteState &src_cstate, AbstractState &src_abs,
+                                                const std::set<const AbstractState *> &dsts_abs) {
     if (_E_must.find(&src_abs) != _E_must.end())
     {
         auto& must_options = _E_must[&src_abs];
         if (std::any_of(must_options.begin(), must_options.end(),
-                [&dsts_abs](const std::set<const AbstractState*>& opt)
+                [&dsts_abs](std::set<AbstractState*>& opt)
                 {
                     return std::includes(dsts_abs.begin(), dsts_abs.end(), opt.begin(), opt.end());
                 }
@@ -92,6 +92,20 @@ void AbstractStructure::split_abs_state_by_son(const ConcreteState &src_cstate, 
             return;
         }
     }
+
+    std::set<const PropFormula *> dst_abs_formulas;
+    for (const auto& dst_astate : dsts_abs) dst_abs_formulas.insert(&dst_astate->get_formula()); // many many copies?
+
+    std::pair<PropFormula, PropFormula> new_abs_state_formulas =
+                                                FormulaSplitUtils::ex_pos(src_cstate.get_conjunct(),
+                                                                          src_abs.get_formula(), dst_abs_formulas);
+
+    // CALL COMMON SPLIT FUNCTION -- create new states, replace values innnnnnnn dictionaires, add new edges and what not.
+
+    throw 143;
+
+
+
 
 
 }

@@ -174,7 +174,7 @@ const z3::expr &ConcreteState::get_conjunct() const {
 
 std::string ConcreteState::to_bitvec_str() const {
     const auto bitvec = to_bitvec();
-    std::string res = "";
+    std::string res;
     for (bool b : bitvec) res += (b ? "1 " : "0 ");
     return res;
 }

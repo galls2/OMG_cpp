@@ -178,3 +178,10 @@ z3::expr FormulaUtils::get_conj_from_sat_result(z3::context &ctx, const z3::expr
     return conj;
 }
 
+
+
+std::pair<PropFormula, PropFormula>
+FormulaSplitUtils::ex_pos(const z3::expr &state_conj, const PropFormula &src_astate_f,
+                          const std::set<const PropFormula *> &dsts_astates_f) {
+    throw 6;
+}

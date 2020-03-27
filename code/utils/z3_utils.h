@@ -49,3 +49,10 @@ public:
     static EEClosureResult is_EE_inductive(AbstractState& to_close, const std::set<AbstractState*>& close_with, const std::string& sat_solver_str);
     static ConcretizationResult concrete_transition_to_abs(const std::unordered_set<UnwindingTree*>& src_nodes, const AbstractState& astate, const std::string& sat_solver_str);
 };
+
+class FormulaSplitUtils
+{
+public:
+    static std::pair<PropFormula, PropFormula> ex_pos(const z3::expr& state_conj, const PropFormula& src_astate_f,
+            const std::set<const PropFormula*>& dsts_astates_f);
+};

@@ -59,7 +59,7 @@ bool operator<(const AbstractState &lhs, const AbstractState &rhs) {
     return lhs.get_cl_node() < rhs.get_cl_node();
 }
 
-PropFormula AbstractState::get_formula() const
+const PropFormula& AbstractState::get_formula() const
 {
     return _sym_rep;
 }

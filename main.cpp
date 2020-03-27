@@ -108,8 +108,29 @@ void unit_tests()
      unit_tests_ag();
 
 }
+
+void q()
+{
+    z3::context ctx;
+
+    Z3SatSolver s(ctx);
+    z3::expr x0 = ctx.bool_const("x0");
+    z3::expr x1 = ctx.bool_const("x1");
+    z3::expr x2 = ctx.bool_const("x2");
+    z3::expr x3 = ctx.bool_const("x3");
+    z3::expr x4 = ctx.bool_const("x4");
+    z3::expr x5 = ctx.bool_const("x5");
+    z3::expr x6 = ctx.bool_const("x6");
+
+//    z3::expr x = z3::implies(x0,x1) && z3::implies(x2, x3) && z3::implies(x4, x5) && z3::implies(x6, x1 && !x3);
+    z3::expr x = x0 && z3::implies(x4,!x1) && z3::implies(x2,x2) && z3::implies(x3, (!x2||x1));
+    PropFormula p(x,{});
+    z3::expr_vector assumptions(ctx); assumptions.push_back(x0); assumptions.push_back(x4); assumptions.push_back(x2); assumptions.push_back(x3);
+    s.get_unsat_core(p, assumptions);
+    std::cout << "DONE" << std::endl;
+}
 int main()
 {
-    unit_tests();
-
+   // unit_tests();
+    q();
 }
