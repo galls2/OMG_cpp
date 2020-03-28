@@ -153,23 +153,6 @@ void OmgModelChecker::strengthen_subtree(Goal& goal, const std::function<bool(co
 }
 
 
-AbstractState next_to_av_close(const std::map<std::reference_wrapper<AbstractState>, std::unordered_set<const UnwindingTree*>>& abs_states_lead)
-{
-    double max_avg = 0.0;
-    AbstractState* max_abs = nullptr;
-    for (auto& it : abs_states_lead) {
-        double curr_avg = 0.0;
-        for (const UnwindingTree* const& node : it.second)
-            curr_avg += node->get_depth();
-        curr_avg /= it.second.size();
-
-        if (max_avg < curr_avg) { max_avg = curr_avg; max_abs = &it.first.get(); }
-    }
-    assert(max_abs != nullptr);
-    return *max_abs;
-}
-
-
 UnwindingTree& get_concretization_successor(UnwindingTree* to_close_node, const ConcreteState& dst_cstate)
 {
     if (to_close_node->exist_successors())

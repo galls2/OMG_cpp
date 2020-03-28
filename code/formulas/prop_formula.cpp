@@ -26,28 +26,6 @@ const std::map<std::string, z3::expr_vector> &PropFormula::get_variables_map() c
 }
 
 
-std::vector<z3::expr> PropFormula::get_vars_in_formula(z3::expr const & e) {
-    std::vector<z3::expr> vars;
-    if (e.num_args() != 0) {
-        unsigned num = e.num_args();
-        for (unsigned i = 0; i < num; i++) {
-            std::vector<z3::expr> sub_res = get_vars_in_formula(e.arg(i));
-            vars.insert( vars.end(), sub_res.begin(), sub_res.end() );
-        }
-
-    }
-//        else if (e.is_quantifier()) {
-//            std::vector<z3::expr> sub_res = get_vars_in_formula(e.body());
-//            vars.insert( vars.end(), sub_res.begin(), sub_res.end() );
-//        }
-    else {
- //       assert(e.is_var());
-        vars.push_back(e);
-        // do something
-    }
-    return vars;
-}
-
 std::string PropFormula::to_string() const {
     std::string res = std::string("---------\n")+_formula.to_string() + std::string("\nThe vars are:\n");
     for (const auto& it : _variables) {

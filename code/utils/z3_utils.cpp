@@ -31,12 +31,6 @@ std::set<T> vector_to_set_debug(std::vector<T> vec)
     return std::set<T>(vec.begin(), vec.end());
 }
 
-std::set<z3::expr, Z3ExprComp> expr_vector_to_set(const z3::expr_vector& expr_vec)
-{
-    std::set<z3::expr, Z3ExprComp> s;
-    for (size_t i = 0;i<expr_vec.size(); ++i) s.insert(expr_vec[i]);
-    return s;
-}
 
 std::vector<z3::expr> expr_vector_to_vector(const z3::expr_vector& expr_vec)
 {
@@ -178,10 +172,51 @@ z3::expr FormulaUtils::get_conj_from_sat_result(z3::context &ctx, const z3::expr
     return conj;
 }
 
+std::vector<z3::expr> FormulaUtils::get_vars_in_formula(z3::expr const &e) {
+    std::vector<z3::expr> vars;
+    if (e.num_args() != 0) {
+        unsigned num = e.num_args();
+        for (unsigned i = 0; i < num; i++) {
+            std::vector<z3::expr> sub_res = get_vars_in_formula(e.arg(i));
+            vars.insert( vars.end(), sub_res.begin(), sub_res.end() );
+        }
+    }
+    else {
+        assert(e.is_bool());
+        vars.push_back(e);
+    }
+    return vars;
+}
 
 
 std::pair<PropFormula, PropFormula>
 FormulaSplitUtils::ex_pos(const z3::expr &state_conj, const PropFormula &src_astate_f,
-                          const std::set<const PropFormula *> &dsts_astates_f) {
-    throw 6;
+                          const std::set<const PropFormula *> &dsts_astates_f, const KripkeStructure& kripke) {
+
+    z3::context& ctx = state_conj.ctx();
+    z3::expr_vector assumptions(ctx);
+    z3::expr_vector assertions(ctx);
+
+    assert(state_conj.is_and());
+    for (unsigned int i = 0; i < state_conj.num_args(); ++i)
+    {
+        const z3::expr &lit = state_conj.arg(i);
+        assert(lit.is_bool() || (lit.is_not() && lit.arg(0).is_bool()));
+        z3::expr lit_assumption = ctx.bool_const((std::string("a")+std::to_string(i)).data());
+        assumptions.push_back(lit_assumption);
+        assertions.push_back(z3::implies(lit_assumption, lit));
+    }
+
+    const PropFormula& tr = kripke.get_tr();
+#ifdef DEBUG
+    std::set<z3::expr, Z3ExprComp> ps_vars = expr_vector_to_set(tr.get_vars_by_tag("ps"));
+    std::set<z3::expr, Z3ExprComp> ps_vars_actual = expr_vector_to_set(FormulaUtils::get_vars_in_formula(state_conj));
+    assert(ps_vars == ps_vars_actual);
+#endif
+
+
+    // create things TR & B'
+    // formulas
+    // assert unsat
+    // get unsatcore
 }

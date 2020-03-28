@@ -13,7 +13,7 @@
 ConcreteState::ConcreteState(const KripkeStructure& kripke, z3::expr conjunct)  : _kripke(kripke), _conjunct(conjunct)
 {
 #ifdef DEBUG
-    std::vector<z3::expr> conj_vars = PropFormula::get_vars_in_formula(_conjunct);
+    std::vector<z3::expr> conj_vars = FormulaUtils::get_vars_in_formula(_conjunct);
     std::set<z3::expr, Z3ExprComp> conj_vars_set(conj_vars.begin(), conj_vars.end());
     std::set<z3::expr, Z3ExprComp> tr_ps_vars = expr_vector_to_set(_kripke.get_tr().get_vars_by_tag("ps"));
 //    for (const auto & it : conj_vars_set) std::cout << it << std::endl;

@@ -6,8 +6,8 @@
 
 
 #include <structures/kripke_structure.h>
-#include "abstract_state.h"
 
+class AbstractState;
 class AbstractClassificationNode;
 
 class AbstractionClassifier {

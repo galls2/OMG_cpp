@@ -98,7 +98,7 @@ void AbstractStructure::refine_exists_successor(const ConcreteState &src_cstate,
 
     std::pair<PropFormula, PropFormula> new_abs_state_formulas =
                                                 FormulaSplitUtils::ex_pos(src_cstate.get_conjunct(),
-                                                                          src_abs.get_formula(), dst_abs_formulas);
+                                                                          src_abs.get_formula(), dst_abs_formulas, _kripke);
 
     // CALL COMMON SPLIT FUNCTION -- create new states, replace values innnnnnnn dictionaires, add new edges and what not.
 

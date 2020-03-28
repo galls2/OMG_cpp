@@ -4,10 +4,12 @@
 //
 #include <memory>
 #include <boost/variant.hpp>
-#include "prop_formula.h"
 #include <utils/omg_exception.h>
 #include <functional>
+#include <map>
+#include <z3++.h>
 
+class PropFormula;
 
 DECLARE_OMG_EXCEPTION(SatSolverResultException)
 
@@ -52,7 +54,7 @@ public:
     virtual std::pair<int, SatSolverResult> inc_solve_sat(const PropFormula& formula, const std::vector<z3::expr>& flags) = 0;
     virtual std::vector<SatSolverResult> all_sat(const PropFormula& formula, const std::vector<z3::expr> &vars, bool complete_assignments=false) = 0;
     static const std::map<std::string, SatSolverFactory> s_sat_solvers;
-
+    virtual ~ISatSolver() = default;
 };
 
 class Z3SatSolver : public ISatSolver
@@ -64,7 +66,7 @@ public:
     std::vector<SatSolverResult> all_sat(const PropFormula& formula, const std::vector<z3::expr> &vars, bool complete_assignments) override;
     virtual std::pair<int, SatSolverResult> inc_solve_sat(const PropFormula& formula, const std::vector<z3::expr>& flags) override;
     void get_unsat_core(const PropFormula& formula, z3::expr_vector& assumptions);
-
+    virtual ~Z3SatSolver() = default;
 
 private:
     z3::solver _solver;
@@ -74,5 +76,3 @@ private:
     void add_assignments(std::vector<SatSolverResult> &assignments, SatSolverResult result, const std::vector<z3::expr> &vars, bool complete_assignments);
 
 };
-
-std::unique_ptr<ISatSolver> create_z3_sat_solver(z3::context& ctx);

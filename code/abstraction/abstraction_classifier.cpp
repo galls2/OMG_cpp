@@ -4,7 +4,7 @@
 
 #include "abstraction_classifier.h"
 #include <utility>
-
+#include "abstract_state.h"
 AbstractionClassifier::AbstractionClassifier(const KripkeStructure &kripke) : _kripke(kripke) {}
 
 const KripkeStructure &AbstractionClassifier::get_kripke() const {

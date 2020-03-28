@@ -18,6 +18,7 @@ public:
     static z3::expr get_conj_from_sat_result(z3::context &ctx, const z3::expr_vector &conj_vars,
                                                      const SatSolverResult &sat_result);
 
+    static std::vector<z3::expr> get_vars_in_formula(z3::expr const & e);
 
 };
 
@@ -32,7 +33,14 @@ z3::expr_vector vec_to_expr_vec(z3::context& ctx, const std::vector<z3::expr>& v
 template <typename T>
 std::set<T> vector_to_set_debug(std::vector<T> vec);
 
-std::set<z3::expr, Z3ExprComp> expr_vector_to_set(const z3::expr_vector& expr_vec);
+
+template <typename VectorType>
+std::set<z3::expr, Z3ExprComp> expr_vector_to_set(const VectorType& expr_vec)
+{
+    std::set<z3::expr, Z3ExprComp> s;
+    for (size_t i = 0;i<expr_vec.size(); ++i) s.insert(expr_vec[i]);
+    return s;
+}
 
 std::vector<z3::expr> expr_vector_to_vector(const z3::expr_vector& expr_vec);
 
@@ -54,5 +62,5 @@ class FormulaSplitUtils
 {
 public:
     static std::pair<PropFormula, PropFormula> ex_pos(const z3::expr& state_conj, const PropFormula& src_astate_f,
-            const std::set<const PropFormula*>& dsts_astates_f);
+            const std::set<const PropFormula*>& dsts_astates_f, const KripkeStructure& kripke);
 };
