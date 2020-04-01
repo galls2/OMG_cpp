@@ -220,3 +220,82 @@ FormulaSplitUtils::ex_pos(const z3::expr &state_conj, const PropFormula &src_ast
     // assert unsat
     // get unsatcore
 }
+
+std::pair<PropFormula, PropFormula>
+FormulaSplitUtils::ex_neg(const z3::expr &state_conj, const PropFormula &src_astate_f,
+                          const std::set<const PropFormula *> &dsts_astates_f, const KripkeStructure &kripke)
+{
+    z3::context& ctx = state_conj.ctx();
+    z3::expr_vector assumptions(ctx), assertions(ctx);
+    std::map<z3::expr, unsigned int, Z3ExprComp> assumptions_map;
+
+    assert(state_conj.is_and());
+    for (unsigned int i = 0; i < state_conj.num_args(); ++i)
+    {
+        const z3::expr &lit = state_conj.arg(i);
+        assert(lit.is_bool() || (lit.is_not() && lit.arg(0).is_bool()));
+        z3::expr lit_assumption = ctx.bool_const((std::string("a")+std::to_string(i)).data());
+        assumptions.push_back(lit_assumption);
+        assertions.push_back(z3::implies(lit_assumption, lit));
+
+        assumptions_map.emplace(lit_assumption, i);
+    }
+
+    const PropFormula& tr = kripke.get_tr();
+#ifdef DEBUG
+    std::set<z3::expr, Z3ExprComp> ps_vars = expr_vector_to_set(tr.get_vars_by_tag("ps"));
+    std::set<z3::expr, Z3ExprComp> ps_vars_actual = expr_vector_to_set(FormulaUtils::get_vars_in_formula(state_conj));
+    assert(is_contained_z3_containers(ps_vars_actual, ps_vars));
+#endif
+
+    z3::expr_vector dsts(ctx);
+    for (const PropFormula* const dst_formula : dsts_astates_f)
+    {
+#ifdef DEBUG
+        std::set<z3::expr, Z3ExprComp> ns_vars_actual = expr_vector_to_set(FormulaUtils::get_vars_in_formula(dst_formula->get_raw_formula()));
+        assert(is_contained_z3_containers(ns_vars_actual, ps_vars));
+#endif
+        z3::expr dst_formula_raw = dst_formula->get_raw_formula();
+        z3::expr dst_ns = dst_formula_raw.substitute(tr.get_vars_by_tag("ps"), tr.get_vars_by_tag("ns"));
+        dsts.push_back(dst_ns);
+    }
+
+    z3::expr dst_formula_full = z3::mk_or(dsts).simplify();
+    z3::expr full_formula = tr.get_raw_formula() && dst_formula_full;
+    z3::expr final_assumption = ctx.bool_const("a_fin");
+    assumptions.push_back(final_assumption);
+    assertions.push_back(z3::implies(final_assumption, full_formula));
+
+    PropFormula formula_to_check(z3::mk_and(assertions), tr.get_variables_map());
+
+    Z3SatSolver solver(ctx); // CHANGE ME
+    z3::expr_vector unsat_core = solver.get_unsat_core(formula_to_check, assumptions);
+
+    z3::expr_vector assertions_selected(ctx);
+
+#ifdef DEBUG
+    bool exists_final_assumption = false;
+    for (unsigned int i = 0; i<unsat_core.size(); ++i) if (z3::eq(unsat_core[i], final_assumption)) { exists_final_assumption = true; break; }
+    assert(exists_final_assumption);
+#endif
+
+
+    z3::expr_vector pos_assertions(ctx);
+
+    for (size_t i = 0 ;i < unsat_core.size(); ++i)
+    {
+        z3::expr unsat_core_item = unsat_core[i];
+
+        if (assumptions_map.find(unsat_core_item) != assumptions_map.end())
+        {
+            z3::expr assertion = state_conj.arg(assumptions_map[unsat_core_item]);
+            pos_assertions.push_back(assertion);
+        }
+    }
+
+    z3::expr pos_part = z3::mk_and(pos_assertions); // cut with A(v)
+   // z3::expr neg_part = (state_conj && !pos_part).simplify(); // Deduce the remains of A(v)
+    std::cout << pos_part.to_string() << std::endl;
+  //  std::cout << neg_part.to_string() << std::endl;
+    throw 6543;
+    }

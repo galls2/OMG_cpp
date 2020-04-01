@@ -224,8 +224,23 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
             else
             {
                 DEBUG_PRINT("Refinement -- no concretization witness!\n");
+
+                AbstractState& abs_src_witness = find_abs(src);
+                std::unordered_set<UnwindingTree*> to_close_nodes = ind_candidate.nodes;
+                const auto& it = std::find_if(to_close_nodes.begin(), to_close_nodes.end(),
+                        [this, abs_src_witness](UnwindingTree* n) {
+                    AbstractState& current = find_abs(*n);
+                 //   DEBUG_PRINT("%s vs %s\n", current._debug_name.c_str(), abs_src_witness._debug_name.c_str());
+                    return find_abs(*n).get_cl_node() == abs_src_witness.get_cl_node(); } );
+                if (it == to_close_nodes.end()) throw "ERROR -- BUG IN INDUCTIVENESS!";
+
+                UnwindingTree* to_close_node = *it;
+
+                refine_no_successor(*to_close_node, abs_src_witness, abs_dst);
+
                 throw "Need to implement (EX-) refinement";
                 // (EX-) refinement
+                /* XYYX */
 
             }
 
@@ -499,6 +514,19 @@ void OmgModelChecker::refine_exists_successor(const ConcreteState *src_cstate,
 
 void OmgModelChecker::update_classifier() {
     throw 16565;
+}
+
+void OmgModelChecker::refine_no_successor(const UnwindingTree &to_close_node, AbstractState &abs_src_witness,
+                                          AbstractState &abs_dst)
+{
+    /*
+     * One might have thought that we can use here EX+ refinement with the state that we found that does have a transition to
+     * absssss_dst in order to conduct the split, instead of this EX- refinement that we conduct.
+     * However, this is not ture. he reason is that we want to split AWAY the part of abs_src_witness that includes the reacehable
+     * node in the unwinding tree, which is not necessarily done in EX+.
+     */
+    _abs_structure->refine_no_successor(to_close_node, abs_src_witness, abs_dst);
+    update_classifier();
 }
 
 

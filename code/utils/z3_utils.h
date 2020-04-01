@@ -29,6 +29,19 @@ z3::expr_vector iterable_to_expr_vec(z3::context& ctx, const T& iterable);
 
 z3::expr_vector vec_to_expr_vec(z3::context& ctx, const std::vector<z3::expr>& vec);
 
+template <typename IterableType1, typename IterableType2>
+bool is_contained_z3_containers(const IterableType1& iter1, const IterableType2& iter2)
+{
+    return std::all_of(iter1.begin(), iter1.end(), [&iter2] (const z3::expr& it1)
+    {
+        return std::any_of(iter2.begin(), iter2.end(), [it1] (const z3::expr& it2)
+        {
+            return z3::eq(it1, it2);
+        });
+
+    });
+}
+
 
 template <typename T>
 std::set<T> vector_to_set_debug(std::vector<T> vec);
@@ -63,4 +76,6 @@ class FormulaSplitUtils
 public:
     static std::pair<PropFormula, PropFormula> ex_pos(const z3::expr& state_conj, const PropFormula& src_astate_f,
             const std::set<const PropFormula*>& dsts_astates_f, const KripkeStructure& kripke);
+    static std::pair<PropFormula, PropFormula> ex_neg(const z3::expr& state_conj, const PropFormula& src_astate_f,
+          const std::set<const PropFormula*>& dsts_astates_f, const KripkeStructure& kripke);
 };

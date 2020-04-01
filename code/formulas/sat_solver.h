@@ -65,7 +65,7 @@ public:
 
     std::vector<SatSolverResult> all_sat(const PropFormula& formula, const std::vector<z3::expr> &vars, bool complete_assignments) override;
     virtual std::pair<int, SatSolverResult> inc_solve_sat(const PropFormula& formula, const std::vector<z3::expr>& flags) override;
-    void get_unsat_core(const PropFormula& formula, z3::expr_vector& assumptions);
+    z3::expr_vector get_unsat_core(const PropFormula& formula, z3::expr_vector& assumptions);
     virtual ~Z3SatSolver() = default;
 
 private:

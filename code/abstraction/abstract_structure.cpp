@@ -109,3 +109,22 @@ void AbstractStructure::refine_exists_successor(const ConcreteState &src_cstate,
 
 
 }
+
+void AbstractStructure::refine_no_successor(const UnwindingTree &to_close_node, AbstractState &abs_src_witness,
+                                            AbstractState &abs_dst)
+{
+    if (_NE_may.find(&abs_src_witness) != _NE_may.end() && _NE_may[&abs_src_witness].find(&abs_dst) != _NE_may[&abs_src_witness].end())
+    {
+        return;
+    }
+    std::set<const PropFormula *> dst_abs_formulas;
+    dst_abs_formulas.insert(&abs_dst.get_formula());
+    std::pair<PropFormula, PropFormula> new_abs_state_formulas =
+            FormulaSplitUtils::ex_neg(to_close_node.get_concrete_state().get_conjunct(),
+                                      abs_src_witness.get_formula(), dst_abs_formulas, _kripke);
+
+    // SPLIT SOMETHING
+
+    throw 167;
+
+}

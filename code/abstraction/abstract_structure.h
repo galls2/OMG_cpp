@@ -8,6 +8,7 @@
 
 #include <structures/kripke_structure.h>
 #include "abstract_state.h"
+class UnwindingTree;
 
 struct EEClosureResult
 {
@@ -26,6 +27,8 @@ public:
     const OmgModelChecker* get_omg() const;
     void refine_exists_successor(const ConcreteState &src_cstate, AbstractState &src_abs,
                                  const std::set<const AbstractState *> &dsts_abs);
+    void refine_no_successor(const UnwindingTree& to_close_node, AbstractState& abs_src_witness, AbstractState& abs_dst);
+
 
 private:
     const KripkeStructure& _kripke;

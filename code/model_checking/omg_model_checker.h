@@ -103,6 +103,7 @@ private:
     is_concrete_violation(const std::unordered_set<UnwindingTree *> &to_close_nodes, AbstractState &abs_witness);
 
     void refine_exists_successor(const ConcreteState* src_cstate, const std::set<const ConcreteState*>& dsts_cstate);
+    void refine_no_successor(const UnwindingTree& to_close_node, AbstractState& abs_src_witness, AbstractState& abs_dst);
 
     void update_classifier();
 };
