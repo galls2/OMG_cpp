@@ -122,7 +122,6 @@ void ConcreteState::aps_by_sat(CtlFormula::PropertySet& pos, CtlFormula::Propert
 
 PropFormula ConcreteState::get_bis0_formula() const {
     z3::context& ctx = _kripke.get_tr().get_raw_formula().ctx();
-    z3::expr_vector bis0_parts(ctx);
     z3::solver solver(ctx);
 
     solver.add(_conjunct);
@@ -130,18 +129,32 @@ PropFormula ConcreteState::get_bis0_formula() const {
     z3::model m = solver.get_model();
 
     z3::expr_vector ps_vars = _kripke.get_tr().get_vars_by_tag("ps");
-    for (const CtlFormula* ap : _kripke.get_aps())
+    if (_kripke.get_aps().size() > 1) {
+        z3::expr_vector bis0_parts(ctx);
+        for (const CtlFormula *ap : _kripke.get_aps())
+        {
+            size_t var_idx = _kripke.get_var_num_by_ap(ap->get_data());
+            const z3::expr var = ps_vars[var_idx];
+            bool is_pos_value = z3::eq(m.eval(var), ctx.bool_val(true));
+            bis0_parts.push_back(is_pos_value ? var : (!var));
+        }
+        z3::expr raw_bis0 = z3::mk_and(bis0_parts);
+
+        PropFormula bis0(raw_bis0, {{"ps",  ps_vars},
+                                    {"in0", _kripke.get_tr().get_vars_by_tag("in0")}});
+        return bis0;
+    }
+    else
     {
+        assert(!_kripke.get_aps().empty());
+        const CtlFormula* ap = *_kripke.get_aps().begin();
         size_t var_idx = _kripke.get_var_num_by_ap(ap->get_data());
         const z3::expr var = ps_vars[var_idx];
-        if (z3::eq(m.eval(var), ctx.bool_val(true)))
-            bis0_parts.push_back(var);
-        else
-            bis0_parts.push_back(!var);
+        bool is_pos_value = z3::eq(m.eval(var), ctx.bool_val(true));
+        PropFormula bis0(is_pos_value ? var : (!var), {{"ps",  ps_vars},
+                                    {"in0", _kripke.get_tr().get_vars_by_tag("in0")}});
+        return bis0;
     }
-    z3::expr raw_bis0 = z3::mk_and(bis0_parts);
-    PropFormula bis0(raw_bis0, {{"ps", ps_vars}, {"in0", _kripke.get_tr().get_vars_by_tag("in0")} });
-    return bis0;
 }
 
 std::set<std::string> ConcreteState::string_sat_aps() const {

@@ -193,19 +193,17 @@ std::pair<PropFormula, PropFormula>
 FormulaSplitUtils::ex_pos(const z3::expr &state_conj, const PropFormula &src_astate_f,
                           const std::set<const PropFormula *> &dsts_astates_f, const KripkeStructure& kripke) {
 
-    z3::context& ctx = state_conj.ctx();
-    z3::expr_vector assumptions(ctx);
-    z3::expr_vector assertions(ctx);
-
+#ifdef DEBUG
     assert(state_conj.is_and());
     for (unsigned int i = 0; i < state_conj.num_args(); ++i)
-    {
-        const z3::expr &lit = state_conj.arg(i);
-        assert(lit.is_bool() || (lit.is_not() && lit.arg(0).is_bool()));
-        z3::expr lit_assumption = ctx.bool_const((std::string("a")+std::to_string(i)).data());
-        assumptions.push_back(lit_assumption);
-        assertions.push_back(z3::implies(lit_assumption, lit));
-    }
+        assert(state_conj.arg(i).is_bool() || (state_conj.arg(i).is_not() && state_conj.arg(i).arg(0).is_bool()));
+#endif
+
+    z3::context& ctx = state_conj.ctx();
+    z3::expr_vector assumptions(ctx), assertions(ctx);
+    std::map<z3::expr, unsigned int, Z3ExprComp> assumptions_map;
+
+    add_flags_to_state_conj(state_conj, ctx, assumptions, assertions, assumptions_map);
 
     const PropFormula& tr = kripke.get_tr();
 #ifdef DEBUG
@@ -225,23 +223,20 @@ std::pair<PropFormula, PropFormula>
 FormulaSplitUtils::ex_neg(const z3::expr &state_conj, const PropFormula &src_astate_f,
                           const std::set<const PropFormula *> &dsts_astates_f, const KripkeStructure &kripke)
 {
+#ifdef DEBUG
+    assert(state_conj.is_and());
+    for (unsigned int i = 0; i < state_conj.num_args(); ++i)
+        assert(state_conj.arg(i).is_bool() || (state_conj.arg(i).is_not() && state_conj.arg(i).arg(0).is_bool()));
+#endif
+
     z3::context& ctx = state_conj.ctx();
     z3::expr_vector assumptions(ctx), assertions(ctx);
     std::map<z3::expr, unsigned int, Z3ExprComp> assumptions_map;
 
-    assert(state_conj.is_and());
-    for (unsigned int i = 0; i < state_conj.num_args(); ++i)
-    {
-        const z3::expr &lit = state_conj.arg(i);
-        assert(lit.is_bool() || (lit.is_not() && lit.arg(0).is_bool()));
-        z3::expr lit_assumption = ctx.bool_const((std::string("a")+std::to_string(i)).data());
-        assumptions.push_back(lit_assumption);
-        assertions.push_back(z3::implies(lit_assumption, lit));
-
-        assumptions_map.emplace(lit_assumption, i);
-    }
+    add_flags_to_state_conj(state_conj, ctx, assumptions, assertions, assumptions_map);
 
     const PropFormula& tr = kripke.get_tr();
+
 #ifdef DEBUG
     std::set<z3::expr, Z3ExprComp> ps_vars = expr_vector_to_set(tr.get_vars_by_tag("ps"));
     std::set<z3::expr, Z3ExprComp> ps_vars_actual = expr_vector_to_set(FormulaUtils::get_vars_in_formula(state_conj));
@@ -280,22 +275,53 @@ FormulaSplitUtils::ex_neg(const z3::expr &state_conj, const PropFormula &src_ast
 #endif
 
 
+    z3::expr_vector pos_assertions = get_assertions_from_unsat_core(state_conj, ctx, assumptions_map, unsat_core);
+
+    z3::expr no_successor_part  = z3::mk_and(pos_assertions);
+    z3::expr pos_split_part = (no_successor_part && src_astate_f.get_raw_formula()).simplify();
+
+    // The following is equivalent to src_astate_f.get_raw_formula() && (!pos_split_part)
+    z3::expr neg_split_part = (src_astate_f.get_raw_formula() && (!pos_split_part));
+//    z3::goal g(ctx); g.add(neg_split_part_not_simple);
+//    z3::tactic t(ctx, "ctx-solver-simplify");
+//    z3::apply_result app_res = t.apply(g);
+//    z3::expr neg_split_part = app_res[0].as_expr();
+
+    const std::map<std::string, z3::expr_vector> abs_var_map = {
+            {"ps" , tr.get_vars_by_tag("ps")},
+            {"in0", tr.get_vars_by_tag("in0")}
+    };
+   return { PropFormula(pos_split_part, abs_var_map), PropFormula(neg_split_part, abs_var_map) };
+}
+
+z3::expr_vector FormulaSplitUtils::get_assertions_from_unsat_core(const z3::expr &state_conj, z3::context &ctx,
+                                                                  std::map<z3::expr, unsigned int, Z3ExprComp> &assumptions_map,
+                                                                  const z3::expr_vector &unsat_core) {
     z3::expr_vector pos_assertions(ctx);
 
     for (size_t i = 0 ;i < unsat_core.size(); ++i)
     {
         z3::expr unsat_core_item = unsat_core[i];
-
         if (assumptions_map.find(unsat_core_item) != assumptions_map.end())
         {
             z3::expr assertion = state_conj.arg(assumptions_map[unsat_core_item]);
             pos_assertions.push_back(assertion);
         }
     }
+    return pos_assertions;
+}
 
-    z3::expr pos_part = z3::mk_and(pos_assertions); // cut with A(v)
-   // z3::expr neg_part = (state_conj && !pos_part).simplify(); // Deduce the remains of A(v)
-    std::cout << pos_part.to_string() << std::endl;
-  //  std::cout << neg_part.to_string() << std::endl;
-    throw 6543;
+
+void
+FormulaSplitUtils::add_flags_to_state_conj(const z3::expr &state_conj, z3::context &ctx, z3::expr_vector &assumptions,
+                                           z3::expr_vector &assertions,
+                                           std::map<z3::expr, unsigned int, Z3ExprComp> &assumptions_map) {
+    for (unsigned int i = 0; i < state_conj.num_args(); ++i)
+    {
+        const z3::expr &lit = state_conj.arg(i);
+        z3::expr lit_assumption = ctx.bool_const((std::__cxx11::string("a") + std::__cxx11::to_string(i)).data());
+        assumptions.push_back(lit_assumption);
+        assertions.push_back(implies(lit_assumption, lit));
+        assumptions_map.emplace(lit_assumption, i);
     }
+}

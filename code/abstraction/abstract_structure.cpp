@@ -5,6 +5,7 @@
 #include "abstract_structure.h"
 #include <utils/z3_utils.h>
 #include <model_checking/omg_model_checker.h>
+#include <utils/omg_utils.h>
 
 AbstractStructure::AbstractStructure(const KripkeStructure &kripke, const OmgModelChecker* omg) : _kripke(kripke), _omg(omg)
 {}
@@ -99,9 +100,8 @@ void AbstractStructure::refine_exists_successor(const ConcreteState &src_cstate,
     std::pair<PropFormula, PropFormula> new_abs_state_formulas =
                                                 FormulaSplitUtils::ex_pos(src_cstate.get_conjunct(),
                                                                           src_abs.get_formula(), dst_abs_formulas, _kripke);
-
+    //TSE
     // CALL COMMON SPLIT FUNCTION -- create new states, replace values innnnnnnn dictionaires, add new edges and what not.
-
     throw 143;
 
 
@@ -122,8 +122,9 @@ void AbstractStructure::refine_no_successor(const UnwindingTree &to_close_node, 
     std::pair<PropFormula, PropFormula> new_abs_state_formulas =
             FormulaSplitUtils::ex_neg(to_close_node.get_concrete_state().get_conjunct(),
                                       abs_src_witness.get_formula(), dst_abs_formulas, _kripke);
-
+    //TSE
     // SPLIT SOMETHING
+    DEBUG_PRINT("Created neg formulas");
 
     throw 167;
 

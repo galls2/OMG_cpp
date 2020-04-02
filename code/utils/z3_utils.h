@@ -78,4 +78,12 @@ public:
             const std::set<const PropFormula*>& dsts_astates_f, const KripkeStructure& kripke);
     static std::pair<PropFormula, PropFormula> ex_neg(const z3::expr& state_conj, const PropFormula& src_astate_f,
           const std::set<const PropFormula*>& dsts_astates_f, const KripkeStructure& kripke);
+
+    static void add_flags_to_state_conj(const z3::expr &state_conj, z3::context &ctx, z3::expr_vector &assumptions,
+                                        z3::expr_vector &assertions,
+                                        std::map<z3::expr, unsigned int, Z3ExprComp> &assumptions_map);
+
+    static z3::expr_vector get_assertions_from_unsat_core(const z3::expr &state_conj, z3::context &ctx,
+                                                          std::map<z3::expr, unsigned int, Z3ExprComp> &assumptions_map,
+                                                          const z3::expr_vector &unsat_core);
 };
