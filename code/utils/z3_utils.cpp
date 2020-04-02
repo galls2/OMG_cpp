@@ -69,7 +69,7 @@ std::string z3_expr_to_string(const std::vector<z3::expr> &vec) {
 
 
 EEClosureResult
-FormulaInductiveUtils::is_EE_inductive(AbstractState &to_close, const std::set<AbstractState *> &close_with, const std::string& sat_solver_str) {
+FormulaInductiveUtils::is_EE_inductive(AbstractState &to_close, const std::set<AbstractState *> &close_with) {
     const KripkeStructure& kripke = to_close.get_kripke();
     const PropFormula& tr = kripke.get_tr();
 
@@ -95,7 +95,7 @@ FormulaInductiveUtils::is_EE_inductive(AbstractState &to_close, const std::set<A
 
     z3::expr inductive_raw_formula = src_part && tr.get_raw_formula() && dst_part;
     PropFormula inductive_formula(inductive_raw_formula, {{"ps", ps_tr}, {"ns", ns_tr}});
-    std::unique_ptr<ISatSolver> solver = ISatSolver::s_sat_solvers.at(sat_solver_str)(ps_tr.ctx());
+    std::unique_ptr<ISatSolver> solver = ISatSolver::s_sat_solvers.at(OmgConfiguration::get<std::string>("Sat Solver"))(ps_tr.ctx());
     SatSolverResult sat_res = solver->solve_sat(inductive_formula);
     if (!sat_res.get_is_sat()) // if the formula is UNSAT, there is NO cex to the inductiveness, so we have inductiveness
     {
@@ -113,7 +113,7 @@ FormulaInductiveUtils::is_EE_inductive(AbstractState &to_close, const std::set<A
 
 ConcretizationResult
 FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<UnwindingTree *> &src_nodes,
-                                                  const AbstractState &astate, const std::string &sat_solver_str) {
+                                                  const AbstractState &astate) {
     const KripkeStructure &kripke = astate.get_kripke();
     const PropFormula &tr = kripke.get_tr();
 
@@ -144,7 +144,7 @@ FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<Unwin
     PropFormula is_tr_formula = PropFormula(raw_formula, {{"ps", ps_tr},
                                                           {"ns", ns_tr}});
 
-    std::unique_ptr<ISatSolver> solver = ISatSolver::s_sat_solvers.at(sat_solver_str)(ctx);
+    std::unique_ptr<ISatSolver> solver = ISatSolver::s_sat_solvers.at(OmgConfiguration::get<std::string>("Sat Solver"))(ctx);
 
     std::pair<int, SatSolverResult> res = solver->inc_solve_sat(is_tr_formula, flags);
     if (res.first < 0) {

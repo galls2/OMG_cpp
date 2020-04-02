@@ -53,7 +53,7 @@ EEClosureResult AbstractStructure::is_EE_closure(AbstractState &to_close,
         }
     }
 
-    EEClosureResult closure_result = FormulaInductiveUtils::is_EE_inductive(to_close, p_closers, get_omg()->_sat_solver);
+    EEClosureResult closure_result = FormulaInductiveUtils::is_EE_inductive(to_close, p_closers);
 
     if (closure_result.is_closed)
     {

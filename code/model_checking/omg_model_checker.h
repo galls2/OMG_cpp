@@ -51,14 +51,7 @@ public:
     typedef bool (OmgModelChecker::*handler_t)(Goal& goal);
     bool model_checking(ConcreteState& cstate, const CtlFormula& specification);
 
-    OmgModelChecker(const KripkeStructure& kripke, const OmgConfiguration& config);
-
-    /*
-    * Configurable Properties
-    */
-    const bool _opt_trivial_splits; // Is the Trivial Split Elimination optimization activated
-    const bool _opt_brother_unif; // Is the Trivial Split Elimination optimization activated
-    const std::string _sat_solver; // What SAT solver to use
+    explicit OmgModelChecker(const KripkeStructure& kripke);
 
 private:
     const KripkeStructure& _kripke;
@@ -95,7 +88,7 @@ private:
     void strengthen_subtree(Goal& goal, const std::function<bool(const UnwindingTree&)>& stop_condition);
     void strengthen_trace(UnwindingTree& start, UnwindingTree& end) const;
     void handle_proving_trace(bool is_strengthen, Goal& goal, UnwindingTree& node_to_explore, bool positivity);
-    CandidateSet compute_candidate_set(Goal& goal, bool brother_unif);
+    CandidateSet compute_candidate_set(Goal& goal);
     CandidateSet brother_unification(const CandidateSet &cands, const CtlFormula& agree_upon);
     void label_subtree(Goal& goal, bool positivity);
 

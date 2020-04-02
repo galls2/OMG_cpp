@@ -17,10 +17,12 @@ std::unordered_map<std::string, ValueType> OmgConfigurationBuilder::configuratio
         };
 
 
-OmgConfiguration OmgConfigurationBuilder::build() {
+void OmgConfigurationBuilder::build() {
     switch (_config_src) {
         case ConfigurationSource::FILE: {
-            return get_config_from_file();
+            ConfigTable config_table = get_config_from_file();
+            OmgConfiguration::load_config_table(config_table);
+            break;
         }
         case ConfigurationSource::STDIN: {
             throw OmgConfigurationException("Unsupported configuration input option.");
@@ -32,7 +34,8 @@ OmgConfiguration OmgConfigurationBuilder::build() {
                             {"Trivial Split Elimination", true},
                             {"Sat Solver", std::string("z3")}
                     };
-            return OmgConfiguration(config_table);
+            OmgConfiguration::load_config_table(config_table);
+            break;
         }
         default: {
             throw OmgConfigurationException("Unsupported configuration input option.");
@@ -40,7 +43,7 @@ OmgConfiguration OmgConfigurationBuilder::build() {
     }
 }
 
-OmgConfiguration OmgConfigurationBuilder::get_config_from_file() const {
+ConfigTable OmgConfigurationBuilder::get_config_from_file() const {
 
     ConfigTable config_data;
     size_t properties_found_counter = 0;
@@ -84,8 +87,8 @@ OmgConfiguration OmgConfigurationBuilder::get_config_from_file() const {
     }
     if (properties_found_counter < configuration_fields.size())
                 throw OmgConfigurationException("Not enough properties in configuration");
-    return OmgConfiguration(config_data);
+    return config_data;
 }
 
 
-
+ConfigTable OmgConfiguration::_configuration = {};

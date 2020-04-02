@@ -172,7 +172,7 @@ UnwindingTree& get_concretization_successor(UnwindingTree* to_close_node, const 
 }
 bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit)
 {
-    CandidateSet candidates = compute_candidate_set(goal, _opt_brother_unif);
+    CandidateSet candidates = compute_candidate_set(goal);
 
     std::set<std::reference_wrapper<AbstractState>> abs_states;
     for (const auto& it : candidates) abs_states.emplace(*it.first);
@@ -251,7 +251,7 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
     return true;
 }
 
-CandidateSet OmgModelChecker::compute_candidate_set(Goal& goal, bool brother_unif)
+CandidateSet OmgModelChecker::compute_candidate_set(Goal& goal)
 {
     CandidateSet cands;
     UnwindingTree& root = goal.get_node();
@@ -275,7 +275,7 @@ CandidateSet OmgModelChecker::compute_candidate_set(Goal& goal, bool brother_uni
         return node.is_developed(goal);
     });
 
-    if (brother_unif)
+    if (OmgConfiguration::get<bool>("Brother Unification"))
         return brother_unification(cands, *(goal.get_spec().get_operands()[1]));
     else return cands;
 }
@@ -350,11 +350,9 @@ bool OmgModelChecker::handle_ex(Goal &goal)
         throw OmgMcException("Not implemented!");
 }
 
-OmgModelChecker::OmgModelChecker(const KripkeStructure &kripke, const OmgConfiguration &config)
-: _kripke(kripke),
-        _opt_trivial_splits(config.get<bool>("Trivial Split Elimination")),
-        _opt_brother_unif(config.get<bool>("Brother Unification")),
-        _sat_solver(config.get<std::string>(std::string("Sat Solver")))
+OmgModelChecker::OmgModelChecker(const KripkeStructure &kripke)
+:
+        _kripke(kripke)
 {
         initialize_abstraction();
 }
@@ -481,7 +479,7 @@ ConcretizationResult
 OmgModelChecker::is_concrete_violation(const std::unordered_set<UnwindingTree *> &to_close_nodes,
                                        AbstractState &abs_witness)
 {
-    return FormulaInductiveUtils::concrete_transition_to_abs(to_close_nodes, abs_witness, _sat_solver);
+    return FormulaInductiveUtils::concrete_transition_to_abs(to_close_nodes, abs_witness);
 }
 
 void OmgModelChecker::strengthen_trace(UnwindingTree &start, UnwindingTree &end) const
