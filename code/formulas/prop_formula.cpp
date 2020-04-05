@@ -2,7 +2,9 @@
 // Created by galls2 on 29/09/19.
 //
 
+#include <configuration/omg_config.h>
 #include "prop_formula.h"
+#include "sat_solver.h"
 
 std::vector<z3::expr> PropFormula::get_all_variables() const {
     std::vector<z3::expr> all_vars;
@@ -49,4 +51,10 @@ z3::expr PropFormula::get_raw_formula() {
 
 PropFormula::PropFormula(const z3::expr &formula, const std::map<std::string, z3::expr_vector> &variables)  : _formula(formula), _variables(
         variables) {}
+
+bool PropFormula::is_sat() const
+{
+    std::unique_ptr<ISatSolver> solver = ISatSolver::s_sat_solvers.at(OmgConfiguration::get<std::string>("Sat Solver"))(_formula.ctx());
+    return solver->solve_sat(*this).get_is_sat();
+}
 

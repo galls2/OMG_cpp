@@ -67,7 +67,7 @@ std::string z3_expr_to_string(const std::vector<z3::expr>& vec);
 class FormulaInductiveUtils
 {
 public:
-    static EEClosureResult is_EE_inductive(AbstractState& to_close, const std::set<AbstractState*>& close_with);
+    static EEClosureResult is_EE_inductive(AbstractState& to_close, const AbsStateSet& close_with);
     static ConcretizationResult concrete_transition_to_abs(const std::unordered_set<UnwindingTree*>& src_nodes, const AbstractState& astate);
 };
 

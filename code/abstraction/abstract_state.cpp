@@ -67,3 +67,7 @@ const PropFormula& AbstractState::get_formula() const
 void AbstractState::set_cl_node(AbstractClassificationNode *const cl_node) {
     _cl_node = cl_node;
 }
+
+const CtlFormula::PropertySet &AbstractState::get_pos_labels() const {
+    return _pos_labels;
+}

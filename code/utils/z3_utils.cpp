@@ -263,14 +263,14 @@ FormulaSplitUtils::ex_neg(const z3::expr &state_conj, const PropFormula &src_ast
 
     PropFormula formula_to_check(z3::mk_and(assertions), tr.get_variables_map());
 
-    Z3SatSolver solver(ctx); // CHANGE ME
-    z3::expr_vector unsat_core = solver.get_unsat_core(formula_to_check, assumptions);
+    std::unique_ptr<ISatSolver> solver = ISatSolver::s_sat_solvers.at(OmgConfiguration::get<std::string>("Sat Solver"))(ctx);
+    z3::expr_vector unsat_core = solver->get_unsat_core(formula_to_check, assumptions);
 
     z3::expr_vector assertions_selected(ctx);
 
 #ifdef DEBUG
     bool exists_final_assumption = false;
-    for (unsigned int i = 0; i<unsat_core.size(); ++i) if (z3::eq(unsat_core[i], final_assumption)) { exists_final_assumption = true; break; }
+    for (unsigned int i = 0; i < unsat_core.size(); ++i) if (z3::eq(unsat_core[i], final_assumption)) { exists_final_assumption = true; break; }
     assert(exists_final_assumption);
 #endif
 

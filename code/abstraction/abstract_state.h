@@ -19,6 +19,7 @@ public:
     AbstractClassificationNode* get_cl_node() const;
     const KripkeStructure& get_kripke() const;
     const PropFormula& get_formula() const;
+    const CtlFormula::PropertySet& get_pos_labels() const;
 #ifdef DEBUG
     std::string _debug_name;
 #endif

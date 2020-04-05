@@ -10,6 +10,8 @@
 #include "abstract_state.h"
 class UnwindingTree;
 
+typedef std::set<AbstractState*> AbsStateSet;
+
 struct EEClosureResult
 {
     bool is_closed = false;
@@ -22,12 +24,14 @@ class OmgModelChecker;
 class AbstractStructure {
 public:
     explicit AbstractStructure(const KripkeStructure& kripke, const OmgModelChecker* omg);
-    AbstractState& create_abs_state(const ConcreteState& cstate);
+    AbstractState& create_astate_from_cstate(const ConcreteState& cstate);
+    AbstractState& create_astate_from_astate_split(const AbstractState& astate, PropFormula sym_rep);
+
     EEClosureResult is_EE_closure(AbstractState& to_close , const std::set<std::reference_wrapper<AbstractState>>& close_with);
     const OmgModelChecker* get_omg() const;
     void refine_exists_successor(const ConcreteState &src_cstate, AbstractState &src_abs,
                                  const std::set<const AbstractState *> &dsts_abs);
-    void refine_no_successor(const UnwindingTree& to_close_node, AbstractState& abs_src_witness, AbstractState& abs_dst);
+    void refine_no_successor(const UnwindingTree& to_close_node, AbstractState& abs_src_witness, const std::set<AbstractState *> &dsts_abs);
 
 
 private:
@@ -35,12 +39,14 @@ private:
     const OmgModelChecker* _omg;
     std::set<AbstractState> _abs_states;
 
-    std::map<AbstractState* const, std::set<AbstractState*>> _NE_may;
-    std::map<AbstractState* const, std::vector<std::set<AbstractState*>>> _E_must;
-    std::map<AbstractState* const, std::vector<std::set<AbstractState*>>> _E_may_over;
-    std::map<AbstractState* const, std::vector<std::pair<std::set<AbstractState*>, EEClosureResult>>> _NE_may_over;
+    std::map<AbstractState*, AbsStateSet> _NE_may;
+    std::map<AbstractState*, std::vector<AbsStateSet>> _E_must;
+    std::map<AbstractState*, std::vector<AbsStateSet>> _E_may_over;
+    std::map<AbstractState*, std::vector<std::pair<AbsStateSet, EEClosureResult>>> _NE_may_over;
 
     //E MAY OVER, , NE MAY OVER
+    std::pair<AbstractState*, AbstractState*> create_new_astates_and_update(AbstractState &abs_src_witness,
+                                       std::pair<PropFormula, PropFormula> new_abs_state_formulas);
 };
 
 

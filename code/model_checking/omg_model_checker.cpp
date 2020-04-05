@@ -350,9 +350,7 @@ bool OmgModelChecker::handle_ex(Goal &goal)
         throw OmgMcException("Not implemented!");
 }
 
-OmgModelChecker::OmgModelChecker(const KripkeStructure &kripke)
-:
-        _kripke(kripke)
+OmgModelChecker::OmgModelChecker(const KripkeStructure &kripke) : _kripke(kripke)
 {
         initialize_abstraction();
 }
@@ -431,7 +429,7 @@ AbstractState &OmgModelChecker::find_abs(const ConcreteState &cstate)
 {
     if (!_abs_classifier->exists_classification(cstate))
     {
-        AbstractState &astate = _abs_structure->create_abs_state(cstate);
+        AbstractState &astate = _abs_structure->create_astate_from_cstate(cstate);
         _abs_classifier->add_classification_tree(cstate, astate);
         return astate;
     }
@@ -511,6 +509,7 @@ void OmgModelChecker::refine_exists_successor(const ConcreteState *src_cstate,
 }
 
 void OmgModelChecker::update_classifier() {
+    DEBUG_PRINT("IMPLEMENT UPDATE CLASSIFIER!");
     throw 16565;
 }
 
@@ -523,7 +522,7 @@ void OmgModelChecker::refine_no_successor(const UnwindingTree &to_close_node, Ab
      * However, this is not ture. he reason is that we want to split AWAY the part of abs_src_witness that includes the reacehable
      * node in the unwinding tree, which is not necessarily done in EX+.
      */
-    _abs_structure->refine_no_successor(to_close_node, abs_src_witness, abs_dst);
+    _abs_structure->refine_no_successor(to_close_node, abs_src_witness, {&abs_dst});
     update_classifier();
 }
 
