@@ -14,14 +14,20 @@
 AbstractState::AbstractState(const KripkeStructure &kripke, CtlFormula::PropertySet pos_labels,
                              CtlFormula::PropertySet atomic_labels, PropFormula sym_rep)
                              : _kripke(kripke), _pos_labels(std::move(pos_labels)),
-                             _atomic_labels(std::move(atomic_labels)), _sym_rep(std::move(sym_rep))
+                             _atomic_labels(std::move(atomic_labels)), _sym_rep(std::move(sym_rep)), _abs_idx(VersionManager::next_version_number("Abs"))
 {
     std::set_difference(_atomic_labels.begin(), _atomic_labels.end(), _pos_labels.begin(), _pos_labels.end(),
                         std::inserter(_neg_labels, _neg_labels.end()));
 #ifdef DEBUG
-    _debug_name = VersionManager::next_version("Abs");
+    _debug_name = VersionManager::version_to_string(_abs_idx);
 #endif
 }
+
+const size_t AbstractState::get_abs_idx() const
+{
+    return _abs_idx;
+}
+
 
 bool AbstractState::is_neg_labeled(const CtlFormula &spec) const {
     return spec.is_boolean() ? !spec.get_boolean_value() : _neg_labels.find(&spec) != _neg_labels.end();
@@ -56,7 +62,11 @@ const KripkeStructure &AbstractState::get_kripke() const {
 }
 
 bool operator<(const AbstractState &lhs, const AbstractState &rhs) {
-    return lhs.get_cl_node() < rhs.get_cl_node();
+    return lhs.get_abs_idx() < rhs.get_abs_idx();
+}
+
+bool operator==(const AbstractState &lhs, const AbstractState &rhs) {
+    return lhs.get_abs_idx() == rhs.get_abs_idx();
 }
 
 const PropFormula& AbstractState::get_formula() const

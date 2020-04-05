@@ -147,7 +147,7 @@ void AbstractStructure::refine_no_successor(const UnwindingTree &to_close_node, 
 
     auto res = create_new_astates_and_update(abs_src_witness, std::move(new_abs_state_formulas));
 
-    bool is_src_in_dsts = std::any_of(dsts_abs.begin(), dsts_abs.end(), [&abs_src_witness] (AbstractState* abs_dst) {return abs_dst->get_cl_node() == abs_src_witness.get_cl_node(); });
+    bool is_src_in_dsts = std::any_of(dsts_abs.begin(), dsts_abs.end(), [&abs_src_witness] (AbstractState* abs_dst) {return (*abs_dst) == abs_src_witness; });
     for (AbstractState* abs_dst : dsts_abs) {_NE_may[res.first].insert(abs_dst); }
     if (is_src_in_dsts) { _NE_may[res.first].insert({res.first, res.second}); }
 

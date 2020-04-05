@@ -231,7 +231,7 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
                         [this, abs_src_witness](UnwindingTree* n) {
                     AbstractState& current = find_abs(*n);
                  //   DEBUG_PRINT("%s vs %s\n", current._debug_name.c_str(), abs_src_witness._debug_name.c_str());
-                    return find_abs(*n).get_cl_node() == abs_src_witness.get_cl_node(); } );
+                    return find_abs(*n) == abs_src_witness; } );
                 if (it == to_close_nodes.end()) throw "ERROR -- BUG IN INDUCTIVENESS!";
 
                 UnwindingTree* to_close_node = *it;

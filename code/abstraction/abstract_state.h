@@ -20,10 +20,12 @@ public:
     const KripkeStructure& get_kripke() const;
     const PropFormula& get_formula() const;
     const CtlFormula::PropertySet& get_pos_labels() const;
+    const size_t get_abs_idx() const;
 #ifdef DEBUG
     std::string _debug_name;
 #endif
 private:
+    const size_t _abs_idx;
     const KripkeStructure& _kripke;
     CtlFormula::PropertySet _pos_labels;
     CtlFormula::PropertySet _neg_labels;
@@ -34,3 +36,4 @@ private:
 };
 
 bool operator<(const AbstractState& lhs, const AbstractState& rhs);
+bool operator==(const AbstractState& lhs, const AbstractState& rhs);
