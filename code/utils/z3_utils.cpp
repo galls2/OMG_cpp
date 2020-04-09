@@ -189,7 +189,7 @@ std::vector<z3::expr> FormulaUtils::get_vars_in_formula(z3::expr const &e) {
 }
 
 
-std::pair<PropFormula, PropFormula>
+SplitFormulas
 FormulaSplitUtils::ex_pos(const z3::expr &state_conj, const PropFormula &src_astate_f,
                           const std::set<const PropFormula *> &dsts_astates_f, const KripkeStructure& kripke) {
 
@@ -219,7 +219,7 @@ FormulaSplitUtils::ex_pos(const z3::expr &state_conj, const PropFormula &src_ast
     // get unsatcore
 }
 
-std::pair<PropFormula, PropFormula>
+SplitFormulas
 FormulaSplitUtils::ex_neg(const z3::expr &state_conj, const PropFormula &src_astate_f,
                           const std::set<const PropFormula *> &dsts_astates_f, const KripkeStructure &kripke)
 {
@@ -278,6 +278,8 @@ FormulaSplitUtils::ex_neg(const z3::expr &state_conj, const PropFormula &src_ast
     z3::expr_vector pos_assertions = get_assertions_from_unsat_core(state_conj, ctx, assumptions_map, unsat_core);
 
     z3::expr no_successor_part  = z3::mk_and(pos_assertions);
+
+
     z3::expr pos_split_part = (no_successor_part && src_astate_f.get_raw_formula()).simplify();
 
     // The following is equivalent to src_astate_f.get_raw_formula() && (!pos_split_part)
@@ -291,7 +293,8 @@ FormulaSplitUtils::ex_neg(const z3::expr &state_conj, const PropFormula &src_ast
             {"ps" , tr.get_vars_by_tag("ps")},
             {"in0", tr.get_vars_by_tag("in0")}
     };
-   return { PropFormula(pos_split_part, abs_var_map), PropFormula(neg_split_part, abs_var_map) };
+    auto create_prop = [&abs_var_map] (const z3::expr& raw_f) { return PropFormula(raw_f, abs_var_map); };
+   return { create_prop(no_successor_part), create_prop(pos_split_part), create_prop(neg_split_part) };
 }
 
 z3::expr_vector FormulaSplitUtils::get_assertions_from_unsat_core(const z3::expr &state_conj, z3::context &ctx,

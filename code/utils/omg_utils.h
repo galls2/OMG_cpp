@@ -10,6 +10,8 @@
 
 #ifdef DEBUG
 #include <cstdio>
+#include <set>
+
 #define DEBUG_PRINT(fmt, args...) fprintf(stderr, fmt, ## args)
 #else
 #define DEBUG_PRINT(fmt, args...)
@@ -28,3 +30,8 @@ void print_vec(const std::vector<T>& vec)
         std::cout << it << " ";
     std::cout << std::endl;
 }
+
+class AbstractState;
+typedef std::set<AbstractState*> AbsStateSet;
+typedef std::reference_wrapper<AbstractState> AStateRef;
+typedef std::pair<AStateRef, AStateRef> AStateRefPair;

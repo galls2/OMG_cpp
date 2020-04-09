@@ -5,6 +5,7 @@
 #include <set>
 #include <formulas/sat_solver.h>
 #include <abstraction/abstract_structure.h>
+#include "omg_utils.h"
 
 class AbstractState;
 class UnwindingTree;
@@ -64,6 +65,8 @@ std::string expr_vector_to_string(const z3::expr_vector& vec);
 
 std::string z3_expr_to_string(const std::vector<z3::expr>& vec);
 
+struct EEClosureResult;
+
 class FormulaInductiveUtils
 {
 public:
@@ -71,12 +74,19 @@ public:
     static ConcretizationResult concrete_transition_to_abs(const std::unordered_set<UnwindingTree*>& src_nodes, const AbstractState& astate);
 };
 
+struct SplitFormulas
+{
+    PropFormula query;
+    PropFormula generalized_formula;
+    PropFormula remainder_formula;
+};
+
 class FormulaSplitUtils
 {
 public:
-    static std::pair<PropFormula, PropFormula> ex_pos(const z3::expr& state_conj, const PropFormula& src_astate_f,
+    static SplitFormulas ex_pos(const z3::expr& state_conj, const PropFormula& src_astate_f,
             const std::set<const PropFormula*>& dsts_astates_f, const KripkeStructure& kripke);
-    static std::pair<PropFormula, PropFormula> ex_neg(const z3::expr& state_conj, const PropFormula& src_astate_f,
+    static SplitFormulas ex_neg(const z3::expr& state_conj, const PropFormula& src_astate_f,
           const std::set<const PropFormula*>& dsts_astates_f, const KripkeStructure& kripke);
 
     static void add_flags_to_state_conj(const z3::expr &state_conj, z3::context &ctx, z3::expr_vector &assumptions,

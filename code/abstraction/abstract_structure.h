@@ -7,16 +7,27 @@
 
 
 #include <structures/kripke_structure.h>
+#include <utils/z3_utils.h>
 #include "abstract_state.h"
-class UnwindingTree;
+#include <utils/omg_utils.h>
 
-typedef std::set<AbstractState*> AbsStateSet;
+class UnwindingTree;
+struct SplitFormulas;
 
 struct EEClosureResult
 {
     bool is_closed = false;
     std::experimental::optional<ConcreteState> src;
     std::experimental::optional<ConcreteState> dst;
+};
+
+
+struct RefinementResult
+{
+    bool is_split = true;
+    AbstractState* astate_generalized = nullptr;
+    AbstractState* astate_remainder = nullptr;
+    std::experimental::optional<PropFormula> split_query;
 };
 
 class OmgModelChecker;
@@ -27,11 +38,11 @@ public:
     AbstractState& create_astate_from_cstate(const ConcreteState& cstate);
     AbstractState& create_astate_from_astate_split(const AbstractState& astate, PropFormula sym_rep);
 
-    EEClosureResult is_EE_closure(AbstractState& to_close , const std::set<std::reference_wrapper<AbstractState>>& close_with);
+    EEClosureResult is_EE_closure(AbstractState& to_close , const std::set<AStateRef>& close_with);
     const OmgModelChecker* get_omg() const;
-    void refine_exists_successor(const ConcreteState &src_cstate, AbstractState &src_abs,
+    RefinementResult refine_exists_successor(const ConcreteState &src_cstate, AbstractState &src_abs,
                                  const std::set<const AbstractState *> &dsts_abs);
-    void refine_no_successor(const UnwindingTree& to_close_node, AbstractState& abs_src_witness, const std::set<AbstractState *> &dsts_abs);
+    RefinementResult refine_no_successor(const UnwindingTree& to_close_node, AbstractState& abs_src_witness, const std::set<AbstractState *> &dsts_abs);
 
 
 private:
@@ -46,7 +57,7 @@ private:
 
     //E MAY OVER, , NE MAY OVER
     std::pair<AbstractState*, AbstractState*> create_new_astates_and_update(AbstractState &abs_src_witness,
-                                       std::pair<PropFormula, PropFormula> new_abs_state_formulas);
+                                       SplitFormulas& new_abs_state_formulas);
 };
 
 

@@ -25,15 +25,7 @@ struct InductiveCandidate
     AbstractState* abs_state;
     std::unordered_set<UnwindingTree*> nodes;
     double avg_depth;
-    InductiveCandidate(AbstractState* _abs_state, std::unordered_set<UnwindingTree*> _nodes) : abs_state(_abs_state), nodes(
-            std::move(_nodes))
-    {
-        double avg = 0;
-        for (UnwindingTree* const& node : nodes)
-            avg += node->get_depth();
-        avg /= nodes.size();
-        avg_depth = avg;
-    }
+    InductiveCandidate(AbstractState* _abs_state, std::unordered_set<UnwindingTree*> _nodes);
 };
 
 struct ConcretizationResult
@@ -98,6 +90,6 @@ private:
     void refine_exists_successor(const ConcreteState* src_cstate, const std::set<const ConcreteState*>& dsts_cstate);
     void refine_no_successor(const UnwindingTree& to_close_node, AbstractState& abs_src_witness, AbstractState& abs_dst);
 
-    void update_classifier();
+    void update_classifier(const RefinementResult& refine_result);
 };
 

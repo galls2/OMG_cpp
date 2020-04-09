@@ -21,13 +21,13 @@ AbstractState &AbstractStructure::create_astate_from_cstate(const ConcreteState 
 }
 
 EEClosureResult AbstractStructure::is_EE_closure(AbstractState &to_close,
-                                                 const std::set<std::reference_wrapper<AbstractState>> &close_with)
+                                                 const std::set<AStateRef> &close_with)
 {
     AbsStateSet p_closers, p_non_closers;
     if (_NE_may.find(&to_close) != _NE_may.end()) {
         p_non_closers = _NE_may[&to_close];
     }
-    for (const std::reference_wrapper<AbstractState>& cl : close_with) {
+    for (const AStateRef& cl : close_with) {
         if (p_non_closers.find(&cl.get()) == p_non_closers.end()) p_closers.insert(&cl.get());
     }
 
@@ -78,7 +78,7 @@ const OmgModelChecker *AbstractStructure::get_omg() const{
     return _omg;
 }
 
-void AbstractStructure::refine_exists_successor(const ConcreteState &src_cstate, AbstractState &src_abs,
+RefinementResult AbstractStructure::refine_exists_successor(const ConcreteState &src_cstate, AbstractState &src_abs,
                                                 const std::set<const AbstractState *> &dsts_abs) {
     if (_E_must.find(&src_abs) != _E_must.end())
     {
@@ -90,17 +90,17 @@ void AbstractStructure::refine_exists_successor(const ConcreteState &src_cstate,
                 }
                 ))
         {
-            return;
+            return {false, nullptr, nullptr};
         }
     }
 
     std::set<const PropFormula *> dst_abs_formulas;
     for (const auto& dst_astate : dsts_abs) dst_abs_formulas.insert(&dst_astate->get_formula()); // many many copies?
 
-    std::pair<PropFormula, PropFormula> new_abs_state_formulas =
-                                                FormulaSplitUtils::ex_pos(src_cstate.get_conjunct(),
-                                                                          src_abs.get_formula(), dst_abs_formulas, _kripke);
-    //TSE
+//    std::pair<PropFormula, PropFormula> new_abs_state_formulas =
+//                                                FormulaSplitUtils::ex_pos(src_cstate.get_conjunct(),
+//                                                                          src_abs.get_formula(), dst_abs_formulas, _kripke);
+//    //TSE
     // CALL COMMON SPLIT FUNCTION -- create new states, replace values innnnnnnn dictionaires, add new edges and what not.
     throw 143;
 
@@ -117,7 +117,7 @@ void inherit_values_in_dict(std::map<T, S>& dict, T& old_key, const std::set<T>&
 }
 
 
-void AbstractStructure::refine_no_successor(const UnwindingTree &to_close_node, AbstractState &abs_src_witness,
+RefinementResult AbstractStructure::refine_no_successor(const UnwindingTree &to_close_node, AbstractState &abs_src_witness,
                                             const std::set<AbstractState *> &dsts_abs)
 {
     if (_NE_may.find(&abs_src_witness) != _NE_may.end() &&
@@ -128,24 +128,24 @@ void AbstractStructure::refine_no_successor(const UnwindingTree &to_close_node, 
 
                     }))
     {
-        return;
+        return {false, nullptr, nullptr, std::experimental::optional<PropFormula>()};
     }
 
     std::set<const PropFormula *> dst_abs_formulas;
     std::for_each(dsts_abs.begin(), dsts_abs.end(),
             [&dst_abs_formulas] (const AbstractState* astate) { dst_abs_formulas.insert(&astate->get_formula()); });
 
-    std::pair<PropFormula, PropFormula> new_abs_state_formulas =
+    SplitFormulas split_formulas =
             FormulaSplitUtils::ex_neg(to_close_node.get_concrete_state().get_conjunct(),
                                       abs_src_witness.get_formula(), dst_abs_formulas, _kripke);
 
-    if (OmgConfiguration::get<bool>("Trivial Split Elimination") && !new_abs_state_formulas.second.is_sat())
+    if (OmgConfiguration::get<bool>("Trivial Split Elimination") && !split_formulas.remainder_formula.is_sat())
     {
         DEBUG_PRINT("IMPLEMENT TSE :)");
         throw "IEEE";
     }
 
-    auto res = create_new_astates_and_update(abs_src_witness, std::move(new_abs_state_formulas));
+    std::pair<AbstractState*, AbstractState*> res = create_new_astates_and_update(abs_src_witness, split_formulas);
 
     bool is_src_in_dsts = std::any_of(dsts_abs.begin(), dsts_abs.end(), [&abs_src_witness] (AbstractState* abs_dst) {return (*abs_dst) == abs_src_witness; });
     for (AbstractState* abs_dst : dsts_abs) {_NE_may[res.first].insert(abs_dst); }
@@ -169,16 +169,17 @@ void AbstractStructure::refine_no_successor(const UnwindingTree &to_close_node, 
     remove_redundant(_E_must);
     remove_redundant(_E_may_over);
 
+    return { true, res.first, res.second, std::experimental::optional<PropFormula>(split_formulas.query) };
 }
 
 std::pair<AbstractState*, AbstractState*> AbstractStructure::create_new_astates_and_update(AbstractState &abs_src_witness,
-                                                      std::pair<PropFormula, PropFormula> new_abs_state_formulas) {
-    AbstractState& abs_no_successors = create_astate_from_astate_split(abs_src_witness, std::move(new_abs_state_formulas.first));
-    AbstractState& abs_residual = create_astate_from_astate_split(abs_src_witness, std::move(new_abs_state_formulas.second));
+                                                      SplitFormulas& new_abs_state_formulas) {
+    AbstractState& abs_no_successors = create_astate_from_astate_split(abs_src_witness, new_abs_state_formulas.generalized_formula);
+    AbstractState& abs_residual = create_astate_from_astate_split(abs_src_witness, new_abs_state_formulas.remainder_formula);
     AbstractState* abs_src_witness_ptr = &abs_src_witness;
 
 
-    DEBUG_PRINT("Created neg formulas");
+    DEBUG_PRINT("Created neg formulas\n");
     std::set<AbstractState*> new_keys;
     new_keys.insert({&abs_no_successors, &abs_residual});
     inherit_values_in_dict<AbstractState*, std::vector<AbsStateSet>>(_E_must, abs_src_witness_ptr, new_keys);
@@ -223,8 +224,9 @@ std::pair<AbstractState*, AbstractState*> AbstractStructure::create_new_astates_
         }
     });
 
-    size_t erase_res = _abs_states.erase(abs_src_witness);
-    assert(erase_res == 1);
+    // Not deleting in order to not mess up the classifier
+//    size_t erase_res = _abs_states.erase(abs_src_witness);
+//    assert(erase_res == 1);
 
     return {&abs_no_successors, &abs_residual};
 }

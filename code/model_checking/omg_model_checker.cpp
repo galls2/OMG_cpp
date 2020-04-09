@@ -174,7 +174,7 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
 {
     CandidateSet candidates = compute_candidate_set(goal);
 
-    std::set<std::reference_wrapper<AbstractState>> abs_states;
+    std::set<AStateRef> abs_states;
     for (const auto& it : candidates) abs_states.emplace(*it.first);
 
     auto comp_ind_cands = [](const InductiveCandidate& a, const InductiveCandidate& b) { return a.avg_depth < b.avg_depth; };
@@ -502,13 +502,15 @@ void OmgModelChecker::refine_exists_successor(const ConcreteState *src_cstate,
     AbstractState& src_abs = find_abs(*src_cstate);
 
 
-    _abs_structure->refine_exists_successor(*src_cstate, src_abs, dsts_abs);
+    RefinementResult refinement_res = _abs_structure->refine_exists_successor(*src_cstate, src_abs, dsts_abs);
 
-    update_classifier();
+
+    update_classifier(refinement_res);
 
 }
 
-void OmgModelChecker::update_classifier() {
+void OmgModelChecker::update_classifier(const RefinementResult& refine_result) {
+    if (!refine_result.is_split) return;
     DEBUG_PRINT("IMPLEMENT UPDATE CLASSIFIER!");
     throw 16565;
 }
@@ -522,8 +524,14 @@ void OmgModelChecker::refine_no_successor(const UnwindingTree &to_close_node, Ab
      * However, this is not ture. he reason is that we want to split AWAY the part of abs_src_witness that includes the reacehable
      * node in the unwinding tree, which is not necessarily done in EX+.
      */
-    _abs_structure->refine_no_successor(to_close_node, abs_src_witness, {&abs_dst});
-    update_classifier();
+    RefinementResult refine_res = _abs_structure->refine_no_successor(to_close_node, abs_src_witness, {&abs_dst});
+    update_classifier(refine_res);
 }
 
 
+InductiveCandidate::InductiveCandidate(AbstractState *_abs_state, std::unordered_set<UnwindingTree *> _nodes)
+    : abs_state(_abs_state), nodes(std::move(_nodes))
+{
+    avg_depth = ((double) std::accumulate(_nodes.begin(), _nodes.end(), 0U,
+            [] (size_t partial_sum, UnwindingTree* node) {  return node->get_depth() + partial_sum; } ) ) / _nodes.size();
+}

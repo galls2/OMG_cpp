@@ -8,6 +8,7 @@
 #include <vector>
 #include <experimental/optional>
 #include <set>
+#include <abstraction/abstract_state.h>
 
 #include "concrete_state.h"
 
@@ -25,7 +26,7 @@ public:
     void set_developed(const Goal& goal);
     bool is_developed(const Goal& goal) const;
     void set_urgent(bool to_set);
-    std::experimental::optional<std::reference_wrapper<AbstractState>>  get_abs() const;
+    std::experimental::optional<AStateRef>  get_abs() const;
     void set_abs(AbstractState& astate);
     bool is_urgent() const;
     const std::vector<std::unique_ptr<UnwindingTree>>& get_successors() const;
@@ -42,7 +43,7 @@ public:
 private:
     const KripkeStructure& _kripke;
     ConcreteState _cstate;
-    std::experimental::optional<std::reference_wrapper<AbstractState>> _astate;
+    std::experimental::optional<AStateRef> _astate;
     UnwindingTree * const _parent;
     size_t _depth;
     bool _URGENT;

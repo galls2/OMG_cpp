@@ -59,7 +59,7 @@ void UnwindingTree::set_abs(AbstractState& astate)
     _astate.emplace(std::ref(astate));
 }
 
-std::experimental::optional<std::reference_wrapper<AbstractState>> UnwindingTree::get_abs() const
+std::experimental::optional<AStateRef> UnwindingTree::get_abs() const
 {
     return _astate;
 }
