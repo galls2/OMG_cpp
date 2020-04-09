@@ -232,16 +232,11 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
                     AbstractState& current = find_abs(*n);
                  //   DEBUG_PRINT("%s vs %s\n", current._debug_name.c_str(), abs_src_witness._debug_name.c_str());
                     return find_abs(*n) == abs_src_witness; } );
-                if (it == to_close_nodes.end()) throw "ERROR -- BUG IN INDUCTIVENESS!";
+                if (it == to_close_nodes.end()) throw OmgMcException("ERROR -- BUG IN INDUCTIVENESS!");
 
                 UnwindingTree* to_close_node = *it;
 
                 refine_no_successor(*to_close_node, abs_src_witness, abs_dst);
-
-                throw "Need to implement (EX-) refinement";
-                // (EX-) refinement
-                /* XYYX */
-
             }
 
             return false;
@@ -505,17 +500,23 @@ void OmgModelChecker::refine_exists_successor(const ConcreteState *src_cstate,
     RefinementResult refinement_res = _abs_structure->refine_exists_successor(*src_cstate, src_abs, dsts_abs);
 
 
-    update_classifier(refinement_res);
+  //  update_classifier(refinement_res);
+ //   find_abs(to_close_node);
 
 }
 
-void OmgModelChecker::update_classifier(const RefinementResult& refine_result) {
+void OmgModelChecker::update_classifier(RefinementResult& refine_result, AbstractState& abs_src_witness) {
     if (!refine_result.is_split) return;
-    DEBUG_PRINT("IMPLEMENT UPDATE CLASSIFIER!");
-    throw 16565;
+
+    _abs_classifier->split(abs_src_witness, *refine_result.split_query, *refine_result.astate_generalized, *refine_result.astate_generalized);
+
+    refine_result.astate_generalized->set_cl_node(&abs_src_witness.get_cl_node()->get_successor(true));
+    refine_result.astate_remainder->set_cl_node(&abs_src_witness.get_cl_node()->get_successor(false));
+
+    DEBUG_PRINT("NEED To IMPL CLASSIFICATION CACHE!");
 }
 
-void OmgModelChecker::refine_no_successor(const UnwindingTree &to_close_node, AbstractState &abs_src_witness,
+void OmgModelChecker::refine_no_successor(UnwindingTree &to_close_node, AbstractState &abs_src_witness,
                                           AbstractState &abs_dst)
 {
     /*
@@ -525,7 +526,8 @@ void OmgModelChecker::refine_no_successor(const UnwindingTree &to_close_node, Ab
      * node in the unwinding tree, which is not necessarily done in EX+.
      */
     RefinementResult refine_res = _abs_structure->refine_no_successor(to_close_node, abs_src_witness, {&abs_dst});
-    update_classifier(refine_res);
+    update_classifier(refine_res, abs_src_witness);
+    find_abs(to_close_node);
 }
 
 

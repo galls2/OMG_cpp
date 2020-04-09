@@ -4,6 +4,9 @@
 
 #include "abstraction_classifier.h"
 #include <utility>
+#include <configuration/omg_config.h>
+#include <formulas/sat_solver.h>
+#include <utils/z3_utils.h>
 #include "abstract_state.h"
 AbstractionClassifier::AbstractionClassifier(const KripkeStructure &kripke) : _kripke(kripke) {}
 
@@ -42,7 +45,32 @@ AbstractState &AbstractionClassifier::update_classification(const AbstractState 
     return cl->classify(cstate);
 }
 
-#ifndef DEBUG
+AbstractClassificationNode *
+AbstractionClassifier::split(AbstractState &astate, PropFormula &query_formula, AbstractState &astate_pos,
+                             AbstractState &astate_neg) {
+    AbstractClassificationNode* cl_node = astate.get_cl_node();
+    assert(cl_node->is_leaf());
+
+    cl_node->_successors.emplace(true, std::make_unique<AbstractClassificationNode>(*this, &astate_pos, cl_node));
+    cl_node->_successors.emplace(false, std::make_unique<AbstractClassificationNode>(*this, &astate_neg, cl_node));
+
+    z3::context& ctx = query_formula.get_ctx();
+    cl_node->_query.emplace([query_formula, &ctx] (const ConcreteState& cstate)
+    {
+        std::unique_ptr<ISatSolver> solver = ISatSolver::s_sat_solvers.at(OmgConfiguration::get<std::string>("Sat Solver"))(ctx);
+#ifdef DEBUG
+        std::set<z3::expr, Z3ExprComp> cstate_vars = expr_vector_to_set(FormulaUtils::get_vars_in_formula(cstate.get_conjunct()));
+        std::set<z3::expr, Z3ExprComp> ps_vars = expr_vector_to_set(query_formula.get_vars_by_tag("ps"));
+        assert(is_contained_z3_containers(cstate_vars, ps_vars));
+#endif
+        z3::expr formula_to_solver = query_formula.get_raw_formula() && cstate.get_conjunct();
+        return solver->is_sat(formula_to_solver);
+    });
+
+    return cl_node;
+}
+
+#ifdef DEBUG
 void AbstractClassificationNode::set_split_string(const std::string& str) {
     _split_string = str;
 }
@@ -84,4 +112,10 @@ AbstractState *AbstractClassificationNode::get_abs() const {
 
 const AbstractClassificationNode *AbstractClassificationNode::get_parent() const {
     return _parent;
+}
+
+AbstractClassificationNode& AbstractClassificationNode::get_successor(QueryResult query_result)
+{
+    assert(_successors.find(query_result) != _successors.end());
+    return *_successors[query_result];
 }

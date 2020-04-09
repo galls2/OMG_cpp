@@ -19,6 +19,7 @@ public:
     AbstractState& classify(const ConcreteState &cstate);
     const KripkeStructure& get_kripke() const;
     AbstractState& update_classification(const AbstractState& astate, const ConcreteState& cstate);
+    AbstractClassificationNode* split(AbstractState& astate, PropFormula& query_formula, AbstractState& astate_pos, AbstractState& astate_neg);
 private:
     const KripkeStructure& _kripke;
     std::map<std::set<std::string>, std::unique_ptr<AbstractClassificationNode>> _classification_trees;
@@ -28,24 +29,26 @@ private:
 class AbstractClassificationNode
 {
 public:
+    typedef bool QueryResult;
     AbstractClassificationNode(AbstractionClassifier& classifier, AbstractState* abs_state, const AbstractClassificationNode* parent=nullptr);
     size_t get_depth() const;
     bool is_leaf() const;
     const AbstractClassificationNode* get_parent() const;
     AbstractState* get_abs() const;
     AbstractState& classify(const ConcreteState& cstate) const;
-
-#ifndef DEBUG
+    AbstractClassificationNode& get_successor(QueryResult query_result);
+    friend class AbstractionClassifier;
+#ifdef DEBUG
     void set_split_string(const std::string& str);
 #endif
 private:
     const AbstractionClassifier& _classifier;
-    const std::experimental::optional<std::function<bool(const ConcreteState&)>> _query;
-    const std::map<bool, std::unique_ptr<AbstractClassificationNode>> _successors;
-    AbstractState* _abs_state;
+    std::experimental::optional<std::function<QueryResult(const ConcreteState&)>> _query;
+    std::map<QueryResult, std::unique_ptr<AbstractClassificationNode>> _successors;
+    AbstractState* const _abs_state;
     const AbstractClassificationNode* _parent;
     const size_t _depth;
-#ifndef DEBUG
+#ifdef DEBUG
     std::string _split_string;
 #endif
 };

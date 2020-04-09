@@ -178,8 +178,6 @@ std::pair<AbstractState*, AbstractState*> AbstractStructure::create_new_astates_
     AbstractState& abs_residual = create_astate_from_astate_split(abs_src_witness, new_abs_state_formulas.remainder_formula);
     AbstractState* abs_src_witness_ptr = &abs_src_witness;
 
-
-    DEBUG_PRINT("Created neg formulas\n");
     std::set<AbstractState*> new_keys;
     new_keys.insert({&abs_no_successors, &abs_residual});
     inherit_values_in_dict<AbstractState*, std::vector<AbsStateSet>>(_E_must, abs_src_witness_ptr, new_keys);

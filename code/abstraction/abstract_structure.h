@@ -50,7 +50,7 @@ private:
     const OmgModelChecker* _omg;
     std::set<AbstractState> _abs_states;
 
-    std::map<AbstractState*, AbsStateSet> _NE_may;
+std::map<AbstractState*, AbsStateSet> _NE_may;
     std::map<AbstractState*, std::vector<AbsStateSet>> _E_must;
     std::map<AbstractState*, std::vector<AbsStateSet>> _E_may_over;
     std::map<AbstractState*, std::vector<std::pair<AbsStateSet, EEClosureResult>>> _NE_may_over;

@@ -51,6 +51,8 @@ class ISatSolver
 {
 public:
     virtual SatSolverResult solve_sat(const PropFormula& formula) = 0;
+    virtual bool is_sat(const z3::expr& formula) = 0;
+
     virtual std::pair<int, SatSolverResult> inc_solve_sat(const PropFormula& formula, const std::vector<z3::expr>& flags) = 0;
     virtual std::vector<SatSolverResult> all_sat(const PropFormula& formula, const std::vector<z3::expr> &vars, bool complete_assignments=false) = 0;
     virtual z3::expr_vector get_unsat_core(const PropFormula& formula, z3::expr_vector& assumptions) = 0;
@@ -63,6 +65,7 @@ class Z3SatSolver : public ISatSolver
 public:
     explicit Z3SatSolver(z3::context& context) : _solver(context) {}
     SatSolverResult solve_sat(const PropFormula& formula) override;
+    bool is_sat(const z3::expr& formula) override;
 
     std::vector<SatSolverResult> all_sat(const PropFormula& formula, const std::vector<z3::expr> &vars, bool complete_assignments) override;
     std::pair<int, SatSolverResult> inc_solve_sat(const PropFormula& formula, const std::vector<z3::expr>& flags) override;

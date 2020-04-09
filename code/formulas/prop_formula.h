@@ -22,6 +22,7 @@ public:
     const z3::expr_vector& get_vars_by_tag(const std::string& tag) const;
     std::vector<z3::expr> get_all_variables() const;
     bool is_sat() const;
+    z3::context& get_ctx() const;
     const std::map<std::string, z3::expr_vector> & get_variables_map() const;
 
 private:

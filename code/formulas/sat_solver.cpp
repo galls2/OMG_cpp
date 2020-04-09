@@ -102,6 +102,14 @@ z3::expr_vector Z3SatSolver::get_unsat_core(const PropFormula& formula, z3::expr
     return unsat_core;
 }
 
+bool Z3SatSolver::is_sat(const z3::expr &raw_formula) {
+    _solver.add(raw_formula);
+    z3::check_result sat_res = _solver.check();
+    if (sat_res == z3::unsat) return false;
+    else if (sat_res == z3::sat) return true;
+    else { assert(sat_res == z3::unknown); throw SatSolverResultException("SAT result is unknown"); }
+}
+
 
 SatSolverResult::SatSolverResult() : _is_sat(false) { }
 

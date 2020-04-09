@@ -58,3 +58,7 @@ bool PropFormula::is_sat() const
     return solver->solve_sat(*this).get_is_sat();
 }
 
+z3::context &PropFormula::get_ctx() const {
+    return _formula.ctx();
+}
+
