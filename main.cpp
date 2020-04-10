@@ -116,3 +116,4 @@ int main()
     TEST("/home/galls2/Desktop/af_ag.aig", "AG (~state<1>) ", false);
 
 }
+//  when no possible tse add flag

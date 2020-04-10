@@ -53,6 +53,10 @@ AbstractionClassifier::split(AbstractState &astate, PropFormula &query_formula, 
 
     cl_node->_successors.emplace(true, std::make_unique<AbstractClassificationNode>(*this, &astate_pos, cl_node));
     cl_node->_successors.emplace(false, std::make_unique<AbstractClassificationNode>(*this, &astate_neg, cl_node));
+#ifdef DEBUG
+    cl_node->get_successor(true).set_split_string(cl_node->get_abs()->_debug_name + std::string("::True"));
+    cl_node->get_successor(false).set_split_string(cl_node->get_abs()->_debug_name + std::string("::False"));
+#endif
 
     z3::context& ctx = query_formula.get_ctx();
     cl_node->_query.emplace([query_formula, &ctx] (const ConcreteState& cstate)

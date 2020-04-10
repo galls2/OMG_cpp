@@ -13,8 +13,10 @@
 #include <set>
 
 #define DEBUG_PRINT(fmt, args...) fprintf(stderr, fmt, ## args)
+#define DEBUG_PRINT_SEP DEBUG_PRINT("------------------------------------------\n")
 #else
 #define DEBUG_PRINT(fmt, args...)
+#define DEBUG_PRINT_SEP
 #endif
 
 template< typename T, typename ...Ts>

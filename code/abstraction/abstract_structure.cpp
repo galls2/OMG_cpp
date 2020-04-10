@@ -141,7 +141,7 @@ RefinementResult AbstractStructure::refine_no_successor(const UnwindingTree &to_
 
     if (OmgConfiguration::get<bool>("Trivial Split Elimination") && !split_formulas.remainder_formula.is_sat())
     {
-        DEBUG_PRINT("IMPLEMENT TSE :)");
+        DEBUG_PRINT("IMPLEMENT TSE :)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
         throw "IEEE";
     }
 

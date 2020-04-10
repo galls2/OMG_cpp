@@ -78,7 +78,7 @@ bool OmgModelChecker::handle_ar(Goal &goal)
     while (!to_visit.empty()) {
         UnwindingTree &node_to_explore = to_visit.top();
         to_visit.pop();
-        DEBUG_PRINT("AR: exploring %s\n", node_to_explore.get_concrete_state().to_bitvec_str().data());
+        DEBUG_PRINT_SEP; DEBUG_PRINT("AR: exploring %s\n", node_to_explore.get_concrete_state().to_bitvec_str().data());
         node_to_explore.set_urgent(false);
 
 
@@ -271,7 +271,7 @@ CandidateSet OmgModelChecker::compute_candidate_set(Goal& goal)
     });
 
     if (OmgConfiguration::get<bool>("Brother Unification"))
-        return brother_unification(cands, *(goal.get_spec().get_operands()[1]));
+        return brother_unification(cands, *(goal.get_spec().get_operands()[0]));
     else return cands;
 }
 
@@ -327,6 +327,11 @@ CandidateSet OmgModelChecker::brother_unification(const CandidateSet &cands, con
 
         CandidateSet unchanged, next_level;
         unify_same_level(levels[depth], agree_upon, unchanged, next_level);
+
+        reduced.insert(unchanged.begin(), unchanged.end());
+
+        size_t next_depth = depth - 1;
+        levels[next_depth].insert(next_level.begin(), next_level.end());
     }
 
     if (levels.find(0) != levels.end()) reduced.insert(levels[0].begin(), levels[0].end());
@@ -409,6 +414,7 @@ AbstractState &OmgModelChecker::find_abs(UnwindingTree &node)
         else
         {
             AbstractState &updated_abs = _abs_classifier->update_classification(astate, cstate);
+            node.set_abs(updated_abs);
             return updated_abs;
         }
     }
@@ -508,12 +514,13 @@ void OmgModelChecker::refine_exists_successor(const ConcreteState *src_cstate,
 void OmgModelChecker::update_classifier(RefinementResult& refine_result, AbstractState& abs_src_witness) {
     if (!refine_result.is_split) return;
 
-    _abs_classifier->split(abs_src_witness, *refine_result.split_query, *refine_result.astate_generalized, *refine_result.astate_generalized);
+    _abs_classifier->split(abs_src_witness, *refine_result.split_query, *refine_result.astate_generalized, *refine_result.astate_remainder);
 
     refine_result.astate_generalized->set_cl_node(&abs_src_witness.get_cl_node()->get_successor(true));
     refine_result.astate_remainder->set_cl_node(&abs_src_witness.get_cl_node()->get_successor(false));
 
-    DEBUG_PRINT("NEED To IMPL CLASSIFICATION CACHE!");
+    DEBUG_PRINT("NEED To IMPL CLASSIFICATION CACHE!\n");
+
 }
 
 void OmgModelChecker::refine_no_successor(UnwindingTree &to_close_node, AbstractState &abs_src_witness,
