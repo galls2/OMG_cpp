@@ -532,7 +532,7 @@ void OmgModelChecker::refine_no_successor(UnwindingTree &to_close_node, Abstract
      * However, this is not ture. he reason is that we want to split AWAY the part of abs_src_witness that includes the reacehable
      * node in the unwinding tree, which is not necessarily done in EX+.
      */
-    RefinementResult refine_res = _abs_structure->refine_no_successor(to_close_node, abs_src_witness, {&abs_dst});
+    RefinementResult refine_res = _abs_structure->refine_no_successor(to_close_node, abs_src_witness, {&abs_dst}, false);
     update_classifier(refine_res, abs_src_witness);
     find_abs(to_close_node);
 }

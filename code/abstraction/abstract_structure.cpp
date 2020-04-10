@@ -103,11 +103,6 @@ RefinementResult AbstractStructure::refine_exists_successor(const ConcreteState 
 //    //TSE
     // CALL COMMON SPLIT FUNCTION -- create new states, replace values innnnnnnn dictionaires, add new edges and what not.
     throw 143;
-
-
-
-
-
 }
 
 template <typename T, typename S>
@@ -118,7 +113,7 @@ void inherit_values_in_dict(std::map<T, S>& dict, T& old_key, const std::set<T>&
 
 
 RefinementResult AbstractStructure::refine_no_successor(const UnwindingTree &to_close_node, AbstractState &abs_src_witness,
-                                            const std::set<AbstractState *> &dsts_abs)
+                                            const std::set<AbstractState *> &dsts_abs, bool is_tse_possible /* =true */)
 {
     if (_NE_may.find(&abs_src_witness) != _NE_may.end() &&
         std::all_of(dsts_abs.begin(), dsts_abs.end(),
@@ -139,10 +134,13 @@ RefinementResult AbstractStructure::refine_no_successor(const UnwindingTree &to_
             FormulaSplitUtils::ex_neg(to_close_node.get_concrete_state().get_conjunct(),
                                       abs_src_witness.get_formula(), dst_abs_formulas, _kripke);
 
-    if (OmgConfiguration::get<bool>("Trivial Split Elimination") && !split_formulas.remainder_formula.is_sat())
+    if (OmgConfiguration::get<bool>("Trivial Split Elimination") && is_tse_possible)
     {
-        DEBUG_PRINT("IMPLEMENT TSE :)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-        throw "IEEE";
+        if (!split_formulas.remainder_formula.is_sat())
+        {
+            DEBUG_PRINT("IMPLEMENT TSE :)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+            throw "IEEE";
+        }
     }
 
     std::pair<AbstractState*, AbstractState*> res = create_new_astates_and_update(abs_src_witness, split_formulas);

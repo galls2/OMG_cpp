@@ -1,10 +1,7 @@
+#pragma once
 //
 // Created by galls2 on 04/10/19.
 //
-
-#ifndef OMG_CPP_ABSTRACT_STRUCTURE_H
-#define OMG_CPP_ABSTRACT_STRUCTURE_H
-
 
 #include <structures/kripke_structure.h>
 #include <utils/z3_utils.h>
@@ -42,7 +39,9 @@ public:
     const OmgModelChecker* get_omg() const;
     RefinementResult refine_exists_successor(const ConcreteState &src_cstate, AbstractState &src_abs,
                                  const std::set<const AbstractState *> &dsts_abs);
-    RefinementResult refine_no_successor(const UnwindingTree& to_close_node, AbstractState& abs_src_witness, const std::set<AbstractState *> &dsts_abs);
+
+    RefinementResult refine_no_successor(const UnwindingTree& to_close_node, AbstractState& abs_src_witness, const std::set<AbstractState *> &dsts_abs
+        , bool is_tse_possible=true);
 
 
 private:
@@ -55,10 +54,7 @@ std::map<AbstractState*, AbsStateSet> _NE_may;
     std::map<AbstractState*, std::vector<AbsStateSet>> _E_may_over;
     std::map<AbstractState*, std::vector<std::pair<AbsStateSet, EEClosureResult>>> _NE_may_over;
 
-    //E MAY OVER, , NE MAY OVER
     std::pair<AbstractState*, AbstractState*> create_new_astates_and_update(AbstractState &abs_src_witness,
                                        SplitFormulas& new_abs_state_formulas);
 };
 
-
-#endif //OMG_CPP_ABSTRACT_STRUCTURE_H
