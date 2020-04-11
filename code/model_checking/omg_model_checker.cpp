@@ -495,10 +495,10 @@ void OmgModelChecker::strengthen_trace(UnwindingTree &start, UnwindingTree &end)
 }
 
 void OmgModelChecker::refine_exists_successor(const ConcreteState *src_cstate,
-                                              const std::set<const ConcreteState *> &dsts_cstate)
+                                              const std::set<ConcreteState *> &dsts_cstate)
 {
-    std::set<const AbstractState*> dsts_abs;
-    for (const ConcreteState* dst_cstate : dsts_cstate) dsts_abs.insert(&find_abs(*dst_cstate));
+    std::set<AbstractState*> dsts_abs;
+    for (ConcreteState* dst_cstate : dsts_cstate) dsts_abs.insert(&find_abs(*dst_cstate));
 
     AbstractState& src_abs = find_abs(*src_cstate);
 

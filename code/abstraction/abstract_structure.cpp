@@ -79,7 +79,7 @@ const OmgModelChecker *AbstractStructure::get_omg() const{
 }
 
 RefinementResult AbstractStructure::refine_exists_successor(const ConcreteState &src_cstate, AbstractState &src_abs,
-                                                const std::set<const AbstractState *> &dsts_abs, bool is_tse_possible) {
+                                                const std::set<AbstractState *> &dsts_abs, bool is_tse_possible) {
     if (_E_must.find(&src_abs) != _E_must.end())
     {
         auto& must_options = _E_must[&src_abs];
@@ -95,50 +95,38 @@ RefinementResult AbstractStructure::refine_exists_successor(const ConcreteState 
     }
 
     std::set<const PropFormula *> dst_abs_formulas;
-    for (const auto& dst_astate : dsts_abs) dst_abs_formulas.insert(&dst_astate->get_formula()); // many many copies?
+    for (const auto& dst_astate : dsts_abs) dst_abs_formulas.insert(&dst_astate->get_formula());
 
 
     SplitFormulas split_formulas =
             FormulaSplitUtils::ex_pos(src_cstate.get_conjunct(),
                                       src_abs.get_formula(), dst_abs_formulas, _kripke);
-    throw "impl ex_pos";
-//    if (OmgConfig::get<bool>("Trivial Split Elimination") && is_tse_possible)
-//    {
-//        if (!split_formulas.remainder_formula.is_sat())
-//        {
-//            DEBUG_PRINT("IMPLEMENT TSE :)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-//            throw "IEEE";
-//        }
-//    }
 
-//    std::pair<AbstractState*, AbstractState*> res = create_new_astates_and_update(src_abs, split_formulas);
-//
-//    bool is_src_in_dsts = std::any_of(dsts_abs.begin(), dsts_abs.end(), [&src_abs] (AbstractState* abs_dst) {return (*abs_dst) == src_abs; });
-//    throw "impl x here down";
-//    for (AbstractState* abs_dst : dsts_abs) {_NE_may[res.first].insert(abs_dst); }
-//    if (is_src_in_dsts) { _NE_may[res.first].insert({res.first, res.second}); }
-//
-//    auto remove_redundant =
-//            [&res, &dsts_abs, is_src_in_dsts] (std::map<AbstractState*, std::vector<AbsStateSet>>& dict)
-//            {
-//                if (dict.find(res.first) == dict.end()) return;
-//                for (AbsStateSet &opt : dict[res.first])
-//                {
-//                    opt.erase(dsts_abs.begin(), dsts_abs.end());
-//                    if (is_src_in_dsts)
-//                    {
-//                        opt.erase(res.first);
-//                        opt.erase(res.second);
-//                    }
-//                }
-//            };
-//
-//    remove_redundant(_E_must);
-//    remove_redundant(_E_may_over);
+    if (OmgConfig::get<bool>("Trivial Split Elimination") && is_tse_possible)
+    {
+        if (!split_formulas.remainder_formula.is_sat())
+        {
+            DEBUG_PRINT("IMPLEMENT TSE :)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+            throw "IEEE";
+        }
+    }
 
-   // return { true, res.first, res.second, std::experimental::optional<PropFormula>(split_formulas.query) };
+    std::pair<AbstractState*, AbstractState*> res = create_new_astates_and_update(src_abs, split_formulas);
 
-    throw 143;
+    bool is_src_in_dsts = std::any_of(dsts_abs.begin(), dsts_abs.end(), [&src_abs] (AbstractState* abs_dst) {return (*abs_dst) == src_abs; });
+
+    if (is_src_in_dsts)
+    {
+        AbsStateSet updated = dsts_abs;
+        size_t erase_res = updated.erase(&src_abs);
+        assert(erase_res == 1);
+        updated.insert({res.first, res.second});
+        _E_must[res.first].emplace_back(std::move(updated));
+    } else
+    {
+        _E_must[res.first].emplace_back(dsts_abs);
+    }
+    return { true, res.first, res.second, std::experimental::optional<PropFormula>(split_formulas.query) };
 }
 
 template <typename T, typename S>
