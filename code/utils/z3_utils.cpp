@@ -7,7 +7,8 @@
 #include "version_manager.h"
 #include <model_checking/omg_model_checker.h>
 
-z3::expr to_var(z3::context& ctx, size_t val) {
+z3::expr to_var(z3::context& ctx, size_t val)
+{
     return ctx.bool_const(VersionManager::new_version(val).data());
 }
 
@@ -22,13 +23,6 @@ z3::expr_vector iterable_to_expr_vec(z3::context& ctx, const T& iterable)
 z3::expr_vector vec_to_expr_vec(z3::context& ctx, const std::vector<z3::expr>& vec)
 {
     return iterable_to_expr_vec<std::vector<z3::expr>>(ctx, vec);
-}
-
-
-template <typename T>
-std::set<T> vector_to_set_debug(std::vector<T> vec)
-{
-    return std::set<T>(vec.begin(), vec.end());
 }
 
 
@@ -48,7 +42,7 @@ SatResult Z3_val_to_sat_result(Z3_lbool v) {
         case Z3_lbool::Z3_L_TRUE:
             return SatResult::TRUE;
         default:
-            throw(SatSolverResultException("Illegal Sat value"));
+            throw(SatSolverResultException("Illegal SAT value"));
     }
 }
 
@@ -62,7 +56,7 @@ std::string expr_vector_to_string(const z3::expr_vector &vec) {
 std::string z3_expr_to_string(const std::vector<z3::expr> &vec) {
     std::string res;
     for (const auto &i : vec)
-        res += i.to_string()  + std::string(" ");
+        res += i.to_string() + std::string(" ");
     return res;
 }
 
@@ -95,7 +89,7 @@ FormulaInductiveUtils::is_EE_inductive(AbstractState &to_close, const std::set<A
 
     z3::expr inductive_raw_formula = src_part && tr.get_raw_formula() && dst_part;
     PropFormula inductive_formula(inductive_raw_formula, {{"ps", ps_tr}, {"ns", ns_tr}});
-    std::unique_ptr<ISatSolver> solver = ISatSolver::s_sat_solvers.at(OmgConfiguration::get<std::string>("Sat Solver"))(ps_tr.ctx());
+    std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(ps_tr.ctx());
     SatSolverResult sat_res = solver->solve_sat(inductive_formula);
     if (!sat_res.get_is_sat()) // if the formula is UNSAT, there is NO cex to the inductiveness, so we have inductiveness
     {
@@ -144,7 +138,7 @@ FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<Unwin
     PropFormula is_tr_formula = PropFormula(raw_formula, {{"ps", ps_tr},
                                                           {"ns", ns_tr}});
 
-    std::unique_ptr<ISatSolver> solver = ISatSolver::s_sat_solvers.at(OmgConfiguration::get<std::string>("Sat Solver"))(ctx);
+    std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(ctx);
 
     std::pair<int, SatSolverResult> res = solver->inc_solve_sat(is_tr_formula, flags);
     if (res.first < 0) {
@@ -188,113 +182,154 @@ std::vector<z3::expr> FormulaUtils::get_vars_in_formula(z3::expr const &e) {
     return vars;
 }
 
+bool FormulaUtils::is_cstate_conjunct(const z3::expr &f) {
+    if (!f.is_and()) return false;
+    for (unsigned int i = 0; i < f.num_args(); ++i) {
+        if (!(f.arg(i).is_bool() || (f.arg(i).is_not() && f.arg(i).arg(0).is_bool())))
+            return false;
+    }
+    return true;
+}
+
+bool FormulaUtils::is_contained_expr_vec(const z3::expr_vector &small, const z3::expr_vector &big) {
+    Z3ExprSet small_set = expr_vector_to_set(small);
+    Z3ExprSet big_set = expr_vector_to_set(big);
+    assert(is_contained_z3_containers(small_set, big_set));
+}
+
+void FormulaSplitUtils::find_proving_inputs(const z3::expr& state_conj, const PropFormula& tr, z3::expr& dst, z3::expr_vector& input_values)
+{
+    z3::expr raw_formula_to_solve = state_conj && tr.get_raw_formula() && dst;
+    PropFormula to_solve(raw_formula_to_solve, tr.get_variables_map());
+    z3::context& ctx = tr.get_ctx();
+
+    std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(ctx);
+
+    SatSolverResult sat_result = solver->solve_sat(to_solve);
+    assert(sat_result.get_is_sat());
+
+    z3::expr_vector in0_vec = tr.get_vars_by_tag("in0");
+
+    for (size_t in_i = 0; in_i < in0_vec.size(); ++in_i)
+    {
+        const z3::expr& in_var = in0_vec[in_i];
+        SatResult in_var_val = sat_result.get_value(in_var);
+        if (in_var_val == SatResult::TRUE) input_values.push_back(in_var);
+        else if (in_var_val == SatResult::FALSE) input_values.push_back(!in_var);
+    }
+}
 
 SplitFormulas
 FormulaSplitUtils::ex_pos(const z3::expr &state_conj, const PropFormula &src_astate_f,
                           const std::set<const PropFormula *> &dsts_astates_f, const KripkeStructure& kripke) {
+    assert(FormulaUtils::is_cstate_conjunct(state_conj));
+
+    const PropFormula &tr = kripke.get_tr();
+    z3::context &ctx = state_conj.ctx();
 
 #ifdef DEBUG
-    assert(state_conj.is_and());
-    for (unsigned int i = 0; i < state_conj.num_args(); ++i)
-        assert(state_conj.arg(i).is_bool() || (state_conj.arg(i).is_not() && state_conj.arg(i).arg(0).is_bool()));
+    Z3ExprSet ps_vars = expr_vector_to_set(tr.get_vars_by_tag("ps"));
+    Z3ExprSet ps_vars_actual = expr_vector_to_set(FormulaUtils::get_vars_in_formula(state_conj));
+    assert(is_contained_z3_containers(ps_vars_actual, ps_vars) && is_contained_z3_containers(ps_vars, ps_vars_actual));
 #endif
 
-    z3::context& ctx = state_conj.ctx();
+
     z3::expr_vector assumptions(ctx), assertions(ctx);
     std::map<z3::expr, unsigned int, Z3ExprComp> assumptions_map;
 
-    add_flags_to_state_conj(state_conj, ctx, assumptions, assertions, assumptions_map);
+    add_flags_to_conj(state_conj, ctx, assumptions, assertions, assumptions_map, std::string("a"));
+    z3::expr dst_formula_full = merge_dst_astate_formulas(dsts_astates_f, tr, ctx);
 
-    const PropFormula& tr = kripke.get_tr();
-#ifdef DEBUG
-    std::set<z3::expr, Z3ExprComp> ps_vars = expr_vector_to_set(tr.get_vars_by_tag("ps"));
-    std::set<z3::expr, Z3ExprComp> ps_vars_actual = expr_vector_to_set(FormulaUtils::get_vars_in_formula(state_conj));
-    assert(ps_vars == ps_vars_actual);
-#endif
+    z3::expr_vector input_values(ctx);
+    FormulaSplitUtils::find_proving_inputs(state_conj, tr, dst_formula_full, input_values);
+    z3::expr input_formula = z3::mk_and(input_values);
+    add_flags_to_conj(input_formula, ctx, assumptions, assertions, assumptions_map, std::string("b"));
 
+    z3::expr rest_of_formula = tr.get_raw_formula() && (!dst_formula_full);
+    z3::expr final_assumption = ctx.bool_const("a_fin");
+    assumptions.push_back(final_assumption);
+    assertions.push_back(z3::implies(final_assumption, rest_of_formula));
 
-    // create things TR & B'
-    // formulas
-    // assert unsat
-    // get unsatcore
+    PropFormula formula_to_check(z3::mk_and(assertions), tr.get_variables_map());
+
+    SplitFormulas res = get_split_formulas(state_conj, src_astate_f, tr, ctx, assumptions, assumptions_map,
+                                           final_assumption,
+                                           formula_to_check);
+
+    return res;
 }
 
 SplitFormulas
 FormulaSplitUtils::ex_neg(const z3::expr &state_conj, const PropFormula &src_astate_f,
-                          const std::set<const PropFormula *> &dsts_astates_f, const KripkeStructure &kripke)
-{
+                          const std::set<const PropFormula *> &dsts_astates_f, const KripkeStructure &kripke) {
+    assert(FormulaUtils::is_cstate_conjunct(state_conj));
+
+    const PropFormula &tr = kripke.get_tr();
+
 #ifdef DEBUG
-    assert(state_conj.is_and());
-    for (unsigned int i = 0; i < state_conj.num_args(); ++i)
-        assert(state_conj.arg(i).is_bool() || (state_conj.arg(i).is_not() && state_conj.arg(i).arg(0).is_bool()));
+    Z3ExprSet ps_vars = expr_vector_to_set(tr.get_vars_by_tag("ps"));
+    Z3ExprSet ps_vars_actual = expr_vector_to_set(FormulaUtils::get_vars_in_formula(state_conj));
+    assert(is_contained_z3_containers(ps_vars_actual, ps_vars) && is_contained_z3_containers(ps_vars, ps_vars_actual));
 #endif
 
-    z3::context& ctx = state_conj.ctx();
+
+    z3::context &ctx = state_conj.ctx();
     z3::expr_vector assumptions(ctx), assertions(ctx);
     std::map<z3::expr, unsigned int, Z3ExprComp> assumptions_map;
 
-    add_flags_to_state_conj(state_conj, ctx, assumptions, assertions, assumptions_map);
+    add_flags_to_conj(state_conj, ctx, assumptions, assertions, assumptions_map, std::string("a"));
 
-    const PropFormula& tr = kripke.get_tr();
-
-#ifdef DEBUG
-    std::set<z3::expr, Z3ExprComp> ps_vars = expr_vector_to_set(tr.get_vars_by_tag("ps"));
-    std::set<z3::expr, Z3ExprComp> ps_vars_actual = expr_vector_to_set(FormulaUtils::get_vars_in_formula(state_conj));
-    assert(is_contained_z3_containers(ps_vars_actual, ps_vars));
-#endif
-
-    z3::expr_vector dsts(ctx);
-    for (const PropFormula* const dst_formula : dsts_astates_f)
-    {
-#ifdef DEBUG
-        std::set<z3::expr, Z3ExprComp> ns_vars_actual = expr_vector_to_set(FormulaUtils::get_vars_in_formula(dst_formula->get_raw_formula()));
-        assert(is_contained_z3_containers(ns_vars_actual, ps_vars));
-#endif
-        z3::expr dst_formula_raw = dst_formula->get_raw_formula();
-        z3::expr dst_ns = dst_formula_raw.substitute(tr.get_vars_by_tag("ps"), tr.get_vars_by_tag("ns"));
-        dsts.push_back(dst_ns);
-    }
-
-    z3::expr dst_formula_full = z3::mk_or(dsts).simplify();
-    z3::expr full_formula = tr.get_raw_formula() && dst_formula_full;
+    z3::expr dst_formula_full = merge_dst_astate_formulas(dsts_astates_f, tr, ctx);
+    z3::expr rest_of_formula = tr.get_raw_formula() && dst_formula_full;
     z3::expr final_assumption = ctx.bool_const("a_fin");
     assumptions.push_back(final_assumption);
-    assertions.push_back(z3::implies(final_assumption, full_formula));
+    assertions.push_back(z3::implies(final_assumption, rest_of_formula));
 
     PropFormula formula_to_check(z3::mk_and(assertions), tr.get_variables_map());
 
-    std::unique_ptr<ISatSolver> solver = ISatSolver::s_sat_solvers.at(OmgConfiguration::get<std::string>("Sat Solver"))(ctx);
+    SplitFormulas res = get_split_formulas(state_conj, src_astate_f, tr, ctx, assumptions, assumptions_map,
+                                           final_assumption,
+                                           formula_to_check);
+
+    return res;
+}
+
+SplitFormulas FormulaSplitUtils::get_split_formulas(const z3::expr &state_conj, const PropFormula &src_astate_formula,
+                                                    const PropFormula &tr, z3::context &ctx,
+                                                    z3::expr_vector &assumptions,
+                                                    std::map<z3::expr, unsigned int, Z3ExprComp> &assumptions_map,
+                                                    const z3::expr &final_assumption,
+                                                    const PropFormula &formula_to_check) {
+    std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(
+            ctx);
     z3::expr_vector unsat_core = solver->get_unsat_core(formula_to_check, assumptions);
 
     z3::expr_vector assertions_selected(ctx);
 
 #ifdef DEBUG
     bool exists_final_assumption = false;
-    for (unsigned int i = 0; i < unsat_core.size(); ++i) if (z3::eq(unsat_core[i], final_assumption)) { exists_final_assumption = true; break; }
+    for (unsigned int i = 0; i < unsat_core.size(); ++i)
+        if (eq(unsat_core[i], final_assumption)) {
+            exists_final_assumption = true;
+            break;
+        }
     assert(exists_final_assumption);
 #endif
 
 
     z3::expr_vector pos_assertions = get_assertions_from_unsat_core(state_conj, ctx, assumptions_map, unsat_core);
+    z3::expr no_successor_part = mk_and(pos_assertions);
 
-    z3::expr no_successor_part  = z3::mk_and(pos_assertions);
-
-
-    z3::expr pos_split_part = (no_successor_part && src_astate_f.get_raw_formula()).simplify();
-
-    // The following is equivalent to src_astate_f.get_raw_formula() && (!pos_split_part)
-    z3::expr neg_split_part = (src_astate_f.get_raw_formula() && (!pos_split_part));
-//    z3::goal g(ctx); g.add(neg_split_part_not_simple);
-//    z3::tactic t(ctx, "ctx-solver-simplify");
-//    z3::apply_result app_res = t.apply(g);
-//    z3::expr neg_split_part = app_res[0].as_expr();
+    z3::expr pos_split_part = (no_successor_part && src_astate_formula.get_raw_formula()).simplify();
+    z3::expr neg_split_part = (src_astate_formula.get_raw_formula() && (!pos_split_part));
 
     const std::map<std::string, z3::expr_vector> abs_var_map = {
-            {"ps" , tr.get_vars_by_tag("ps")},
+            {"ps", tr.get_vars_by_tag("ps")},
             {"in0", tr.get_vars_by_tag("in0")}
     };
-    auto create_prop = [&abs_var_map] (const z3::expr& raw_f) { return PropFormula(raw_f, abs_var_map); };
-   return { create_prop(no_successor_part), create_prop(pos_split_part), create_prop(neg_split_part) };
+    auto create_prop = [&abs_var_map](const z3::expr &raw_f) { return PropFormula(raw_f, abs_var_map); };
+    SplitFormulas res = {create_prop(no_successor_part), create_prop(pos_split_part), create_prop(neg_split_part)};
+    return res;
 }
 
 z3::expr_vector FormulaSplitUtils::get_assertions_from_unsat_core(const z3::expr &state_conj, z3::context &ctx,
@@ -316,15 +351,36 @@ z3::expr_vector FormulaSplitUtils::get_assertions_from_unsat_core(const z3::expr
 
 
 void
-FormulaSplitUtils::add_flags_to_state_conj(const z3::expr &state_conj, z3::context &ctx, z3::expr_vector &assumptions,
-                                           z3::expr_vector &assertions,
-                                           std::map<z3::expr, unsigned int, Z3ExprComp> &assumptions_map) {
-    for (unsigned int i = 0; i < state_conj.num_args(); ++i)
+FormulaSplitUtils::add_flags_to_conj(const z3::expr &conj, z3::context &ctx, z3::expr_vector &assumptions,
+                                     z3::expr_vector &assertions,
+                                     std::map<z3::expr, unsigned int, Z3ExprComp> &assumptions_map,
+                                     const std::string &assumption_prefix) {
+    for (unsigned int i = 0; i < conj.num_args(); ++i)
     {
-        const z3::expr &lit = state_conj.arg(i);
-        z3::expr lit_assumption = ctx.bool_const((std::__cxx11::string("a") + std::__cxx11::to_string(i)).data());
+        const z3::expr &lit = conj.arg(i);
+        z3::expr lit_assumption = ctx.bool_const((assumption_prefix + std::to_string(i)).data());
         assumptions.push_back(lit_assumption);
         assertions.push_back(implies(lit_assumption, lit));
         assumptions_map.emplace(lit_assumption, i);
     }
 }
+
+
+z3::expr FormulaSplitUtils::merge_dst_astate_formulas(const std::set<const PropFormula *> &dsts_astates_f, const PropFormula& tr, z3::context& ctx)
+{
+    z3::expr_vector dsts(ctx);
+    for (const PropFormula* const dst_formula : dsts_astates_f)
+    {
+#ifdef DEBUG
+        Z3ExprSet ns_vars_actual = expr_vector_to_set(FormulaUtils::get_vars_in_formula(dst_formula->get_raw_formula()));
+        assert(is_contained_z3_containers(ns_vars_actual, expr_vector_to_set(tr.get_vars_by_tag("ps"))));
+#endif
+        z3::expr dst_formula_raw = dst_formula->get_raw_formula();
+        z3::expr dst_ns = dst_formula_raw.substitute(tr.get_vars_by_tag("ps"), tr.get_vars_by_tag("ns"));
+        dsts.push_back(dst_ns);
+    }
+
+    z3::expr dst_formula_full = z3::mk_or(dsts).simplify();
+    return dst_formula_full;
+}
+

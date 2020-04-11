@@ -21,6 +21,11 @@ public:
 
     static std::vector<z3::expr> get_vars_in_formula(z3::expr const & e);
 
+    static bool is_cstate_conjunct(const z3::expr& f);
+
+
+    static bool is_contained_expr_vec(const z3::expr_vector& small, const z3::expr_vector& big);
+
 };
 
 z3::expr to_var(z3::context& ctx, size_t val);
@@ -43,15 +48,14 @@ bool is_contained_z3_containers(const IterableType1& iter1, const IterableType2&
     });
 }
 
-
 template <typename T>
 std::set<T> vector_to_set_debug(std::vector<T> vec);
 
 
 template <typename VectorType>
-std::set<z3::expr, Z3ExprComp> expr_vector_to_set(const VectorType& expr_vec)
+Z3ExprSet expr_vector_to_set(const VectorType& expr_vec)
 {
-    std::set<z3::expr, Z3ExprComp> s;
+    Z3ExprSet s;
     for (size_t i = 0;i<expr_vec.size(); ++i) s.insert(expr_vec[i]);
     return s;
 }
@@ -88,12 +92,22 @@ public:
             const std::set<const PropFormula*>& dsts_astates_f, const KripkeStructure& kripke);
     static SplitFormulas ex_neg(const z3::expr& state_conj, const PropFormula& src_astate_f,
           const std::set<const PropFormula*>& dsts_astates_f, const KripkeStructure& kripke);
-
-    static void add_flags_to_state_conj(const z3::expr &state_conj, z3::context &ctx, z3::expr_vector &assumptions,
-                                        z3::expr_vector &assertions,
-                                        std::map<z3::expr, unsigned int, Z3ExprComp> &assumptions_map);
+private:
+    static void add_flags_to_conj(const z3::expr &conj, z3::context &ctx, z3::expr_vector &assumptions,
+                      z3::expr_vector &assertions,
+                      std::map<z3::expr, unsigned int, Z3ExprComp> &assumptions_map,
+                      const std::string &assumption_prefix);
 
     static z3::expr_vector get_assertions_from_unsat_core(const z3::expr &state_conj, z3::context &ctx,
                                                           std::map<z3::expr, unsigned int, Z3ExprComp> &assumptions_map,
                                                           const z3::expr_vector &unsat_core);
+
+    static z3::expr merge_dst_astate_formulas(const std::set<const PropFormula *> &dsts_astates_f, const PropFormula& tr, z3::context& ctx);
+    static void find_proving_inputs(const z3::expr& state_conj, const PropFormula& tr, z3::expr& dst, z3::expr_vector& input_values);
+
+    static SplitFormulas
+    get_split_formulas(const z3::expr &state_conj, const PropFormula &src_astate_formula, const PropFormula &tr,
+                       z3::context &ctx, z3::expr_vector &assumptions,
+                       std::map<z3::expr, unsigned int, Z3ExprComp> &assumptions_map, const z3::expr &final_assumption,
+                       const PropFormula &formula_to_check);
 };

@@ -65,7 +65,7 @@ bool test_formula(const std::string& aig_path, const std::string& formula_str)
     std::vector<ConcreteState> inits = kripke->get_initial_states();
     ConcreteState& init = inits[0];
 
-    OmgConfigurationBuilder builder;
+    OmgConfigBuilder builder;
     builder.set_config_src(ConfigurationSource::DEFAULT).build();
     OmgModelChecker omg(*kripke);
     bool res = omg.model_checking(init, *formula);

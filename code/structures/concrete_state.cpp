@@ -14,8 +14,8 @@ ConcreteState::ConcreteState(const KripkeStructure& kripke, z3::expr conjunct)  
 {
 #ifdef DEBUG
     std::vector<z3::expr> conj_vars = FormulaUtils::get_vars_in_formula(_conjunct);
-    std::set<z3::expr, Z3ExprComp> conj_vars_set(conj_vars.begin(), conj_vars.end());
-    std::set<z3::expr, Z3ExprComp> tr_ps_vars = expr_vector_to_set(_kripke.get_tr().get_vars_by_tag("ps"));
+    Z3ExprSet conj_vars_set(conj_vars.begin(), conj_vars.end());
+    Z3ExprSet tr_ps_vars = expr_vector_to_set(_kripke.get_tr().get_vars_by_tag("ps"));
 //    for (const auto & it : conj_vars_set) std::cout << it << std::endl;
 //    std::cout << "^^^^^^^^^" << std::endl;
 //    for (const auto & it : tr_ps_vars) std::cout << it << std::endl;

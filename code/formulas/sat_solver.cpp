@@ -152,7 +152,7 @@ z3::expr SatSolverResult::to_conjunt(z3::context& ctx) const {
 SatSolverResult::SatSolverResult(std::map<z3::expr, SatResult, Z3ExprComp> values) : _is_sat(true), _values(std::move(values)) {}
 
 
-const std::map<std::string, SatSolverFactory> ISatSolver::s_sat_solvers =
+const std::map<std::string, SatSolverFactory> ISatSolver::s_solvers =
         {
                 {"z3", [](z3::context& ctx) { return std::make_unique<Z3SatSolver>(ctx); }}
         };

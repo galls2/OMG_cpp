@@ -3,6 +3,7 @@
 // Created by galls2 on 05/10/19.
 //
 #include <memory>
+#include <set>
 #include <boost/variant.hpp>
 #include <utils/omg_exception.h>
 #include <functional>
@@ -26,6 +27,8 @@ struct Z3ExprComp
     }
 
 };
+
+typedef std::set<z3::expr, Z3ExprComp> Z3ExprSet;
 
 struct SatSolverResult
 {
@@ -56,7 +59,7 @@ public:
     virtual std::pair<int, SatSolverResult> inc_solve_sat(const PropFormula& formula, const std::vector<z3::expr>& flags) = 0;
     virtual std::vector<SatSolverResult> all_sat(const PropFormula& formula, const std::vector<z3::expr> &vars, bool complete_assignments=false) = 0;
     virtual z3::expr_vector get_unsat_core(const PropFormula& formula, z3::expr_vector& assumptions) = 0;
-    static const std::map<std::string, SatSolverFactory> s_sat_solvers;
+    static const std::map<std::string, SatSolverFactory> s_solvers;
     virtual ~ISatSolver() = default;
 };
 

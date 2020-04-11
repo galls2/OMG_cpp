@@ -54,7 +54,7 @@ PropFormula::PropFormula(const z3::expr &formula, const std::map<std::string, z3
 
 bool PropFormula::is_sat() const
 {
-    std::unique_ptr<ISatSolver> solver = ISatSolver::s_sat_solvers.at(OmgConfiguration::get<std::string>("Sat Solver"))(_formula.ctx());
+    std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(_formula.ctx());
     return solver->solve_sat(*this).get_is_sat();
 }
 

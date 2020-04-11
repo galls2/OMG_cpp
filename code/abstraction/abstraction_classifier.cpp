@@ -61,10 +61,10 @@ AbstractionClassifier::split(AbstractState &astate, PropFormula &query_formula, 
     z3::context& ctx = query_formula.get_ctx();
     cl_node->_query.emplace([query_formula, &ctx] (const ConcreteState& cstate)
     {
-        std::unique_ptr<ISatSolver> solver = ISatSolver::s_sat_solvers.at(OmgConfiguration::get<std::string>("Sat Solver"))(ctx);
+        std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(ctx);
 #ifdef DEBUG
-        std::set<z3::expr, Z3ExprComp> cstate_vars = expr_vector_to_set(FormulaUtils::get_vars_in_formula(cstate.get_conjunct()));
-        std::set<z3::expr, Z3ExprComp> ps_vars = expr_vector_to_set(query_formula.get_vars_by_tag("ps"));
+        Z3ExprSet cstate_vars = expr_vector_to_set(FormulaUtils::get_vars_in_formula(cstate.get_conjunct()));
+        Z3ExprSet ps_vars = expr_vector_to_set(query_formula.get_vars_by_tag("ps"));
         assert(is_contained_z3_containers(cstate_vars, ps_vars));
 #endif
         z3::expr formula_to_solver = query_formula.get_raw_formula() && cstate.get_conjunct();

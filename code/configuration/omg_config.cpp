@@ -8,7 +8,7 @@
 #include <boost/variant.hpp>
 #include "omg_config.h"
 
-std::unordered_map<std::string, ValueType> OmgConfigurationBuilder::configuration_fields =
+std::unordered_map<std::string, ValueType> OmgConfigBuilder::configuration_fields =
         {
                 {"Properties per specification", ValueType::BOOLEAN},
                 {"Brother Unification",          ValueType::BOOLEAN},
@@ -17,15 +17,15 @@ std::unordered_map<std::string, ValueType> OmgConfigurationBuilder::configuratio
         };
 
 
-void OmgConfigurationBuilder::build() {
+void OmgConfigBuilder::build() {
     switch (_config_src) {
         case ConfigurationSource::FILE: {
             ConfigTable config_table = get_config_from_file();
-            OmgConfiguration::load_config_table(config_table);
+            OmgConfig::load_config_table(config_table);
             break;
         }
         case ConfigurationSource::STDIN: {
-            throw OmgConfigurationException("Unsupported configuration input option.");
+            throw OmgConfigException("Unsupported configuration input option.");
         }
         case ConfigurationSource::DEFAULT: {
                     ConfigTable config_table = {
@@ -34,16 +34,16 @@ void OmgConfigurationBuilder::build() {
                             {"Trivial Split Elimination", true},
                             {"Sat Solver", std::string("z3")}
                     };
-            OmgConfiguration::load_config_table(config_table);
+            OmgConfig::load_config_table(config_table);
             break;
         }
         default: {
-            throw OmgConfigurationException("Unsupported configuration input option.");
+            throw OmgConfigException("Unsupported configuration input option.");
         }
     }
 }
 
-ConfigTable OmgConfigurationBuilder::get_config_from_file() const {
+ConfigTable OmgConfigBuilder::get_config_from_file() const {
 
     ConfigTable config_data;
     size_t properties_found_counter = 0;
@@ -59,7 +59,7 @@ ConfigTable OmgConfigurationBuilder::get_config_from_file() const {
                 case ValueType::BOOLEAN: {
                     if (parts[1] == "True") config_data[parts[0]] = true;
                     else if (parts[1] == "False") config_data[parts[0]] = false;
-                    else throw OmgConfigurationException(
+                    else throw OmgConfigException(
                             std::string("Illegal boolean value ").append(parts[0]).append(
                                     ". Must be True/False").data());
                     break;
@@ -70,7 +70,7 @@ ConfigTable OmgConfigurationBuilder::get_config_from_file() const {
                     }
                     catch (std::exception &ex) // Should be std::invalid_argument OR std::out_of_range
                     {
-                        throw OmgConfigurationException(
+                        throw OmgConfigException(
                                 std::string("Illegal integer value ").append(parts[1]).append(":")
                                         .append(ex.what()).data());
                     }
@@ -80,15 +80,15 @@ ConfigTable OmgConfigurationBuilder::get_config_from_file() const {
                     config_data[parts[0]] = parts[1];
                     break;
                 default:
-                    throw OmgConfigurationException("Unknown value type.");
+                    throw OmgConfigException("Unknown value type.");
             }
         } else
-            throw OmgConfigurationException((std::string("Unrecognized configuration ").append(parts[0])).data());
+            throw OmgConfigException((std::string("Unrecognized configuration ").append(parts[0])).data());
     }
     if (properties_found_counter < configuration_fields.size())
-                throw OmgConfigurationException("Not enough properties in configuration");
+                throw OmgConfigException("Not enough properties in configuration");
     return config_data;
 }
 
 
-ConfigTable OmgConfiguration::_configuration = {};
+ConfigTable OmgConfig::_configuration = {};

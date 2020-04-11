@@ -79,7 +79,7 @@ const OmgModelChecker *AbstractStructure::get_omg() const{
 }
 
 RefinementResult AbstractStructure::refine_exists_successor(const ConcreteState &src_cstate, AbstractState &src_abs,
-                                                const std::set<const AbstractState *> &dsts_abs) {
+                                                const std::set<const AbstractState *> &dsts_abs, bool is_tse_possible) {
     if (_E_must.find(&src_abs) != _E_must.end())
     {
         auto& must_options = _E_must[&src_abs];
@@ -90,18 +90,54 @@ RefinementResult AbstractStructure::refine_exists_successor(const ConcreteState 
                 }
                 ))
         {
-            return {false, nullptr, nullptr};
+            return {false, nullptr, nullptr, std::experimental::optional<PropFormula>()};
         }
     }
 
     std::set<const PropFormula *> dst_abs_formulas;
     for (const auto& dst_astate : dsts_abs) dst_abs_formulas.insert(&dst_astate->get_formula()); // many many copies?
 
-//    std::pair<PropFormula, PropFormula> new_abs_state_formulas =
-//                                                FormulaSplitUtils::ex_pos(src_cstate.get_conjunct(),
-//                                                                          src_abs.get_formula(), dst_abs_formulas, _kripke);
-//    //TSE
-    // CALL COMMON SPLIT FUNCTION -- create new states, replace values innnnnnnn dictionaires, add new edges and what not.
+
+    SplitFormulas split_formulas =
+            FormulaSplitUtils::ex_pos(src_cstate.get_conjunct(),
+                                      src_abs.get_formula(), dst_abs_formulas, _kripke);
+    throw "impl ex_pos";
+//    if (OmgConfig::get<bool>("Trivial Split Elimination") && is_tse_possible)
+//    {
+//        if (!split_formulas.remainder_formula.is_sat())
+//        {
+//            DEBUG_PRINT("IMPLEMENT TSE :)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+//            throw "IEEE";
+//        }
+//    }
+
+//    std::pair<AbstractState*, AbstractState*> res = create_new_astates_and_update(src_abs, split_formulas);
+//
+//    bool is_src_in_dsts = std::any_of(dsts_abs.begin(), dsts_abs.end(), [&src_abs] (AbstractState* abs_dst) {return (*abs_dst) == src_abs; });
+//    throw "impl x here down";
+//    for (AbstractState* abs_dst : dsts_abs) {_NE_may[res.first].insert(abs_dst); }
+//    if (is_src_in_dsts) { _NE_may[res.first].insert({res.first, res.second}); }
+//
+//    auto remove_redundant =
+//            [&res, &dsts_abs, is_src_in_dsts] (std::map<AbstractState*, std::vector<AbsStateSet>>& dict)
+//            {
+//                if (dict.find(res.first) == dict.end()) return;
+//                for (AbsStateSet &opt : dict[res.first])
+//                {
+//                    opt.erase(dsts_abs.begin(), dsts_abs.end());
+//                    if (is_src_in_dsts)
+//                    {
+//                        opt.erase(res.first);
+//                        opt.erase(res.second);
+//                    }
+//                }
+//            };
+//
+//    remove_redundant(_E_must);
+//    remove_redundant(_E_may_over);
+
+   // return { true, res.first, res.second, std::experimental::optional<PropFormula>(split_formulas.query) };
+
     throw 143;
 }
 
@@ -134,7 +170,7 @@ RefinementResult AbstractStructure::refine_no_successor(const UnwindingTree &to_
             FormulaSplitUtils::ex_neg(to_close_node.get_concrete_state().get_conjunct(),
                                       abs_src_witness.get_formula(), dst_abs_formulas, _kripke);
 
-    if (OmgConfiguration::get<bool>("Trivial Split Elimination") && is_tse_possible)
+    if (OmgConfig::get<bool>("Trivial Split Elimination") && is_tse_possible)
     {
         if (!split_formulas.remainder_formula.is_sat())
         {

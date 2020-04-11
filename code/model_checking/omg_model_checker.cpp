@@ -270,7 +270,7 @@ CandidateSet OmgModelChecker::compute_candidate_set(Goal& goal)
         return node.is_developed(goal);
     });
 
-    if (OmgConfiguration::get<bool>("Brother Unification"))
+    if (OmgConfig::get<bool>("Brother Unification"))
         return brother_unification(cands, *(goal.get_spec().get_operands()[0]));
     else return cands;
 }
@@ -505,10 +505,8 @@ void OmgModelChecker::refine_exists_successor(const ConcreteState *src_cstate,
 
     RefinementResult refinement_res = _abs_structure->refine_exists_successor(*src_cstate, src_abs, dsts_abs);
 
-
-  //  update_classifier(refinement_res);
- //   find_abs(to_close_node);
-
+    //update_classifier(refinement_res);
+// find_abs??
 }
 
 void OmgModelChecker::update_classifier(RefinementResult& refine_result, AbstractState& abs_src_witness) {
@@ -534,7 +532,7 @@ void OmgModelChecker::refine_no_successor(UnwindingTree &to_close_node, Abstract
      */
     RefinementResult refine_res = _abs_structure->refine_no_successor(to_close_node, abs_src_witness, {&abs_dst}, false);
     update_classifier(refine_res, abs_src_witness);
-    find_abs(to_close_node);
+    find_abs(to_close_node); // redundant?
 }
 
 
