@@ -92,6 +92,8 @@ void unit_tests_aps()
     TEST("/home/galls2/Desktop/af_ag.aig", " (~state<0>) | state<1>", true);
     TEST("/home/galls2/Desktop/af_ag.aig", " (~state<0>) & state<1>", false);
     TEST("/home/galls2/Desktop/af_ag.aig", " (~state<0>) &  (!state<1>)", true);
+    TEST("/home/galls2/Desktop/gray.aig", "true", true);
+    TEST("/home/galls2/Desktop/gray.aig", "false", false);
 }
 
 void unit_tests_ag()
@@ -106,6 +108,9 @@ void unit_tests_ag()
     TEST("/home/galls2/Desktop/gray.aig", "AG ((~p) & (~q) & (~r))", false);
     TEST("/home/galls2/Desktop/gray.aig", "AG (~p)", false);
     TEST("/home/galls2/Desktop/gray.aig", "AG (~q)", false);
+    TEST("/home/galls2/Desktop/gray.aig", "AG (~r)", false);
+
+//    TEST("/home/galls2/Desktop/af_ag.aig", "AG true", true); // This should fail, as AP is empty, which is not allowed
 }
 void unit_tests()
 {
@@ -117,12 +122,11 @@ void unit_tests()
 
 int main()
 {
-//  unit_tests();
+  unit_tests();
 
 //    TEST("/home/galls2/Desktop/gray.aig", "((~q) & (~r)) -> (~(E (~p) U r))", true);
 
-    TEST("/home/galls2/Desktop/gray.aig", "AG (~r)", false);
-//    TEST("/home/galls2/Desktop/gray.aig", "AG true", true); ALSO FOR AF_AG
+
 //    TEST("/home/galls2/Desktop/gray.aig", "AG (~((~p) & (~q) & r))", true);
 //    TEST("/home/galls2/Desktop/gray.aig", "AG (~((~p) & q & (!r)))", true);
 //    TEST("/home/galls2/Desktop/gray.aig", "AG (~(p & (!q) & (r)))", true);

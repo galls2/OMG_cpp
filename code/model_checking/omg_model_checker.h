@@ -30,7 +30,7 @@ struct InductiveCandidate
 
 struct ConcretizationResult
 {
-    explicit ConcretizationResult(UnwindingTree* const src_node_, std::experimental::optional<ConcreteState> dst_cstate = std::experimental::optional<ConcreteState>())
+    explicit ConcretizationResult(UnwindingTree* const src_node_ = nullptr, std::experimental::optional<ConcreteState> dst_cstate = std::experimental::optional<ConcreteState>())
     : src_node(src_node_), dst_cstate(std::move(dst_cstate)) {}
     UnwindingTree* const src_node;
     std::experimental::optional<ConcreteState> dst_cstate;

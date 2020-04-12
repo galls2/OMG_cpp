@@ -110,6 +110,7 @@ FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<Unwin
                                                   const AbstractState &astate) {
     const KripkeStructure &kripke = astate.get_kripke();
     const PropFormula &tr = kripke.get_tr();
+    z3::context &ctx = tr.get_ctx();
 
     const z3::expr_vector ps_tr = tr.get_vars_by_tag("ps"), ns_tr = tr.get_vars_by_tag("ns"),
             in_0 = tr.get_vars_by_tag("in0"), in_1 = tr.get_vars_by_tag("in1");
@@ -119,11 +120,11 @@ FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<Unwin
             .substitute(astate_formula.get_vars_by_tag("ps"), ns_tr)
             .substitute(astate_formula.get_vars_by_tag("in0"), in_1);
 
-    z3::context &ctx = dst_part.ctx();
+
     z3::expr_vector src_parts(ctx);
+    std::vector<z3::expr> flags;
 
     size_t count_flags = 0;
-    std::vector<z3::expr> flags;
     for (const UnwindingTree *src_node : src_nodes) {
         const z3::expr &src_formula = src_node->get_concrete_state().get_conjunct();
         z3::expr flag = ctx.bool_const(std::to_string(count_flags++).data());
@@ -134,15 +135,13 @@ FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<Unwin
     z3::expr src = z3::mk_and(src_parts);
 
     z3::expr raw_formula = src && tr.get_raw_formula() && dst_part;
-
-    PropFormula is_tr_formula = PropFormula(raw_formula, {{"ps", ps_tr},
-                                                          {"ns", ns_tr}});
+    PropFormula is_tr_formula = PropFormula(raw_formula, {{"ps", ps_tr}, {"ns", ns_tr}});
 
     std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(ctx);
 
     std::pair<int, SatSolverResult> res = solver->inc_solve_sat(is_tr_formula, flags);
     if (res.first < 0) {
-        return ConcretizationResult(nullptr);
+        return ConcretizationResult();
     } else {
         auto first_node_it = src_nodes.begin();
         std::advance(first_node_it, static_cast<size_t>(res.first));

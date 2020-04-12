@@ -197,7 +197,7 @@ std::unique_ptr<CtlFormula> LR1CtlParser::transform_ctl_to_omg(const CtlFormula&
             case 'G':
             {
                 assert(transformed_operands.size() == 1);
-                auto false_formula = std::make_unique<CtlFormula>("False");
+                auto false_formula = std::make_unique<CtlFormula>("false");
                 transformed_operands.emplace(transformed_operands.begin(), std::move(false_formula));
                 return std::make_unique<CtlFormula>("AR", std::move(transformed_operands));
             }
@@ -223,7 +223,7 @@ std::unique_ptr<CtlFormula> LR1CtlParser::transform_ctl_to_omg(const CtlFormula&
                 std::unique_ptr<CtlFormula> op = std::move(transformed_operands[0]);
 
                 auto new_op = do_not(std::move(op));
-                auto false_formula = std::make_unique<CtlFormula>("False");
+                auto false_formula = std::make_unique<CtlFormula>("false");
                 std::vector<std::unique_ptr<CtlFormula>> release_ops;
                 release_ops.emplace_back(std::move(new_op));
                 release_ops.emplace_back(std::move(false_formula));

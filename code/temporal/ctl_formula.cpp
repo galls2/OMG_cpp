@@ -58,12 +58,12 @@ std::string CtlFormula::get_data() const {
 }
 
 bool CtlFormula::is_boolean() const {
-    return ((_data == "True") || (_data == "False"));
+    return ((_data == "true") || (_data == "false"));
 }
 
 bool CtlFormula::get_boolean_value() const {
     assert(is_boolean());
-    return _data == "True";
+    return _data == "true";
 }
 
 const std::vector<std::unique_ptr<CtlFormula>> &CtlFormula::get_operands() const {
