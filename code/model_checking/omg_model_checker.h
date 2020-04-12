@@ -78,8 +78,8 @@ private:
 
     bool check_inductive_av(Goal& goal, NodePriorityQueue& to_visit);
     void strengthen_subtree(Goal& goal, const std::function<bool(const UnwindingTree&)>& stop_condition);
-    void strengthen_trace(UnwindingTree& start, UnwindingTree& end) const;
-    void handle_proving_trace(bool is_strengthen, Goal& goal, UnwindingTree& node_to_explore, bool positivity);
+    void strengthen_trace(UnwindingTree& start, UnwindingTree& end);
+    void handle_proving_trace(Goal& goal, UnwindingTree& node_to_explore, bool positivity);
     CandidateSet compute_candidate_set(Goal& goal);
     CandidateSet brother_unification(const CandidateSet &cands, const CtlFormula& agree_upon);
     void label_subtree(Goal& goal, bool positivity);
@@ -87,7 +87,7 @@ private:
     ConcretizationResult
     is_concrete_violation(const std::unordered_set<UnwindingTree *> &to_close_nodes, AbstractState &abs_witness);
 
-    void refine_exists_successor(const ConcreteState* src_cstate, const std::set<ConcreteState*>& dsts_cstate);
+    void refine_exists_successor(UnwindingTree& src_node, const std::set<const ConcreteState*>& dsts_cstate);
     void refine_no_successor(UnwindingTree& to_close_node, AbstractState& abs_src_witness, AbstractState& abs_dst);
 
     void update_classifier(RefinementResult& refine_result, AbstractState& abs_src_witness);

@@ -95,12 +95,12 @@ bool OmgModelChecker::handle_ar(Goal &goal)
         const CtlFormula &q = *goal.get_spec().get_operands()[1];
         Goal subgoal_q(node_to_explore, q, goal.get_properties());
         bool res_q = recur_ctl(subgoal_q);
-        if (!res_q) // nte |/= q
+        if (!res_q) // nte |/= q. This is the case of a refuting path!
         {
-            /*
-             * This is the case of a refuting path!
-             */
-            handle_proving_trace(goal.get_properties().at("strengthen"), goal, node_to_explore, false);
+            if (goal.get_properties().at("strengthen"))
+            {
+                handle_proving_trace(goal, node_to_explore, false);
+            }
             return false;
         }
 
@@ -148,8 +148,6 @@ void OmgModelChecker::strengthen_subtree(Goal& goal, const std::function<bool(co
 {
         throw OmgMcException("Not implemented!");
     // use unwinding tree map_subtree method
-
-
 }
 
 
@@ -441,23 +439,14 @@ AbstractState &OmgModelChecker::find_abs(const ConcreteState &cstate)
     }
 }
 
-void OmgModelChecker::handle_proving_trace(bool is_strengthen, Goal &goal, UnwindingTree &node, bool positivity)
+void OmgModelChecker::handle_proving_trace(Goal &goal, UnwindingTree &node, bool positivity)
 {
-        if (is_strengthen)
-        {
-            const CtlFormula& spec = goal.get_spec();
-            strengthen_trace(goal.get_node(), node);
-            node.map_upwards(
-                       [&spec, positivity] (UnwindingTree& n) { n.add_label(positivity, spec); },
-                       [](const UnwindingTree& m) { return m.get_parent() == nullptr; }
-            );
-        }
-                throw OmgMcException("Not implemented");
-//    if is_strengthen:
-//        self._strengthen_trace(node, node_to_explore)
-//    _map_upward(node_to_explore, lambda curr: curr.add_label(spec, to_return), node.get_parent())
-//    return to_return
-
+    const CtlFormula &spec = goal.get_spec();
+    strengthen_trace(goal.get_node(), node);
+    node.map_upwards(
+            [&spec, positivity](UnwindingTree &n) { n.add_label(positivity, spec); },
+            [](const UnwindingTree &m) { return m.get_parent() == nullptr; }
+    );
 }
 
 void OmgModelChecker::label_subtree(Goal &goal, bool positivity) {
@@ -481,32 +470,31 @@ OmgModelChecker::is_concrete_violation(const std::unordered_set<UnwindingTree *>
     return FormulaInductiveUtils::concrete_transition_to_abs(to_close_nodes, abs_witness);
 }
 
-void OmgModelChecker::strengthen_trace(UnwindingTree &start, UnwindingTree &end) const
+void OmgModelChecker::strengthen_trace(UnwindingTree &start, UnwindingTree &end)
 {
     UnwindingTree* current = &end;
     std::set<const ConcreteState*> dsts;
     while (current != &start)
     {
         dsts.emplace(&current->get_concrete_state());
-
-        throw 5;
+        refine_exists_successor(*current, dsts);
         current = current->get_parent();
     }
 }
 
-void OmgModelChecker::refine_exists_successor(const ConcreteState *src_cstate,
-                                              const std::set<ConcreteState *> &dsts_cstate)
+void OmgModelChecker::refine_exists_successor(UnwindingTree& src_node,
+                                              const std::set<const ConcreteState *> &dsts_cstate)
 {
     std::set<AbstractState*> dsts_abs;
-    for (ConcreteState* dst_cstate : dsts_cstate) dsts_abs.insert(&find_abs(*dst_cstate));
+    for (const ConcreteState* dst_cstate : dsts_cstate) dsts_abs.insert(&find_abs(*dst_cstate));
 
-    AbstractState& src_abs = find_abs(*src_cstate);
+    AbstractState& src_abs = find_abs(src_node.get_concrete_state());
 
 
-    RefinementResult refinement_res = _abs_structure->refine_exists_successor(*src_cstate, src_abs, dsts_abs);
+    RefinementResult refinement_res = _abs_structure->refine_exists_successor(src_node.get_concrete_state(), src_abs, dsts_abs);
 
-    //update_classifier(refinement_res);
-// find_abs??
+    update_classifier(refinement_res, src_abs);
+    find_abs(src_node); // redundant?
 }
 
 void OmgModelChecker::update_classifier(RefinementResult& refine_result, AbstractState& abs_src_witness) {
