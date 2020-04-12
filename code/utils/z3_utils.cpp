@@ -127,11 +127,11 @@ FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<Unwin
     for (const UnwindingTree *src_node : src_nodes) {
         const z3::expr &src_formula = src_node->get_concrete_state().get_conjunct();
         z3::expr flag = ctx.bool_const(std::to_string(count_flags++).data());
-        z3::expr flagged_src = (!flag) || src_formula;
+        z3::expr flagged_src = z3::implies(flag, src_formula);
         flags.push_back(flag);
         src_parts.push_back(flagged_src);
     }
-    z3::expr src = z3::mk_or(src_parts);
+    z3::expr src = z3::mk_and(src_parts);
 
     z3::expr raw_formula = src && tr.get_raw_formula() && dst_part;
 
