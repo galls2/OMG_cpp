@@ -97,6 +97,7 @@ bool OmgModelChecker::handle_ar(Goal &goal)
         bool res_q = recur_ctl(subgoal_q);
         if (!res_q) // nte |/= q. This is the case of a refuting path!
         {
+            DEBUG_PRINT("AR: Returning false due to a BUG state!\n");
             if (goal.get_properties().at("strengthen"))
             {
                 handle_proving_trace(goal, node_to_explore, false);
@@ -133,15 +134,15 @@ bool OmgModelChecker::handle_ar(Goal &goal)
             return true;
         }
     }
-    if (goal.get_properties().at("strengthen"))
-    {
-            strengthen_subtree(goal, [goal](const UnwindingTree& n) { return n.is_developed(goal); });
-            label_subtree(goal, true);
-            return true;
+
+    DEBUG_PRINT("AR: unwinding tree completely trimmed - returning TRUE!\n");
+
+    if (goal.get_properties().at("strengthen")) {
+        strengthen_subtree(goal, [goal](const UnwindingTree &n) { return n.is_developed(goal); });
+        label_subtree(goal, true);
     }
-    else {
-            return true;
-    }
+    return true;
+
 }
 
 void OmgModelChecker::strengthen_subtree(Goal& goal, const std::function<bool(const UnwindingTree&)>& stop_condition)
@@ -491,7 +492,7 @@ void OmgModelChecker::refine_exists_successor(UnwindingTree& src_node,
     AbstractState& src_abs = find_abs(src_node.get_concrete_state());
 
 
-    RefinementResult refinement_res = _abs_structure->refine_exists_successor(src_node.get_concrete_state(), src_abs, dsts_abs);
+    RefinementResult refinement_res = _abs_structure->refine_exists_successor(src_node.get_concrete_state(), src_abs, dsts_abs, true);
 
     update_classifier(refinement_res, src_abs);
     find_abs(src_node); // redundant?

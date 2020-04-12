@@ -106,8 +106,8 @@ RefinementResult AbstractStructure::refine_exists_successor(const ConcreteState 
     {
         if (!split_formulas.remainder_formula.is_sat())
         {
-            DEBUG_PRINT("IMPLEMENT TSE :)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-            throw "IEEE";
+            _E_must[&src_abs].emplace_back(dsts_abs);
+            return {false, nullptr, nullptr, std::experimental::optional<PropFormula>()};
         }
     }
 
@@ -162,7 +162,7 @@ RefinementResult AbstractStructure::refine_no_successor(const UnwindingTree &to_
     {
         if (!split_formulas.remainder_formula.is_sat())
         {
-            DEBUG_PRINT("IMPLEMENT TSE :)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+            DEBUG_PRINT("IMPLEMENT TSE in refine no successors:)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
             throw "IEEE";
         }
     }
