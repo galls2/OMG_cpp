@@ -26,7 +26,7 @@ void test_ctl_file_parser()
 {
     CtlFileParser ctl_file_parser;
     std::vector<FormulaChunk> formula_chunks;
-    ctl_file_parser.parse_ctl_file("/home/galls2/Desktop/spm.ctl", formula_chunks);
+    ctl_file_parser.parse_ctl_file("../resources/spm.ctl", formula_chunks);
     for (const auto& chunk : formula_chunks)
     {
         std::cout << chunk.get_expected_result() << std::endl;
@@ -77,60 +77,60 @@ bool test_formula(const std::string& aig_path, const std::string& formula_str)
 
 void unit_tests_aps()
 {
-    TEST("/home/galls2/Desktop/af_ag.aig", "!state<0>", true);
-    TEST("/home/galls2/Desktop/af_ag.aig", "!state<1>", true);
-    TEST("/home/galls2/Desktop/af_ag.aig", "state<0>", false);
-    TEST("/home/galls2/Desktop/af_ag.aig", "state<1>", false);
-    TEST("/home/galls2/Desktop/af_ag.aig", "p", true);
-    TEST("/home/galls2/Desktop/af_ag.aig", "(state<1> | state<0>)", false);
-    TEST("/home/galls2/Desktop/af_ag.aig", "(p | state<0>)", true);
-    TEST("/home/galls2/Desktop/af_ag.aig", "!p", false);
-    TEST("/home/galls2/Desktop/af_ag.aig", "(p & state<0>)", false); //
-    TEST("/home/galls2/Desktop/af_ag.aig", "(state<1> ^ state<0>)", false);
-    TEST("/home/galls2/Desktop/af_ag.aig", "((((((state<1>)) ^ (state<0>)))))", false);
-    TEST("/home/galls2/Desktop/af_ag.aig", "(p & state<0>) | (state<1> ^ state<0>)", false);
-    TEST("/home/galls2/Desktop/af_ag.aig", " (~state<0>) | state<1>", true);
-    TEST("/home/galls2/Desktop/af_ag.aig", " (~state<0>) & state<1>", false);
-    TEST("/home/galls2/Desktop/af_ag.aig", " (~state<0>) &  (!state<1>)", true);
-    TEST("/home/galls2/Desktop/gray.aig", "true", true);
-    TEST("/home/galls2/Desktop/gray.aig", "false", false);
+    TEST("../resources/af_ag.aig", "!state<0>", true);
+    TEST("../resources/af_ag.aig", "!state<1>", true);
+    TEST("../resources/af_ag.aig", "state<0>", false);
+    TEST("../resources/af_ag.aig", "state<1>", false);
+    TEST("../resources/af_ag.aig", "p", true);
+    TEST("../resources/af_ag.aig", "(state<1> | state<0>)", false);
+    TEST("../resources/af_ag.aig", "(p | state<0>)", true);
+    TEST("../resources/af_ag.aig", "!p", false);
+    TEST("../resources/af_ag.aig", "(p & state<0>)", false); //
+    TEST("../resources/af_ag.aig", "(state<1> ^ state<0>)", false);
+    TEST("../resources/af_ag.aig", "((((((state<1>)) ^ (state<0>)))))", false);
+    TEST("../resources/af_ag.aig", "(p & state<0>) | (state<1> ^ state<0>)", false);
+    TEST("../resources/af_ag.aig", " (~state<0>) | state<1>", true);
+    TEST("../resources/af_ag.aig", " (~state<0>) & state<1>", false);
+    TEST("../resources/af_ag.aig", " (~state<0>) &  (!state<1>)", true);
+    TEST("../resources/gray.aig", "true", true);
+    TEST("../resources/gray.aig", "false", false);
 }
 
 void unit_tests_ag()
 {
-    TEST("/home/galls2/Desktop/af_ag.aig", "AG ((~state<0>) | (~state<1>))", true);
-    TEST("/home/galls2/Desktop/af_ag.aig", "AG ((~state<0>) & (~state<1>))", false);
-    TEST("/home/galls2/Desktop/af_ag.aig", "AG (~state<0>) ", false);
-    TEST("/home/galls2/Desktop/af_ag.aig", "AG (~state<1>) ", false);
-    TEST("/home/galls2/Desktop/af_ag.aig", "AG (!(state<0> & state<1>))", true);
-    TEST("/home/galls2/Desktop/af_ag.aig", "AG (state<0> | state<1>)", false);
+    TEST("../resources/af_ag.aig", "AG ((~state<0>) | (~state<1>))", true);
+    TEST("../resources/af_ag.aig", "AG ((~state<0>) & (~state<1>))", false);
+    TEST("../resources/af_ag.aig", "AG (~state<0>) ", false);
+    TEST("../resources/af_ag.aig", "AG (~state<1>) ", false);
+    TEST("../resources/af_ag.aig", "AG (!(state<0> & state<1>))", true);
+    TEST("../resources/af_ag.aig", "AG (state<0> | state<1>)", false);
 
-    TEST("/home/galls2/Desktop/gray.aig", "AG ((~p) & (~q) & (~r))", false);
-    TEST("/home/galls2/Desktop/gray.aig", "AG (~p)", false);
-    TEST("/home/galls2/Desktop/gray.aig", "AG (~q)", false);
-    TEST("/home/galls2/Desktop/gray.aig", "AG (~r)", false);
+    TEST("../resources/gray.aig", "AG ((~p) & (~q) & (~r))", false);
+    TEST("../resources/gray.aig", "AG (~p)", false);
+    TEST("../resources/gray.aig", "AG (~q)", false);
+    TEST("../resources/gray.aig", "AG (~r)", false);
 
-//    TEST("/home/galls2/Desktop/af_ag.aig", "AG true", true); // This should fail, as AP is empty, which is not allowed
+//    TEST("../resources/af_ag.aig", "AG true", true); // This should fail, as AP is empty, which is not allowed
 }
 void unit_tests()
 {
     unit_tests_aps();
-     //   TEST("/home/galls2/Desktop/af_ag.aig", "AX (p)", false);
+     //   TEST("../resources/af_ag.aig", "AX (p)", false);
      unit_tests_ag();
 
 }
 
 int main()
 {
-  unit_tests();
+    //unit_tests();
 
-//    TEST("/home/galls2/Desktop/gray.aig", "((~q) & (~r)) -> (~(E (~p) U r))", true);
+//    TEST("../resources/gray.aig", "((~q) & (~r)) -> (~(E (~p) U r))", true);
 
 
-//    TEST("/home/galls2/Desktop/gray.aig", "AG (~((~p) & (~q) & r))", true);
-//    TEST("/home/galls2/Desktop/gray.aig", "AG (~((~p) & q & (!r)))", true);
-//    TEST("/home/galls2/Desktop/gray.aig", "AG (~(p & (!q) & (r)))", true);
-//    TEST("/home/galls2/Desktop/gray.aig", "AG (~(p & (q) & (!r)))", true);
+//    TEST("../resources/gray.aig", "AG (~((~p) & (~q) & r))", true);
+//    TEST("../resources/gray.aig", "AG (~((~p) & q & (!r)))", true);
+//    TEST("../resources/gray.aig", "AG (~(p & (!q) & (r)))", true);
+//    TEST("../resources/gray.aig", "AG (~(p & (q) & (!r)))", true);
 
 
 }
