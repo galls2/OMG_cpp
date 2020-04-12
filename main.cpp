@@ -97,9 +97,9 @@ void unit_tests_aps()
 void unit_tests_ag()
 {
     TEST("/home/galls2/Desktop/af_ag.aig", "AG ((~state<0>) | (~state<1>))", true);
-  //  TEST("/home/galls2/Desktop/af_ag.aig", "AG ((~state<0>) & (~state<1>))", false);
-  //   TEST("/home/galls2/Desktop/af_ag.aig", "AG (~state<0>) ", false);
-  //  TEST("/home/galls2/Desktop/af_ag.aig", "AG (~state<1>) ", false);
+    TEST("/home/galls2/Desktop/af_ag.aig", "AG ((~state<0>) & (~state<1>))", false);
+     TEST("/home/galls2/Desktop/af_ag.aig", "AG (~state<0>) ", false);
+    TEST("/home/galls2/Desktop/af_ag.aig", "AG (~state<1>) ", false);
 }
 void unit_tests()
 {
@@ -112,7 +112,6 @@ void unit_tests()
 int main()
 {
   //  unit_tests();
-  // unit_tests_ag();
-    TEST("/home/galls2/Desktop/af_ag.aig", "AG (~state<1>) ", false);
+   unit_tests_ag();
 
 }

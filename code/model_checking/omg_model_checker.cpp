@@ -478,7 +478,7 @@ void OmgModelChecker::strengthen_trace(UnwindingTree &start, UnwindingTree &end)
     while (current != &start)
     {
         dsts.emplace(&current->get_concrete_state());
-        refine_exists_successor(*current, dsts);
+        refine_exists_successor(*current->get_parent(), dsts);
         current = current->get_parent();
     }
 }
