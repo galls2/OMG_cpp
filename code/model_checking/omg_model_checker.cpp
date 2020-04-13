@@ -84,7 +84,7 @@ bool OmgModelChecker::handle_ar(Goal &goal)
 
         // CHECK - we will delete this later. This checks for twice for the same concrete state
         assert(!std::any_of(visited.begin(), visited.end(), [&](const ConcreteState *const &visitedee) {
-            return node_to_explore.get_concrete_state().to_bitvec() == visitedee->to_bitvec();
+            return node_to_explore.get_concrete_state() == (*visitedee);
         }));
 
         visited.emplace(&node_to_explore.get_concrete_state());
@@ -110,22 +110,20 @@ bool OmgModelChecker::handle_ar(Goal &goal)
         bool res_p = recur_ctl(subgoal_p);
         if (res_p) {
             AbstractState &astate = find_abs(node_to_explore);
-            astate.add_label(true, p);
+            astate.add_label(true, goal.get_spec());
         } else {
-            DEBUG_PRINT("Unwinding successors of node: CSTATE %s depth %zu:\n", node_to_explore.get_concrete_state().to_bitvec_str().data(), node_to_explore.get_depth());
+            DEBUG_PRINT("AR: Unwinding successors of node: CSTATE %s depth %zu:\n", node_to_explore.get_concrete_state().to_bitvec_str().data(), node_to_explore.get_depth());
             const std::vector<std::unique_ptr<UnwindingTree>> &successors = node_to_explore.unwind_further();
 
             for (const std::unique_ptr<UnwindingTree> &succ : successors) {
                 DEBUG_PRINT("SUCCESSOR: %s\n", succ->get_concrete_state().to_bitvec_str().data());
                 if (std::all_of(visited.begin(), visited.end(), [&succ](const ConcreteState *const &visitedee) {
-                    return !(visitedee == &(succ->get_concrete_state()) ||
-                             (*visitedee == succ->get_concrete_state()));
+                    return (*visitedee) != succ->get_concrete_state();
                 })) {
                     to_visit.emplace(std::ref(*succ));
                 }
             }
         }
-
 
 
         bool inductive_res = check_inductive_av(goal, to_visit);
@@ -143,6 +141,82 @@ bool OmgModelChecker::handle_ar(Goal &goal)
     }
     return true;
 
+}
+
+bool OmgModelChecker::handle_er(Goal &goal) {
+    NodePriorityQueue to_visit(cmp_nodes);
+    to_visit.emplace(std::ref(goal.get_node()));
+    std::set<const ConcreteState *> visited;
+
+    while (!to_visit.empty()) {
+        UnwindingTree &node_to_explore = to_visit.top();
+        to_visit.pop();
+        DEBUG_PRINT_SEP;
+        DEBUG_PRINT("ER: exploring %s\n", node_to_explore.get_concrete_state().to_bitvec_str().data());
+        node_to_explore.set_urgent(false);
+
+        (void) find_abs(node_to_explore);
+
+        bool was_visited = std::any_of(visited.begin(), visited.end(), [&](const ConcreteState *const &visitedee) {
+            return node_to_explore.get_concrete_state() == *visitedee;
+        });
+
+        if (was_visited) {
+            if (node_to_explore.is_concrete_lasso(goal.get_node())) {
+                if (goal.get_properties().at("strengthen")) {
+                    handle_proving_trace(goal, node_to_explore, true);
+                }
+                return true;
+            } else continue;
+        }
+
+        node_to_explore.set_developed(goal);
+
+        const CtlFormula &q = *goal.get_spec().get_operands()[1];
+        Goal subgoal_q(node_to_explore, q, goal.get_properties());
+        bool res_q = recur_ctl(subgoal_q);
+        if (!res_q) // nte |/= q. This is the case of a refuting path!
+        {
+            DEBUG_PRINT("ER: Trimming Tree as %s |/= q!\n",
+                        node_to_explore.get_concrete_state().to_bitvec_str().data());
+            continue;
+        }
+
+        visited.emplace(&node_to_explore.get_concrete_state());
+
+        const CtlFormula &p = *goal.get_spec().get_operands()[0];
+        Goal subgoal_p(node_to_explore, p, goal.get_properties());
+        bool res_p = recur_ctl(subgoal_p);
+        if (res_p) {
+            DEBUG_PRINT("ER: Returning true due to a proving trace!\n");
+            if (goal.get_properties().at("strengthen")) {
+                handle_proving_trace(goal, node_to_explore, true);
+            }
+            return true;
+        } else {
+            DEBUG_PRINT("ER: Unwinding successors of node: CSTATE %s depth %zu:\n",
+                        node_to_explore.get_concrete_state().to_bitvec_str().data(), node_to_explore.get_depth());
+            const std::vector<std::unique_ptr<UnwindingTree>> &successors = node_to_explore.unwind_further();
+
+            for (const std::unique_ptr<UnwindingTree> &succ : successors) {
+                DEBUG_PRINT("SUCCESSOR: %s\n", succ->get_concrete_state().to_bitvec_str().data());
+                to_visit.emplace(std::ref(*succ));
+            }
+        }
+
+        std::pair<bool, UnwindingTree *> inductive_res = check_inductive_ev(goal, node_to_explore);
+        if (inductive_res.first) {
+            throw "Implement strengthenings from check_inductive_ev from python";
+        }
+    }
+
+    DEBUG_PRINT("ER: unwinding tree completely trimmed - returning FALSE!\n");
+    if (goal.get_properties().at("strengthen")) {
+        strengthen_subtree(goal, [goal](const UnwindingTree &n) { return n.is_developed(goal); });
+        label_subtree(goal, false);
+
+    }
+    return false;
 }
 
 void OmgModelChecker::strengthen_subtree(Goal& goal, const std::function<bool(const UnwindingTree&)>& stop_condition)
@@ -339,10 +413,6 @@ CandidateSet OmgModelChecker::brother_unification(const CandidateSet &cands, con
 }
 
 
-bool OmgModelChecker::handle_er(Goal &goal)
-{
-        throw OmgMcException("Not implemented!");
-}
 
 bool OmgModelChecker::handle_ex(Goal &goal)
 {
@@ -522,6 +592,10 @@ void OmgModelChecker::refine_no_successor(UnwindingTree &to_close_node, Abstract
     RefinementResult refine_res = _abs_structure->refine_no_successor(to_close_node, abs_src_witness, {&abs_dst}, false);
     update_classifier(refine_res, abs_src_witness);
     find_abs(to_close_node); // redundant?
+}
+
+std::pair<bool, UnwindingTree*> OmgModelChecker::check_inductive_ev(Goal &goal, UnwindingTree &node_to_explore) {
+    throw 16;
 }
 
 

@@ -35,7 +35,9 @@ public:
                      const std::function<bool(const UnwindingTree &)> &activation_condition);
     void map_upwards(const std::function<void(UnwindingTree &)> &mapper,
                      const std::function<bool(const UnwindingTree &)> &last_node_pred);
-
+    bool any_of_upwards(const std::function<bool(const UnwindingTree &)> &predicate,
+                       const std::function<bool(const UnwindingTree &)> &last_node_pred) const;
+    bool is_concrete_lasso(const UnwindingTree& last_node) const;
     void add_label(bool positivity, const CtlFormula& spec);
 
     UnwindingTree* get_parent() const;

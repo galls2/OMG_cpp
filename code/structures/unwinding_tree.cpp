@@ -111,3 +111,23 @@ void UnwindingTree::add_label(bool positivity, const CtlFormula &spec) {
 UnwindingTree *UnwindingTree::get_parent() const {
     return _parent;
 }
+
+bool UnwindingTree::any_of_upwards(const std::function<bool(const UnwindingTree &)> &predicate,
+                                   const std::function<bool(const UnwindingTree &)> &last_node_pred) const {
+    if (predicate(*this)) return true;
+    if (!last_node_pred(*this))
+    {
+#ifdef DEBUG
+        assert(_parent != nullptr);
+#endif
+        return _parent->any_of_upwards(predicate, last_node_pred);
+    }
+    return false;
+}
+
+bool UnwindingTree::is_concrete_lasso(const UnwindingTree &last_node) const {
+    return any_of_upwards(
+            [this](const UnwindingTree& n) {return this->get_concrete_state() == n.get_concrete_state();},
+            [&last_node] (const UnwindingTree& n) { return &last_node == &n; }
+            );
+}

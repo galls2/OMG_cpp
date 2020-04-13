@@ -181,6 +181,10 @@ bool ConcreteState::operator==(const ConcreteState &other) const {
     return z3::eq(other._conjunct, _conjunct);
 }
 
+bool ConcreteState::operator!=(const ConcreteState &other) const {
+    return !(*this == other);
+}
+
 const z3::expr &ConcreteState::get_conjunct() const {
     return _conjunct;
 }

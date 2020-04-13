@@ -77,6 +77,7 @@ private:
     static const std::map<std::string, handler_t> _handlers;
 
     bool check_inductive_av(Goal& goal, NodePriorityQueue& to_visit);
+    std::pair<bool, UnwindingTree*> check_inductive_ev(Goal& goal, UnwindingTree& node_to_explore);
     void strengthen_subtree(Goal& goal, const std::function<bool(const UnwindingTree&)>& stop_condition);
     void strengthen_trace(UnwindingTree& start, UnwindingTree& end);
     void handle_proving_trace(Goal& goal, UnwindingTree& node_to_explore, bool positivity);
