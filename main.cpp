@@ -109,6 +109,11 @@ void unit_tests_ag()
     TEST("../resources/gray.aig", "AG (~p)", false);
     TEST("../resources/gray.aig", "AG (~q)", false);
     TEST("../resources/gray.aig", "AG (~r)", false);
+    TEST("../resources/gray.aig", "AG (~((~p) & (~q) & r))", true);
+    TEST("../resources/gray.aig", "AG (~((~p) & q & (!r)))", true);
+    TEST("../resources/gray.aig", "AG (~(p & (!q) & (r)))", true);
+    TEST("../resources/gray.aig", "AG (~(p & (q) & (!r)))", true);
+    TEST("../resources/gray.aig", "((~q) & (~r)) -> (~(E (~p) U r))", true);
 
 //    TEST("../resources/af_ag.aig", "AG true", true); // This should fail, as AP is empty, which is not allowed
 }
@@ -122,15 +127,10 @@ void unit_tests()
 
 int main()
 {
-    //unit_tests();
-
-//    TEST("../resources/gray.aig", "((~q) & (~r)) -> (~(E (~p) U r))", true);
+    unit_tests();
 
 
-//    TEST("../resources/gray.aig", "AG (~((~p) & (~q) & r))", true);
-//    TEST("../resources/gray.aig", "AG (~((~p) & q & (!r)))", true);
-//    TEST("../resources/gray.aig", "AG (~(p & (!q) & (r)))", true);
-//    TEST("../resources/gray.aig", "AG (~(p & (q) & (!r)))", true);
+
 
 
 }
