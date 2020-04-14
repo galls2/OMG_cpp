@@ -211,18 +211,28 @@ bool OmgModelChecker::handle_er(Goal &goal) {
     }
 
     DEBUG_PRINT("ER: unwinding tree completely trimmed - returning FALSE!\n");
-    if (goal.get_properties().at("strengthen")) {
+    if (goal.get_properties().at("strengthen"))
+    {
         strengthen_subtree(goal, [goal](const UnwindingTree &n) { return n.is_developed(goal); });
         label_subtree(goal, false);
-
     }
     return false;
 }
 
 void OmgModelChecker::strengthen_subtree(Goal& goal, const std::function<bool(const UnwindingTree&)>& stop_condition)
 {
-        throw OmgMcException("Not implemented!");
-    // use unwinding tree map_subtree method
+    UnwindingTree& node = goal.get_node();
+    const CtlFormula& spec = goal.get_spec();
+
+    auto strengthener =
+            [this](UnwindingTree& n) {
+                assert(n.get_abs());
+                std::set<const UnwindingTree*> dsts;
+                for (auto& successor : n.get_successors()) dsts.insert(&*successor);
+                refine_all_successors(n, dsts);
+            };
+
+    node.map_subtree(strengthener, stop_condition);
 }
 
 

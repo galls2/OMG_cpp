@@ -102,13 +102,10 @@ RefinementResult AbstractStructure::refine_exists_successor(const ConcreteState 
             FormulaSplitUtils::ex_pos(src_cstate.get_conjunct(),
                                       src_abs.get_formula(), dst_abs_formulas, _kripke);
 
-    if (OmgConfig::get<bool>("Trivial Split Elimination") && is_tse_possible)
+    if (is_tse_possible && OmgConfig::get<bool>("Trivial Split Elimination") && !split_formulas.remainder_formula.is_sat())
     {
-        if (!split_formulas.remainder_formula.is_sat())
-        {
-            _E_must[&src_abs].emplace_back(dsts_abs);
-            return {false, nullptr, nullptr, std::experimental::optional<PropFormula>()};
-        }
+        _E_must[&src_abs].emplace_back(dsts_abs);
+        return {false, nullptr, nullptr, std::experimental::optional<PropFormula>()};
     }
 
     std::pair<AbstractState*, AbstractState*> res = create_new_astates_and_update(src_abs, split_formulas);
@@ -158,13 +155,10 @@ RefinementResult AbstractStructure::refine_no_successor(const UnwindingTree &to_
             FormulaSplitUtils::ex_neg(to_close_node.get_concrete_state().get_conjunct(),
                                       abs_src_witness.get_formula(), dst_abs_formulas, _kripke, false);
 
-    if (OmgConfig::get<bool>("Trivial Split Elimination") && is_tse_possible)
+    if (is_tse_possible && OmgConfig::get<bool>("Trivial Split Elimination") && !split_formulas.remainder_formula.is_sat())
     {
-        if (!split_formulas.remainder_formula.is_sat())
-        {
-            DEBUG_PRINT("IMPLEMENT TSE in refine no successors:)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-            throw "IEEE";
-        }
+        DEBUG_PRINT("IMPLEMENT TSE in refine no successors:)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+        throw "IEEE";
     }
 
     std::pair<AbstractState*, AbstractState*> res = create_new_astates_and_update(abs_src_witness, split_formulas);
@@ -281,13 +275,11 @@ AbstractStructure::refine_all_successors(const UnwindingTree &to_close_node, Abs
             FormulaSplitUtils::ex_neg(to_close_node.get_concrete_state().get_conjunct(),
                                       abs_src_witness.get_formula(), dst_abs_formulas, _kripke, true);
 
-    if (OmgConfig::get<bool>("Trivial Split Elimination") && is_tse_possible)
+    if (is_tse_possible && OmgConfig::get<bool>("Trivial Split Elimination") && !split_formulas.remainder_formula.is_sat())
     {
-        if (!split_formulas.remainder_formula.is_sat())
-        {
-            DEBUG_PRINT("IMPLEMENT TSE in refine all successors:)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-            throw "IEEE";
-        }
+        _E_must[&abs_src_witness].emplace_back(dsts_abs);
+        _E_may_over[&abs_src_witness].emplace_back(dsts_abs);
+        return {false, nullptr, nullptr, std::experimental::optional<PropFormula>()};
     }
 
     std::pair<AbstractState*, AbstractState*> res = create_new_astates_and_update(abs_src_witness, split_formulas);

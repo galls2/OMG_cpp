@@ -279,6 +279,7 @@ FormulaSplitUtils::ex_neg(const z3::expr &state_conj, const PropFormula &src_ast
     add_flags_to_conj(state_conj, ctx, assumptions, assertions, assumptions_map, std::string("a"));
 
     z3::expr dst_formula_full = merge_dst_astate_formulas(dsts_astates_f, tr, ctx);
+    if (is_negate_dsts) dst_formula_full = !dst_formula_full;
     z3::expr rest_of_formula = tr.get_raw_formula() && dst_formula_full;
     z3::expr final_assumption = ctx.bool_const("a_fin");
     assumptions.push_back(final_assumption);
