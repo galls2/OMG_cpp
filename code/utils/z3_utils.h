@@ -91,7 +91,7 @@ public:
     static SplitFormulas ex_pos(const z3::expr& state_conj, const PropFormula& src_astate_f,
             const std::set<const PropFormula*>& dsts_astates_f, const KripkeStructure& kripke);
     static SplitFormulas ex_neg(const z3::expr& state_conj, const PropFormula& src_astate_f,
-          const std::set<const PropFormula*>& dsts_astates_f, const KripkeStructure& kripke);
+          const std::set<const PropFormula*>& dsts_astates_f, const KripkeStructure& kripke, bool is_negate_dsts);
 private:
     static void add_flags_to_conj(const z3::expr &conj, z3::context &ctx, z3::expr_vector &assumptions,
                       z3::expr_vector &assertions,

@@ -156,7 +156,7 @@ RefinementResult AbstractStructure::refine_no_successor(const UnwindingTree &to_
 
     SplitFormulas split_formulas =
             FormulaSplitUtils::ex_neg(to_close_node.get_concrete_state().get_conjunct(),
-                                      abs_src_witness.get_formula(), dst_abs_formulas, _kripke);
+                                      abs_src_witness.get_formula(), dst_abs_formulas, _kripke, false);
 
     if (OmgConfig::get<bool>("Trivial Split Elimination") && is_tse_possible)
     {
@@ -258,3 +258,58 @@ AbstractState &AbstractStructure::create_astate_from_astate_split(const Abstract
 
     return const_cast<AbstractState&>(*res.first);
 }
+
+RefinementResult
+AbstractStructure::refine_all_successors(const UnwindingTree &to_close_node, AbstractState &abs_src_witness,
+                                         const std::set<AbstractState *> &dsts_abs, bool is_tse_possible) {
+    if (_E_may_over.find(&abs_src_witness) != _E_may_over.end() &&
+        std::any_of(_E_may_over[&abs_src_witness].begin(), _E_may_over[&abs_src_witness].end(),
+                    [&dsts_abs](const AbsStateSet& astate_set)
+                    {
+                        // True iff astate_set \subseteq dsts_abs
+                        return std::includes(dsts_abs.begin(), dsts_abs.end(), astate_set.begin(), astate_set.end());
+                    }))
+    {
+        return {false, nullptr, nullptr, std::experimental::optional<PropFormula>()};
+    }
+
+    std::set<const PropFormula *> dst_abs_formulas;
+    std::for_each(dsts_abs.begin(), dsts_abs.end(),
+                  [&dst_abs_formulas] (const AbstractState* astate) { dst_abs_formulas.insert(&astate->get_formula()); });
+
+    SplitFormulas split_formulas =
+            FormulaSplitUtils::ex_neg(to_close_node.get_concrete_state().get_conjunct(),
+                                      abs_src_witness.get_formula(), dst_abs_formulas, _kripke, true);
+
+    if (OmgConfig::get<bool>("Trivial Split Elimination") && is_tse_possible)
+    {
+        if (!split_formulas.remainder_formula.is_sat())
+        {
+            DEBUG_PRINT("IMPLEMENT TSE in refine all successors:)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+            throw "IEEE";
+        }
+    }
+
+    std::pair<AbstractState*, AbstractState*> res = create_new_astates_and_update(abs_src_witness, split_formulas);
+
+    bool is_src_in_dsts = std::any_of(dsts_abs.begin(), dsts_abs.end(), [&abs_src_witness] (AbstractState* abs_dst) {return (*abs_dst) == abs_src_witness; });
+
+    if (is_src_in_dsts)
+    {
+        AbsStateSet updated = dsts_abs;
+        size_t erase_res = updated.erase(&abs_src_witness);
+        assert(erase_res == 1);
+        updated.insert({res.first, res.second});
+        _E_must[res.first].emplace_back(updated);
+        _E_may_over[res.first].emplace_back(std::move(updated));
+
+    } else
+    {
+        _E_must[res.first].emplace_back(dsts_abs);
+        _E_may_over[res.first].emplace_back(dsts_abs);
+
+    }
+
+    return { true, res.first, res.second, std::experimental::optional<PropFormula>(split_formulas.query) };
+}
+

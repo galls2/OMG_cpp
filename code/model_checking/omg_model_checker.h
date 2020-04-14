@@ -90,6 +90,7 @@ private:
 
     void refine_exists_successor(UnwindingTree& src_node, const std::set<const ConcreteState*>& dsts_cstate);
     void refine_no_successor(UnwindingTree& to_close_node, AbstractState& abs_src_witness, AbstractState& abs_dst);
+    void refine_all_successors(UnwindingTree& to_close_node, const std::set<const UnwindingTree*>& dsts_nodes);
 
     void update_classifier(RefinementResult& refine_result, AbstractState& abs_src_witness);
 };

@@ -38,10 +38,13 @@ public:
     EEClosureResult is_EE_closure(AbstractState& to_close , const std::set<AStateRef>& close_with);
     const OmgModelChecker* get_omg() const;
     RefinementResult refine_exists_successor(const ConcreteState &src_cstate, AbstractState &src_abs,
-                                 const std::set<AbstractState *> &dsts_abs, bool is_tse_possible=true);
+                                 const std::set<AbstractState *> &dsts_abs, bool is_tse_possible);
 
-    RefinementResult refine_no_successor(const UnwindingTree& to_close_node, AbstractState& abs_src_witness, const std::set<AbstractState *> &dsts_abs
-        , bool is_tse_possible=true);
+    RefinementResult refine_no_successor(const UnwindingTree& to_close_node, AbstractState& abs_src_witness,
+            const std::set<AbstractState *> &dsts_abs, bool is_tse_possible);
+
+    RefinementResult refine_all_successors(const UnwindingTree& to_close_node, AbstractState& abs_src_witness,
+            const std::set<AbstractState *> &dsts_abs, bool is_tse_possible);
 
 
 private:

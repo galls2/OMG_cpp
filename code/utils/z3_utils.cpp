@@ -260,7 +260,7 @@ FormulaSplitUtils::ex_pos(const z3::expr &state_conj, const PropFormula &src_ast
 
 SplitFormulas
 FormulaSplitUtils::ex_neg(const z3::expr &state_conj, const PropFormula &src_astate_f,
-                          const std::set<const PropFormula *> &dsts_astates_f, const KripkeStructure &kripke) {
+                          const std::set<const PropFormula *> &dsts_astates_f, const KripkeStructure &kripke, bool is_negate_dsts) {
     assert(FormulaUtils::is_cstate_conjunct(state_conj));
 
     const PropFormula &tr = kripke.get_tr();

@@ -416,7 +416,33 @@ CandidateSet OmgModelChecker::brother_unification(const CandidateSet &cands, con
 
 bool OmgModelChecker::handle_ex(Goal &goal)
 {
-        throw OmgMcException("Not implemented!");
+    CtlFormula& subformula = *goal.get_spec().get_operands()[0];
+    const std::vector<std::unique_ptr<UnwindingTree>> &successors = goal.get_node().unwind_further();
+    for (auto& successor : successors)
+    {
+        DEBUG_PRINT("EX: exploring %s\n", successor->get_concrete_state().to_bitvec_str().data());
+        Goal subgoal(*successor, subformula, goal.get_properties());
+        bool res = recur_ctl(subgoal);
+        if (res) {
+            DEBUG_PRINT("EX: found a satisfying successor %s\n", successor->get_concrete_state().to_bitvec_str().data());
+            if (goal.get_properties().at("strengthen"))
+            {
+                refine_exists_successor(goal.get_node(), {&successor->get_concrete_state()});
+            }
+            return true;
+        }
+    }
+
+    DEBUG_PRINT("EX: no satisfying successor found!\n");
+    if (goal.get_properties().at("strengthen"))
+    {
+        std::set<const UnwindingTree*> dst_nodes;
+        for (const auto& succ : successors) dst_nodes.insert(&*succ);
+        refine_all_successors(goal.get_node(), dst_nodes);
+    }
+    return false;
+
+
 }
 
 OmgModelChecker::OmgModelChecker(const KripkeStructure &kripke) : _kripke(kripke)
@@ -596,6 +622,19 @@ void OmgModelChecker::refine_no_successor(UnwindingTree &to_close_node, Abstract
 
 std::pair<bool, UnwindingTree*> OmgModelChecker::check_inductive_ev(Goal &goal, UnwindingTree &node_to_explore) {
     throw 16;
+}
+
+void OmgModelChecker::refine_all_successors(UnwindingTree& to_close_node, const std::set<const UnwindingTree*>& dsts_nodes)
+{
+    std::set<AbstractState*> dsts_abs;
+    for (const UnwindingTree* dst_node : dsts_nodes) dsts_abs.insert(&find_abs(dst_node->get_concrete_state()));
+
+    AbstractState& abs_src_witness = find_abs(to_close_node);
+
+
+    RefinementResult refine_res = _abs_structure->refine_all_successors(to_close_node, abs_src_witness, dsts_abs, true);
+    update_classifier(refine_res, abs_src_witness);
+    find_abs(to_close_node); // redundant?
 }
 
 
