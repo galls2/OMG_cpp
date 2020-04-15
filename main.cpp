@@ -117,20 +117,62 @@ void unit_tests_ag()
 
 //    TEST("../resources/af_ag.aig", "AG true", true); // This should fail, as AP is empty, which is not allowed
 }
+
+
+void unit_tests_modal()
+{
+
+    TEST("../resources/af_ag.aig", "EX (state<0> & ~state<1>)", true);
+    TEST("../resources/af_ag.aig", "EX ~state<0> & ~state<1>", true);
+    TEST("../resources/af_ag.aig", "EX state<0> & state<1>", false);
+    TEST("../resources/af_ag.aig", "EX state<0> | state<1>", true);
+    TEST("../resources/af_ag.aig", "EX (~state<0>) & state<1>", false);
+    TEST("../resources/af_ag.aig", "EX state<1>", false);
+    TEST("../resources/af_ag.aig", "EX EX ((~state<0>) & state<1>)", true);
+    TEST("../resources/af_ag.aig", "EX ((EX ((~state<0>) & state<1>)) | (EX (state<0> & state<1>)))", true);
+    TEST("../resources/af_ag.aig", "EX EX ((~state<0>) & state<1>)", true);
+    TEST("../resources/af_ag.aig", "EX EX (state<0> & state<1>)", false);
+    TEST("../resources/af_ag.aig", "EX EX EX (state<0> & state<1>)", false);
+    TEST("../resources/af_ag.aig", "AX !state<1>", true);
+    TEST("../resources/af_ag.aig", "AX state<0>", false);
+    TEST("../resources/af_ag.aig", "AX (p)", false);
+
+}
+
+void unit_tests_complex()
+{
+
+}
+
 void unit_tests()
 {
     unit_tests_aps();
-     //   TEST("../resources/af_ag.aig", "AX (p)", false);
-     unit_tests_ag();
+    unit_tests_modal();
+    unit_tests_ag();
 
 }
 
 int main()
 {
     unit_tests();
+//    TEST("../resources/gray.aig", "((~q) & (~r)) -> (~(E (~p) U r))", true);
 
+ // The bug appears when you run unit_test() in the last property in AG
+ // If ran there, there is no inductiveness after 1 unwinding, and so we continue and then rechoose a node in the tree.
+ // However, if ran regularly, we do find inductiveness and finish
 
+ // The truth: initial states has two successors: itself and another one that satisfies (~p), which is p in ApVq.
+ // Thus, there it is not checked for clousre, and Abs0 does have closure, so closure SHOULD in fact be found after one
+ // iteration. Thus, the "regular run is OK", answering:
+ // First, ran regularly, why would there be closure for Abs 0 when there wasn't before?
 
+ // We still seek closure for Abs1, even though we shouldn't. Then there is indeed no closure, and we choose someone else.
+ // However we still explore [1 0 0 1]
 
+ // We should now answer why it happens that:
+ // Then, why is there a rechoosing when running ALL?
+ // This makes sense, as closure was not found, we seek to further develop this node's suceesors, but as it satisfies p there aren't any and it is rechosen.
 
+ // And then, why wasn't a closure found??
+ // Why is there a difference?
 }

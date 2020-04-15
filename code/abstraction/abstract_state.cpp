@@ -11,15 +11,17 @@
 #include <abstraction/abstraction_classifier.h>
 #include <utils/version_manager.h>
 
-AbstractState::AbstractState(const KripkeStructure &kripke, CtlFormula::PropertySet pos_labels,
+AbstractState::AbstractState(const KripkeStructure &kripke, CtlFormula::PropertySet pos_labels, CtlFormula::PropertySet neg_labels,
                              CtlFormula::PropertySet atomic_labels, PropFormula sym_rep)
-                             : _kripke(kripke), _pos_labels(std::move(pos_labels)),
+                             : _kripke(kripke), _pos_labels(std::move(pos_labels)), _neg_labels(std::move(neg_labels)),
                              _atomic_labels(std::move(atomic_labels)), _sym_rep(std::move(sym_rep)), _abs_idx(VersionManager::next_version_number("Abs"))
 {
-    std::set_difference(_atomic_labels.begin(), _atomic_labels.end(), _pos_labels.begin(), _pos_labels.end(),
-                        std::inserter(_neg_labels, _neg_labels.end()));
 #ifdef DEBUG
     _debug_name = VersionManager::version_to_string(_abs_idx);
+
+    CtlFormula::PropertySet diff;
+    std::set_intersection(_pos_labels.begin(), _pos_labels.end(), _neg_labels.begin(), _neg_labels.end(), std::inserter(diff, diff.begin()));
+    assert(diff.size() == 0);
 #endif
 }
 
@@ -81,3 +83,8 @@ void AbstractState::set_cl_node(AbstractClassificationNode *const cl_node) {
 const CtlFormula::PropertySet &AbstractState::get_pos_labels() const {
     return _pos_labels;
 }
+
+const CtlFormula::PropertySet &AbstractState::get_neg_labels() const {
+    return _neg_labels;
+}
+

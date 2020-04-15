@@ -14,7 +14,7 @@ AbstractState &AbstractStructure::create_astate_from_cstate(const ConcreteState 
     CtlFormula::PropertySet pos, neg;
     cstate.aps_by_sat(pos, neg);
 
-    auto res =_abs_states.emplace(_kripke, pos, _kripke.get_aps(), cstate.get_bis0_formula());
+    auto res =_abs_states.emplace(_kripke, pos, neg, _kripke.get_aps(), cstate.get_bis0_formula());
     assert(res.second);
 
     return const_cast<AbstractState&>(*res.first);
@@ -247,7 +247,7 @@ std::pair<AbstractState*, AbstractState*> AbstractStructure::create_new_astates_
 
 AbstractState &AbstractStructure::create_astate_from_astate_split(const AbstractState &astate, PropFormula sym_rep)
 {
-    auto res =_abs_states.emplace(_kripke, astate.get_pos_labels(), _kripke.get_aps(), std::move(sym_rep));
+    auto res =_abs_states.emplace(_kripke, astate.get_pos_labels(), astate.get_neg_labels(), _kripke.get_aps(), std::move(sym_rep));
     assert(res.second);
 
     return const_cast<AbstractState&>(*res.first);

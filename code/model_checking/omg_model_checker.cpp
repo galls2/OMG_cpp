@@ -83,8 +83,8 @@ bool OmgModelChecker::handle_ar(Goal &goal)
 
 
         // CHECK - we will delete this later. This checks for twice for the same concrete state
-        assert(!std::any_of(visited.begin(), visited.end(), [&](const ConcreteState *const &visitedee) {
-            return node_to_explore.get_concrete_state() == (*visitedee);
+        assert(std::all_of(visited.begin(), visited.end(), [&](const ConcreteState *const &visitedee) {
+            return node_to_explore.get_concrete_state() != (*visitedee);
         }));
 
         visited.emplace(&node_to_explore.get_concrete_state());
@@ -299,6 +299,9 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
                 // More Unwinding
                 const ConcreteState& dst_cstate = *concretization_result.dst_cstate;
                 UnwindingTree* const to_close_node = concretization_result.src_node;
+
+                assert(find_abs(*to_close_node).is_neg_labeled(*goal.get_spec().get_operands()[0]));
+
                 UnwindingTree& node_to_set = get_concretization_successor(to_close_node, dst_cstate);
                 node_to_set.set_urgent(true);
                 to_visit.emplace(std::ref(node_to_set));
@@ -468,14 +471,14 @@ void OmgModelChecker::initialize_abstraction()
 
 bool OmgModelChecker::model_checking(ConcreteState &cstate, const CtlFormula &specification)
 {
-        // In the future - unwinding tree cache is to be used here
-        std::unique_ptr<UnwindingTree> root = std::make_unique<UnwindingTree>(_kripke, cstate, nullptr);
+    // In the future - unwinding tree cache is to be used here
+    std::unique_ptr<UnwindingTree> root = std::make_unique<UnwindingTree>(_kripke, cstate, nullptr);
 
-        root->reset_developed_in_tree();
+    root->reset_developed_in_tree();
 
-        Goal goal(*root, specification, {{"strengthen", true}});
-        bool result = recur_ctl(goal);
-        return result;
+    Goal goal(*root, specification, {{"strengthen", true}});
+    bool result = recur_ctl(goal);
+    return result;
 }
 
 bool OmgModelChecker::recur_ctl(Goal &g)
