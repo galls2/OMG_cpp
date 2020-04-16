@@ -38,7 +38,7 @@ EEClosureResult AbstractStructure::is_EE_closure(AbstractState &to_close,
         {
             bool is_subset = std::includes(p_closers.begin(), p_closers.end(), closer_set.begin(), closer_set.end());
             if (is_subset)
-                return {true, std::experimental::optional<ConcreteState>(), std::experimental::optional<ConcreteState>()};
+                return {true, {}, {}};
         }
     }
 
@@ -264,7 +264,7 @@ AbstractStructure::refine_all_successors(const UnwindingTree &to_close_node, Abs
                         return std::includes(dsts_abs.begin(), dsts_abs.end(), astate_set.begin(), astate_set.end());
                     }))
     {
-        return {false, nullptr, nullptr, std::experimental::optional<PropFormula>()};
+        return {false, nullptr, nullptr, {}};
     }
 
     std::set<const PropFormula *> dst_abs_formulas;

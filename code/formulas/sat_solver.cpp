@@ -156,3 +156,4 @@ const std::map<std::string, SatSolverFactory> ISatSolver::s_solvers =
         {
                 {"z3", [](z3::context& ctx) { return std::make_unique<Z3SatSolver>(ctx); }}
         };
+

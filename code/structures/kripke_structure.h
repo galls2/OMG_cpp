@@ -5,7 +5,6 @@
 #include <z3++.h>
 #include <formulas/prop_formula.h>
 #include <structures/concrete_state.h>
-#include <utils/cartesian_product_generator.h>
 #include <temporal/ctl_formula.h>
 #include <unordered_set>
 #include <utils/omg_exception.h>

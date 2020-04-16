@@ -54,7 +54,7 @@ struct ActionTable
        {
             return std::experimental::optional<LrTableEntry>(_table_data.at(std::make_pair(state, token.get_token_type())));
        }
-       else return std::experimental::optional<LrTableEntry>();
+       else return {};
     }
 
     explicit ActionTable(ActionTable_t table_data) : _table_data(std::move(table_data)) {}

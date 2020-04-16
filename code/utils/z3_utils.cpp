@@ -93,7 +93,7 @@ FormulaInductiveUtils::is_EE_inductive(AbstractState &to_close, const ConstAbsSt
     SatSolverResult sat_res = solver->solve_sat(inductive_formula);
     if (!sat_res.get_is_sat()) // if the formula is UNSAT, there is NO cex to the inductiveness, so we have inductiveness
     {
-        return {true, std::experimental::optional<ConcreteState>(), std::experimental::optional<ConcreteState>()};
+        return {true, {}, {}};
     }
     else
     {

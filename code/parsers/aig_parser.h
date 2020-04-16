@@ -10,7 +10,6 @@
 #include <experimental/optional>
 #include <z3++.h>
 #include <structures/kripke_structure.h>
-#include <utils/cartesian_product_generator.h>
 #include <bits/unordered_map.h>
 
 enum AigMetadata{
@@ -26,7 +25,6 @@ public:
     std::unique_ptr<KripkeStructure> to_kripke(const CtlFormula::PropertySet& aps);
 
 private:
-   // std::string read_aag_to_aig(const std::string& aig_path) const;
     AigParser& extract_metadata(const std::string& first_aag_line);
     AigParser& extract_literals(const std::vector<std::string>& aag_lines);
     const AigParser& dfs(const std::vector<std::string> &lines, std::unordered_map<size_t, z3::expr>& formulas, size_t first_line, size_t target_lit) const;
