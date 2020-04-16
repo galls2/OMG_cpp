@@ -305,3 +305,12 @@ AbstractStructure::refine_all_successors(const UnwindingTree &to_close_node, Abs
     return { true, res.first, res.second, std::experimental::optional<PropFormula>(split_formulas.query) };
 }
 
+AbsStateSet AbstractStructure::get_astates_by_property(const CtlFormula &prop) {
+    AbsStateSet to_ret;
+//    for (AbstractState& it : _abs_states)
+//    {
+//        if (it.is_pos_labeled(prop)) to_ret.emplace(&it);
+//    }
+    return to_ret;
+}
+

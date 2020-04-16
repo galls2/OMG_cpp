@@ -4,11 +4,9 @@
 
 #include "lexer.h"
 
-bool in_collection(char look_for, std::vector<char> chars)
-{
-    for (const auto inside : chars) { if (inside == look_for) return true; }
-    return false;
-}
+constexpr std::array<char, 2> Token::s_terminating_signs;
+constexpr std::array<char, 2> Token::s_negation_signs;
+constexpr std::array<char, 10> Token::s_signs_which_are_tokens;
 
 std::vector<Token> Lexer::lex(const std::string &input) const {
     std::vector<Token> tokens;
@@ -16,7 +14,7 @@ std::vector<Token> Lexer::lex(const std::string &input) const {
     while (index < input.length())
     {
         if (input[index] == ' ') { ++index; continue; }
-        if (in_collection(input[index], {'(', ')', 'A', 'E', 'F', 'G', 'U', 'W', 'R', 'X'}))
+        if (in_collection(input[index], Token::s_signs_which_are_tokens))
         {
             tokens.emplace_back(input[index++]);
             continue;
@@ -33,7 +31,7 @@ std::vector<Token> Lexer::lex(const std::string &input) const {
             tokens.emplace_back("AND");
             continue;
         }
-        if (in_collection(input[index], {'~', '!'}))
+        if (in_collection(input[index], Token::s_negation_signs))
         {
             ++index;
             tokens.emplace_back("NOT");
@@ -54,13 +52,12 @@ std::vector<Token> Lexer::lex(const std::string &input) const {
         }
 
         size_t count_to_delim = 0;
-        while (!in_collection(input[index+count_to_delim], {' ', ')'}))
+        while ((index + count_to_delim) < input.length() && !in_collection(input[index+count_to_delim], Token::s_terminating_signs))
         {
             ++count_to_delim;
         }
 
-        Token atomic_token(input.substr(index, count_to_delim), true);
-        tokens.emplace_back(atomic_token);
+        tokens.emplace_back(input.substr(index, count_to_delim), true);
         index += count_to_delim;
 
     }

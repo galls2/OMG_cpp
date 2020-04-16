@@ -96,19 +96,20 @@ AigParser &AigParser::extract_ap_mapping(const std::vector<std::string> &aag_lin
 
 std::unordered_map<size_t, z3::expr> AigParser::calc_literal_formulas(const std::vector<std::string> &aag_lines)
 {
+    std::unordered_map<size_t, z3::expr> lit_formulas;
 
-    _lit_formulas.insert(std::make_pair(0, _ctx.bool_val(false)));
-    _lit_formulas.insert(std::make_pair(1, _ctx.bool_val(true)));
+    lit_formulas.emplace(0, _ctx.bool_val(false));
+    lit_formulas.emplace(1, _ctx.bool_val(true));
     for (auto lit : _in_literals)
-        _lit_formulas.insert(std::make_pair(lit, _ctx.bool_const(std::to_string(lit).data())));
+        lit_formulas.insert(std::make_pair(lit, _ctx.bool_const(std::to_string(lit).data())));
     for (auto lit : _prev_state_literals)
-        _lit_formulas.insert(std::make_pair(lit, _ctx.bool_const(std::to_string(lit).data())));
+        lit_formulas.insert(std::make_pair(lit, _ctx.bool_const(std::to_string(lit).data())));
 
     size_t first_and_line = _first_ap_index - _metadata[A];
-    for (auto lit : _next_state_literals) dfs(aag_lines, _lit_formulas, first_and_line, lit);
-    for (auto lit : _out_literals) dfs(aag_lines, _lit_formulas, first_and_line, lit);
+    for (auto lit : _next_state_literals) dfs(aag_lines, lit_formulas, first_and_line, lit);
+    for (auto lit : _out_literals) dfs(aag_lines, lit_formulas, first_and_line, lit);
 
-    return _lit_formulas;
+    return lit_formulas;
 }
 
 const AigParser &

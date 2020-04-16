@@ -46,6 +46,7 @@ public:
     RefinementResult refine_all_successors(const UnwindingTree& to_close_node, AbstractState& abs_src_witness,
             const std::set<AbstractState *> &dsts_abs, bool is_tse_possible);
 
+    AbsStateSet get_astates_by_property(const CtlFormula &prop);
 
 private:
     const KripkeStructure& _kripke;

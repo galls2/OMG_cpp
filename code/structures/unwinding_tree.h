@@ -12,9 +12,12 @@
 
 #include "concrete_state.h"
 
+class UnwindingTree;
 class KripkeStructure;
 class Goal;
 class AbstractState;
+
+typedef std::unordered_map<AbstractState*, std::unordered_set<UnwindingTree*>> CandidateSet;
 
 class UnwindingTree {
 public:
@@ -38,6 +41,7 @@ public:
     bool any_of_upwards(const std::function<bool(const UnwindingTree &)> &predicate,
                        const std::function<bool(const UnwindingTree &)> &last_node_pred) const;
     bool is_concrete_lasso(const UnwindingTree& last_node) const;
+    std::pair<CandidateSet, UnwindingTree*> find_abstract_lasso(const UnwindingTree& last_node);
     void add_label(bool positivity, const CtlFormula& spec);
 
     UnwindingTree* get_parent() const;

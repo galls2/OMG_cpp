@@ -46,7 +46,7 @@ private:
     std::vector<size_t> _out_literals;
     std::vector<size_t> _prev_state_literals;
     std::vector<size_t> _next_state_literals;
-    std::unordered_map<size_t, z3::expr> _lit_formulas;
+//    std::unordered_map<size_t, z3::expr> _lit_formulas;
     z3::context _ctx;
     std::unique_ptr<PropFormula> _tr_formula;
     std::unique_ptr<z3::expr> _init_formula;

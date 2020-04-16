@@ -4,7 +4,7 @@
 // Created by galls2 on 04/10/19.
 //
 #include <utility>
-
+#include "goal.h"
 #include <unordered_map>
 #include <unordered_set>
 #include <structures/kripke_structure.h>
@@ -77,11 +77,11 @@ private:
     static const std::map<std::string, handler_t> _handlers;
 
     bool check_inductive_av(Goal& goal, NodePriorityQueue& to_visit);
-    std::pair<bool, UnwindingTree*> check_inductive_ev(Goal& goal, UnwindingTree& node_to_explore);
+    std::pair<bool, UnwindingTree*> check_inductive_ev(Goal& goal, UnwindingTree& node_to_explore, const AbsStateSet& p_astates);
     void strengthen_subtree(Goal& goal, const std::function<bool(const UnwindingTree&)>& stop_condition);
     void strengthen_trace(UnwindingTree& start, UnwindingTree& end);
     void handle_proving_trace(Goal& goal, UnwindingTree& node_to_explore, bool positivity);
-    CandidateSet compute_candidate_set(Goal& goal);
+    CandidateSet compute_candidate_set_av(Goal &goal);
     CandidateSet brother_unification(const CandidateSet &cands, const CtlFormula& agree_upon);
     void label_subtree(Goal& goal, bool positivity);
 

@@ -131,3 +131,33 @@ bool UnwindingTree::is_concrete_lasso(const UnwindingTree &last_node) const {
             [&last_node] (const UnwindingTree& n) { return &last_node == &n; }
             );
 }
+
+std::pair<CandidateSet, UnwindingTree*> UnwindingTree::find_abstract_lasso(const UnwindingTree &last_node) {
+    CandidateSet to_return;
+
+    assert(get_abs());
+    AbstractState& abs_to_find = *get_abs();
+
+    UnwindingTree* lasso_base = nullptr;
+    bool is_lasso = false;
+
+    auto mapper = [&abs_to_find, &is_lasso, &to_return, &lasso_base](UnwindingTree& n) {
+        assert(n.get_abs());
+        AbstractState &current_abs = *n.get_abs();
+        if (current_abs == abs_to_find) { is_lasso = true; lasso_base = &n; }
+        to_return[&current_abs].emplace(&n);
+    };
+
+    auto stop_predicate = [&abs_to_find, &last_node] (const UnwindingTree& n) {
+        assert(n.get_abs());
+        AbstractState &current_abs = *n.get_abs();
+        return current_abs == abs_to_find || &n == &last_node;
+    };
+
+    map_upwards(mapper, stop_predicate);
+
+    if (!is_lasso) return {};
+    else return {to_return, lasso_base};
+}
+
+

@@ -7,6 +7,9 @@
 #include <utility>
 #include <string>
 #include <vector>
+#include <array>
+#include <utils/omg_utils.h>
+
 class Token
 {
 public:
@@ -22,6 +25,10 @@ public:
         return l.get_data() < r.get_data();
     }
     friend std::ostream& operator<<(std::ostream& os, const Token& token);
+
+    static constexpr std::array<char, 2> s_terminating_signs{make_array(' ',')')};
+    static constexpr std::array<char, 2> s_negation_signs{make_array('!', '~')};
+    static constexpr std::array<char, 10> s_signs_which_are_tokens{make_array('(', ')', 'A', 'E', 'F', 'G', 'U', 'W', 'R', 'X')};
 private:
     std::string _data;
     bool _is_ap;
@@ -33,3 +40,10 @@ public:
     std::vector<Token> lex(const std::string& input) const;
 
 };
+
+template<size_t N>
+bool in_collection(char look_for, const std::array<char, N>& chars)
+{
+    for (const auto inside : chars) { if (inside == look_for) return true; }
+    return false;
+}

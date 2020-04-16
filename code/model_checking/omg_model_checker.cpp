@@ -75,6 +75,9 @@ bool OmgModelChecker::handle_ar(Goal &goal)
     to_visit.emplace(std::ref(goal.get_node()));
     std::set<const ConcreteState*> visited;
 
+    const CtlFormula &q = *goal.get_spec().get_operands()[1];
+    const CtlFormula &p = *goal.get_spec().get_operands()[0];
+
     while (!to_visit.empty()) {
         UnwindingTree &node_to_explore = to_visit.top();
         to_visit.pop();
@@ -92,7 +95,6 @@ bool OmgModelChecker::handle_ar(Goal &goal)
         (void) find_abs(node_to_explore);
         node_to_explore.set_developed(goal);
 
-        const CtlFormula &q = *goal.get_spec().get_operands()[1];
         Goal subgoal_q(node_to_explore, q, goal.get_properties());
         bool res_q = recur_ctl(subgoal_q);
         if (!res_q) // nte |/= q. This is the case of a refuting path!
@@ -105,7 +107,6 @@ bool OmgModelChecker::handle_ar(Goal &goal)
             return false;
         }
 
-        const CtlFormula &p = *goal.get_spec().get_operands()[0];
         Goal subgoal_p(node_to_explore, p, goal.get_properties());
         bool res_p = recur_ctl(subgoal_p);
         if (res_p) {
@@ -144,9 +145,15 @@ bool OmgModelChecker::handle_ar(Goal &goal)
 }
 
 bool OmgModelChecker::handle_er(Goal &goal) {
+
     NodePriorityQueue to_visit(cmp_nodes);
     to_visit.emplace(std::ref(goal.get_node()));
     std::set<const ConcreteState *> visited;
+
+    const CtlFormula &q = *goal.get_spec().get_operands()[1];
+    const CtlFormula &p = *goal.get_spec().get_operands()[0];
+
+    AbsStateSet p_satisfying_astates = _abs_structure->get_astates_by_property(p);;
 
     while (!to_visit.empty()) {
         UnwindingTree &node_to_explore = to_visit.top();
@@ -172,19 +179,17 @@ bool OmgModelChecker::handle_er(Goal &goal) {
 
         node_to_explore.set_developed(goal);
 
-        const CtlFormula &q = *goal.get_spec().get_operands()[1];
         Goal subgoal_q(node_to_explore, q, goal.get_properties());
         bool res_q = recur_ctl(subgoal_q);
         if (!res_q) // nte |/= q. This is the case of a refuting path!
         {
             DEBUG_PRINT("ER: Trimming Tree as %s |/= q!\n",
                         node_to_explore.get_concrete_state().to_bitvec_str().data());
-            continue;
+            continue;   // This is not the druid we're looking for
         }
 
         visited.emplace(&node_to_explore.get_concrete_state());
 
-        const CtlFormula &p = *goal.get_spec().get_operands()[0];
         Goal subgoal_p(node_to_explore, p, goal.get_properties());
         bool res_p = recur_ctl(subgoal_p);
         if (res_p) {
@@ -204,7 +209,7 @@ bool OmgModelChecker::handle_er(Goal &goal) {
             }
         }
 
-        std::pair<bool, UnwindingTree *> inductive_res = check_inductive_ev(goal, node_to_explore);
+        std::pair<bool, UnwindingTree *> inductive_res = check_inductive_ev(goal, node_to_explore, p_satisfying_astates);
         if (inductive_res.first) {
             throw "Implement strengthenings from check_inductive_ev from python";
         }
@@ -253,9 +258,34 @@ UnwindingTree& get_concretization_successor(UnwindingTree* to_close_node, const 
         return *to_close_node;
     }
 }
+
+
+
+std::pair<bool, UnwindingTree*> OmgModelChecker::check_inductive_ev(Goal &goal, UnwindingTree &node_to_explore, const AbsStateSet& p_astates) {
+    std::pair<CandidateSet, UnwindingTree*> abs_lasso = node_to_explore.find_abstract_lasso(goal.get_node());
+    if (abs_lasso.first.empty()) return {false, nullptr};
+    assert(abs_lasso.second != nullptr);
+
+    UnwindingTree* lasso_base = abs_lasso.second;
+    const CtlFormula& p = *(goal.get_spec().get_operands()[0]);
+    CandidateSet candidates = (OmgConfig::get<bool>("Brother Unification")) ? brother_unification(abs_lasso.first, p) : abs_lasso.first;
+
+    std::set<AStateRef> abs_states;
+    for (const auto& it : candidates) abs_states.emplace(*it.first);
+    for (const auto& it : p_astates) abs_states.emplace(std::ref(*it));
+
+    auto comp_ind_cands = [](const InductiveCandidate& a, const InductiveCandidate& b) { return a.avg_depth < b.avg_depth; };
+    std::priority_queue<InductiveCandidate, std::vector<InductiveCandidate>, decltype(comp_ind_cands)> abs_states_lead(comp_ind_cands);
+    for (const auto &it: candidates) {
+        abs_states_lead.emplace(it.first, it.second);
+    }
+
+
+}
+
 bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit)
 {
-    CandidateSet candidates = compute_candidate_set(goal);
+    CandidateSet candidates = compute_candidate_set_av(goal);
 
     std::set<AStateRef> abs_states;
     for (const auto& it : candidates) abs_states.emplace(*it.first);
@@ -332,7 +362,7 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
     return true;
 }
 
-CandidateSet OmgModelChecker::compute_candidate_set(Goal& goal)
+CandidateSet OmgModelChecker::compute_candidate_set_av(Goal &goal)
 {
     CandidateSet cands;
     UnwindingTree& root = goal.get_node();
@@ -633,10 +663,6 @@ void OmgModelChecker::refine_no_successor(UnwindingTree &to_close_node, Abstract
     find_abs(to_close_node); // redundant?
 }
 
-std::pair<bool, UnwindingTree*> OmgModelChecker::check_inductive_ev(Goal &goal, UnwindingTree &node_to_explore) {
-    throw 16;
-}
-
 void OmgModelChecker::refine_all_successors(UnwindingTree& to_close_node, const std::set<const UnwindingTree*>& dsts_nodes)
 {
     std::set<AbstractState*> dsts_abs;
@@ -649,6 +675,7 @@ void OmgModelChecker::refine_all_successors(UnwindingTree& to_close_node, const 
     update_classifier(refine_res, abs_src_witness);
     find_abs(to_close_node); // redundant?
 }
+
 
 
 InductiveCandidate::InductiveCandidate(AbstractState *_abs_state, std::unordered_set<UnwindingTree *> _nodes)

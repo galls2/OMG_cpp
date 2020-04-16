@@ -18,6 +18,7 @@
             bool passed = ((expected) == test_formula(std::string((aig_path)), std::string((raw_ctl_string)))); \
             if (passed) std::cout << "PASS! :)" << std::endl; \
             else std::cout << "\tFAIL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl; \
+            Z3_finalize_memory(); \
         } \
     while(0)
 
@@ -155,24 +156,5 @@ void unit_tests()
 int main()
 {
     unit_tests();
-//    TEST("../resources/gray.aig", "((~q) & (~r)) -> (~(E (~p) U r))", true);
 
- // The bug appears when you run unit_test() in the last property in AG
- // If ran there, there is no inductiveness after 1 unwinding, and so we continue and then rechoose a node in the tree.
- // However, if ran regularly, we do find inductiveness and finish
-
- // The truth: initial states has two successors: itself and another one that satisfies (~p), which is p in ApVq.
- // Thus, there it is not checked for clousre, and Abs0 does have closure, so closure SHOULD in fact be found after one
- // iteration. Thus, the "regular run is OK", answering:
- // First, ran regularly, why would there be closure for Abs 0 when there wasn't before?
-
- // We still seek closure for Abs1, even though we shouldn't. Then there is indeed no closure, and we choose someone else.
- // However we still explore [1 0 0 1]
-
- // We should now answer why it happens that:
- // Then, why is there a rechoosing when running ALL?
- // This makes sense, as closure was not found, we seek to further develop this node's suceesors, but as it satisfies p there aren't any and it is rechosen.
-
- // And then, why wasn't a closure found??
- // Why is there a difference?
 }
