@@ -74,7 +74,7 @@ struct EEClosureResult;
 class FormulaInductiveUtils
 {
 public:
-    static EEClosureResult is_EE_inductive(AbstractState& to_close, const AbsStateSet& close_with);
+    static EEClosureResult is_EE_inductive(AbstractState& to_close, const ConstAbsStateSet& close_with);
     static ConcretizationResult concrete_transition_to_abs(const std::unordered_set<UnwindingTree*>& src_nodes, const AbstractState& astate);
 };
 

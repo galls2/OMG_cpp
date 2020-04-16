@@ -21,13 +21,13 @@ AbstractState &AbstractStructure::create_astate_from_cstate(const ConcreteState 
 }
 
 EEClosureResult AbstractStructure::is_EE_closure(AbstractState &to_close,
-                                                 const std::set<AStateRef> &close_with)
+                                                 const std::set<ConstAStateRef> &close_with)
 {
-    AbsStateSet p_closers, p_non_closers;
+    ConstAbsStateSet p_closers, p_non_closers;
     if (_NE_may.find(&to_close) != _NE_may.end()) {
         p_non_closers = _NE_may[&to_close];
     }
-    for (const AStateRef& cl : close_with) {
+    for (const ConstAStateRef& cl : close_with) {
         if (p_non_closers.find(&cl.get()) == p_non_closers.end()) p_closers.insert(&cl.get());
     }
 
@@ -64,9 +64,9 @@ EEClosureResult AbstractStructure::is_EE_closure(AbstractState &to_close,
         if (_NE_may_over.find(&to_close) == _NE_may_over.end())
         {
             AbstractState* src = &to_close;
-            std::pair<AbsStateSet, EEClosureResult> new_entry = std::make_pair(std::move(p_closers), closure_result);
-            std::vector<std::pair<AbsStateSet, EEClosureResult>> new_entry_vec = {new_entry};
-            _NE_may_over.emplace(src, new_entry_vec);
+            std::vector<std::pair<ConstAbsStateSet, EEClosureResult>> new_entry_vec;
+            new_entry_vec.emplace_back(std::move(p_closers), std::move(closure_result));
+            _NE_may_over.emplace(src, std::move(new_entry_vec));
         }
         else _NE_may_over[&to_close].emplace_back(p_closers, closure_result);
     }
@@ -79,18 +79,18 @@ const OmgModelChecker *AbstractStructure::get_omg() const{
 }
 
 RefinementResult AbstractStructure::refine_exists_successor(const ConcreteState &src_cstate, AbstractState &src_abs,
-                                                const std::set<AbstractState *> &dsts_abs, bool is_tse_possible) {
+                                                const ConstAbsStateSet &dsts_abs, bool is_tse_possible) {
     if (_E_must.find(&src_abs) != _E_must.end())
     {
         auto& must_options = _E_must[&src_abs];
         if (std::any_of(must_options.begin(), must_options.end(),
-                [&dsts_abs](AbsStateSet& opt)
+                [&dsts_abs](ConstAbsStateSet& opt)
                 {
                     return std::includes(dsts_abs.begin(), dsts_abs.end(), opt.begin(), opt.end());
                 }
                 ))
         {
-            return {false, nullptr, nullptr, std::experimental::optional<PropFormula>()};
+            return {false, nullptr, nullptr, {}};
         }
     }
 
@@ -105,16 +105,16 @@ RefinementResult AbstractStructure::refine_exists_successor(const ConcreteState 
     if (is_tse_possible && OmgConfig::get<bool>("Trivial Split Elimination") && !split_formulas.remainder_formula.is_sat())
     {
         _E_must[&src_abs].emplace_back(dsts_abs);
-        return {false, nullptr, nullptr, std::experimental::optional<PropFormula>()};
+        return {false, nullptr, nullptr, {}};
     }
 
     std::pair<AbstractState*, AbstractState*> res = create_new_astates_and_update(src_abs, split_formulas);
 
-    bool is_src_in_dsts = std::any_of(dsts_abs.begin(), dsts_abs.end(), [&src_abs] (AbstractState* abs_dst) {return (*abs_dst) == src_abs; });
+    bool is_src_in_dsts = std::any_of(dsts_abs.begin(), dsts_abs.end(), [&src_abs] (const AbstractState* abs_dst) {return (*abs_dst) == src_abs; });
 
     if (is_src_in_dsts)
     {
-        AbsStateSet updated = dsts_abs;
+        ConstAbsStateSet updated = dsts_abs;
         size_t erase_res = updated.erase(&src_abs);
         assert(erase_res == 1);
         updated.insert({res.first, res.second});
@@ -123,7 +123,7 @@ RefinementResult AbstractStructure::refine_exists_successor(const ConcreteState 
     {
         _E_must[res.first].emplace_back(dsts_abs);
     }
-    return { true, res.first, res.second, std::experimental::optional<PropFormula>(split_formulas.query) };
+    return { true, res.first, res.second, {split_formulas.query} };
 }
 
 template <typename T, typename S>
@@ -134,17 +134,17 @@ void inherit_values_in_dict(std::map<T, S>& dict, T& old_key, const std::set<T>&
 
 
 RefinementResult AbstractStructure::refine_no_successor(const UnwindingTree &to_close_node, AbstractState &abs_src_witness,
-                                            const std::set<AbstractState *> &dsts_abs, bool is_tse_possible /* =true */)
+                                            const ConstAbsStateSet &dsts_abs, bool is_tse_possible /* =true */)
 {
     if (_NE_may.find(&abs_src_witness) != _NE_may.end() &&
         std::all_of(dsts_abs.begin(), dsts_abs.end(),
-                [this, &abs_src_witness](AbstractState* astate)
+                [this, &abs_src_witness](const AbstractState* astate)
                     {
                         return _NE_may[&abs_src_witness].find(astate) != _NE_may[&abs_src_witness].end();
 
                     }))
     {
-        return {false, nullptr, nullptr, std::experimental::optional<PropFormula>()};
+        return {false, nullptr, nullptr, {}};
     }
 
     std::set<const PropFormula *> dst_abs_formulas;
@@ -163,15 +163,15 @@ RefinementResult AbstractStructure::refine_no_successor(const UnwindingTree &to_
 
     std::pair<AbstractState*, AbstractState*> res = create_new_astates_and_update(abs_src_witness, split_formulas);
 
-    bool is_src_in_dsts = std::any_of(dsts_abs.begin(), dsts_abs.end(), [&abs_src_witness] (AbstractState* abs_dst) {return (*abs_dst) == abs_src_witness; });
-    for (AbstractState* abs_dst : dsts_abs) {_NE_may[res.first].insert(abs_dst); }
+    bool is_src_in_dsts = std::any_of(dsts_abs.begin(), dsts_abs.end(), [&abs_src_witness] (const AbstractState* abs_dst) {return (*abs_dst) == abs_src_witness; });
+    for (const AbstractState* abs_dst : dsts_abs) {_NE_may[res.first].insert(abs_dst); }
     if (is_src_in_dsts) { _NE_may[res.first].insert({res.first, res.second}); }
 
     auto remove_redundant =
-            [&res, &dsts_abs, is_src_in_dsts] (std::map<AbstractState*, std::vector<AbsStateSet>>& dict)
+            [&res, &dsts_abs, is_src_in_dsts] (std::map<AbstractState*, std::vector<ConstAbsStateSet>>& dict)
             {
                 if (dict.find(res.first) == dict.end()) return;
-                for (AbsStateSet &opt : dict[res.first])
+                for (ConstAbsStateSet &opt : dict[res.first])
                 {
                     opt.erase(dsts_abs.begin(), dsts_abs.end());
                     if (is_src_in_dsts)
@@ -185,7 +185,7 @@ RefinementResult AbstractStructure::refine_no_successor(const UnwindingTree &to_
     remove_redundant(_E_must);
     remove_redundant(_E_may_over);
 
-    return { true, res.first, res.second, std::experimental::optional<PropFormula>(split_formulas.query) };
+    return { true, res.first, res.second, {split_formulas.query} };
 }
 
 std::pair<AbstractState*, AbstractState*> AbstractStructure::create_new_astates_and_update(AbstractState &abs_src_witness,
@@ -196,13 +196,13 @@ std::pair<AbstractState*, AbstractState*> AbstractStructure::create_new_astates_
 
     std::set<AbstractState*> new_keys;
     new_keys.insert({&abs_no_successors, &abs_residual});
-    inherit_values_in_dict<AbstractState*, std::vector<AbsStateSet>>(_E_must, abs_src_witness_ptr, new_keys);
-    inherit_values_in_dict<AbstractState*, std::vector<AbsStateSet>>(_E_may_over, abs_src_witness_ptr, new_keys);
+    inherit_values_in_dict<AbstractState*, std::vector<ConstAbsStateSet>>(_E_must, abs_src_witness_ptr, new_keys);
+    inherit_values_in_dict<AbstractState*, std::vector<ConstAbsStateSet>>(_E_may_over, abs_src_witness_ptr, new_keys);
 
-    auto abs_state_set_updater = [&abs_src_witness_ptr, &new_keys] (std::pair<AbstractState*, std::vector<AbsStateSet>> entry)
+    auto abs_state_set_updater = [&abs_src_witness_ptr, &new_keys] (std::pair<AbstractState*, std::vector<ConstAbsStateSet>> entry)
     {
-        std::vector<AbsStateSet>& entry_values = entry.second;
-        for (AbsStateSet& astate_set : entry_values)
+        auto& entry_values = entry.second;
+        for (auto& astate_set : entry_values)
         {
             if (astate_set.find(abs_src_witness_ptr) != astate_set.end())
             {
@@ -211,11 +211,11 @@ std::pair<AbstractState*, AbstractState*> AbstractStructure::create_new_astates_
             }
         }
     };
-    for_each(_E_must.begin(), _E_must.end(), abs_state_set_updater);
-    for_each(_E_may_over.begin(), _E_may_over.end(), abs_state_set_updater);
+    std::for_each(_E_must.begin(), _E_must.end(), abs_state_set_updater);
+    std::for_each(_E_may_over.begin(), _E_may_over.end(), abs_state_set_updater);
 
     for_each(_NE_may.begin(), _NE_may.end(),
-             [&abs_src_witness_ptr, &new_keys] (std::pair<AbstractState*, AbsStateSet> entry)
+             [&abs_src_witness_ptr, &new_keys] (std::pair<AbstractState*, ConstAbsStateSet> entry)
           {
               if (entry.second.find(abs_src_witness_ptr) != entry.second.end())
               {
@@ -225,9 +225,9 @@ std::pair<AbstractState*, AbstractState*> AbstractStructure::create_new_astates_
           });
 
     for_each(_NE_may_over.begin(), _NE_may_over.end(), [&abs_src_witness_ptr, &new_keys] (
-            std::pair<AbstractState*, std::vector<std::pair<AbsStateSet, EEClosureResult>>> entry)
+            std::pair<AbstractState*, std::vector<std::pair<ConstAbsStateSet, EEClosureResult>>> entry)
     {
-        std::vector<std::pair<AbsStateSet, EEClosureResult>>& entry_values = entry.second;
+        auto& entry_values = entry.second;
         for (auto& entry_value : entry_values)
         {
             if (entry_value.first.find(abs_src_witness_ptr) != entry_value.first.end())
@@ -255,10 +255,10 @@ AbstractState &AbstractStructure::create_astate_from_astate_split(const Abstract
 
 RefinementResult
 AbstractStructure::refine_all_successors(const UnwindingTree &to_close_node, AbstractState &abs_src_witness,
-                                         const std::set<AbstractState *> &dsts_abs, bool is_tse_possible) {
+                                         const ConstAbsStateSet &dsts_abs, bool is_tse_possible) {
     if (_E_may_over.find(&abs_src_witness) != _E_may_over.end() &&
         std::any_of(_E_may_over[&abs_src_witness].begin(), _E_may_over[&abs_src_witness].end(),
-                    [&dsts_abs](const AbsStateSet& astate_set)
+                    [&dsts_abs](const ConstAbsStateSet& astate_set)
                     {
                         // True iff astate_set \subseteq dsts_abs
                         return std::includes(dsts_abs.begin(), dsts_abs.end(), astate_set.begin(), astate_set.end());
@@ -279,16 +279,16 @@ AbstractStructure::refine_all_successors(const UnwindingTree &to_close_node, Abs
     {
         _E_must[&abs_src_witness].emplace_back(dsts_abs);
         _E_may_over[&abs_src_witness].emplace_back(dsts_abs);
-        return {false, nullptr, nullptr, std::experimental::optional<PropFormula>()};
+        return {false, nullptr, nullptr, {}};
     }
 
     std::pair<AbstractState*, AbstractState*> res = create_new_astates_and_update(abs_src_witness, split_formulas);
 
-    bool is_src_in_dsts = std::any_of(dsts_abs.begin(), dsts_abs.end(), [&abs_src_witness] (AbstractState* abs_dst) {return (*abs_dst) == abs_src_witness; });
+    bool is_src_in_dsts = std::any_of(dsts_abs.begin(), dsts_abs.end(), [&abs_src_witness] (const AbstractState* abs_dst) {return (*abs_dst) == abs_src_witness; });
 
     if (is_src_in_dsts)
     {
-        AbsStateSet updated = dsts_abs;
+        ConstAbsStateSet updated = dsts_abs;
         size_t erase_res = updated.erase(&abs_src_witness);
         assert(erase_res == 1);
         updated.insert({res.first, res.second});
@@ -302,15 +302,19 @@ AbstractStructure::refine_all_successors(const UnwindingTree &to_close_node, Abs
 
     }
 
-    return { true, res.first, res.second, std::experimental::optional<PropFormula>(split_formulas.query) };
+    return { true, res.first, res.second, {split_formulas.query} };
 }
 
-AbsStateSet AbstractStructure::get_astates_by_property(const CtlFormula &prop) {
-    AbsStateSet to_ret;
-//    for (AbstractState& it : _abs_states)
-//    {
-//        if (it.is_pos_labeled(prop)) to_ret.emplace(&it);
-//    }
+std::set<ConstAStateRef> AbstractStructure::get_astates_by_property(const CtlFormula &prop) {
+    std::set<ConstAStateRef> to_ret;
+    for (auto& it : _abs_states)
+    {
+        if (it.is_pos_labeled(prop)) to_ret.emplace(std::ref(it));
+    }
     return to_ret;
+}
+
+AEClosureResult AbstractStructure::is_AE_closure(AbstractState &to_close, const std::set<ConstAStateRef> &close_with) {
+    throw 154;
 }
 

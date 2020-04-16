@@ -153,7 +153,7 @@ bool OmgModelChecker::handle_er(Goal &goal) {
     const CtlFormula &q = *goal.get_spec().get_operands()[1];
     const CtlFormula &p = *goal.get_spec().get_operands()[0];
 
-    AbsStateSet p_satisfying_astates = _abs_structure->get_astates_by_property(p);;
+    std::set<ConstAStateRef> p_satisfying_astates = _abs_structure->get_astates_by_property(p);;
 
     while (!to_visit.empty()) {
         UnwindingTree &node_to_explore = to_visit.top();
@@ -261,33 +261,69 @@ UnwindingTree& get_concretization_successor(UnwindingTree* to_close_node, const 
 
 
 
-std::pair<bool, UnwindingTree*> OmgModelChecker::check_inductive_ev(Goal &goal, UnwindingTree &node_to_explore, const AbsStateSet& p_astates) {
+std::pair<bool, UnwindingTree*> OmgModelChecker::check_inductive_ev(Goal &goal, UnwindingTree &node_to_explore, const std::set<ConstAStateRef>& p_astates) {
     std::pair<CandidateSet, UnwindingTree*> abs_lasso = node_to_explore.find_abstract_lasso(goal.get_node());
-    if (abs_lasso.first.empty()) return {false, nullptr};
-    assert(abs_lasso.second != nullptr);
 
-    UnwindingTree* lasso_base = abs_lasso.second;
-    const CtlFormula& p = *(goal.get_spec().get_operands()[0]);
-    CandidateSet candidates = (OmgConfig::get<bool>("Brother Unification")) ? brother_unification(abs_lasso.first, p) : abs_lasso.first;
+    while (!abs_lasso.first.empty()) {
+        assert(abs_lasso.second != nullptr);
 
-    std::set<AStateRef> abs_states;
-    for (const auto& it : candidates) abs_states.emplace(*it.first);
-    for (const auto& it : p_astates) abs_states.emplace(std::ref(*it));
+        UnwindingTree *lasso_base = abs_lasso.second;
+        const CtlFormula &p = *(goal.get_spec().get_operands()[0]);
 
-    auto comp_ind_cands = [](const InductiveCandidate& a, const InductiveCandidate& b) { return a.avg_depth < b.avg_depth; };
-    std::priority_queue<InductiveCandidate, std::vector<InductiveCandidate>, decltype(comp_ind_cands)> abs_states_lead(comp_ind_cands);
-    for (const auto &it: candidates) {
-        abs_states_lead.emplace(it.first, it.second);
+        bool is_brother_unification = (OmgConfig::get<bool>("Brother Unification"));
+        CandidateSet candidates = is_brother_unification ? brother_unification(abs_lasso.first, p) : abs_lasso.first;
+
+        std::set<ConstAStateRef> abs_states;
+        for (const auto &it : candidates) abs_states.emplace(*it.first);
+        for (const auto &it : p_astates) abs_states.emplace(it);
+
+        auto comp_ind_cands = [](const InductiveCandidate &a, const InductiveCandidate &b) {
+            return a.avg_depth < b.avg_depth;
+        };
+        std::priority_queue<InductiveCandidate, std::vector<InductiveCandidate>, decltype(comp_ind_cands)> abs_states_lead(
+                comp_ind_cands);
+        for (const auto &it: candidates) {
+            abs_states_lead.emplace(it.first, it.second);
+        }
+
+        while (!abs_states_lead.empty()) {
+            InductiveCandidate ind_candidate = abs_states_lead.top();
+            AbstractState *abs_lead = ind_candidate.abs_state;
+            DEBUG_PRINT("Is there ER-inductiveness for abs state %s?... ", abs_lead->_debug_name.data());
+
+            AEClosureResult res = _abs_structure->is_AE_closure(*abs_lead, abs_states);
+            if (res.is_closed) {
+                DEBUG_PRINT("Yes!\n");
+                abs_states_lead.pop();
+            } else {
+                throw 143;
+            }
+
+        }
+
+        if (abs_states_lead.empty()) {
+            DEBUG_PRINT("ER: found ER inductiveness");
+            if (goal.get_properties().at("strengthen")) {
+                // strengthen trace from node to base (root to base)
+                // positive label from nte to root
+            }
+            else
+            {
+                // positive label from nte to base of lasso
+            }
+            return {true, nullptr};
+        }
+
+        abs_lasso = node_to_explore.find_abstract_lasso(goal.get_node());
     }
-
-
+    return {false, nullptr}; // Should we really do the strengthenings outside this function?
 }
 
 bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit)
 {
     CandidateSet candidates = compute_candidate_set_av(goal);
 
-    std::set<AStateRef> abs_states;
+    std::set<ConstAStateRef> abs_states;
     for (const auto& it : candidates) abs_states.emplace(*it.first);
 
     auto comp_ind_cands = [](const InductiveCandidate& a, const InductiveCandidate& b) { return a.avg_depth < b.avg_depth; };
@@ -303,7 +339,7 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
     {
         InductiveCandidate ind_candidate = abs_states_lead.top();
         AbstractState* abs_lead = ind_candidate.abs_state;
-        DEBUG_PRINT("Is there inductiveness for abs state %s?... ", abs_lead->_debug_name.data());
+        DEBUG_PRINT("Is there AV-inductiveness for abs state %s?... ", abs_lead->_debug_name.data());
 
         EEClosureResult res = _abs_structure->is_EE_closure(*abs_lead, abs_states);
         if (res.is_closed)
@@ -398,8 +434,6 @@ void unify_same_level(CandidateSet& src, const CtlFormula& agree_upon, Candidate
     for (const std::pair<AbstractState* const, std::unordered_set<UnwindingTree*>>& it : src) {
         const AbstractClassificationNode* parent = it.first->get_cl_node()->get_parent();
         assert(parent != nullptr);
-//        if (parents_mapping.find(parent) == parents_mapping.end())
-//            parents_mapping[parent] = std::pair<AbstractState*, std::vector<std::unordered_set<UnwindingTree*>>>();
         parents_mapping[parent].second.push_back(it.second);
         parents_mapping[parent].first = it.first;
     }
@@ -625,7 +659,7 @@ void OmgModelChecker::strengthen_trace(UnwindingTree &start, UnwindingTree &end)
 void OmgModelChecker::refine_exists_successor(UnwindingTree& src_node,
                                               const std::set<const ConcreteState *> &dsts_cstate)
 {
-    std::set<AbstractState*> dsts_abs;
+    ConstAbsStateSet dsts_abs;
     for (const ConcreteState* dst_cstate : dsts_cstate) dsts_abs.insert(&find_abs(*dst_cstate));
 
     AbstractState& src_abs = find_abs(src_node.get_concrete_state());
@@ -665,7 +699,7 @@ void OmgModelChecker::refine_no_successor(UnwindingTree &to_close_node, Abstract
 
 void OmgModelChecker::refine_all_successors(UnwindingTree& to_close_node, const std::set<const UnwindingTree*>& dsts_nodes)
 {
-    std::set<AbstractState*> dsts_abs;
+    ConstAbsStateSet dsts_abs;
     for (const UnwindingTree* dst_node : dsts_nodes) dsts_abs.insert(&find_abs(dst_node->get_concrete_state()));
 
     AbstractState& abs_src_witness = find_abs(to_close_node);

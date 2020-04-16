@@ -63,7 +63,7 @@ std::string z3_expr_to_string(const std::vector<z3::expr> &vec) {
 
 
 EEClosureResult
-FormulaInductiveUtils::is_EE_inductive(AbstractState &to_close, const std::set<AbstractState *> &close_with) {
+FormulaInductiveUtils::is_EE_inductive(AbstractState &to_close, const ConstAbsStateSet &close_with) {
     const KripkeStructure& kripke = to_close.get_kripke();
     const PropFormula& tr = kripke.get_tr();
 

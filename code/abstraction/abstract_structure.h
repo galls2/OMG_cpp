@@ -18,6 +18,13 @@ struct EEClosureResult
     std::experimental::optional<ConcreteState> dst;
 };
 
+struct AEClosureResult
+{
+    bool is_closed = false;
+    std::experimental::optional<ConcreteState> violator;
+};
+
+
 
 struct RefinementResult
 {
@@ -35,28 +42,30 @@ public:
     AbstractState& create_astate_from_cstate(const ConcreteState& cstate);
     AbstractState& create_astate_from_astate_split(const AbstractState& astate, PropFormula sym_rep);
 
-    EEClosureResult is_EE_closure(AbstractState& to_close , const std::set<AStateRef>& close_with);
+    EEClosureResult is_EE_closure(AbstractState& to_close , const std::set<ConstAStateRef>& close_with);
+    AEClosureResult is_AE_closure(AbstractState& to_close , const std::set<ConstAStateRef>& close_with);
+
     const OmgModelChecker* get_omg() const;
     RefinementResult refine_exists_successor(const ConcreteState &src_cstate, AbstractState &src_abs,
-                                 const std::set<AbstractState *> &dsts_abs, bool is_tse_possible);
+                                 const ConstAbsStateSet &dsts_abs, bool is_tse_possible);
 
     RefinementResult refine_no_successor(const UnwindingTree& to_close_node, AbstractState& abs_src_witness,
-            const std::set<AbstractState *> &dsts_abs, bool is_tse_possible);
+            const ConstAbsStateSet &dsts_abs, bool is_tse_possible);
 
     RefinementResult refine_all_successors(const UnwindingTree& to_close_node, AbstractState& abs_src_witness,
-            const std::set<AbstractState *> &dsts_abs, bool is_tse_possible);
+            const ConstAbsStateSet &dsts_abs, bool is_tse_possible);
 
-    AbsStateSet get_astates_by_property(const CtlFormula &prop);
+    std::set<ConstAStateRef> get_astates_by_property(const CtlFormula &prop);
 
 private:
     const KripkeStructure& _kripke;
     const OmgModelChecker* _omg;
     std::set<AbstractState> _abs_states;
 
-std::map<AbstractState*, AbsStateSet> _NE_may;
-    std::map<AbstractState*, std::vector<AbsStateSet>> _E_must;
-    std::map<AbstractState*, std::vector<AbsStateSet>> _E_may_over;
-    std::map<AbstractState*, std::vector<std::pair<AbsStateSet, EEClosureResult>>> _NE_may_over;
+    std::map<AbstractState*, ConstAbsStateSet> _NE_may;
+    std::map<AbstractState*, std::vector<ConstAbsStateSet>> _E_must;
+    std::map<AbstractState*, std::vector<ConstAbsStateSet>> _E_may_over;
+    std::map<AbstractState*, std::vector<std::pair<ConstAbsStateSet, EEClosureResult>>> _NE_may_over;
 
     std::pair<AbstractState*, AbstractState*> create_new_astates_and_update(AbstractState &abs_src_witness,
                                        SplitFormulas& new_abs_state_formulas);
