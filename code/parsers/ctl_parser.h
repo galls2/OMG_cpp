@@ -52,7 +52,7 @@ struct ActionTable
     {
        if (_table_data.find(std::make_pair(state, token.get_token_type())) != _table_data.end())
        {
-            return std::experimental::optional<LrTableEntry>(_table_data.at(std::make_pair(state, token.get_token_type())));
+            return {_table_data.at(std::make_pair(state, token.get_token_type()))};
        }
        else return {};
     }

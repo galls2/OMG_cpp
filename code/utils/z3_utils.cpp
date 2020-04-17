@@ -5,6 +5,7 @@
 #include <unordered_set>
 #include "z3_utils.h"
 #include "version_manager.h"
+#include <formulas/epr_solver.h>
 #include <model_checking/omg_model_checker.h>
 
 z3::expr to_var(z3::context& ctx, size_t val)
@@ -46,21 +47,6 @@ SatResult Z3_val_to_sat_result(Z3_lbool v) {
     }
 }
 
-std::string expr_vector_to_string(const z3::expr_vector &vec) {
-    std::string res;
-    for (size_t i = 0; i< vec.size(); ++i)
-        res += vec[i].to_string()  + std::string(" ");
-    return res;
-}
-
-std::string z3_expr_to_string(const std::vector<z3::expr> &vec) {
-    std::string res;
-    for (const auto &i : vec)
-        res += i.to_string() + std::string(" ");
-    return res;
-}
-
-
 
 EEClosureResult
 FormulaInductiveUtils::is_EE_inductive(AbstractState &to_close, const ConstAbsStateSet &close_with) {
@@ -79,13 +65,13 @@ FormulaInductiveUtils::is_EE_inductive(AbstractState &to_close, const ConstAbsSt
     {
         PropFormula dst = closer->get_formula();
         z3::expr dst_raw_formula =
-                FormulaUtils::negate(dst.get_raw_formula()
+                dst.get_raw_formula()
                                  .substitute(dst.get_vars_by_tag("ps"), ns_tr)
-                                 .substitute(dst.get_vars_by_tag("in0"), in_1));
+                                 .substitute(dst.get_vars_by_tag("in0"), in_1);
         dsts.push_back(dst_raw_formula);
     }
 
-    z3::expr dst_part = z3::mk_and(dsts);
+    z3::expr dst_part = !z3::mk_or(dsts);
 
     z3::expr inductive_raw_formula = src_part && tr.get_raw_formula() && dst_part;
     PropFormula inductive_formula(inductive_raw_formula, {{"ps", ps_tr}, {"ns", ns_tr}});
@@ -150,6 +136,50 @@ FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<Unwin
     }
 }
 
+AEClosureResult FormulaInductiveUtils::is_AE_inductive(AbstractState &to_close, const ConstAbsStateSet &close_with) {
+    const KripkeStructure& kripke = to_close.get_kripke();
+    const PropFormula& tr = kripke.get_tr();
+
+    const z3::expr_vector ps_tr = tr.get_vars_by_tag("ps"), ns_tr = tr.get_vars_by_tag("ns"),
+            in_0 = tr.get_vars_by_tag("in0"), in_1 = tr.get_vars_by_tag("in1");
+
+    PropFormula src_formula = to_close.get_formula();
+    z3::expr src_part = src_formula.get_raw_formula().substitute(src_formula.get_vars_by_tag("ps"), ps_tr)
+            .substitute(src_formula.get_vars_by_tag("in0"), in_0);
+
+    z3::expr_vector dsts(ps_tr.ctx());
+    for (const auto & closer : close_with)
+    {
+        PropFormula dst = closer->get_formula();
+        z3::expr dst_raw_formula =
+                dst.get_raw_formula()
+                        .substitute(dst.get_vars_by_tag("ps"), ns_tr)
+                        .substitute(dst.get_vars_by_tag("in0"), in_1);
+        dsts.push_back(dst_raw_formula);
+    }
+
+    z3::expr dst_part = z3::mk_or(dsts);
+
+    z3::expr inner_quantified = z3::implies(tr.get_raw_formula(), !dst_part);
+    z3::expr quantified_part = z3::forall(ns_tr, inner_quantified); // in1 vars are not quanitifed as of the implication TR. Probably is true but possible BUG
+    z3::expr inductive_raw_formula = src_part && quantified_part;
+
+    PropFormula inductive_formula(inductive_raw_formula, {{"ps", ps_tr}});
+    std::unique_ptr<IEprSolver> solver = IEprSolver::s_solvers.at(OmgConfig::get<std::string>("Epr Solver"))(ps_tr.ctx());
+    SatSolverResult sat_res = solver->solve_sat(inductive_formula);
+    if (!sat_res.get_is_sat()) // if the formula is UNSAT, there is NO cex to the inductiveness, so we have inductiveness
+    {
+        return {true, {}};
+    }
+    else
+    {
+        z3::expr cstate_conj = FormulaUtils::get_conj_from_sat_result(ps_tr.ctx(), ps_tr, sat_res);
+        auto cstate_src = ConcreteState(kripke, cstate_conj);
+
+        return {false, cstate_src};
+    }
+}
+
 z3::expr FormulaUtils::negate(const z3::expr &expr) {
     return expr.is_not() ? expr.arg(0) : !expr;
 }
@@ -188,12 +218,6 @@ bool FormulaUtils::is_cstate_conjunct(const z3::expr &f) {
             return false;
     }
     return true;
-}
-
-bool FormulaUtils::is_contained_expr_vec(const z3::expr_vector &small, const z3::expr_vector &big) {
-    Z3ExprSet small_set = expr_vector_to_set(small);
-    Z3ExprSet big_set = expr_vector_to_set(big);
-    assert(is_contained_z3_containers(small_set, big_set));
 }
 
 void FormulaSplitUtils::find_proving_inputs(const z3::expr& state_conj, const PropFormula& tr, z3::expr& dst, z3::expr_vector& input_values)

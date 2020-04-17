@@ -303,7 +303,9 @@ std::pair<bool, UnwindingTree*> OmgModelChecker::check_inductive_ev(Goal &goal, 
 
         if (abs_states_lead.empty()) {
             DEBUG_PRINT("ER: found ER inductiveness");
+            throw 1543;
             if (goal.get_properties().at("strengthen")) {
+
                 // strengthen trace from node to base (root to base)
                 // positive label from nte to root
             }
@@ -408,17 +410,10 @@ CandidateSet OmgModelChecker::compute_candidate_set_av(Goal &goal)
         assert(abs);
 
         AbstractState* p_abs = &(abs->get());
-        std::unordered_set<UnwindingTree*> node_set;
-        node_set.insert(&node);
-        if (cands.find(p_abs) == cands.end())
-        {
-
-            cands.emplace(p_abs, node_set);
-        } else
-            cands[p_abs].emplace(&node);
+        cands[p_abs].emplace(&node);
     };
-    root.map_subtree(inserter, [&goal](const UnwindingTree &node) {
 
+    root.map_subtree(inserter, [&goal](const UnwindingTree &node) {
         return node.is_developed(goal);
     });
 
@@ -466,8 +461,7 @@ CandidateSet OmgModelChecker::brother_unification(const CandidateSet &cands, con
     {
         size_t depth = it.first->get_cl_node()->get_depth();
         max_depth = max_depth >= depth ? max_depth : depth;
-        if (levels.find(depth) == levels.end()) levels[depth] = {it};
-        else levels[depth].emplace(it);
+        levels[depth].emplace(it);
     }
 
     CandidateSet reduced;

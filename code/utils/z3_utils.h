@@ -24,8 +24,6 @@ public:
     static bool is_cstate_conjunct(const z3::expr& f);
 
 
-    static bool is_contained_expr_vec(const z3::expr_vector& small, const z3::expr_vector& big);
-
 };
 
 z3::expr to_var(z3::context& ctx, size_t val);
@@ -64,17 +62,16 @@ std::vector<z3::expr> expr_vector_to_vector(const z3::expr_vector& expr_vec);
 
 SatResult Z3_val_to_sat_result(Z3_lbool v);
 
-std::string expr_vector_to_string(const z3::expr_vector& vec);
-
-
-std::string z3_expr_to_string(const std::vector<z3::expr>& vec);
 
 struct EEClosureResult;
+struct AEClosureResult;
 
 class FormulaInductiveUtils
 {
 public:
     static EEClosureResult is_EE_inductive(AbstractState& to_close, const ConstAbsStateSet& close_with);
+    static AEClosureResult is_AE_inductive(AbstractState& to_close, const ConstAbsStateSet& close_with);
+
     static ConcretizationResult concrete_transition_to_abs(const std::unordered_set<UnwindingTree*>& src_nodes, const AbstractState& astate);
 };
 

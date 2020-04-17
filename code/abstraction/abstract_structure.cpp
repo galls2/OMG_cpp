@@ -57,18 +57,10 @@ EEClosureResult AbstractStructure::is_EE_closure(AbstractState &to_close,
 
     if (closure_result.is_closed)
     {
-        if (_E_may_over.find(&to_close) == _E_may_over.end()) _E_may_over[&to_close] = {p_closers};
-        else _E_may_over[&to_close].emplace_back(p_closers);
+        _E_may_over[&to_close].emplace_back(std::move(p_closers));
     } else
     {
-        if (_NE_may_over.find(&to_close) == _NE_may_over.end())
-        {
-            AbstractState* src = &to_close;
-            std::vector<std::pair<ConstAbsStateSet, EEClosureResult>> new_entry_vec;
-            new_entry_vec.emplace_back(std::move(p_closers), std::move(closure_result));
-            _NE_may_over.emplace(src, std::move(new_entry_vec));
-        }
-        else _NE_may_over[&to_close].emplace_back(p_closers, closure_result);
+        _NE_may_over[&to_close].emplace_back(std::move(p_closers), closure_result);
     }
 
     return closure_result;
@@ -315,6 +307,38 @@ std::set<ConstAStateRef> AbstractStructure::get_astates_by_property(const CtlFor
 }
 
 AEClosureResult AbstractStructure::is_AE_closure(AbstractState &to_close, const std::set<ConstAStateRef> &close_with) {
-    throw 154;
+
+    ConstAbsStateSet p_closers, p_non_closers;
+    if (_NE_may.find(&to_close) != _NE_may.end()) {
+        p_non_closers = _NE_may[&to_close];
+    }
+    for (const ConstAStateRef& cl : close_with) {
+        if (p_non_closers.find(&cl.get()) == p_non_closers.end()) p_closers.insert(&cl.get());
+    }
+
+    auto is_superset = [&to_close, &p_closers] (std::map<AbstractState*, std::vector<ConstAbsStateSet>>& dict) {
+        if (dict.find(&to_close) != dict.end()) {
+            for (const auto &closer_set : dict[&to_close]) {
+                bool is_subset = std::includes(p_closers.begin(), p_closers.end(), closer_set.begin(),
+                                               closer_set.end());
+                if (is_subset)
+                    return true;
+            }
+        }
+        return false;
+    };
+
+    if (is_superset(_E_must) || is_superset(_E_may_over)) return {true, {}};
+
+
+    AEClosureResult closure_result = FormulaInductiveUtils::is_AE_inductive(to_close, p_closers);
+
+    if (closure_result.is_closed)
+    {
+        _E_must[&to_close].emplace_back(std::move(p_closers));
+    }
+
+    return closure_result;
+
 }
 
