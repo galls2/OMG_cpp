@@ -142,15 +142,12 @@ void unit_tests_modal()
 
 void unit_tests_ev()
 {
-//    TEST("../resources/af_ag.aig", "EG ((~state<0>) & (~state<1>))", true);
-//    TEST("../resources/af_ag.aig", "EX EG (state<0> ^ state<1>)", true);
-//    TEST("../resources/af_ag.aig", "AX EG ~state<1>", false);
-//    TEST("../resources/af_ag.aig", "EF EG ((~state<0>) & state<1>)", true);
+    TEST("../resources/af_ag.aig", "EG ((~state<0>) & (~state<1>))", true);
+    TEST("../resources/af_ag.aig", "EX EG (state<0> ^ state<1>)", true);
+    TEST("../resources/af_ag.aig", "AX EG ~state<1>", false);
+    TEST("../resources/af_ag.aig", "EF EG ((~state<0>) & state<1>)", true);
 }
-void unit_tests_complex()
-{
 
-}
 
 void unit_tests()
 {
@@ -163,6 +160,5 @@ void unit_tests()
 int main()
 {
     unit_tests();
-    TEST("../resources/af_ag.aig", "EG ((~state<0>) & (~state<1>))", true);
 
 }

@@ -227,8 +227,8 @@ std::unique_ptr<CtlFormula> LR1CtlParser::transform_ctl_to_omg(const CtlFormula&
                 auto new_op = do_not(std::move(op));
                 auto false_formula = std::make_unique<CtlFormula>("false");
                 std::vector<std::unique_ptr<CtlFormula>> release_ops;
-                release_ops.emplace_back(std::move(new_op));
                 release_ops.emplace_back(std::move(false_formula));
+                release_ops.emplace_back(std::move(new_op));
 
                 std::string new_data = std::string(1, 'A'+'E' - path_quantifier).append("R");
                 auto release_formula = std::make_unique<CtlFormula>(new_data, std::move(release_ops));

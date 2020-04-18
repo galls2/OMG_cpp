@@ -141,10 +141,10 @@ std::pair<CandidateSet, UnwindingTree*> UnwindingTree::find_abstract_lasso(const
     UnwindingTree* lasso_base = nullptr;
     bool is_lasso = false;
 
-    auto mapper = [&abs_to_find, &is_lasso, &to_return, &lasso_base](UnwindingTree& n) {
+    auto mapper = [&abs_to_find, &is_lasso, &to_return, &lasso_base, this](UnwindingTree& n) {
         assert(n.get_abs());
         AbstractState &current_abs = *n.get_abs();
-        if (current_abs == abs_to_find) { is_lasso = true; lasso_base = &n; }
+        if (current_abs == abs_to_find && this != &n) { is_lasso = true; lasso_base = &n; }
         to_return[&current_abs].emplace(&n);
     };
 

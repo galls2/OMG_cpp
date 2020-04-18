@@ -170,7 +170,9 @@ bool OmgModelChecker::handle_er(Goal &goal) {
 
         if (was_visited) {
             if (node_to_explore.is_concrete_lasso(goal.get_node())) {
-                if (goal.get_properties().at("strengthen")) {
+            DEBUG_PRINT("ER: Found CONCRETE lasso with the base %s!\n", node_to_explore.get_concrete_state().to_bitvec_str().data());
+
+            if (goal.get_properties().at("strengthen")) {
                     handle_proving_trace(goal, node_to_explore, true);
                 }
                 return true;
@@ -515,7 +517,7 @@ bool OmgModelChecker::handle_ex(Goal &goal)
         Goal subgoal(*successor, subformula, goal.get_properties());
         bool res = recur_ctl(subgoal);
         if (res) {
-            DEBUG_PRINT("EX: found a satisfying successor %s\n", successor->get_concrete_state().to_bitvec_str().data());
+            DEBUG_PRINT("EX: found a satisfying successor %s - returning TRUE\n", successor->get_concrete_state().to_bitvec_str().data());
             if (goal.get_properties().at("strengthen"))
             {
                 strengthen_trace(goal.get_node(), *successor);
@@ -524,7 +526,7 @@ bool OmgModelChecker::handle_ex(Goal &goal)
         }
     }
 
-    DEBUG_PRINT("EX: no satisfying successor found!\n");
+    DEBUG_PRINT("EX: no satisfying successor found! -- returning FALSE\n");
     if (goal.get_properties().at("strengthen"))
     {
         std::set<const UnwindingTree*> dst_nodes;
@@ -549,6 +551,7 @@ void OmgModelChecker::initialize_abstraction()
 
 bool OmgModelChecker::model_checking(ConcreteState &cstate, const CtlFormula &specification)
 {
+//    std::cout << specification.to_string() << std::endl;
     // In the future - unwinding tree cache is to be used here
     std::unique_ptr<UnwindingTree> root = std::make_unique<UnwindingTree>(_kripke, cstate, nullptr);
 
