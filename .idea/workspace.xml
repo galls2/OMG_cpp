@@ -17,10 +17,8 @@
   <component name="ChangeListManager">
     <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/parsers/ctl_parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/ctl_parser.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/structures/unwinding_tree.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/unwinding_tree.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/main.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -48,7 +46,7 @@
         <entry file="file://$PROJECT_DIR$/code/formulas/sat_solver.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="355">
-              <caret line="131" lean-forward="true" selection-start-line="131" selection-end-line="131" />
+              <caret line="131" selection-start-line="131" selection-end-line="131" />
             </state>
           </provider>
         </entry>
@@ -57,7 +55,7 @@
         <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser_data.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="220">
-              <caret line="13" column="33" lean-forward="true" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="33" />
+              <caret line="13" column="33" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -86,11 +84,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
-              <caret line="553" column="5" selection-start-line="553" selection-start-column="5" selection-end-line="553" selection-end-column="5" />
+            <state relative-caret-position="296">
+              <caret line="556" selection-start-line="556" selection-end-line="556" />
               <folding>
                 <element signature="e#42#60#0" expanded="true" />
                 <element signature="e#767#1193#0" />
@@ -106,7 +104,7 @@
         <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-324">
-              <caret line="212" column="51" lean-forward="true" selection-start-line="212" selection-start-column="51" selection-end-line="212" selection-end-column="51" />
+              <caret line="212" column="51" selection-start-line="212" selection-start-column="51" selection-end-line="212" selection-end-column="51" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -114,11 +112,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main.cpp">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/code/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="437">
-              <caret line="164" lean-forward="true" selection-start-line="164" selection-end-line="164" />
+            <state>
               <folding>
                 <element signature="e#40#59#0" expanded="true" />
               </folding>
@@ -271,54 +268,6 @@
               <item name="OMG_cpp" type="462c0819:PsiDirectoryNode" />
               <item name="code" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="OMG_CPP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OMG_cpp" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="abstraction" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OMG_CPP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OMG_cpp" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="configuration" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OMG_CPP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OMG_cpp" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="formulas" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OMG_CPP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OMG_cpp" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="model_checking" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OMG_CPP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OMG_cpp" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="parsers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OMG_CPP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OMG_cpp" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="structures" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OMG_CPP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OMG_cpp" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="temporal" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OMG_CPP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OMG_cpp" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="utils" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -397,13 +346,6 @@
       <workItem from="1576322596048" duration="1851000" />
       <workItem from="1580376891038" duration="55751000" />
       <workItem from="1584796046953" duration="738000" />
-    </task>
-    <task id="LOCAL-00051" summary="More impl of EE-closure.&#10;Changing the definition of EEClosureResult.">
-      <created>1573316069711</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1573316069711</updated>
     </task>
     <task id="LOCAL-00052" summary="Code now compiles after more AR impl">
       <created>1573710172734</created>
@@ -741,11 +683,18 @@
       <option name="project" value="LOCAL" />
       <updated>1587227949258</updated>
     </task>
-    <option name="localTasksCounter" value="100" />
+    <task id="LOCAL-00100" summary="Bugfixes:&#10;-Abstract lasso of length 1 does not count anymore&#10;-CtlParser bug in EF parsing">
+      <created>1587241813820</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1587241813820</updated>
+    </task>
+    <option name="localTasksCounter" value="101" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="675433000" />
+    <option name="totallyTimeSpent" value="676119000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -760,12 +709,12 @@
     <frame x="0" y="24" width="1920" height="1004" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49861112" visible="true" weight="0.15326902" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49861112" visible="true" weight="0.15326902" />
       <window_info id="Structure" order="1" sideWeight="0.5013889" side_tool="true" weight="0.1511254" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3261851" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4989282" visible="true" weight="0.31828442" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4989282" visible="true" weight="0.31828442" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49839228" weight="0.4819413" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -810,7 +759,6 @@
     <option name="version" value="1" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added typedefs &amp; refactor towards impl of EX-" />
     <MESSAGE value="Implemented EX-. Not yet debugged" />
     <MESSAGE value="Prettified prints, Added debug string&#10;&#10;Bugfixes:&#10;- sending p now instead of q (buggy) to brother unification as an agree-upon formula&#10;- forgetting to unify next_level and unchanged during brother unification algorithm" />
     <MESSAGE value="Adde a is_tse_possible flag. Cannot be done as a template boolean argument due to an include conflict in abstract_structure.h. Settled for a regular parameter to the function, instead of auto-creating two functions" />
@@ -835,7 +783,8 @@
     <MESSAGE value="-Refactor&#10;-Added EprSolver interface&amp;class&#10;-Implemented EV's inductiveness checking" />
     <MESSAGE value="Finished ER impl" />
     <MESSAGE value="Bugfixes:&#10;-ER closure formula -- added state formula &amp; quantified in0&#10;-CtlParser bug in EG parsing&#10;&#10;*Big Refactor" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bugfixes:&#10;-ER closure formula -- added state formula &amp; quantified in0&#10;-CtlParser bug in EG parsing&#10;&#10;*Big Refactor" />
+    <MESSAGE value="Bugfixes:&#10;-Abstract lasso of length 1 does not count anymore&#10;-CtlParser bug in EF parsing" />
+    <option name="LAST_COMMIT_MESSAGE" value="Bugfixes:&#10;-Abstract lasso of length 1 does not count anymore&#10;-CtlParser bug in EF parsing" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1286,14 +1235,14 @@
     <entry file="file://$PROJECT_DIR$/code/formulas/sat_solver.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="355">
-          <caret line="131" lean-forward="true" selection-start-line="131" selection-end-line="131" />
+          <caret line="131" selection-start-line="131" selection-end-line="131" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser_data.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
-          <caret line="13" column="33" lean-forward="true" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="33" />
+          <caret line="13" column="33" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="33" />
         </state>
       </provider>
     </entry>
@@ -1350,33 +1299,32 @@
     <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-324">
-          <caret line="212" column="51" lean-forward="true" selection-start-line="212" selection-start-column="51" selection-end-line="212" selection-end-column="51" />
+          <caret line="212" column="51" selection-start-line="212" selection-start-column="51" selection-end-line="212" selection-end-column="51" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="164" lean-forward="true" selection-start-line="164" selection-end-line="164" />
-          <folding>
-            <element signature="e#40#59#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="553" column="5" selection-start-line="553" selection-start-column="5" selection-end-line="553" selection-end-column="5" />
+        <state relative-caret-position="296">
+          <caret line="556" selection-start-line="556" selection-end-line="556" />
           <folding>
             <element signature="e#42#60#0" expanded="true" />
             <element signature="e#767#1193#0" />
             <element signature="e#1195#1618#0" />
             <element signature="e#1620#1832#0" />
             <element signature="e#1834#2234#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#40#59#0" expanded="true" />
           </folding>
         </state>
       </provider>

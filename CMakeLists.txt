@@ -6,7 +6,7 @@ set(CMAKE_CXX_FLAGS "-O3")
 include_directories(code)
 project (OMG_CPP)
 
-add_executable(OMG main.cpp
+add_executable(OMG code/main.cpp
 
         code/utils/version_manager.cpp code/utils/string_utils.cpp
         code/parsers/aig_parser.cpp code/parsers/lexer.cpp code/parsers/ctl_parser.cpp
