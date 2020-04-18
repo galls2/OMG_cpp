@@ -45,3 +45,7 @@ const CtlFormula::PropertySet &KripkeStructure::get_aps() const {
 const PropFormula &KripkeStructure::get_tr() const {
     return _transitions;
 }
+
+const z3::expr &KripkeStructure::get_state_formula() const {
+    return _state_formula;
+}

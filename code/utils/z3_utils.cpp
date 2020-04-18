@@ -7,6 +7,7 @@
 #include "version_manager.h"
 #include <formulas/epr_solver.h>
 #include <model_checking/omg_model_checker.h>
+#include <structures/kripke_structure.h>
 
 z3::expr to_var(z3::context& ctx, size_t val)
 {
@@ -139,6 +140,7 @@ FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<Unwin
 AEClosureResult FormulaInductiveUtils::is_AE_inductive(AbstractState &to_close, const ConstAbsStateSet &close_with) {
     const KripkeStructure& kripke = to_close.get_kripke();
     const PropFormula& tr = kripke.get_tr();
+    z3::context& ctx = tr.get_ctx();
 
     const z3::expr_vector ps_tr = tr.get_vars_by_tag("ps"), ns_tr = tr.get_vars_by_tag("ns"),
             in_0 = tr.get_vars_by_tag("in0"), in_1 = tr.get_vars_by_tag("in1");
@@ -147,7 +149,7 @@ AEClosureResult FormulaInductiveUtils::is_AE_inductive(AbstractState &to_close, 
     z3::expr src_part = src_formula.get_raw_formula().substitute(src_formula.get_vars_by_tag("ps"), ps_tr)
             .substitute(src_formula.get_vars_by_tag("in0"), in_0);
 
-    z3::expr_vector dsts(ps_tr.ctx());
+    z3::expr_vector dsts(ctx);
     for (const auto & closer : close_with)
     {
         PropFormula dst = closer->get_formula();
@@ -160,9 +162,15 @@ AEClosureResult FormulaInductiveUtils::is_AE_inductive(AbstractState &to_close, 
 
     z3::expr dst_part = z3::mk_or(dsts);
 
+
     z3::expr inner_quantified = z3::implies(tr.get_raw_formula(), !dst_part);
-    z3::expr quantified_part = z3::forall(ns_tr, inner_quantified); // in1 vars are not quanitifed as of the implication TR. Probably is true but possible BUG
-    z3::expr inductive_raw_formula = src_part && quantified_part;
+
+    z3::expr_vector vars_to_quantify(ctx);
+    for (size_t i = 0; i<ns_tr.size(); ++i) vars_to_quantify.push_back(ns_tr[i]);
+    for (size_t i = 0; i<in_0.size(); ++i) vars_to_quantify.push_back(in_0[i]);
+
+    z3::expr quantified_part = z3::forall(vars_to_quantify, inner_quantified); // in1 vars are not quanitifed as of the implication TR. Probably is true but possible BUG
+    z3::expr inductive_raw_formula = kripke.get_state_formula() && src_part && quantified_part;
 
     PropFormula inductive_formula(inductive_raw_formula, {{"ps", ps_tr}});
     std::unique_ptr<IEprSolver> solver = IEprSolver::s_solvers.at(OmgConfig::get<std::string>("Epr Solver"))(ps_tr.ctx());

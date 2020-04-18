@@ -101,9 +101,9 @@ std::unordered_map<size_t, z3::expr> AigParser::calc_literal_formulas(const std:
     lit_formulas.emplace(0, _ctx.bool_val(false));
     lit_formulas.emplace(1, _ctx.bool_val(true));
     for (auto lit : _in_literals)
-        lit_formulas.insert(std::make_pair(lit, _ctx.bool_const(std::to_string(lit).data())));
+        lit_formulas.emplace(lit, _ctx.bool_const(std::to_string(lit).data()));
     for (auto lit : _prev_state_literals)
-        lit_formulas.insert(std::make_pair(lit, _ctx.bool_const(std::to_string(lit).data())));
+        lit_formulas.emplace(lit, _ctx.bool_const(std::to_string(lit).data()));
 
     size_t first_and_line = _first_ap_index - _metadata[A];
     for (auto lit : _next_state_literals) dfs(aag_lines, lit_formulas, first_and_line, lit);
@@ -125,13 +125,12 @@ AigParser::dfs(const std::vector<std::string> &lines, std::unordered_map<size_t,
                 size_t left_operand = std::stoul(parts[1]);
                 size_t right_operand = std::stoul(parts[2]);
                 if (left_operand % 2 == 1 && right_operand % 2 == 1) {
-                    formulas.insert(std::make_pair(target_lit, formulas.at(left_operand - 1) ||
-                                                               formulas.at(right_operand - 1)));
+                    formulas.emplace(target_lit, formulas.at(left_operand - 1) || formulas.at(right_operand - 1));
                 } else {
-                    formulas.insert(std::make_pair(target_lit, !formulas.at(target_lit - 1)));
+                    formulas.emplace(target_lit, !formulas.at(target_lit - 1));
                 }
             } else {
-                formulas.insert(std::make_pair(target_lit, !formulas.at(target_lit - 1)));
+                formulas.emplace(target_lit, !formulas.at(target_lit - 1));
             }
         } else {
             const size_t and_line_index = first_line + (target_lit - _first_and_literal) / 2;
@@ -142,7 +141,7 @@ AigParser::dfs(const std::vector<std::string> &lines, std::unordered_map<size_t,
 
             dfs(lines, formulas, first_line, left_operand);
             dfs(lines, formulas, first_line, right_operand);
-            formulas.insert(std::make_pair(target_lit, formulas.at(left_operand) && formulas.at(right_operand)));
+            formulas.emplace(target_lit, formulas.at(left_operand) && formulas.at(right_operand));
         }
     }
     return *this;
@@ -157,7 +156,7 @@ std::unique_ptr<KripkeStructure> AigParser::to_kripke(const CtlFormula::Property
         char ap_type = it.second[0];
         size_t raw_idx = std::stoul(it.second.substr(1));
         size_t idx = raw_idx + (ap_type == 'o' ? _metadata[AigMetadata::L] : 0);
-        ap_to_var_idx.insert(std::make_pair(it.first, idx));
+        ap_to_var_idx.emplace(it.first, idx);
     }
     return std::make_unique<KripkeStructure>(*_tr_formula, aps, *_state_formula, *_init_formula, ap_to_var_idx);
 }
@@ -167,12 +166,9 @@ void AigParser::calculate_tr_formula(const std::unordered_map<size_t, z3::expr> 
 
     std::vector<z3::expr> prev_in, prev_latch, prev_out, next_in, next_latch, next_out;
     std::vector<std::reference_wrapper<std::vector<z3::expr>>>
-            ins = {std::reference_wrapper<std::vector<z3::expr>>(prev_in),
-                   std::reference_wrapper<std::vector<z3::expr>>(next_in)},
-            latches = {std::reference_wrapper<std::vector<z3::expr>>(prev_latch),
-                       std::reference_wrapper<std::vector<z3::expr>>(next_latch)},
-            outs = {std::reference_wrapper<std::vector<z3::expr>>(prev_out),
-                    std::reference_wrapper<std::vector<z3::expr>>(next_out)};
+            ins = {{prev_in}, {next_in}},
+            latches = {{prev_latch}, {next_latch}},
+            outs = {{prev_out}, {next_out}};
 
     generate_new_names(ins, new_var_index, _metadata[AigMetadata::I]);
     generate_new_names(latches, new_var_index, _metadata[AigMetadata::L]);
@@ -210,13 +206,14 @@ void AigParser::calculate_tr_formula(const std::unordered_map<size_t, z3::expr> 
     for (const z3::expr &it : boost::join(prev_latch, prev_out)) ps.push_back(it);
     for (const z3::expr &it : boost::join(next_latch, next_out)) ns.push_back(it);
 
-    std::map<std::string, z3::expr_vector> var_tags;
-    var_tags.insert(std::make_pair(std::string("in0"), vec_to_expr_vec(_ctx, prev_in)));
-    var_tags.insert(std::make_pair(std::string("in1"), vec_to_expr_vec(_ctx, next_in)));
-    var_tags.insert(std::make_pair(std::string("ps"), ps));
-    var_tags.insert(std::make_pair(std::string("ns"), ns));
+    std::map<std::string, z3::expr_vector> var_tags =
+            {
+                    {"in0", vec_to_expr_vec(_ctx, prev_in)},
+                    {"in1", vec_to_expr_vec(_ctx, next_in)},
+                    {"ps", ps}, {"ns", ns}
+            };
 
-    _tr_formula = std::make_unique<PropFormula>(tr_raw, var_tags);
+    _tr_formula = std::make_unique<PropFormula>(tr_raw, std::move(var_tags));
 }
 
 void
@@ -283,6 +280,5 @@ void AigParser::generate_new_names(std::vector<std::reference_wrapper<std::vecto
         for (auto& vec : vec_of_vecs)
             vec.get().push_back(to_var(_ctx, ++start_from));
     }
-
 }
 

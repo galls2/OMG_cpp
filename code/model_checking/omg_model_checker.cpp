@@ -298,6 +298,9 @@ bool OmgModelChecker::check_inductive_ev(Goal &goal, UnwindingTree &node_to_expl
             } else {
                 assert(res.violator);
                 ConcreteState& src = *res.violator;
+
+                DEBUG_PRINT("No! Found cex: %s\n", src.to_bitvec_str().data());
+
                 AbstractState& abs_src_witness = find_abs(src);
 
                 std::unordered_set<UnwindingTree*> to_close_nodes = ind_candidate.nodes;
@@ -319,7 +322,7 @@ bool OmgModelChecker::check_inductive_ev(Goal &goal, UnwindingTree &node_to_expl
         }
 
         if (abs_states_lead.empty()) {
-            DEBUG_PRINT("ER: found ER inductiveness");
+            DEBUG_PRINT("ER: found ER inductiveness!\n");
             if (goal.get_properties().at("strengthen")) {
                 strengthen_trace(goal.get_node(), *lasso_base);
                 node_to_explore.map_upwards([&goal] (UnwindingTree& n) {  n.add_label(true, goal.get_spec()); },

@@ -7,7 +7,7 @@
 
 std::unique_ptr<CtlFormula> LR1CtlParser::parse_lr(const std::vector<Token> &formula_tokens) {
     boost::variant<State, Token> initial_frame(Token(std::string("")));
-    _parse_stack.push(std::make_pair(0, initial_frame));
+    _parse_stack.emplace(0, initial_frame);
     size_t current_token_index = 0;
     while (!_parse_stack.empty())
     {
@@ -20,7 +20,7 @@ std::unique_ptr<CtlFormula> LR1CtlParser::parse_lr(const std::vector<Token> &for
         if (action_table_entry.is_shift())
         {
             State next_state = action_table_entry.get_index();
-            _parse_stack.push(std::make_pair(next_state, current_token));
+            _parse_stack.emplace(next_state, current_token);
             ++current_token_index;
         }
         else if (action_table_entry.is_reduce())
@@ -41,7 +41,7 @@ std::unique_ptr<CtlFormula> LR1CtlParser::parse_lr(const std::vector<Token> &for
             State stack_head_state = _parse_stack.top().first;
 
             State new_state = _goto_table.go_to(stack_head_state, var_derived);
-            _parse_stack.push(std::make_pair(new_state, var_derived));
+            _parse_stack.emplace(new_state, var_derived);
         } else
         {
             assert (action_table_entry.is_accept());
@@ -175,8 +175,9 @@ std::unique_ptr<CtlFormula> LR1CtlParser::transform_ctl_to_omg(const CtlFormula&
     }
 
     std::string main_connective = lr_parsed_formula.get_data();
+    if (main_connective == "EV" || main_connective == "AV") throw CtlParserException("Release is V!!!");
     const auto stay_the_same = make_array(std::string("AND"), std::string("OR"),
-            std::string("ARROW"), std::string("XOR"), std::string("EX"), std::string("AV"), std::string("EV"));
+            std::string("ARROW"), std::string("XOR"), std::string("EX"), std::string("AR"), std::string("ER"));
     // AND OR XOR OPT?
     if (std::any_of(stay_the_same.begin(), stay_the_same.end(),
             [main_connective](const std::string& op) { return op == main_connective; }))
@@ -199,7 +200,8 @@ std::unique_ptr<CtlFormula> LR1CtlParser::transform_ctl_to_omg(const CtlFormula&
                 assert(transformed_operands.size() == 1);
                 auto false_formula = std::make_unique<CtlFormula>("false");
                 transformed_operands.emplace(transformed_operands.begin(), std::move(false_formula));
-                return std::make_unique<CtlFormula>("AR", std::move(transformed_operands));
+                std::string new_data = std::string(1, path_quantifier).append("R");
+                return std::make_unique<CtlFormula>(new_data, std::move(transformed_operands));
             }
             case 'U':
             {

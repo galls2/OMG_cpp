@@ -18,6 +18,7 @@ public:
     KripkeStructure(PropFormula tr, CtlFormula::PropertySet aps, const z3::expr &state_f, const z3::expr &init_f,
             const std::map<std::string, std::size_t>& ap_to_var_idx);
     const PropFormula& get_tr() const;
+    const z3::expr& get_state_formula() const;
     std::vector<ConcreteState> get_initial_states() const;
     size_t get_var_num_by_ap(const std::string& ap_text) const;
     const CtlFormula::PropertySet& get_aps() const;

@@ -15,10 +15,16 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="">
+    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="Bugfixes:&#10;-ER closure formula -- added state formula &amp; quantified in0&#10;-CtlParser bug in EG parsing&#10;-Refactor">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/formulas/sat_solver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/formulas/sat_solver.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/model_checking/omg_model_checker.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/omg_model_checker.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/parsers/aig_parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/aig_parser.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/parsers/ctl_parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/ctl_parser.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/structures/kripke_structure.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/kripke_structure.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/structures/kripke_structure.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/kripke_structure.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/utils/z3_utils.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/z3_utils.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -31,74 +37,52 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/abstraction/abstract_structure.cpp">
+        <entry file="file://$PROJECT_DIR$/code/parsers/aig_parser.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="179">
-              <caret line="72" column="36" selection-start-line="72" selection-start-column="36" selection-end-line="72" selection-end-column="36" />
+            <state relative-caret-position="163">
+              <caret line="158" column="44" selection-start-line="158" selection-start-column="44" selection-end-line="158" selection-end-column="44" />
               <folding>
-                <element signature="e#40#60#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="329">
-              <caret line="314" column="53" selection-start-line="314" selection-start-column="53" selection-end-line="314" selection-end-column="53" />
-              <folding>
-                <element signature="e#42#60#0" expanded="true" />
-                <element signature="e#767#1193#0" />
-                <element signature="e#1195#1618#0" />
-                <element signature="e#1620#1832#0" />
-                <element signature="e#1834#2234#0" />
+                <element signature="e#60#78#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/model_checking/omg_model_checker.h">
+        <entry file="file://$PROJECT_DIR$/code/formulas/sat_solver.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="91" column="26" selection-start-line="91" selection-start-column="26" selection-end-line="91" selection-end-column="26" />
+            <state relative-caret-position="355">
+              <caret line="131" lean-forward="true" selection-start-line="131" selection-end-line="131" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser_data.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="220">
+              <caret line="13" column="33" lean-forward="true" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="33" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/code/parsers/lexer.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="148">
+              <caret line="14" column="7" lean-forward="true" selection-start-line="14" selection-start-column="7" selection-end-line="14" selection-end-column="7" />
               <folding>
-                <element signature="e#54#72#0" expanded="true" />
+                <element signature="e#56#74#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/structures/unwinding_tree.cpp">
+        <entry file="file://$PROJECT_DIR$/code/structures/kripke_structure.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="184">
-              <caret line="91" column="20" selection-start-line="91" selection-start-column="20" selection-end-line="91" selection-end-column="20" />
-              <folding>
-                <element signature="e#41#59#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/utils/z3_utils.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="66" column="8" selection-start-line="66" selection-start-column="8" selection-end-line="66" selection-end-column="8" />
-              <folding>
-                <element signature="e#14#31#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/abstraction/abstract_structure.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="175">
-              <caret line="23" column="32" selection-start-line="23" selection-start-column="32" selection-end-line="23" selection-end-column="32" />
+            <state relative-caret-position="522">
+              <caret line="49" column="26" selection-start-line="49" selection-start-column="26" selection-end-line="49" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -106,24 +90,44 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/utils/z3_utils.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="193">
-              <caret line="168" column="48" selection-start-line="168" selection-start-column="48" selection-end-line="168" selection-end-column="48" />
+            <state relative-caret-position="175">
+              <caret line="151" column="28" lean-forward="true" selection-start-line="151" selection-start-column="28" selection-end-line="151" selection-end-column="28" />
               <folding>
                 <element signature="e#41#65#0" expanded="true" />
-                <element signature="e#164#281#0" />
-                <element signature="e#283#507#0" />
-                <element signature="e#509#662#0" />
-                <element signature="e#3784#5845#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/formulas/sat_solver.h">
+        <entry file="file:///usr/include/z3++.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="18">
+              <caret line="1790" column="16" selection-start-line="1790" selection-start-column="16" selection-end-line="1790" selection-end-column="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="180">
-              <caret line="10" column="12" selection-start-line="10" selection-end-line="11" />
+              <caret line="10" selection-start-line="10" selection-end-line="10" />
+              <folding>
+                <element signature="e#0#23#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/main.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="504">
+              <caret line="165" column="2" selection-start-line="165" selection-start-column="2" selection-end-line="165" selection-end-column="2" />
+              <folding>
+                <element signature="e#40#59#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -139,19 +143,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>std::</find>
-      <find>flags</find>
-      <find>std::vector&lt;z3::expr</find>
-      <find>Z3_finalize_memory</find>
-      <find>lasso</find>
-      <find>CandidateSet</find>
-      <find>find_abstract</find>
-      <find>_abs_structure-&gt;get_astates_by_property(prop);</find>
-      <find>get_astates_</find>
-      <find>check_induc</find>
-      <find>check_ind</find>
-      <find>EE</find>
-      <find>std::experim</find>
       <find>Car</find>
       <find>:</find>
       <find>is_EE</find>
@@ -163,12 +154,25 @@
       <find>map_upward</find>
       <find>map_up</find>
       <find>check_indu</find>
-      <find>inductive_ev</find>
       <find>refine_exists_successor</find>
       <find>refine_exists_succes</find>
       <find>strengthen_trace</find>
       <find>refine_exists</find>
       <find>check_inductive_ev</find>
+      <find>inductive_ev</find>
+      <find>src</find>
+      <find>abs_src_witness</find>
+      <find>test_for</find>
+      <find>model_c</find>
+      <find>PROP IS</find>
+      <find>found ER</find>
+      <find>to_kripke</find>
+      <find>_state_formula</find>
+      <find>std::unique_ptr</find>
+      <find>FA</find>
+      <find>std::make_pair</find>
+      <find>std::make</find>
+      <find>std::pair</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -198,7 +202,6 @@
       <list>
         <option value="$PROJECT_DIR$/code/utils/omg_exception.h" />
         <option value="$PROJECT_DIR$/code/utils/omg_utils.cpp" />
-        <option value="$PROJECT_DIR$/code/structures/kripke_structure.cpp" />
         <option value="$PROJECT_DIR$/code/parsers/aiger/aig_to_aag.h" />
         <option value="$PROJECT_DIR$/code/parsers/aiger/aig_to_aag.cpp" />
         <option value="$PROJECT_DIR$/code/parsers/aiger/CMakeLists.txt" />
@@ -218,7 +221,6 @@
         <option value="$PROJECT_DIR$/code/abstraction/abstraction_classifier.cpp" />
         <option value="$PROJECT_DIR$/code/configuration/omg_config.h" />
         <option value="$PROJECT_DIR$/code/temporal/ctl_formula.cpp" />
-        <option value="$PROJECT_DIR$/code/parsers/ctl_parser.cpp" />
         <option value="$PROJECT_DIR$/code/structures/concrete_state.h" />
         <option value="$PROJECT_DIR$/code/structures/concrete_state.cpp" />
         <option value="$PROJECT_DIR$/code/temporal/ctl_formula.h" />
@@ -226,27 +228,29 @@
         <option value="$PROJECT_DIR$/code/abstraction/abstract_state.cpp" />
         <option value="$PROJECT_DIR$/code/parsers/lexer.h" />
         <option value="$PROJECT_DIR$/code/parsers/lexer.cpp" />
-        <option value="$PROJECT_DIR$/code/parsers/aig_parser.cpp" />
-        <option value="$PROJECT_DIR$/main.cpp" />
         <option value="$PROJECT_DIR$/code/structures/unwinding_tree.cpp" />
         <option value="$PROJECT_DIR$/code/structures/unwinding_tree.h" />
         <option value="$PROJECT_DIR$/code/utils/omg_utils.h" />
         <option value="$PROJECT_DIR$/code/utils/cartesian_product_generator.h" />
         <option value="$PROJECT_DIR$/code/parsers/aig_parser.h" />
-        <option value="$PROJECT_DIR$/code/structures/kripke_structure.h" />
-        <option value="$PROJECT_DIR$/code/formulas/sat_solver.cpp" />
         <option value="$PROJECT_DIR$/code/formulas/sat_solver.h" />
         <option value="$PROJECT_DIR$/code/parsers/ctl_parser.h" />
-        <option value="$PROJECT_DIR$/code/utils/z3_utils.h" />
-        <option value="$PROJECT_DIR$/code/abstraction/abstract_structure.cpp" />
         <option value="$PROJECT_DIR$/code/configuration/omg_config.cpp" />
         <option value="$PROJECT_DIR$/code/formulas/epr_solver.h" />
         <option value="$PROJECT_DIR$/code/formulas/epr_solver.cpp" />
-        <option value="$PROJECT_DIR$/code/utils/z3_utils.cpp" />
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/code/abstraction/abstract_structure.h" />
         <option value="$PROJECT_DIR$/code/model_checking/omg_model_checker.h" />
+        <option value="$PROJECT_DIR$/code/structures/kripke_structure.h" />
+        <option value="$PROJECT_DIR$/code/utils/z3_utils.h" />
+        <option value="$PROJECT_DIR$/code/abstraction/abstract_structure.cpp" />
+        <option value="$PROJECT_DIR$/code/structures/kripke_structure.cpp" />
         <option value="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" />
+        <option value="$PROJECT_DIR$/code/utils/z3_utils.cpp" />
+        <option value="$PROJECT_DIR$/main.cpp" />
+        <option value="$PROJECT_DIR$/code/parsers/ctl_parser.cpp" />
+        <option value="$PROJECT_DIR$/code/parsers/aig_parser.cpp" />
+        <option value="$PROJECT_DIR$/code/formulas/sat_solver.cpp" />
       </list>
     </option>
   </component>
@@ -399,13 +403,6 @@
       <workItem from="1576322596048" duration="1851000" />
       <workItem from="1580376891038" duration="55751000" />
       <workItem from="1584796046953" duration="738000" />
-    </task>
-    <task id="LOCAL-00049" summary="-More impl of EE-closure&#10;-Creating mapping of z3 solvers">
-      <created>1572690592636</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1572690592636</updated>
     </task>
     <task id="LOCAL-00050" summary="Finished impl of Z3_util's EE-closure">
       <created>1572718806140</created>
@@ -743,11 +740,18 @@
       <option name="project" value="LOCAL" />
       <updated>1587153085010</updated>
     </task>
-    <option name="localTasksCounter" value="98" />
+    <task id="LOCAL-00098" summary="Finished ER impl">
+      <created>1587164541393</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1587164541400</updated>
+    </task>
+    <option name="localTasksCounter" value="99" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="667558000" />
+    <option name="totallyTimeSpent" value="672284000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -760,21 +764,20 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="24" width="1920" height="1004" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49861112" visible="true" weight="0.15326902" />
       <window_info id="Structure" order="1" sideWeight="0.5013889" side_tool="true" weight="0.1511254" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3261851" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4989282" weight="0.2799097" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4989282" visible="true" weight="0.18171558" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49839228" weight="0.4819413" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Database Changes" order="6" />
       <window_info anchor="bottom" id="Inspection Results" order="7" sideWeight="0.4994641" weight="0.3295711" />
       <window_info anchor="bottom" id="TODO" order="8" weight="0.32731378" />
-      <window_info active="true" anchor="bottom" id="Messages" order="9" sideWeight="0.49785638" visible="true" weight="0.33972913" />
+      <window_info anchor="bottom" id="Messages" order="9" sideWeight="0.49785638" weight="0.33972913" />
       <window_info anchor="bottom" id="Terminal" order="10" weight="0.32844242" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5026795" side_tool="true" weight="0.2020316" />
       <window_info anchor="bottom" id="Version Control" order="12" weight="0.3295711" />
@@ -812,7 +815,6 @@
     <option name="version" value="1" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Impl abs_states handling of EX- split" />
     <MESSAGE value="Changed version mananger API, added idxing to astates, made astates comparison efficient" />
     <MESSAGE value="Added typedefs &amp; refactor towards impl of EX-" />
     <MESSAGE value="Implemented EX-. Not yet debugged" />
@@ -837,7 +839,8 @@
     <MESSAGE value="Implemented more EV, added consts" />
     <MESSAGE value="Refactor" />
     <MESSAGE value="-Refactor&#10;-Added EprSolver interface&amp;class&#10;-Implemented EV's inductiveness checking" />
-    <option name="LAST_COMMIT_MESSAGE" value="-Refactor&#10;-Added EprSolver interface&amp;class&#10;-Implemented EV's inductiveness checking" />
+    <MESSAGE value="Finished ER impl" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finished ER impl" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -866,16 +869,6 @@
           <url>file://$PROJECT_DIR$/code/abstraction/abstract_state.h</url>
           <line>20</line>
           <option name="timeStamp" value="133" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>116</line>
-          <option name="timeStamp" value="184" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>86</line>
-          <option name="timeStamp" value="200" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -927,6 +920,26 @@
     </expressions>
     <expressions id="evaluateExpression">
       <expression>
+        <expression-string>tr.to_string()</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>kripke.get_state_formula().to_string()</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>abs_lead-&gt;get_formula().to_string()</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>res.violator-&gt;to_bitvec_str()</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
         <expression-string>var.to_string()</expression-string>
         <language-id>ObjectiveC</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
@@ -951,67 +964,9 @@
         <language-id>ObjectiveC</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
-      <expression>
-        <expression-string>candidates[0].first-&gt;_sym_rep._formula</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>((*candidates.begin()).first)-&gt;get_formula()</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>(*candidates.begin()).first</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>(*candidates.begin()).first-&gt;get_formula()</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/resources/af_ag_modal.ctl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="22" column="50" lean-forward="true" selection-start-line="22" selection-start-column="50" selection-end-line="22" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/utils/aiger-1.9.9/aig_to_aag.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="131">
-          <caret line="155" selection-start-line="155" selection-end-line="155" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/gray.aag">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file:///usr/include/c++/5/bits/basic_string.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-9">
-          <caret line="4988" selection-start-line="4988" selection-end-line="4988" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/include/c++/5/tuple">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="144" selection-start-line="144" selection-end-line="144" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/include/c++/5/bits/unique_ptr.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="43">
-          <caret line="299" selection-start-line="299" selection-end-line="299" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/include/c++/5/bits/stl_set.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="142">
@@ -1116,50 +1071,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/parsers/lexer.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="467">
-          <caret line="57" column="9" lean-forward="true" selection-start-line="57" selection-start-column="9" selection-end-line="57" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/parsers/lexer.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="41" column="2" lean-forward="true" selection-start-line="41" selection-start-column="2" selection-end-line="41" selection-end-column="2" />
-          <folding>
-            <element signature="e#56#74#0" expanded="true" />
-            <element signature="e#1083#1093#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/parsers/aig_parser.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-378">
-          <folding>
-            <element signature="e#60#78#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/af_ag_checkEV.ctl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="337">
-          <caret line="30" column="44" selection-start-line="30" selection-start-column="44" selection-end-line="30" selection-end-column="44" />
-          <folding>
-            <element signature="e#40#59#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/code/abstraction/abstraction_classifier.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="414">
@@ -1229,44 +1140,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/structures/kripke_structure.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="172">
           <caret line="14" column="61" selection-start-line="14" selection-start-column="61" selection-end-line="14" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="55" column="8" selection-start-line="55" selection-start-column="8" selection-end-line="55" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3277">
-          <caret line="65" column="5" selection-start-line="65" selection-start-column="5" selection-end-line="65" selection-end-column="5" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/utils/z3_utils.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="66" column="8" selection-start-line="66" selection-start-column="8" selection-end-line="66" selection-end-column="8" />
-          <folding>
-            <element signature="e#14#31#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1279,13 +1156,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/code/configuration/omg_config.h">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/formulas/sat_solver.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="12" selection-start-line="12" selection-end-line="17" selection-end-column="101" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/code/formulas/prop_formula.cpp">
       <provider selected="true" editor-type-id="text-editor">
@@ -1324,20 +1194,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/utils/z3_utils.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="193">
-          <caret line="168" column="48" selection-start-line="168" selection-start-column="48" selection-end-line="168" selection-end-column="48" />
-          <folding>
-            <element signature="e#41#65#0" expanded="true" />
-            <element signature="e#164#281#0" />
-            <element signature="e#283#507#0" />
-            <element signature="e#509#662#0" />
-            <element signature="e#3784#5845#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/code/structures/unwinding_tree.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="184">
@@ -1355,6 +1211,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/resources/af_ag_checkEV.ctl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="12" lean-forward="true" selection-end-line="12" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/code/model_checking/omg_model_checker.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="322">
@@ -1365,10 +1228,47 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="444">
+          <caret line="107" column="32" selection-start-line="107" selection-start-column="32" selection-end-line="107" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/parsers/lexer.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="202">
+          <caret line="66" column="37" lean-forward="true" selection-start-line="66" selection-start-column="37" selection-end-line="66" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/abp.aig">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/utils/z3_utils.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" />
+          <folding>
+            <element signature="e#14#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/structures/kripke_structure.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="20" column="34" selection-start-line="20" selection-start-column="34" selection-end-line="20" selection-end-column="34" />
+          <folding>
+            <element signature="e#14#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/code/abstraction/abstract_structure.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="72" column="36" selection-start-line="72" selection-start-column="36" selection-end-line="72" selection-end-column="36" />
+        <state relative-caret-position="133">
+          <caret line="333" selection-start-line="333" selection-end-line="333" />
           <folding>
             <element signature="e#40#60#0" expanded="true" />
           </folding>
@@ -1377,14 +1277,106 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="329">
-          <caret line="314" column="53" selection-start-line="314" selection-start-column="53" selection-end-line="314" selection-end-column="53" />
+        <state relative-caret-position="306">
+          <caret line="303" column="63" lean-forward="true" selection-start-line="303" selection-start-column="63" selection-end-line="303" selection-end-column="63" />
           <folding>
             <element signature="e#42#60#0" expanded="true" />
             <element signature="e#767#1193#0" />
             <element signature="e#1195#1618#0" />
             <element signature="e#1620#1832#0" />
             <element signature="e#1834#2234#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/structures/kripke_structure.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="522">
+          <caret line="49" column="26" selection-start-line="49" selection-start-column="26" selection-end-line="49" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/z3++.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="1790" column="16" selection-start-line="1790" selection-start-column="16" selection-end-line="1790" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/utils/z3_utils.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="151" column="28" lean-forward="true" selection-start-line="151" selection-start-column="28" selection-end-line="151" selection-end-column="28" />
+          <folding>
+            <element signature="e#41#65#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/c++/5/bits/unordered_map.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="438" column="4" selection-start-line="438" selection-start-column="4" selection-end-line="438" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/c++/5/bits/stl_map.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="619" column="8" selection-start-line="619" selection-start-column="8" selection-end-line="619" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/parsers/aig_parser.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="163">
+          <caret line="158" column="44" selection-start-line="158" selection-start-column="44" selection-end-line="158" selection-end-column="44" />
+          <folding>
+            <element signature="e#60#78#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/formulas/sat_solver.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="355">
+          <caret line="131" lean-forward="true" selection-start-line="131" selection-end-line="131" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser_data.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="13" column="33" lean-forward="true" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/parsers/lexer.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="148">
+          <caret line="14" column="7" lean-forward="true" selection-start-line="14" selection-start-column="7" selection-end-line="14" selection-end-column="7" />
+          <folding>
+            <element signature="e#56#74#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="165" column="2" selection-start-line="165" selection-start-column="2" selection-end-line="165" selection-end-column="2" />
+          <folding>
+            <element signature="e#40#59#0" expanded="true" />
           </folding>
         </state>
       </provider>

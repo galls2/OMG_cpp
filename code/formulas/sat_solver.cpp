@@ -63,11 +63,11 @@ void Z3SatSolver::add_assignments(std::vector<SatSolverResult> &assignemnts, Sat
             {
                 if (undef_idxs.find(j) == undef_idxs.end())
 
-                    vals.insert(std::make_pair(vars[j], result.get_value(vars[j])));
+                    vals.emplace(vars[j], result.get_value(vars[j]));
                 else
                 {
-                    vals.insert(std::make_pair(vars[j], SatResult::TRUE));
-                    vals.insert(std::make_pair(vars[j], SatResult::FALSE));
+                    vals.emplace(vars[j], SatResult::TRUE);
+                    vals.emplace(vars[j], SatResult::FALSE);
                 }
             }
             assignemnts.emplace_back(std::move(vals));
@@ -119,14 +119,14 @@ SatSolverResult::SatSolverResult(const z3::model& model, const std::vector<z3::e
     for (const auto& var : vars)
     {
         SatResult var_value = Z3_val_to_sat_result(model.eval(var).bool_value());
-        _values.insert(std::make_pair(var, var_value));
+        _values.emplace(var, var_value);
     }
 }
 
 SatSolverResult::SatSolverResult(const std::map<z3::expr, Z3_lbool> &values) : _is_sat(true)
 {
     for (const auto& it : values)
-        _values.insert(std::make_pair(it.first, Z3_val_to_sat_result(it.second)));
+        _values.emplace(it.first, Z3_val_to_sat_result(it.second));
 }
 
 
