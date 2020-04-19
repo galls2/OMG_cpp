@@ -23,6 +23,7 @@ public:
 
     static bool is_cstate_conjunct(const z3::expr& f);
 
+    static bool is_lit_agrees_with_conj(const z3::expr& conj, const z3::expr& var);
 
 };
 

@@ -228,6 +228,17 @@ bool FormulaUtils::is_cstate_conjunct(const z3::expr &f) {
     return true;
 }
 
+bool FormulaUtils::is_lit_agrees_with_conj(const z3::expr &conj, const z3::expr &var) {
+    for (unsigned int i = 0; i < conj.num_args(); ++i)
+    {
+        const z3::expr& current_lit = conj.arg(i);
+        assert(current_lit.is_bool() || (current_lit.is_not() && current_lit.arg(0).is_bool()));
+        if (current_lit.is_bool() && z3::eq(current_lit, var)) return true;
+        else if (current_lit.is_not() && z3::eq(current_lit.arg(0), var)) return false;
+    }
+    assert(false);
+}
+
 void FormulaSplitUtils::find_proving_inputs(const z3::expr& state_conj, const PropFormula& tr, z3::expr& dst, z3::expr_vector& input_values)
 {
     z3::expr raw_formula_to_solve = state_conj && tr.get_raw_formula() && dst;
