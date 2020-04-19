@@ -1,5 +1,6 @@
 #!/bin/sh
 
+cp boost_1_68_0.tar.bz2 ~/Desktop
 cd ~/Desktop
 
 echo Initiating OMG installer.
@@ -11,6 +12,12 @@ apt-get update
 apt install git -y
 apt install cmake -y
 
+echo Installing boost 1.68
+cd boost_1_68_0
+./bootstrap.sh
+./b2 install
+
+cp ~/Desktop
 
 echo Insalling z3
 
