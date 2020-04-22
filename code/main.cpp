@@ -1,6 +1,6 @@
 //
 // Created by galls2 on 30/08/19.
-//
+#include <fstream>
 #include <iostream>
 #include <parsers/aig_parser.h>
 #include <parsers/ctl_parser.h>
@@ -39,6 +39,7 @@ std::vector<FormulaChunk> get_formula_chunks(const std::string& ctl_file_path)
 }
 
 void test_model(const std::string& file_path_no_extension) {
+    DEBUG_PRINT("Testing model: %s\n", file_path_no_extension.data());
     const std::string &aig_path = file_path_no_extension + ".aig";
     const std::string &ctl_file_path = file_path_no_extension + ".ctl";
 
@@ -214,9 +215,21 @@ void unit_tests()
     unit_tests_ev();
 }
 
+void run_models(const std::string& file_path)
+{
+    std::ifstream infile(file_path.c_str());
+
+    std::string line;
+    while (std::getline(infile, line))
+    {
+        std::string model_name = std::string("../resources/") + line.substr(0, line.length() -4);
+        test_model(model_name);
+    }
+}
 int main()
 {
 
+    run_models("../models_to_run.omg");
     // unit_tests();
-   test_model("../resources/af_ag");
+ //  test_model("../resources/af_ag");
 }
