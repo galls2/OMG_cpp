@@ -222,13 +222,14 @@ AigParser::generate_state_formula(const std::unordered_map<size_t, z3::expr> &fo
                               const z3::expr_vector &orig_out, std::vector<z3::expr> &prev_in,
                               std::vector<z3::expr> &prev_latch) {
     z3::expr_vector state_formula_parts(_ctx);
-    for (size_t o_lit : _out_literals)
+    for (size_t i = 0; i< prev_out.size(); ++i)
     {
-        z3::expr out_formula = _ctx.bool_const(std::to_string(o_lit).data()) == formulas.at(o_lit);
+        size_t o_lit = _out_literals[i];
+
+        z3::expr out_formula = prev_out[i] == formulas.at(o_lit);
         z3::expr named_out_formula =
                 out_formula.substitute(orig_in, vec_to_expr_vec(_ctx, prev_in))
-                           .substitute(orig_ps, vec_to_expr_vec(_ctx, prev_latch)) // BUG?
-                          .substitute(orig_out, vec_to_expr_vec(_ctx, prev_out));
+                           .substitute(orig_ps, vec_to_expr_vec(_ctx, prev_latch)); // BUG?
         state_formula_parts.push_back(named_out_formula);
     }
     _state_formula = std::make_unique<z3::expr>(std::move(mk_and(state_formula_parts)));
@@ -254,7 +255,7 @@ void AigParser::extract_init(const std::vector<std::string> &file_lines) {
         else
         {
             assert(num_parts == 3);
-            size_t init_val = std::stoul(parts[1]);
+            size_t init_val = std::stoul(parts[2]);
             if (init_val < 2)
             {
                 assert (init_val == 1);

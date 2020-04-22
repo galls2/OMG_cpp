@@ -171,6 +171,7 @@ void unit_tests_av()
     TEST("../resources/gray.aig", "AG (~(p & (!q) & (r)))", true);
     TEST("../resources/gray.aig", "AG (~(p & (q) & (!r)))", true);
     TEST("../resources/gray.aig", "((~q) & (~r)) -> (~(E (~p) U r))", true);
+    TEST("../resources/tstrst.aig", "AG (o | ~t | s)", true);
 
 //    TEST("../resources/af_ag.aig", "AG true", true); // This should fail, as AP is empty, which is not allowed
 }
@@ -228,8 +229,8 @@ void run_models(const std::string& file_path)
 }
 int main()
 {
+    test_model("../resources/tstrst");
+//    run_models("../models_to_run.omg");
+// unit_tests();
 
-    run_models("../models_to_run.omg");
-    // unit_tests();
- //  test_model("../resources/af_ag");
 }
