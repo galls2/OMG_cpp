@@ -538,7 +538,7 @@ bool OmgModelChecker::handle_ex(Goal &goal)
 
 }
 
-OmgModelChecker::OmgModelChecker(const KripkeStructure &kripke) : _kripke(kripke)
+OmgModelChecker::OmgModelChecker(KripkeStructure &kripke) : _kripke(kripke)
 {
         initialize_abstraction();
 }
@@ -549,7 +549,21 @@ void OmgModelChecker::initialize_abstraction()
         _abs_classifier = std::make_unique<AbstractionClassifier>(_kripke);
 }
 
-bool OmgModelChecker::model_checking(ConcreteState &cstate, const CtlFormula &specification)
+bool OmgModelChecker::check_all_initial_states(const CtlFormula& specification)
+{
+    std::vector<ConcreteState> inits = _kripke.get_initial_states();
+
+    for (const ConcreteState& it : inits)
+    {
+        DEBUG_PRINT("Checking initial state: %s\n", it.to_bitvec_str().data());
+        bool result = model_checking(it, specification);
+        if (!result) return false;
+    }
+
+    return true;
+}
+
+bool OmgModelChecker::model_checking(const ConcreteState &cstate, const CtlFormula &specification)
 {
 //    std::cout << specification.to_string() << std::endl;
     // In the future - unwinding tree cache is to be used here
@@ -561,6 +575,8 @@ bool OmgModelChecker::model_checking(ConcreteState &cstate, const CtlFormula &sp
     bool result = recur_ctl(goal);
     return result;
 }
+
+
 
 bool OmgModelChecker::recur_ctl(Goal &g)
 {

@@ -38,15 +38,15 @@ struct ConcretizationResult
 
 class OmgModelChecker {
 public:
-
+    explicit OmgModelChecker(KripkeStructure& kripke);
 
     typedef bool (OmgModelChecker::*handler_t)(Goal& goal);
-    bool model_checking(ConcreteState& cstate, const CtlFormula& specification);
+    bool model_checking(const ConcreteState& cstate, const CtlFormula& specification);
+    bool check_all_initial_states(const CtlFormula& specification);
 
-    explicit OmgModelChecker(const KripkeStructure& kripke);
 
 private:
-    const KripkeStructure& _kripke;
+    KripkeStructure& _kripke;
     std::unique_ptr<AbstractStructure> _abs_structure;
     std::unique_ptr<AbstractionClassifier> _abs_classifier;
    // std::map_subtree<std::unique_ptr<UnwindingTree>> _unwinding_trees;

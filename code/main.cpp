@@ -18,32 +18,86 @@
             bool passed = ((expected) == test_formula(std::string((aig_path)), std::string((raw_ctl_string)))); \
             if (passed) std::cout << "PASS! :)" << std::endl; \
             else std::cout << "\tFAIL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl; \
-            Z3_finalize_memory(); \
         } \
     while(0)
 
+#define PRINT_IF_BUG(actual_res, expected_res) \
+    do \
+    { \
+        bool passed = ((expected_res) == (actual_res)); \
+        if (passed) std::cout << "PASS! :)" << std::endl; \
+        else std::cout << "\tFAIL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl; \
+    } \
+    while(0)
 
-void test_ctl_file_parser()
+std::vector<FormulaChunk> get_formula_chunks(const std::string& ctl_file_path)
 {
     CtlFileParser ctl_file_parser;
     std::vector<FormulaChunk> formula_chunks;
-    ctl_file_parser.parse_ctl_file("../resources/spm.ctl", formula_chunks);
-    for (const auto& chunk : formula_chunks)
-    {
-        std::cout << chunk.get_expected_result() << std::endl;
-        for (const auto& formula : chunk.get_formulas())
-            std::cout << formula->to_string() << std::endl;
+    ctl_file_parser.parse_ctl_file(ctl_file_path, formula_chunks);
+    return formula_chunks;
+}
+
+void test_model(const std::string& file_path_no_extension) {
+    const std::string &aig_path = file_path_no_extension + ".aig";
+    const std::string &ctl_file_path = file_path_no_extension + ".ctl";
+
+    OmgConfigBuilder builder;
+    builder.set_config_src(ConfigurationSource::FILE).set_config_file_path("../run_config.omg").build();
+
+    AigParser p(aig_path);
+
+    std::vector<FormulaChunk> formula_chunks = get_formula_chunks(ctl_file_path);
+
+    if (!OmgConfig::get<bool>("Properties per specification")) {
+        CtlFormula::PropertySet APs;
+        DEBUG_PRINT("Chunk Structure:\n");
+        for (const auto &it : formula_chunks) {
+            DEBUG_PRINT("BEGIN CHUNK! Result it %s.\n", it.get_expected_result() ? "Pass" : "Fail");
+            for (const auto &it2 : it.get_formulas()) {
+                DEBUG_PRINT("\tFormula: %s\n", it2->to_string().data());
+                CtlFormula::PropertySet current_aps = it2->get_aps();
+                APs.insert(current_aps.begin(), current_aps.end());
+            }
+            DEBUG_PRINT("END CHUNK!");
+        }
+
+        std::unique_ptr<KripkeStructure> kripke = p.to_kripke(APs);
+
+        OmgModelChecker omg(*kripke);
+
+        for (const auto &it : formula_chunks) {
+            bool is_pass = it.get_expected_result();
+            for (const auto &it2 : it.get_formulas()) {
+                DEBUG_PRINT("Testing ## %s ## against ## %s ##... ", it2->to_string().data(), aig_path.data());
+
+                bool res = omg.check_all_initial_states(*it2);
+                PRINT_IF_BUG(res, is_pass);
+            }
+        }
+        Z3_finalize_memory();
+    } else {
+        for (const FormulaChunk &chunk : formula_chunks) {
+            bool is_pass = chunk.get_expected_result();
+            for (const auto &it : chunk.get_formulas()) {
+                DEBUG_PRINT("Testing ## %s ## against ## %s ##... ", it->to_string().data(), aig_path.data());
+
+                std::unique_ptr<KripkeStructure> kripke = p.to_kripke(it->get_aps());
+                OmgModelChecker omg(*kripke);
+
+                bool res = omg.check_all_initial_states(*it);
+                PRINT_IF_BUG(res, is_pass);
+                Z3_finalize_memory();
+            }
+        }
     }
 }
 
-template <typename T>
-void print_vec(const std::vector<T>& v, const std::function<std::string(const T&)>& convert)
-{
-    std::cout << "[";
-    for (size_t i=0;i<v.size();++i) std::cout << (i>0 ? "," :"") << convert(v[i]);
-    std::cout << "]" << std::endl;
-}
 
+
+/*
+ * THIS IS FOR UNIT TESTS
+ */
 std::unique_ptr<CtlFormula> get_formula(const std::string& formula_str)
 {
     Lexer lexer;
@@ -57,21 +111,22 @@ bool test_formula(const std::string& aig_path, const std::string& formula_str)
 {
     std::cout << "Testing ##" << formula_str << "## against ##" << aig_path << "##... ";
 
+    OmgConfigBuilder builder;
+    builder.set_config_src(ConfigurationSource::FILE).set_config_file_path("../run_config.omg").build();
+
+
     std::unique_ptr<CtlFormula> formula = get_formula(formula_str);
     auto aps = formula->get_aps();
 
     AigParser p(aig_path);
     std::unique_ptr<KripkeStructure> kripke = p.to_kripke(aps);
 
-    std::vector<ConcreteState> inits = kripke->get_initial_states();
-    ConcreteState& init = inits[0];
-
-    OmgConfigBuilder builder;
-    builder.set_config_src(ConfigurationSource::DEFAULT).build();
     OmgModelChecker omg(*kripke);
-    bool res = omg.model_checking(init, *formula);
+    bool res = omg.check_all_initial_states(*formula);
 
     std::cout << "Done. ";
+
+    Z3_finalize_memory();
     return res;
 
 }
@@ -146,6 +201,8 @@ void unit_tests_ev()
     TEST("../resources/af_ag.aig", "EX EG (state<0> ^ state<1>)", true);
     TEST("../resources/af_ag.aig", "AX EG ~state<1>", false);
     TEST("../resources/af_ag.aig", "EF EG ((~state<0>) & state<1>)", true);
+    TEST("../resources/af_ag.aig", "AF AG p", false);
+
 }
 
 
@@ -159,6 +216,7 @@ void unit_tests()
 
 int main()
 {
-    unit_tests();
 
+    // unit_tests();
+   test_model("../resources/af_ag");
 }

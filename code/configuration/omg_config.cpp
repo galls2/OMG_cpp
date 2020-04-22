@@ -55,6 +55,7 @@ ConfigTable OmgConfigBuilder::get_config_from_file() const {
 
     std::string line;
     while (getline(infile, line)) {
+        if (line.length() == 0) continue;
         std::array<std::string, 2> parts = split_to<2>(line, ':');
         if (configuration_fields.find(parts[0]) != configuration_fields.end()) {
             ++properties_found_counter;
@@ -95,3 +96,21 @@ ConfigTable OmgConfigBuilder::get_config_from_file() const {
 
 
 ConfigTable OmgConfig::_configuration = {};
+
+std::string OmgConfig::config_table_to_string() {
+    std::string to_return;
+    for (const auto& it : _configuration)
+    {
+
+        to_return += it.first + " : ";
+        if (OmgConfigBuilder::configuration_fields[it.first] == ValueType::STRING)
+            to_return += boost::get<std::string>(it.second);
+        else if (OmgConfigBuilder::configuration_fields[it.first] == ValueType::NUMERIC)
+            to_return += std::to_string(boost::get<int>(it.second));
+        else
+            to_return += boost::get<bool>(it.second) ? "True" : "False";
+
+        to_return += '\n';
+    }
+    return to_return;
+}

@@ -1,0 +1,6 @@
+Properties per specification:True
+Brother Unification:True
+Trivial Split Elimination:True
+Sat Solver:z3
+Epr Solver:z3
+

@@ -22,6 +22,8 @@ struct OmgConfig {
     static const T& get(const std::string& key);
 
     static void load_config_table(ConfigTable conf_table) { OmgConfig::_configuration = std::move(conf_table); };
+
+    static std::string config_table_to_string();
 private:
     static ConfigTable _configuration;
 };
@@ -45,12 +47,13 @@ public:
     OmgConfigBuilder& set_config_src(ConfigurationSource config_src) { _config_src = config_src; return *this; }
     OmgConfigBuilder& set_config_file_path(const std::string &config_file_path) { _config_file_path = config_file_path; return *this; }
 
+    static std::unordered_map<std::string, ValueType> configuration_fields;
+
     void build();
 private:
     ConfigurationSource _config_src;
     std::string _config_file_path;
 
-    static std::unordered_map<std::string, ValueType> configuration_fields;
 
     ConfigTable get_config_from_file() const;
 };
