@@ -76,7 +76,6 @@ void test_model(const std::string& file_path_no_extension) {
                 PRINT_IF_BUG(res, is_pass);
             }
         }
-        Z3_finalize_memory();
     } else {
         for (const FormulaChunk &chunk : formula_chunks) {
             bool is_pass = chunk.get_expected_result();
@@ -88,10 +87,11 @@ void test_model(const std::string& file_path_no_extension) {
 
                 bool res = omg.check_all_initial_states(*it);
                 PRINT_IF_BUG(res, is_pass);
-                Z3_finalize_memory();
             }
         }
     }
+    Z3_finalize_memory();
+
 }
 
 
@@ -229,8 +229,7 @@ void run_models(const std::string& file_path)
 }
 int main()
 {
-    test_model("../resources/tstrst");
-//    run_models("../models_to_run.omg");
+    run_models("../models_to_run.omg");
 // unit_tests();
 
 }
