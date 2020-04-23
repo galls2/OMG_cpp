@@ -71,7 +71,7 @@ FormulaChunk CtlFileParser::parse_raw_formula_chunk(const CtlFileParser::RawForm
     } else
     {
         // may be changed in the furute, if necessary. we assume that in a multi-formula chunk, each formula takes exactly one line
-        for (size_t line_index = first_non_comment_line; line_index < raw_formula_chunk.size(); ++first_non_comment_line)
+        for (size_t line_index = first_non_comment_line; line_index < raw_formula_chunk.size(); ++line_index)
         {
             const std::string& raw_formula = raw_formula_chunk[line_index];
             auto lex_result = lexer.lex(raw_formula);

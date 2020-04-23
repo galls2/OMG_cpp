@@ -18,6 +18,7 @@
     <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/parsers/ctl_file_parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/ctl_file_parser.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -29,11 +30,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="231" selection-start-line="231" selection-end-line="231" />
+            <state relative-caret-position="249">
+              <caret line="36" column="26" selection-start-line="36" selection-start-column="26" selection-end-line="36" selection-end-column="26" />
               <folding>
                 <element signature="e#37#55#0" expanded="true" />
               </folding>
@@ -42,49 +43,70 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file:///usr/include/z3++.h">
+        <entry file="file:///usr/include/c++/5/ext/new_allocator.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
-              <caret line="2164" selection-start-line="2164" selection-end-line="2164" />
+            <state relative-caret-position="142">
+              <caret line="103" selection-start-line="103" selection-end-line="103" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/tstrst.ctl">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/code/parsers/ctl_file_parser.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
-              <caret line="1" selection-start-line="1" selection-end-line="1" selection-end-column="15" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/parsers/aig_parser.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-30">
-              <caret line="266" column="37" lean-forward="true" selection-start-line="266" selection-start-column="37" selection-end-line="266" selection-end-column="37" />
+            <state relative-caret-position="71">
+              <caret line="25" column="11" selection-start-line="25" selection-start-column="11" selection-end-line="25" selection-end-column="11" />
               <folding>
-                <element signature="e#60#78#0" expanded="true" />
+                <element signature="e#41#69#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/tstrst.aag">
+        <entry file="file://$PROJECT_DIR$/code/parsers/lexer.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="72">
-              <caret line="4" selection-start-line="4" selection-end-line="4" selection-end-column="1" />
+            <state relative-caret-position="142">
+              <caret line="18" selection-start-line="18" selection-end-line="18" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/af_ag.aag">
+        <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="72">
-              <caret line="4" selection-start-line="4" selection-end-line="4" />
+            <state relative-caret-position="133">
+              <caret line="15" selection-start-line="15" selection-end-line="15" />
+              <folding>
+                <element signature="e#0#23#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="142">
+              <caret line="52" selection-start-line="52" selection-end-line="52" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file:///usr/include/c++/5/bits/stl_function.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="142">
+              <caret line="891" selection-start-line="891" selection-end-line="891" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file:///usr/include/c++/5/bits/stl_algo.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret line="543" selection-start-line="543" selection-end-line="543" />
             </state>
           </provider>
         </entry>
@@ -107,34 +129,6 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/utils/z3_utils.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304">
-              <caret line="298" selection-start-line="298" selection-end-line="298" />
-              <folding>
-                <element signature="e#41#65#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="553" selection-start-line="553" selection-end-line="553" />
-              <folding>
-                <element signature="e#42#60#0" expanded="true" />
-                <element signature="e#767#1193#0" />
-                <element signature="e#1195#1618#0" />
-                <element signature="e#1620#1832#0" />
-                <element signature="e#1834#2234#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -146,7 +140,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>is_AE</find>
       <find>{ n.add_label(positivity, spec); }</find>
       <find>map_upward</find>
       <find>map_up</find>
@@ -176,6 +169,7 @@
       <find>z3::solver</find>
       <find>get</find>
       <find>Z3_</find>
+      <find>FAIL</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -203,7 +197,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/code/parsers/aiger/aig_to_aag.cpp" />
         <option value="$PROJECT_DIR$/code/parsers/aiger/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/code/utils/aiger-1.9.9/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/code/utils/aiger-1.9.9/aiger.h" />
@@ -254,6 +247,7 @@
         <option value="$PROJECT_DIR$/code/model_checking/omg_model_checker.h" />
         <option value="$PROJECT_DIR$/code/parsers/aig_parser.cpp" />
         <option value="$PROJECT_DIR$/code/main.cpp" />
+        <option value="$PROJECT_DIR$/code/parsers/ctl_file_parser.cpp" />
       </list>
     </option>
   </component>
@@ -372,14 +366,7 @@
       <workItem from="1576322596048" duration="1851000" />
       <workItem from="1580376891038" duration="55751000" />
       <workItem from="1584796046953" duration="738000" />
-      <workItem from="1587326308621" duration="15589000" />
-    </task>
-    <task id="LOCAL-00060" summary="-Added debug_name to abs states, upgraded VersionManager as a result&#10;-Refactoring&#10;-Added debugging util: DEBUG_PRINT">
-      <created>1580823689426</created>
-      <option name="number" value="00060" />
-      <option name="presentableId" value="LOCAL-00060" />
-      <option name="project" value="LOCAL" />
-      <updated>1580823689426</updated>
+      <workItem from="1587326308621" duration="17911000" />
     </task>
     <task id="LOCAL-00061" summary="Bugfix in goal creation">
       <created>1580830661947</created>
@@ -717,11 +704,18 @@
       <option name="project" value="LOCAL" />
       <updated>1587570755860</updated>
     </task>
-    <option name="localTasksCounter" value="109" />
+    <task id="LOCAL-00109" summary="Finalizing memory only at end now">
+      <created>1587621330008</created>
+      <option name="number" value="00109" />
+      <option name="presentableId" value="LOCAL-00109" />
+      <option name="project" value="LOCAL" />
+      <updated>1587621330017</updated>
+    </task>
+    <option name="localTasksCounter" value="110" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="694829000" />
+    <option name="totallyTimeSpent" value="697151000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -736,13 +730,13 @@
     <frame x="0" y="24" width="1920" height="1004" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49861112" visible="true" weight="0.15541264" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49861112" visible="true" weight="0.15541264" />
       <window_info id="Structure" order="1" sideWeight="0.5013889" side_tool="true" weight="0.1511254" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3261851" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4989282" weight="0.29694322" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49839228" visible="true" weight="0.4819413" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4989282" visible="true" weight="0.2866817" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49839228" weight="0.4819413" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Database Changes" order="6" />
@@ -786,7 +780,6 @@
     <option name="version" value="1" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Bugfix in is_concrete_transition_to_abs" />
     <MESSAGE value="-Default argement to CocnretizationResult&#10;-Changed CTL formulas to recognized &quot;true&quot;/&quot;false&quot; and not &quot;True&quot;/&quot;False&quot;&#10;-Minor refactor&#10;-Decided that I will not necessarily handle formulas without APs&#10;-More tests now pass" />
     <MESSAGE value="Added tests resources" />
     <MESSAGE value="Refactored tests to use tests from the git project" />
@@ -811,7 +804,8 @@
     <MESSAGE value="-Bugfix + Added print function to OMG_CONFIG&#10;-Bugfix in MC: now model checking all initial states, which we cache&#10;- Added runconfig&#10;-Made code for using the &quot;Properties per spec&quot; configuration" />
     <MESSAGE value="Set up testing model list feature" />
     <MESSAGE value="Bugfix in aigparser - out literal formula in state formula was ill.  Added test as unit test" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bugfix in aigparser - out literal formula in state formula was ill.  Added test as unit test" />
+    <MESSAGE value="Finalizing memory only at end now" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finalizing memory only at end now" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -938,30 +932,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/code/structures/unwinding_tree.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="319">
-          <caret line="51" column="51" lean-forward="true" selection-start-line="51" selection-start-column="51" selection-end-line="51" selection-end-column="51" />
-          <folding>
-            <element signature="e#54#70#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/temporal/ctl_formula.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="8" selection-start-line="8" selection-end-line="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/include/c++/5/functional">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="397" column="10" selection-start-line="397" selection-start-column="10" selection-end-line="397" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/code/utils/omg_utils.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="400">
@@ -1032,20 +1002,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="444">
-          <caret line="107" column="32" selection-start-line="107" selection-start-column="32" selection-end-line="107" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/parsers/lexer.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="202">
-          <caret line="66" column="37" lean-forward="true" selection-start-line="66" selection-start-column="37" selection-end-line="66" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/abp.aig">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1086,16 +1042,6 @@
           <caret line="131" column="14" lean-forward="true" selection-start-line="131" selection-start-column="14" selection-end-line="131" selection-end-column="14" />
           <folding>
             <element signature="e#41#59#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-324">
-          <caret line="212" column="51" selection-start-line="212" selection-start-column="51" selection-end-line="212" selection-end-column="51" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1226,13 +1172,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_file_parser.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="5" column="18" selection-start-line="5" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/code/abstraction/abstract_structure.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="133">
@@ -1319,12 +1258,67 @@
         </state>
       </provider>
     </entry>
+    <entry file="file:///usr/include/c++/5/ext/new_allocator.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="103" selection-start-line="103" selection-end-line="103" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/parsers/lexer.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="18" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/c++/5/bits/stl_algo.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="543" selection-start-line="543" selection-end-line="543" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/c++/5/bits/stl_function.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="891" selection-start-line="891" selection-end-line="891" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="52" selection-start-line="52" selection-end-line="52" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/code/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="231" selection-start-line="231" selection-end-line="231" />
+        <state relative-caret-position="249">
+          <caret line="36" column="26" selection-start-line="36" selection-start-column="26" selection-end-line="36" selection-end-column="26" />
           <folding>
             <element signature="e#37#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_file_parser.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="71">
+          <caret line="25" column="11" selection-start-line="25" selection-start-column="11" selection-end-line="25" selection-end-column="11" />
+          <folding>
+            <element signature="e#41#69#0" expanded="true" />
           </folding>
         </state>
       </provider>
