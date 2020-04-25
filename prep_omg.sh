@@ -9,7 +9,6 @@ cd build
 cmake -DCMAKE_BUILD_TYPE=Debug ..
 make
 
-
-#cp runconfig.omg OMG_cpp/runconfig.omg
-echo 'Do: cd OMG; ./run.sh '
+cp runconfig.omg OMG_cpp/runconfig.omg
+echo 'Do: cd OMG; ./OMG '
 

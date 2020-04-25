@@ -231,11 +231,11 @@ void run_models(const std::string& file_path)
 int main()
 {
 //    test_model("../resources/gatedClock");
-//    run_models("../models_to_run.omg");
+    run_models("../models_to_run.omg");
 
 
 
 
-     unit_tests();
+//     unit_tests();
 
 }

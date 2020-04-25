@@ -29,4 +29,4 @@ make
 make install
 
 echo Finished installation
-echo In order to run OMG, run the script prep_omg.sh
+echo In order to run OMG, run the script prep_omg.sh from the OMG_cpp repo
