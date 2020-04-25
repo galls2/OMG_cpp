@@ -18,7 +18,7 @@ cd boost_1_68_0
 ./bootstrap.sh
 ./b2 install
 
-cp ~/Desktop
+cd ~/Desktop
 
 echo Insalling z3
 

@@ -231,8 +231,8 @@ void run_models(const std::string& file_path)
 int main()
 {
 //    test_model("../resources/gatedClock");
-    run_models("../models_to_run.omg");
-
+//    run_models("../models_to_run.omg");
+    TEST("../resources/rrobin.aig", "~E (~req0 | ~req1 | ack0 | ack1 | EX(~ack0)) U (req0 & req1 & ~ack0 & ~ack1 & EX(~ack0))", true);
 
 
 
