@@ -57,12 +57,17 @@ private:
     std::set<const Goal*> _developed;
 };
 
-auto cmp_nodes = [](const std::reference_wrapper<UnwindingTree>& a, const std::reference_wrapper<UnwindingTree>& b)
+auto cmp_nodes = [](const UnwindingTree* a, const UnwindingTree* b)
 {
-    if (a.get().is_urgent()) return true;
-    if (b.get().is_urgent()) return false;
-    return a.get().get_depth() < b.get().get_depth();
+    if (a == b) return false;
+    bool a_urgent = a->is_urgent();
+    bool b_urgent = b->is_urgent();
+    assert(!a_urgent || !b_urgent);
+    if (a_urgent) return true;
+    if (b_urgent) return false;
+    if (a->get_depth() < b->get_depth()) return true;
+    if (a->get_depth() > b->get_depth()) return false;
+    return a < b;
 };
 
-typedef std::priority_queue <std::reference_wrapper<UnwindingTree>,
-        std::vector<std::reference_wrapper<UnwindingTree>>, decltype(cmp_nodes)> NodePriorityQueue;
+typedef std::multiset <UnwindingTree*, decltype(cmp_nodes)> NodePriorityQueue;

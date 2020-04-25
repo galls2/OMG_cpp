@@ -72,22 +72,54 @@ bool OmgModelChecker::handle_arrow(Goal &goal)
 bool OmgModelChecker::handle_ar(Goal &goal)
 {
     NodePriorityQueue to_visit(cmp_nodes);
-    to_visit.emplace(std::ref(goal.get_node()));
+#ifdef DEBUG
+    size_t prev_size = to_visit.size();
+#endif
+    to_visit.emplace(&goal.get_node());
+#ifdef DEBUG
+    assert(to_visit.size() == prev_size + 1);
+#endif
     std::set<const ConcreteState*> visited;
 
     const CtlFormula &q = *goal.get_spec().get_operands()[1];
     const CtlFormula &p = *goal.get_spec().get_operands()[0];
 
     while (!to_visit.empty()) {
-        UnwindingTree &node_to_explore = to_visit.top();
-        to_visit.pop();
+
+#ifdef DEBUG
+        bool exist_urgent = false;
+        for (const auto& it : to_visit) {
+            if (it->is_urgent())
+            {
+                assert(!exist_urgent);
+                exist_urgent = true;
+            }
+            for (const auto &it2 : to_visit) {
+                assert((it == it2) || (it->get_concrete_state() != it2->get_concrete_state()));
+            }
+        }
+
+        for (const auto& it_visited : visited)
+            for (const auto& it_to_visit : to_visit)
+            {
+                assert(it_to_visit->get_concrete_state() != *it_visited);
+            }
+#endif
+
+        UnwindingTree &node_to_explore = **to_visit.begin();
+        size_t res = to_visit.erase(&node_to_explore); // why doesn't this work by value?
+        assert(res == 1);
+
+#ifdef DEBUG
+        assert(exist_urgent == node_to_explore.is_urgent());
+#endif
+
         DEBUG_PRINT_SEP; DEBUG_PRINT("AR: exploring %s\n", node_to_explore.get_concrete_state().to_bitvec_str().data());
         node_to_explore.set_urgent(false);
+        assert(std::none_of(to_visit.begin(), to_visit.end(), [] (const UnwindingTree* n) { return n->is_urgent();}));
 
-
-        // CHECK - we will delete this later. This checks for twice for the same concrete state
-        assert(std::all_of(visited.begin(), visited.end(), [&](const ConcreteState *const &visitedee) {
-            return node_to_explore.get_concrete_state() != (*visitedee);
+        assert(std::none_of(visited.begin(), visited.end(), [&](const ConcreteState *const &visitedee) {
+            return node_to_explore.get_concrete_state() == (*visitedee);
         }));
 
         visited.emplace(&node_to_explore.get_concrete_state());
@@ -110,6 +142,7 @@ bool OmgModelChecker::handle_ar(Goal &goal)
         Goal subgoal_p(node_to_explore, p, goal.get_properties());
         bool res_p = recur_ctl(subgoal_p);
         if (res_p) {
+            DEBUG_PRINT("Node satisfies p! Not developing successors!");
             AbstractState &astate = find_abs(node_to_explore);
             astate.add_label(true, goal.get_spec());
         } else {
@@ -121,7 +154,7 @@ bool OmgModelChecker::handle_ar(Goal &goal)
                 if (std::all_of(visited.begin(), visited.end(), [&succ](const ConcreteState *const &visitedee) {
                     return (*visitedee) != succ->get_concrete_state();
                 })) {
-                    to_visit.emplace(std::ref(*succ));
+                    to_visit.emplace(succ.get());
                 }
             }
         }
@@ -147,7 +180,13 @@ bool OmgModelChecker::handle_ar(Goal &goal)
 bool OmgModelChecker::handle_er(Goal &goal) {
 
     NodePriorityQueue to_visit(cmp_nodes);
-    to_visit.emplace(std::ref(goal.get_node()));
+#ifdef DEBUG
+    size_t prev_size = to_visit.size();
+#endif
+    to_visit.emplace(&goal.get_node());
+#ifdef DEBUG
+    assert(to_visit.size() == prev_size + 1);
+#endif
     std::set<const ConcreteState *> visited;
 
     const CtlFormula &q = *goal.get_spec().get_operands()[1];
@@ -156,11 +195,32 @@ bool OmgModelChecker::handle_er(Goal &goal) {
     std::set<ConstAStateRef> p_satisfying_astates = _abs_structure->get_astates_by_property(p);;
 
     while (!to_visit.empty()) {
-        UnwindingTree &node_to_explore = to_visit.top();
-        to_visit.pop();
+#ifdef DEBUG
+        bool exist_urgent = false;
+        for (const auto& it : to_visit) {
+            if (it->is_urgent())
+            {
+                assert(!exist_urgent);
+                exist_urgent = true;
+            }
+            for (const auto &it2 : to_visit) {
+                assert((it == it2) || (it->get_concrete_state() != it2->get_concrete_state()));
+            }
+        }
+#endif
+
+        UnwindingTree &node_to_explore = **to_visit.begin();
+        size_t res = to_visit.erase(&node_to_explore);
+        assert(res == 1);
+
+#ifdef DEBUG
+        assert(exist_urgent == node_to_explore.is_urgent());
+#endif
+
         DEBUG_PRINT_SEP;
         DEBUG_PRINT("ER: exploring %s\n", node_to_explore.get_concrete_state().to_bitvec_str().data());
         node_to_explore.set_urgent(false);
+        assert(std::none_of(to_visit.begin(), to_visit.end(), [] (const UnwindingTree* n) { return n->is_urgent();}));
 
         (void) find_abs(node_to_explore);
 
@@ -207,7 +267,7 @@ bool OmgModelChecker::handle_er(Goal &goal) {
 
             for (const std::unique_ptr<UnwindingTree> &succ : successors) {
                 DEBUG_PRINT("SUCCESSOR: %s\n", succ->get_concrete_state().to_bitvec_str().data());
-                to_visit.emplace(std::ref(*succ));
+                to_visit.emplace(succ.get());
             }
         }
 
@@ -384,18 +444,29 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
 
             if (concretization_result.dst_cstate)
             {
-                DEBUG_PRINT("More unwinding due to concretization witness %s!\n", concretization_result.dst_cstate->to_bitvec_str().data());
 
                 // More Unwinding
                 const ConcreteState& dst_cstate = *concretization_result.dst_cstate;
                 UnwindingTree* const to_close_node = concretization_result.src_node;
 
+                DEBUG_PRINT("More unwinding due to concretization witness transition ([%s], [%s])!\n", to_close_node->get_concrete_state().to_bitvec_str().data(), dst_cstate.to_bitvec_str().data());
+
+
                 assert(find_abs(*to_close_node).is_neg_labeled(*goal.get_spec().get_operands()[0]));
 
                 UnwindingTree& node_to_set = get_concretization_successor(to_close_node, dst_cstate);
-                node_to_set.set_urgent(true);
-                to_visit.emplace(std::ref(node_to_set));
+                DEBUG_PRINT("Node to set URGENT (supposed to be explored next): %s\n", node_to_set.get_concrete_state().to_bitvec_str().data());
 
+                size_t erase_res = to_visit.erase(&node_to_set);
+                assert(erase_res == 1);
+                node_to_set.set_urgent(true);
+#ifdef DEBUG
+                size_t prev_size = to_visit.size();
+#endif
+                to_visit.emplace(&node_to_set);
+#ifdef DEBUG
+                assert(to_visit.size() == prev_size + 1);
+#endif
             }
             else
             {
