@@ -41,8 +41,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/installation/omg_installer.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="177">
-              <caret line="15" column="29" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
+            <state relative-caret-position="447">
+              <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
             </state>
           </provider>
         </entry>
@@ -357,14 +357,7 @@
       <workItem from="1576322596048" duration="1851000" />
       <workItem from="1580376891038" duration="55751000" />
       <workItem from="1584796046953" duration="738000" />
-      <workItem from="1587326308621" duration="35325000" />
-    </task>
-    <task id="LOCAL-00065" summary="Started impl of handle_trace methods">
-      <created>1581085390404</created>
-      <option name="number" value="00065" />
-      <option name="presentableId" value="LOCAL-00065" />
-      <option name="project" value="LOCAL" />
-      <updated>1581085390404</updated>
+      <workItem from="1587326308621" duration="35672000" />
     </task>
     <task id="LOCAL-00066" summary="Updated aig_parser to contain less allocs, changed split to use an array">
       <created>1581086421086</created>
@@ -702,11 +695,18 @@
       <option name="project" value="LOCAL" />
       <updated>1587819424462</updated>
     </task>
-    <option name="localTasksCounter" value="114" />
+    <task id="LOCAL-00114" summary="Update to installer">
+      <created>1587831782112</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1587831782112</updated>
+    </task>
+    <option name="localTasksCounter" value="115" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="714565000" />
+    <option name="totallyTimeSpent" value="714912000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -771,7 +771,6 @@
     <option name="version" value="1" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="-Wrote most of EV algorithm, EXCLUDING check_inductive_ev&#10;-Refactor" />
     <MESSAGE value="Wrote EX and refine_all_successors" />
     <MESSAGE value="-Implemented subtree strengthening&#10;-Added important negation in z3util&#10;-Refactor abstract_structure.cpp&#10;-Implemented TSE optimization in refine_no_successor in abstract_structure.cpp" />
     <MESSAGE value="-Bugfix in abstract state ctor&#10;- Now passing tests for EX" />
@@ -796,7 +795,8 @@
     <MESSAGE value="*Changed definition of NodePriorityQueue to allow correct updating and ordering.&#10;*Bugfix in AV inserting to to_visit&#10;*Added many debug checks" />
     <MESSAGE value="Updated scripts" />
     <MESSAGE value="Updated scripts more" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated scripts more" />
+    <MESSAGE value="Update to installer" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update to installer" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1323,8 +1323,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/installation/omg_installer.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="15" column="29" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
+        <state relative-caret-position="447">
+          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
         </state>
       </provider>
     </entry>

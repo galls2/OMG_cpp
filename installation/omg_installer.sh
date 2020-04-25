@@ -29,10 +29,10 @@ cd build
 make
 make install
 
-git clone https://github.com/galls2/OMG_cpp
+cd ~/Desktop
+
 cp OMG_cpp/run_config.omg .
 cp OMG_cpp/prep_omg.sh .
-rm -r OMG_cpp
 
 echo Finished installation
 echo In order to run OMG, run the script prep_omg.sh
