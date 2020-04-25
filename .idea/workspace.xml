@@ -18,7 +18,6 @@
     <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/installation/omg_installer.sh" beforeDir="false" afterPath="$PROJECT_DIR$/installation/omg_installer.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/prep_omg.sh" beforeDir="false" afterPath="$PROJECT_DIR$/prep_omg.sh" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -33,8 +32,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/prep_omg.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="7" column="8" lean-forward="true" selection-start-line="7" selection-start-column="8" selection-end-line="7" selection-end-column="8" />
+            <state relative-caret-position="198">
+              <caret line="11" column="30" selection-start-line="11" selection-start-column="30" selection-end-line="11" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -42,8 +41,17 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/installation/omg_installer.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="501">
-              <caret line="31" column="74" selection-start-line="31" selection-start-column="74" selection-end-line="31" selection-end-column="74" />
+            <state relative-caret-position="177">
+              <caret line="15" column="29" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/run_config.omg">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="108">
+              <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
             </state>
           </provider>
         </entry>
@@ -51,8 +59,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="60" column="45" selection-start-line="60" selection-start-column="45" selection-end-line="60" selection-end-column="45" />
+            <state relative-caret-position="366">
+              <caret line="234" lean-forward="true" selection-start-line="234" selection-end-line="234" />
               <folding>
                 <element signature="e#37#55#0" expanded="true" />
               </folding>
@@ -119,18 +127,6 @@
               <caret line="48" selection-start-line="48" selection-end-line="48" />
               <folding>
                 <element signature="e#41#59#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/abstraction/abstract_structure.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="367">
-              <caret line="149" column="48" selection-start-line="149" selection-start-column="48" selection-end-line="149" selection-end-column="48" />
-              <folding>
-                <element signature="e#40#60#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -361,21 +357,7 @@
       <workItem from="1576322596048" duration="1851000" />
       <workItem from="1580376891038" duration="55751000" />
       <workItem from="1584796046953" duration="738000" />
-      <workItem from="1587326308621" duration="34047000" />
-    </task>
-    <task id="LOCAL-00063" summary="Added more debug prints and found a test that works">
-      <created>1580833239198</created>
-      <option name="number" value="00063" />
-      <option name="presentableId" value="LOCAL-00063" />
-      <option name="project" value="LOCAL" />
-      <updated>1580833239202</updated>
-    </task>
-    <task id="LOCAL-00064" summary="Upgraded AIG parser - now compiling AIGER library and not using it as an exe.">
-      <created>1581085295405</created>
-      <option name="number" value="00064" />
-      <option name="presentableId" value="LOCAL-00064" />
-      <option name="project" value="LOCAL" />
-      <updated>1581085295406</updated>
+      <workItem from="1587326308621" duration="35325000" />
     </task>
     <task id="LOCAL-00065" summary="Started impl of handle_trace methods">
       <created>1581085390404</created>
@@ -706,11 +688,25 @@
       <option name="project" value="LOCAL" />
       <updated>1587818513416</updated>
     </task>
-    <option name="localTasksCounter" value="112" />
+    <task id="LOCAL-00112" summary="Updated scripts">
+      <created>1587819042748</created>
+      <option name="number" value="00112" />
+      <option name="presentableId" value="LOCAL-00112" />
+      <option name="project" value="LOCAL" />
+      <updated>1587819042748</updated>
+    </task>
+    <task id="LOCAL-00113" summary="Updated scripts more">
+      <created>1587819424462</created>
+      <option name="number" value="00113" />
+      <option name="presentableId" value="LOCAL-00113" />
+      <option name="project" value="LOCAL" />
+      <updated>1587819424462</updated>
+    </task>
+    <option name="localTasksCounter" value="114" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="713287000" />
+    <option name="totallyTimeSpent" value="714565000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -775,8 +771,6 @@
     <option name="version" value="1" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Refactored tests to use tests from the git project" />
-    <MESSAGE value="Added unit tests for AV. &#10;AV algo now works!" />
     <MESSAGE value="-Wrote most of EV algorithm, EXCLUDING check_inductive_ev&#10;-Refactor" />
     <MESSAGE value="Wrote EX and refine_all_successors" />
     <MESSAGE value="-Implemented subtree strengthening&#10;-Added important negation in z3util&#10;-Refactor abstract_structure.cpp&#10;-Implemented TSE optimization in refine_no_successor in abstract_structure.cpp" />
@@ -800,7 +794,9 @@
     <MESSAGE value="Finalizing memory only at end now" />
     <MESSAGE value="Bugfix in CtlFileParser" />
     <MESSAGE value="*Changed definition of NodePriorityQueue to allow correct updating and ordering.&#10;*Bugfix in AV inserting to to_visit&#10;*Added many debug checks" />
-    <option name="LAST_COMMIT_MESSAGE" value="*Changed definition of NodePriorityQueue to allow correct updating and ordering.&#10;*Bugfix in AV inserting to to_visit&#10;*Added many debug checks" />
+    <MESSAGE value="Updated scripts" />
+    <MESSAGE value="Updated scripts more" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated scripts more" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -952,16 +948,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/code/formulas/epr_solver.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="14" column="68" lean-forward="true" selection-start-line="14" selection-start-column="68" selection-end-line="14" selection-end-column="68" />
-          <folding>
-            <element signature="e#41#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/code/abstraction/abstract_structure.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="175">
@@ -1297,16 +1283,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/main.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="60" column="45" selection-start-line="60" selection-start-column="45" selection-end-line="60" selection-end-column="45" />
-          <folding>
-            <element signature="e#37#55#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="509">
@@ -1321,17 +1297,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/code/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="366">
+          <caret line="234" lean-forward="true" selection-start-line="234" selection-end-line="234" />
+          <folding>
+            <element signature="e#37#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/prep_omg.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="7" column="8" lean-forward="true" selection-start-line="7" selection-start-column="8" selection-end-line="7" selection-end-column="8" />
+        <state relative-caret-position="198">
+          <caret line="11" column="30" selection-start-line="11" selection-start-column="30" selection-end-line="11" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/run_config.omg">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/installation/omg_installer.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="501">
-          <caret line="31" column="74" selection-start-line="31" selection-start-column="74" selection-end-line="31" selection-end-column="74" />
+        <state relative-caret-position="177">
+          <caret line="15" column="29" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
         </state>
       </provider>
     </entry>

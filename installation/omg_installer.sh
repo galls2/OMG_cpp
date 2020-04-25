@@ -13,6 +13,7 @@ apt install git -y
 apt install cmake -y
 
 echo Installing boost 1.68
+tar -xvf boost_1_68_0.tar.bz2
 cd boost_1_68_0
 ./bootstrap.sh
 ./b2 install
