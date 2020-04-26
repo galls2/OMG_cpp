@@ -94,16 +94,16 @@ bool OmgModelChecker::handle_ar(Goal &goal)
                 assert(!exist_urgent);
                 exist_urgent = true;
             }
-            for (const auto &it2 : to_visit) {
-                assert((it == it2) || (it->get_concrete_state() != it2->get_concrete_state()));
-            }
+//            for (const auto &it2 : to_visit) {
+//                assert((it == it2) || (it->get_concrete_state() != it2->get_concrete_state()));
+//            }
         }
 
-        for (const auto& it_visited : visited)
-            for (const auto& it_to_visit : to_visit)
-            {
-                assert(it_to_visit->get_concrete_state() != *it_visited);
-            }
+//        for (const auto& it_visited : visited)
+//            for (const auto& it_to_visit : to_visit)
+//            {
+//                assert(it_to_visit->get_concrete_state() != *it_visited);
+//            }
 #endif
 
         UnwindingTree &node_to_explore = **to_visit.begin();
@@ -118,9 +118,12 @@ bool OmgModelChecker::handle_ar(Goal &goal)
         node_to_explore.set_urgent(false);
         assert(std::none_of(to_visit.begin(), to_visit.end(), [] (const UnwindingTree* n) { return n->is_urgent();}));
 
-        assert(std::none_of(visited.begin(), visited.end(), [&](const ConcreteState *const &visitedee) {
+        if (std::any_of(visited.begin(), visited.end(), [&](const ConcreteState *const &visitedee) {
             return node_to_explore.get_concrete_state() == (*visitedee);
-        }));
+        }))
+        {
+            continue;
+        }
 
         visited.emplace(&node_to_explore.get_concrete_state());
 
@@ -142,7 +145,7 @@ bool OmgModelChecker::handle_ar(Goal &goal)
         Goal subgoal_p(node_to_explore, p, goal.get_properties());
         bool res_p = recur_ctl(subgoal_p);
         if (res_p) {
-            DEBUG_PRINT("Node satisfies p! Not developing successors!");
+            DEBUG_PRINT("Node satisfies p - not developing successors!\n");
             AbstractState &astate = find_abs(node_to_explore);
             astate.add_label(true, goal.get_spec());
         } else {
@@ -203,9 +206,9 @@ bool OmgModelChecker::handle_er(Goal &goal) {
                 assert(!exist_urgent);
                 exist_urgent = true;
             }
-            for (const auto &it2 : to_visit) {
-                assert((it == it2) || (it->get_concrete_state() != it2->get_concrete_state()));
-            }
+//            for (const auto &it2 : to_visit) {
+//                assert((it == it2) || (it->get_concrete_state() != it2->get_concrete_state()));
+//            }
         }
 #endif
 

@@ -232,10 +232,14 @@ int main()
 {
 //    test_model("../resources/gatedClock");
 //    run_models("../models_to_run.omg");
+     unit_tests();
     TEST("../resources/rrobin.aig", "~E (~req0 | ~req1 | ack0 | ack1 | EX(~ack0)) U (req0 & req1 & ~ack0 & ~ack1 & EX(~ack0))", true);
 
 
 
-//     unit_tests();
 
 }
+
+/*
+ * Ended with trimming other than closure -- not cool
+ */

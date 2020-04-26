@@ -29,18 +29,21 @@ std::vector<SatSolverResult> Z3SatSolver::all_sat(const PropFormula &formula, co
         z3::model m = solver.get_model();
         SatSolverResult res(m, vars);
         add_assignments(assignments ,res, vars, complete_assignments);
-        z3::expr blocking_clause = get_blocking_clause(m, vars);
+        z3::expr blocking_clause = get_blocking_clause(res, vars);
         solver.add(blocking_clause);
     }
     return assignments;
 }
 
-z3::expr Z3SatSolver::get_blocking_clause(const z3::model& model, const std::vector<z3::expr> &var_vector) {
-    z3::context& ctx = model.ctx();
+z3::expr Z3SatSolver::get_blocking_clause(const SatSolverResult& res, const std::vector<z3::expr> &var_vector) {
+    z3::context& ctx = var_vector.begin()->ctx();
     z3::expr_vector literals(ctx);
     for (const z3::expr& var : var_vector)
     {
-        literals.push_back(z3::eq(model.eval(var), ctx.bool_val(true)) ? (!var) : (var));
+        if (res.get_value(var) != SatResult::UNDEF)
+        {
+            literals.push_back((res.get_value(var) == SatResult::TRUE) ? (!var) : (var));
+        }
     }
     return z3::mk_or(literals);
 }
@@ -58,16 +61,18 @@ void Z3SatSolver::add_assignments(std::vector<SatSolverResult> &assignemnts, Sat
         for (size_t i = 0; i < vars.size(); ++i) if (result.get_value(vars[i]) == SatResult::UNDEF) undef_idxs.insert(i);
         for (size_t i = 0; i < (1 << undef_idxs.size()); ++i)
         {
+            size_t undef_idx = 0;
             std::map<z3::expr, SatResult, Z3ExprComp> vals;
             for (size_t j = 0; j < vars.size(); ++j)
             {
-                if (undef_idxs.find(j) == undef_idxs.end())
-
+                if (undef_idxs.find(j) == undef_idxs.end()) {
                     vals.emplace(vars[j], result.get_value(vars[j]));
+                }
                 else
                 {
-                    vals.emplace(vars[j], SatResult::TRUE);
-                    vals.emplace(vars[j], SatResult::FALSE);
+                    bool is_true_val = (i & (1 << undef_idx)) > 0;
+                    undef_idx++;
+                    vals.emplace(vars[j], is_true_val ? SatResult::TRUE : SatResult::FALSE);
                 }
             }
             assignemnts.emplace_back(std::move(vals));

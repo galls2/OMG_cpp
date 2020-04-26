@@ -78,7 +78,7 @@ public:
 private:
     z3::solver _solver;
 
-    z3::expr get_blocking_clause(const z3::model& model, const std::vector<z3::expr> &vector);
+    z3::expr get_blocking_clause(const SatSolverResult& model, const std::vector<z3::expr> &vector);
 
     void add_assignments(std::vector<SatSolverResult> &assignments, SatSolverResult result, const std::vector<z3::expr> &vars, bool complete_assignments);
 
