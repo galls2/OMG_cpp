@@ -9,7 +9,7 @@
 #include <experimental/optional>
 #include <set>
 #include <abstraction/abstract_state.h>
-
+#include <utils/omg_utils.h>
 #include "concrete_state.h"
 
 class UnwindingTree;
@@ -45,6 +45,7 @@ public:
     void add_label(bool positivity, const CtlFormula& spec);
 
     UnwindingTree* get_parent() const;
+    std::string to_string() const;
 
 private:
     const KripkeStructure& _kripke;

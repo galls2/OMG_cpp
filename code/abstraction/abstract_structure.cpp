@@ -165,7 +165,7 @@ RefinementResult AbstractStructure::refine_no_successor(const UnwindingTree &to_
                 if (dict.find(res.first) == dict.end()) return;
                 for (ConstAbsStateSet &opt : dict[res.first])
                 {
-                    opt.erase(dsts_abs.begin(), dsts_abs.end());
+                    for (const AbstractState* it : dsts_abs) opt.erase(it);
                     if (is_src_in_dsts)
                     {
                         opt.erase(res.first);

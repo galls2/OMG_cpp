@@ -71,6 +71,8 @@ bool OmgModelChecker::handle_arrow(Goal &goal)
 
 bool OmgModelChecker::handle_ar(Goal &goal)
 {
+
+    DEBUG_PRINT("AR: checking %s\n",goal.to_string().data());
     NodePriorityQueue to_visit(cmp_nodes);
 #ifdef DEBUG
     size_t prev_size = to_visit.size();
@@ -122,6 +124,7 @@ bool OmgModelChecker::handle_ar(Goal &goal)
             return node_to_explore.get_concrete_state() == (*visitedee);
         }))
         {
+            DEBUG_PRINT("AR: already visited. Skipping.\n");
             continue;
         }
 
@@ -296,7 +299,7 @@ void OmgModelChecker::strengthen_subtree(Goal& goal, const std::function<bool(co
 
     auto strengthener =
             [this](UnwindingTree& n) {
-                assert(n.get_abs());
+                assert(n.get_abs() && n.get_abs()->get().is_final_classification());
                 std::set<const UnwindingTree*> dsts;
                 for (auto& successor : n.get_successors()) dsts.insert(&*successor);
                 refine_all_successors(n, dsts);
@@ -476,15 +479,29 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
                 DEBUG_PRINT("Refinement -- no concretization witness!\n");
 
                 AbstractState& abs_src_witness = find_abs(src);
+
+                DEBUG_PRINT("Finding a node that corresponds to %s\n", abs_src_witness._debug_name.data());
+
                 std::unordered_set<UnwindingTree*> to_close_nodes = ind_candidate.nodes;
                 const auto& it = std::find_if(to_close_nodes.begin(), to_close_nodes.end(),
                         [this, &abs_src_witness](UnwindingTree* n) {
                     AbstractState& current = find_abs(*n);
                  //   DEBUG_PRINT("%s vs %s\n", current._debug_name.c_str(), abs_src_witness._debug_name.c_str());
                     return find_abs(*n) == abs_src_witness; } );
-                if (it == to_close_nodes.end()) throw OmgMcException("ERROR -- BUG IN INDUCTIVENESS!");
-
+                if (it == to_close_nodes.end()) {
+#ifdef DEBUG
+                    DEBUG_PRINT("Found bug in inductiveness! to_close_nodes:\n");
+                    for (UnwindingTree* n : to_close_nodes)
+                    {
+                        DEBUG_PRINT("\t %s : %s\n", n->to_string().data(), find_abs(*n)._debug_name.data());
+                    }
+#endif
+                    throw OmgMcException("ERROR -- BUG IN INDUCTIVENESS!");
+                }
                 UnwindingTree* to_close_node = *it;
+
+                assert(find_abs(*to_close_node) == abs_src_witness);
+                DEBUG_PRINT("Found %s!\n", to_close_node->to_string().data());
 
                 refine_no_successor(*to_close_node, abs_src_witness, abs_dst);
             }
@@ -500,19 +517,29 @@ CandidateSet OmgModelChecker::compute_candidate_set_av(Goal &goal)
 {
     CandidateSet cands;
     UnwindingTree& root = goal.get_node();
-    auto inserter = [&cands] (UnwindingTree& node)
+    auto inserter = [this, &cands] (UnwindingTree& node)
     {
-        auto abs = node.get_abs();
-        assert(abs);
-
-        AbstractState* p_abs = &(abs->get());
-        cands[p_abs].emplace(&node);
+        assert(node.get_abs()); // Check that a classification exists, even if not up to date
+        AbstractState& abs = find_abs(node);
+        cands[&abs].emplace(&node);
     };
 
     root.map_subtree(inserter, [&goal](const UnwindingTree &node) {
         return node.is_developed(goal);
     });
 
+#ifdef DEBUG
+    for (const auto& it : cands)
+    {
+        assert(it.first->is_final_classification());
+        for (const auto& it2 : it.second)
+        {
+            assert(it2->get_abs());
+            assert(it2->get_abs()->get().is_final_classification());
+            assert(it2->get_abs()->get() == *it.first);
+        }
+    }
+#endif
     if (OmgConfig::get<bool>("Brother Unification"))
         return brother_unification(cands, *(goal.get_spec().get_operands()[0]));
     else return cands;
@@ -533,6 +560,7 @@ void unify_same_level(CandidateSet& src, const CtlFormula& agree_upon, Candidate
     {
         if (it.second.second.size() == 2)
         {
+//            assert(it.first->get_abs() && it.first->get_abs()->is_final_classification());
             AbstractState* new_abs = it.first->get_abs();
 
             std::unordered_set<UnwindingTree*> new_set;
@@ -736,7 +764,7 @@ void OmgModelChecker::label_subtree(Goal &goal, bool positivity) {
 
     auto labeler =
                  [positivity, &spec](UnwindingTree& n) {
-                     assert(n.get_abs());
+                     assert(n.get_abs() && n.get_abs()->get().is_final_classification());
                      n.get_abs()->get().add_label(positivity, spec);
                  };
     auto activation_condition = [&goal](const UnwindingTree& m) { return m.is_developed(goal); };

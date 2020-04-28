@@ -161,7 +161,6 @@ void unit_tests_av()
     TEST("../resources/af_ag.aig", "AG (~state<1>) ", false);
     TEST("../resources/af_ag.aig", "AG (!(state<0> & state<1>))", true);
     TEST("../resources/af_ag.aig", "AG (state<0> | state<1>)", false);
-
     TEST("../resources/gray.aig", "AG ((~p) & (~q) & (~r))", false);
     TEST("../resources/gray.aig", "AG (~p)", false);
     TEST("../resources/gray.aig", "AG (~q)", false);
@@ -230,16 +229,20 @@ void run_models(const std::string& file_path)
 }
 int main()
 {
-//    test_model("../resources/gatedClock");
-//    run_models("../models_to_run.omg");
-     unit_tests();
-    TEST("../resources/rrobin.aig", "~E (~req0 | ~req1 | ack0 | ack1 | EX(~ack0)) U (req0 & req1 & ~ack0 & ~ack1 & EX(~ack0))", true);
+//    test_model("../resources/debug");
+ //   run_models("../models_to_run.omg");
 
+    TEST("../resources/debug.aig", "AF AG ~a", true);
+
+   // unit_tests();
 
 
 
 }
 
+
+
 /*
- * Ended with trimming other than closure -- not cool
+ * Bad examples:
+ *  rrobin - we develop all reachable states, as a non-reachable state requires a lot of refining to exclude. TOO MANY APs matter
  */

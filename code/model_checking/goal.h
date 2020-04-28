@@ -17,6 +17,7 @@ struct Goal
     UnwindingTree &get_node();
     const CtlFormula &get_spec() const;
     const std::map<std::string, bool> &get_properties() const;
+    std::string to_string() const;
 private:
     UnwindingTree& _node;
     const CtlFormula& _spec;
