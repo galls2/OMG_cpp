@@ -104,6 +104,7 @@ void UnwindingTree::map_upwards(const std::function<void(UnwindingTree &)> &mapp
 void UnwindingTree::add_label(bool positivity, const CtlFormula &spec) {
 #ifdef DEBUG
     assert(_astate);
+    assert(_astate->get().is_final_classification());
 #endif
     _astate->get().add_label(positivity, spec);
 }
@@ -135,14 +136,14 @@ bool UnwindingTree::is_concrete_lasso(const UnwindingTree &last_node) const {
 std::pair<CandidateSet, UnwindingTree*> UnwindingTree::find_abstract_lasso(const UnwindingTree &last_node) {
     CandidateSet to_return;
 
-    assert(get_abs());
+    assert(get_abs() && get_abs()->get().is_final_classification());
     AbstractState& abs_to_find = *get_abs();
 
     UnwindingTree* lasso_base = nullptr;
     bool is_lasso = false;
 
     auto mapper = [&abs_to_find, &is_lasso, &to_return, &lasso_base, this](UnwindingTree& n) {
-        assert(n.get_abs());
+        assert(n.get_abs() && n.get_abs()->get().is_final_classification());
         AbstractState &current_abs = *n.get_abs();
         if (current_abs == abs_to_find && this != &n) { is_lasso = true; lasso_base = &n; }
         to_return[&current_abs].emplace(&n);

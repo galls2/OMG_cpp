@@ -753,7 +753,10 @@ void OmgModelChecker::handle_proving_trace(Goal &goal, UnwindingTree &node, bool
     const CtlFormula &spec = goal.get_spec();
     strengthen_trace(goal.get_node(), node);
     node.map_upwards(
-            [&spec, positivity](UnwindingTree &n) { n.add_label(positivity, spec); },
+            [this, &spec, positivity](UnwindingTree &n) {
+                AbstractState& astate = find_abs(n);
+                astate.add_label(positivity, spec);
+                },
             [&goal](const UnwindingTree &m) { return &m ==  &goal.get_node(); }
     );
 }
@@ -763,9 +766,9 @@ void OmgModelChecker::label_subtree(Goal &goal, bool positivity) {
     const CtlFormula& spec = goal.get_spec();
 
     auto labeler =
-                 [positivity, &spec](UnwindingTree& n) {
-                     assert(n.get_abs() && n.get_abs()->get().is_final_classification());
-                     n.get_abs()->get().add_label(positivity, spec);
+                 [this, positivity, &spec](UnwindingTree& n) {
+                    AbstractState& astate = find_abs(n);
+                    astate.add_label(positivity, spec);
                  };
     auto activation_condition = [&goal](const UnwindingTree& m) { return m.is_developed(goal); };
 

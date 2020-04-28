@@ -205,6 +205,8 @@ void unit_tests_ev()
     TEST("../resources/af_ag.aig", "EF EG ((~state<0>) & state<1>)", true);
     TEST("../resources/af_ag.aig", "AF AG p", false);
 
+    TEST("../resources/debug.aig", "AF AG ~a", true);
+    TEST("../resources/debug.aig", "AF AG a", false);
 }
 
 
@@ -232,9 +234,11 @@ int main()
 //    test_model("../resources/debug");
  //   run_models("../models_to_run.omg");
 
-    TEST("../resources/debug.aig", "AF AG ~a", true);
 
-   // unit_tests();
+    unit_tests();
+
+
+
 
 
 
