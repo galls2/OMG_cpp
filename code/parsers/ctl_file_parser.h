@@ -7,6 +7,10 @@
 #include <vector>
 #include <temporal/ctl_formula.h>
 #include <utility>
+#include <utils/omg_exception.h>
+
+DECLARE_OMG_EXCEPTION(CtlFileParserException)
+
 
 struct FormulaChunk {
     explicit FormulaChunk(bool expected_result=false) : _expected_result(expected_result) {}

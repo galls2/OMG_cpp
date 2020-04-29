@@ -231,11 +231,11 @@ void run_models(const std::string& file_path)
 }
 int main()
 {
-//    test_model("../resources/debug");
- //   run_models("../models_to_run.omg");
+    test_model("../resources/rrff");
+    //run_models("../models_to_run.omg");
+  //  TEST("../resources/rrff.aig", "~ack0 & ~ack1", true);
 
-
-    unit_tests();
+//    unit_tests();
 
 
 
@@ -243,7 +243,7 @@ int main()
 
 
 }
-
+// Failed: rrff -first, but stupid
 
 
 /*

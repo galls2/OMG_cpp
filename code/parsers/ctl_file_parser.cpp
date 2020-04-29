@@ -46,13 +46,23 @@ bool CtlFileParser::parse_ctl_file(const std::string &file_path, std::vector<For
 
 FormulaChunk CtlFileParser::parse_raw_formula_chunk(const CtlFileParser::RawFormulaChunk &raw_formula_chunk) const
 {
-    bool expected_result = raw_formula_chunk[0].find(std::string("PASS")) != std::string::npos;
+    auto res_it = std::find_if(raw_formula_chunk.begin(), raw_formula_chunk.end(), [] (const std::string& line)
+    {
+        return line.find(std::string("PASS")) != std::string::npos || line.find(std::string("FAIL")) != std::string::npos;
+    });
+    if (res_it == raw_formula_chunk.end())
+    {
+        throw CtlFileParserException("No PASS/FAIL for CTL chunk!");
+    }
+
+    bool expected_result = res_it->find(std::string("PASS")) != std::string::npos;
+    if (!expected_result) assert(res_it->find(std::string("FAIL")) != std::string::npos);
     FormulaChunk formula_chunk(expected_result);
 
     Lexer lexer;
     LR1CtlParser parser(CtlParserData::grammar_ctl, ActionTable(CtlParserData::action_table_ctl_parser), GotoTable(CtlParserData::goto_table_ctl_parser));
 
-    bool is_multiple_properties = std::regex_search(raw_formula_chunk[0], std::regex("\\(.*-.*\\)"));
+    bool is_multiple_properties = std::regex_search(*res_it, std::regex("\\(.*-.*\\)"));
 
     size_t first_non_comment_line = 0;
     while (raw_formula_chunk[first_non_comment_line][0] == '#') ++first_non_comment_line;
