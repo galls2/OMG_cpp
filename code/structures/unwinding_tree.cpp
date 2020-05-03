@@ -161,8 +161,10 @@ std::pair<CandidateSet, UnwindingTree*> UnwindingTree::find_abstract_lasso(const
     else return {to_return, lasso_base};
 }
 
+#ifdef DEBUG
 std::string UnwindingTree::to_string() const {
     return _cstate.to_bitvec_str() + std::string(", depth: ")+std::to_string(_depth);
 }
+#endif
 
 

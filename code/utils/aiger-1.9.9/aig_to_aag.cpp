@@ -70,51 +70,6 @@ aigtoaig_free (memory * m, void *ptr, size_t bytes)
     free (ptr);
 }
 
-static int
-aigtoaig_put (char ch, stream * stream)
-{
-    int res;
-
-    res = putc ((unsigned char) ch, stream->file);
-    if (res != EOF)
-        stream->bytes++;
-
-    return res;
-}
-
-static int
-aigtoaig_get (stream * stream)
-{
-    int res;
-
-    res = getc (stream->file);
-    if (res != EOF)
-        stream->bytes++;
-
-    return res;
-}
-
-static double
-size_of_file (const char *file_name)
-{
-    struct stat buf{};
-    buf.st_size = 0;
-    stat (file_name, &buf);
-    return buf.st_size;
-}
-
-static void
-die (const char *fmt, ...)
-{
-    va_list ap;
-    fputs ("*** [aigtoaig] ", stderr);
-    va_start (ap, fmt);
-    vfprintf (stderr, fmt, ap);
-    va_end (ap);
-    fputc ('\n', stderr);
-    exit (1);
-}
-
 struct StringWriter
 {
     StringWriter() = default;
@@ -143,7 +98,6 @@ int string_writer_put(char to_write, StringWriter* write_to)
 std::vector<std::string> aig_to_aag_lines(const std::string& aig_path) {
 
     const char *src = aig_path.data(), *error;
-    aiger_mode mode;
     memory memory;
     aiger *aiger;
 
@@ -160,8 +114,6 @@ std::vector<std::string> aig_to_aag_lines(const std::string& aig_path) {
 
 
     StringWriter string_writer;
-
-    mode = aiger_ascii_mode;
 
     if (!aiger_write_generic(aiger, aiger_ascii_mode,
                              &string_writer, (aiger_put) string_writer_put))

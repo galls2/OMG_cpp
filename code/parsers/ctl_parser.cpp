@@ -51,6 +51,7 @@ std::unique_ptr<CtlFormula> LR1CtlParser::parse_lr(const std::vector<Token> &for
             return final_formula;
         }
     }
+    assert(false);
 }
 void LR1CtlParser::get_operands_from_formula_stack(size_t num_operands, std::vector<std::unique_ptr<CtlFormula>>& to_fill)
 {

@@ -21,12 +21,12 @@
         } \
     while(0)
 
-#define PRINT_IF_BUG(actual_res, expected_res) \
+#define PRINT_IF_BUG(actual_res, expected_res, aig, spec) \
     do \
     { \
         bool passed = ((expected_res) == (actual_res)); \
         if (passed) std::cout << "PASS! :)" << std::endl; \
-        else std::cout << "\tFAIL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl; \
+        else std::cout << "\tFAIL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Failed while checking " << aig << " with " << spec << std::endl; \
     } \
     while(0)
 
@@ -45,6 +45,7 @@ void test_model(const std::string& file_path_no_extension) {
 
     OmgConfigBuilder builder;
     builder.set_config_src(ConfigurationSource::FILE).set_config_file_path("../run_config.omg").build();
+    DEBUG_PRINT("OMG Configuration:\n %s",OmgConfig::config_table_to_string().data());
 
     AigParser p(aig_path);
 
@@ -73,7 +74,7 @@ void test_model(const std::string& file_path_no_extension) {
                 DEBUG_PRINT("Testing ## %s ## against ## %s ##... ", it2->to_string().data(), aig_path.data());
 
                 bool res = omg.check_all_initial_states(*it2);
-                PRINT_IF_BUG(res, is_pass);
+                PRINT_IF_BUG(res, is_pass, aig_path, it2->to_string());
             }
         }
     } else {
@@ -86,7 +87,7 @@ void test_model(const std::string& file_path_no_extension) {
                 OmgModelChecker omg(*kripke);
 
                 bool res = omg.check_all_initial_states(*it);
-                PRINT_IF_BUG(res, is_pass);
+                PRINT_IF_BUG(res, is_pass, aig_path, it->to_string());
             }
         }
     }
@@ -231,20 +232,16 @@ void run_models(const std::string& file_path)
 }
 int main()
 {
-    test_model("../resources/rrff");
-    //run_models("../models_to_run.omg");
-  //  TEST("../resources/rrff.aig", "~ack0 & ~ack1", true);
-
+    run_models("../models_to_run.omg");
+//    test_model("../resources/spinner4");
 //    unit_tests();
-
+//    TEST("../resources/spinner4.aig", "AG((~inr<3> & ~inr<2> & ~inr<1> & inr<0>) -> ~E spl U (~inr<3> & ~inr<2> & inr<1> & inr<0>))", false);
 
 
 
 
 
 }
-// Failed: rrff -first, but stupid
-
 
 /*
  * Bad examples:

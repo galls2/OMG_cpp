@@ -13,8 +13,8 @@
 
 AbstractState::AbstractState(const KripkeStructure &kripke, CtlFormula::PropertySet pos_labels, CtlFormula::PropertySet neg_labels,
                              CtlFormula::PropertySet atomic_labels, PropFormula sym_rep)
-                             : _kripke(kripke), _pos_labels(std::move(pos_labels)), _neg_labels(std::move(neg_labels)),
-                             _atomic_labels(std::move(atomic_labels)), _sym_rep(std::move(sym_rep)), _abs_idx(VersionManager::next_version_number("Abs"))
+                             : _abs_idx(VersionManager::next_version_number("Abs")), _kripke(kripke), _pos_labels(std::move(pos_labels)), _neg_labels(std::move(neg_labels)),
+                             _atomic_labels(std::move(atomic_labels)), _sym_rep(std::move(sym_rep))
 {
 #ifdef DEBUG
     _debug_name = VersionManager::version_to_string(_abs_idx);
@@ -25,7 +25,7 @@ AbstractState::AbstractState(const KripkeStructure &kripke, CtlFormula::Property
 #endif
 }
 
-const size_t AbstractState::get_abs_idx() const
+size_t AbstractState::get_abs_idx() const
 {
     return _abs_idx;
 }
@@ -76,7 +76,7 @@ const PropFormula& AbstractState::get_formula() const
     return _sym_rep;
 }
 
-void AbstractState::set_cl_node(AbstractClassificationNode *const cl_node) {
+void AbstractState::set_cl_node(AbstractClassificationNode* cl_node) {
     _cl_node = cl_node;
 }
 

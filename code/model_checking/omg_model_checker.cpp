@@ -156,7 +156,7 @@ bool OmgModelChecker::handle_ar(Goal &goal)
             const std::vector<std::unique_ptr<UnwindingTree>> &successors = node_to_explore.unwind_further();
 
             for (const std::unique_ptr<UnwindingTree> &succ : successors) {
-                DEBUG_PRINT("SUCCESSOR: %s\n", succ->get_concrete_state().to_bitvec_str().data());
+      //          DEBUG_PRINT("SUCCESSOR: %s\n", succ->get_concrete_state().to_bitvec_str().data());
                 if (std::all_of(visited.begin(), visited.end(), [&succ](const ConcreteState *const &visitedee) {
                     return (*visitedee) != succ->get_concrete_state();
                 })) {
@@ -272,7 +272,7 @@ bool OmgModelChecker::handle_er(Goal &goal) {
             const std::vector<std::unique_ptr<UnwindingTree>> &successors = node_to_explore.unwind_further();
 
             for (const std::unique_ptr<UnwindingTree> &succ : successors) {
-                DEBUG_PRINT("SUCCESSOR: %s\n", succ->get_concrete_state().to_bitvec_str().data());
+      //          DEBUG_PRINT("SUCCESSOR: %s\n", succ->get_concrete_state().to_bitvec_str().data());
                 to_visit.emplace(succ.get());
             }
         }
@@ -295,7 +295,6 @@ bool OmgModelChecker::handle_er(Goal &goal) {
 void OmgModelChecker::strengthen_subtree(Goal& goal, const std::function<bool(const UnwindingTree&)>& stop_condition)
 {
     UnwindingTree& node = goal.get_node();
-    const CtlFormula& spec = goal.get_spec();
 
     auto strengthener =
             [this](UnwindingTree& n) {
@@ -374,7 +373,7 @@ bool OmgModelChecker::check_inductive_ev(Goal &goal, UnwindingTree &node_to_expl
                 std::unordered_set<UnwindingTree*> to_close_nodes = ind_candidate.nodes;
                 const auto& it = std::find_if(to_close_nodes.begin(), to_close_nodes.end(),
                                               [this, &abs_src_witness](UnwindingTree* n) {
-                                                  AbstractState& current = find_abs(*n);
+//                                                  AbstractState& current = find_abs(*n);
                                                   //   DEBUG_PRINT("%s vs %s\n", current._debug_name.c_str(), abs_src_witness._debug_name.c_str());
                                                   return find_abs(*n) == abs_src_witness; } );
                 if (it == to_close_nodes.end()) throw OmgMcException("ERROR -- BUG IN INDUCTIVENESS!");
@@ -485,7 +484,7 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
                 std::unordered_set<UnwindingTree*> to_close_nodes = ind_candidate.nodes;
                 const auto& it = std::find_if(to_close_nodes.begin(), to_close_nodes.end(),
                         [this, &abs_src_witness](UnwindingTree* n) {
-                    AbstractState& current = find_abs(*n);
+//                    AbstractState& current = find_abs(*n);
                  //   DEBUG_PRINT("%s vs %s\n", current._debug_name.c_str(), abs_src_witness._debug_name.c_str());
                     return find_abs(*n) == abs_src_witness; } );
                 if (it == to_close_nodes.end()) {
@@ -545,34 +544,47 @@ CandidateSet OmgModelChecker::compute_candidate_set_av(Goal &goal)
     else return cands;
 }
 
+bool is_successors_agree(const AbstractClassificationNode* cl_node, const CtlFormula& f)
+{
+    const AbstractState* astate1 = cl_node->get_successor(true).get_abs();
+    const AbstractState* astate2 = cl_node->get_successor(false).get_abs();
+
+    bool is_first_pos = astate1->is_pos_labeled(f);
+    bool is_second_pos = astate2->is_pos_labeled(f);
+    bool is_first_neg = astate1->is_neg_labeled(f);
+    bool is_second_neg = astate2->is_neg_labeled(f);
+    if ((is_first_neg && is_second_neg) || (is_first_pos && is_second_pos)) return true;
+    bool is_first_labeled = is_first_pos || is_first_neg;
+    bool is_second_labeled = is_second_neg || is_second_pos;
+    return (!is_first_labeled && !is_second_labeled);
+}
 void unify_same_level(CandidateSet& src, const CtlFormula& agree_upon, CandidateSet& unchanged, CandidateSet& next_level)
 {
-    std::map<const AbstractClassificationNode *, std::pair<AbstractState*, std::vector<std::unordered_set<UnwindingTree*>>>> parents_mapping;
+    std::map<const AbstractClassificationNode *, std::vector<std::pair<AbstractState*, std::unordered_set<UnwindingTree*>>>> parents_mapping;
 
     for (const std::pair<AbstractState* const, std::unordered_set<UnwindingTree*>>& it : src) {
         const AbstractClassificationNode* parent = it.first->get_cl_node()->get_parent();
         assert(parent != nullptr);
-        parents_mapping[parent].second.push_back(it.second);
-        parents_mapping[parent].first = it.first;
+        parents_mapping[parent].emplace_back(it.first, it.second);
     }
 
-    for (const std::pair<const AbstractClassificationNode* const, std::pair<AbstractState*, std::vector<std::unordered_set<UnwindingTree*>>>> &it : parents_mapping)
+    for (const std::pair<const AbstractClassificationNode* const, std::vector<std::pair<AbstractState*, std::unordered_set<UnwindingTree*>>>> &it : parents_mapping)
     {
-        if (it.second.second.size() == 2)
-        {
-//            assert(it.first->get_abs() && it.first->get_abs()->is_final_classification());
-            AbstractState* new_abs = it.first->get_abs();
+        if (it.second.size() == 2 && is_successors_agree(it.first, agree_upon)) {
+            assert(!it.first->get_abs()->get_cl_node()->is_leaf());
+            AbstractState *new_abs = it.first->get_abs();
 
-            std::unordered_set<UnwindingTree*> new_set;
-            for (const auto& p_cand : it.second.second) {
-                new_set.insert(p_cand.begin(), p_cand.end());
+            std::unordered_set<UnwindingTree *> new_set;
+            for (const auto &p_cand : it.second) {
+                new_set.insert(p_cand.second.begin(), p_cand.second.end());
             }
             next_level.emplace(new_abs, new_set);
+
         }
         else
         {
-            assert(it.second.second.size() == 1);
-            unchanged.emplace(it.second.first, it.second.second[0]);
+            assert(it.second.size() <= 2 && it.second.size() >= 1);
+            for (const auto &i : it.second) unchanged.emplace(i.first, i.second);
         }
     }
 }
@@ -814,7 +826,7 @@ void OmgModelChecker::update_classifier(RefinementResult& refine_result, Abstrac
     refine_result.astate_generalized->set_cl_node(&abs_src_witness.get_cl_node()->get_successor(true));
     refine_result.astate_remainder->set_cl_node(&abs_src_witness.get_cl_node()->get_successor(false));
 
-    DEBUG_PRINT("<<<TODO>>> NEED To IMPL CLASSIFICATION CACHE!\n");
+ //   DEBUG_PRINT("<<<TODO>>> NEED To IMPL CLASSIFICATION CACHE!\n");
 
 }
 

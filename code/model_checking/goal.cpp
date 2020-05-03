@@ -21,8 +21,10 @@ Goal::Goal(UnwindingTree &node, const CtlFormula &spec,
  : _node(node), _spec(spec), _properties(std::move(properties))
 {}
 
+#ifdef DEBUG
 std::string Goal::to_string() const {
         return std::string("Checking goal: node ") + _node.to_string() + ". Spec: " + _spec.to_string();
 }
+#endif
 
 

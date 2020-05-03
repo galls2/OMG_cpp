@@ -25,10 +25,10 @@ public:
     std::unique_ptr<KripkeStructure> to_kripke(const CtlFormula::PropertySet& aps);
 
 private:
-    AigParser& extract_metadata(const std::string& first_aag_line);
-    AigParser& extract_literals(const std::vector<std::string>& aag_lines);
+    void extract_metadata(const std::string& first_aag_line);
+    void extract_literals(const std::vector<std::string>& aag_lines);
     const AigParser& dfs(const std::vector<std::string> &lines, std::unordered_map<size_t, z3::expr>& formulas, size_t first_line, size_t target_lit) const;
-    AigParser& extract_ap_mapping(const std::vector<std::string>& vector);
+    void extract_ap_mapping(const std::vector<std::string>& vector);
     std::unordered_map<size_t, z3::expr> calc_literal_formulas(const std::vector<std::string>& aag_lines);
     void calculate_tr_formula(const std::unordered_map<size_t, z3::expr>& fresh_formulas);
     void extract_init(const std::vector<std::string> &file_lines);
@@ -52,6 +52,5 @@ private:
 
     void generate_state_formula(const std::unordered_map<size_t, z3::expr> &formulas, std::vector<z3::expr> &prev_out,
                                 const z3::expr_vector &orig_in, const z3::expr_vector &orig_ps,
-                                const z3::expr_vector &orig_out, std::vector<z3::expr> &prev_in,
-                                std::vector<z3::expr> &prev_latch);
+                                std::vector<z3::expr> &prev_in, std::vector<z3::expr> &prev_latch);
 };

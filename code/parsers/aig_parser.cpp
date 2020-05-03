@@ -36,7 +36,7 @@ AigParser::AigParser(const std::string &aig_path)
     extract_init(file_lines);
 }
 
-AigParser &AigParser::extract_literals(const std::vector<std::string> &aag_lines) {
+void AigParser::extract_literals(const std::vector<std::string> &aag_lines) {
     for (size_t i = 1; i < 1 + _metadata[I]; ++i) {
         _in_literals.push_back(std::stoul(aag_lines[i]));
     }
@@ -53,7 +53,7 @@ AigParser &AigParser::extract_literals(const std::vector<std::string> &aag_lines
 }
 
 
-AigParser &AigParser::extract_metadata(const std::string &first_aag_line)
+void AigParser::extract_metadata(const std::string &first_aag_line)
 {
     std::array<std::string, 6> components = split_to<6>(first_aag_line, ' ');
     assert(components[0] == std::string("aag"));
@@ -64,8 +64,6 @@ AigParser &AigParser::extract_metadata(const std::string &first_aag_line)
     _metadata[A] = std::stoul(components[5]);
 
     _first_and_literal = (_metadata.at(AigMetadata::I) + _metadata.at(L) + 1) * 2;
-
-    return *this;
 }
 
 
@@ -73,7 +71,7 @@ const std::unordered_map<AigMetadata, size_t, std::hash<size_t>> &AigParser::get
     return _metadata;
 }
 
-AigParser &AigParser::extract_ap_mapping(const std::vector<std::string> &aag_lines) {
+void AigParser::extract_ap_mapping(const std::vector<std::string> &aag_lines) {
 
     const std::regex ap_line_regex("^[ilo][0-9].*");
     const size_t start_search_idx = _metadata[A]+_metadata[L]+_metadata[I] + _metadata[O];
@@ -90,7 +88,6 @@ AigParser &AigParser::extract_ap_mapping(const std::vector<std::string> &aag_lin
         }
     }
     assert(_first_ap_index > 0);
-    return *this;
 }
 
 
@@ -180,7 +177,7 @@ void AigParser::calculate_tr_formula(const std::unordered_map<size_t, z3::expr> 
     for (size_t ns_lit : _next_state_literals) orig_ns.push_back(_ctx.bool_const(std::to_string(ns_lit).data()));
     for (size_t o_lit : _out_literals) orig_out.push_back(_ctx.bool_const(std::to_string(o_lit).data()));
 
-    generate_state_formula(formulas, prev_out, orig_in, orig_ps, orig_out, prev_in, prev_latch);
+    generate_state_formula(formulas, prev_out, orig_in, orig_ps, prev_in, prev_latch);
 
     z3::expr_vector ltr_parts(_ctx);
     for (size_t i = 0; i < _next_state_literals.size(); ++i) {
@@ -219,7 +216,7 @@ void AigParser::calculate_tr_formula(const std::unordered_map<size_t, z3::expr> 
 void
 AigParser::generate_state_formula(const std::unordered_map<size_t, z3::expr> &formulas, std::vector<z3::expr> &prev_out,
                               const z3::expr_vector &orig_in, const z3::expr_vector &orig_ps,
-                              const z3::expr_vector &orig_out, std::vector<z3::expr> &prev_in,
+                               std::vector<z3::expr> &prev_in,
                               std::vector<z3::expr> &prev_latch) {
     z3::expr_vector state_formula_parts(_ctx);
     for (size_t i = 0; i< prev_out.size(); ++i)

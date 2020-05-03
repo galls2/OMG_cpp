@@ -37,6 +37,8 @@ public:
     AbstractState* get_abs() const;
     AbstractState& classify(const ConcreteState& cstate) const;
     AbstractClassificationNode& get_successor(QueryResult query_result);
+    const AbstractClassificationNode& get_successor(QueryResult query_result) const;
+
     friend class AbstractionClassifier;
 #ifdef DEBUG
     void set_split_string(const std::string& str);

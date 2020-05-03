@@ -15,14 +15,14 @@ public:
     bool is_neg_labeled(const CtlFormula& spec) const;
     void add_label(bool positivity, const CtlFormula& spec);
     bool is_final_classification() const;
-    void set_cl_node(AbstractClassificationNode* const cl_node);
+    void set_cl_node(AbstractClassificationNode* cl_node);
     AbstractClassificationNode* get_cl_node() const;
     const KripkeStructure& get_kripke() const;
     const PropFormula& get_formula() const;
     const CtlFormula::PropertySet& get_pos_labels() const;
     const CtlFormula::PropertySet& get_neg_labels() const;
 
-    const size_t get_abs_idx() const;
+    size_t get_abs_idx() const;
 #ifdef DEBUG
     std::string _debug_name;
 #endif

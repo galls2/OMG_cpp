@@ -123,3 +123,9 @@ AbstractClassificationNode& AbstractClassificationNode::get_successor(QueryResul
     assert(_successors.find(query_result) != _successors.end());
     return *_successors[query_result];
 }
+
+const AbstractClassificationNode& AbstractClassificationNode::get_successor(QueryResult query_result) const
+{
+    assert(_successors.find(query_result) != _successors.end());
+    return *_successors.at(query_result);
+}

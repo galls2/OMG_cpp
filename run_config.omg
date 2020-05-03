@@ -1,4 +1,4 @@
-Properties per specification:True
+Properties per specification:False
 Brother Unification:True
 Trivial Split Elimination:True
 Sat Solver:z3
