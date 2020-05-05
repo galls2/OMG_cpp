@@ -16,25 +16,11 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="">
+    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="Refactor">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/abstraction/abstract_state.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstract_state.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/abstraction/abstraction_classifier.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstraction_classifier.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/abstraction/abstraction_classifier.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstraction_classifier.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/formulas/sat_solver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/formulas/sat_solver.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/model_checking/goal.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/goal.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/model_checking/goal.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/goal.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/parsers/aig_parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/aig_parser.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/parsers/aig_parser.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/aig_parser.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/parsers/ctl_parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/ctl_parser.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/structures/concrete_state.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/concrete_state.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/structures/unwinding_tree.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/unwinding_tree.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/structures/unwinding_tree.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/unwinding_tree.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/utils/aiger-1.9.9/aig_to_aag.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/aiger-1.9.9/aig_to_aag.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_config.omg" beforeDir="false" afterPath="$PROJECT_DIR$/run_config.omg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prep_omg.sh" beforeDir="false" afterPath="$PROJECT_DIR$/prep_omg.sh" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <ignored path="$PROJECT_DIR$/cmake-build-release/" />
@@ -44,56 +30,14 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Release" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/structures/unwinding_tree.cpp">
+        <entry file="file://$PROJECT_DIR$/prep_omg.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="338">
-              <caret line="164" column="17" selection-start-line="164" selection-start-column="17" selection-end-line="164" selection-end-column="17" />
-              <folding>
-                <element signature="e#41#59#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/structures/unwinding_tree.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="50" column="6" selection-start-line="50" selection-start-column="6" selection-end-line="50" selection-end-column="6" />
-              <folding>
-                <element signature="e#54#70#0" expanded="true" />
-                <element signature="e#1909#1939#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/structures/concrete_state.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="129">
-              <caret line="71" column="6" selection-start-line="71" selection-start-column="6" selection-end-line="71" selection-end-column="6" />
-              <folding>
-                <element signature="e#328#1042#0" expanded="true" />
-                <element signature="e#6630#6808#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/model_checking/goal.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="392">
-              <caret line="27" column="6" selection-start-line="27" selection-start-column="6" selection-end-line="27" selection-end-column="6" />
-              <folding>
-                <element signature="e#40#57#0" expanded="true" />
-                <element signature="e#510#654#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="144">
+              <caret line="8" column="32" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
             </state>
           </provider>
         </entry>
@@ -113,19 +57,49 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/abstraction/abstract_state.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="14" column="54" lean-forward="true" selection-start-line="14" selection-start-column="54" selection-end-line="14" selection-end-column="54" />
+            <state relative-caret-position="46">
+              <caret line="17" column="17" selection-start-line="17" selection-start-column="17" selection-end-line="17" selection-end-column="17" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/structures/concrete_state.h">
+        <entry file="file://$PROJECT_DIR$/code/abstraction/abstract_state.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="305">
-              <caret line="28" column="11" selection-start-line="28" selection-end-line="29" />
+            <state relative-caret-position="176">
+              <caret line="78" column="58" selection-start-line="78" selection-start-column="58" selection-end-line="78" selection-end-column="58" />
               <folding>
-                <element signature="e#725#800#0" expanded="true" />
+                <element signature="e#42#60#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="468">
+              <caret line="26" column="41" selection-start-line="26" selection-start-column="41" selection-end-line="26" selection-end-column="41" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/code/formulas/sat_solver.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="176">
+              <caret line="76" column="40" selection-start-line="76" selection-start-column="40" selection-end-line="76" selection-end-column="40" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/code/main.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="176">
+              <caret line="28" column="167" selection-start-line="28" selection-start-column="167" selection-end-line="28" selection-end-column="167" />
+              <folding>
+                <element signature="e#37#55#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -159,7 +133,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/abstraction/abstraction_classifier.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="374">
@@ -215,9 +189,9 @@
       <find>generate_state_formula</find>
       <find>SUCCESSOR</find>
       <find>Checking initi</find>
-      <find>PASS</find>
       <find>FAIL</find>
       <find>Checking</find>
+      <find>PASS</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -272,7 +246,6 @@
         <option value="$PROJECT_DIR$/code/structures/kripke_structure.h" />
         <option value="$PROJECT_DIR$/code/model_checking/omg_model_checker.h" />
         <option value="$PROJECT_DIR$/installation/omg_installer.sh" />
-        <option value="$PROJECT_DIR$/prep_omg.sh" />
         <option value="$PROJECT_DIR$/code/formulas/sat_solver.h" />
         <option value="$PROJECT_DIR$/resources/rrobin.aag" />
         <option value="$PROJECT_DIR$/code/utils/omg_utils.h" />
@@ -280,13 +253,9 @@
         <option value="$PROJECT_DIR$/code/parsers/ctl_file_parser.h" />
         <option value="$PROJECT_DIR$/code/parsers/ctl_file_parser.cpp" />
         <option value="$PROJECT_DIR$/code/parsers/ctl_parser.cpp" />
-        <option value="$PROJECT_DIR$/code/abstraction/abstract_state.cpp" />
         <option value="$PROJECT_DIR$/code/utils/aiger-1.9.9/aig_to_aag.cpp" />
         <option value="$PROJECT_DIR$/code/parsers/aig_parser.h" />
         <option value="$PROJECT_DIR$/code/parsers/aig_parser.cpp" />
-        <option value="$PROJECT_DIR$/code/formulas/sat_solver.cpp" />
-        <option value="$PROJECT_DIR$/code/abstraction/abstract_state.h" />
-        <option value="$PROJECT_DIR$/code/main.cpp" />
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/code/structures/unwinding_tree.cpp" />
         <option value="$PROJECT_DIR$/code/structures/unwinding_tree.h" />
@@ -296,15 +265,19 @@
         <option value="$PROJECT_DIR$/code/abstraction/abstraction_classifier.h" />
         <option value="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" />
         <option value="$PROJECT_DIR$/code/abstraction/abstraction_classifier.cpp" />
+        <option value="$PROJECT_DIR$/code/abstraction/abstract_state.h" />
+        <option value="$PROJECT_DIR$/code/abstraction/abstract_state.cpp" />
+        <option value="$PROJECT_DIR$/code/formulas/sat_solver.cpp" />
+        <option value="$PROJECT_DIR$/prep_omg.sh" />
+        <option value="$PROJECT_DIR$/code/main.cpp" />
       </list>
     </option>
   </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="5" />
-    <option name="y" value="29" />
-    <option name="width" value="1910" />
-    <option name="height" value="994" />
+    <option name="y" value="24" />
+    <option name="width" value="1920" />
+    <option name="height" value="1004" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -415,14 +388,7 @@
       <workItem from="1576322596048" duration="1851000" />
       <workItem from="1580376891038" duration="55751000" />
       <workItem from="1584796046953" duration="738000" />
-      <workItem from="1587326308621" duration="72183000" />
-    </task>
-    <task id="LOCAL-00072" summary="Impling of EX-">
-      <created>1585821715231</created>
-      <option name="number" value="00072" />
-      <option name="presentableId" value="LOCAL-00072" />
-      <option name="project" value="LOCAL" />
-      <updated>1585821715231</updated>
+      <workItem from="1587326308621" duration="74379000" />
     </task>
     <task id="LOCAL-00073" summary="Changed OMG_CONFIG to be a global static thing instead of an object that's passed">
       <created>1585841245693</created>
@@ -760,11 +726,18 @@
       <option name="project" value="LOCAL" />
       <updated>1588168272650</updated>
     </task>
-    <option name="localTasksCounter" value="121" />
+    <task id="LOCAL-00121" summary="Grand refactor,&#10;bugfix in brother unif">
+      <created>1588539630847</created>
+      <option name="number" value="00121" />
+      <option name="presentableId" value="LOCAL-00121" />
+      <option name="project" value="LOCAL" />
+      <updated>1588539630847</updated>
+    </task>
+    <option name="localTasksCounter" value="122" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="751423000" />
+    <option name="totallyTimeSpent" value="753619000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -776,22 +749,22 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="5" y="29" width="1910" height="994" extended-state="0" />
+    <frame x="0" y="24" width="1920" height="1004" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49861112" visible="true" weight="0.15625" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49861112" visible="true" weight="0.15541264" />
       <window_info id="Structure" order="1" sideWeight="0.5013889" side_tool="true" weight="0.1511254" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32505643" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4989282" weight="0.44748858" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4989282" weight="0.44695258" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49839228" weight="0.48307" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Database Changes" order="6" />
       <window_info anchor="bottom" id="Inspection Results" order="7" sideWeight="0.4994641" weight="0.3295711" />
       <window_info anchor="bottom" id="TODO" order="8" weight="0.32731378" />
-      <window_info active="true" anchor="bottom" id="Messages" order="9" sideWeight="0.49785638" visible="true" weight="0.3413242" />
+      <window_info active="true" anchor="bottom" id="Messages" order="9" sideWeight="0.49785638" visible="true" weight="0.33747178" />
       <window_info anchor="bottom" id="Terminal" order="10" weight="0.32762557" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5026795" side_tool="true" weight="0.2020316" />
       <window_info anchor="bottom" id="Version Control" order="12" weight="0.3295711" />
@@ -829,8 +802,6 @@
     <option name="version" value="1" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Implemented more EV, added consts" />
-    <MESSAGE value="Refactor" />
     <MESSAGE value="-Refactor&#10;-Added EprSolver interface&amp;class&#10;-Implemented EV's inductiveness checking" />
     <MESSAGE value="Finished ER impl" />
     <MESSAGE value="Bugfixes:&#10;-ER closure formula -- added state formula &amp; quantified in0&#10;-CtlParser bug in EG parsing&#10;&#10;*Big Refactor" />
@@ -854,7 +825,9 @@
     <MESSAGE value="Bugfixes and added prints and asserts" />
     <MESSAGE value="Bugfix -- a non-final astate was used. &#10;Added assert to prevent this from ha" />
     <MESSAGE value="Bugfix in CTL file parser" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bugfix in CTL file parser" />
+    <MESSAGE value="Grand refactor,&#10;bugfix in brother unif" />
+    <MESSAGE value="Refactor" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -880,14 +853,14 @@
           <option name="timeStamp" value="71" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/code/abstraction/abstract_state.h</url>
-          <line>20</line>
-          <option name="timeStamp" value="133" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/code/parsers/ctl_file_parser.cpp</url>
           <line>62</line>
           <option name="timeStamp" value="271" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/code/main.cpp</url>
+          <line>28</line>
+          <option name="timeStamp" value="273" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -1177,13 +1150,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/prep_omg.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="13" selection-start-line="13" selection-end-line="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/rrff.aag">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -1227,23 +1193,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/formulas/sat_solver.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="62" column="42" selection-start-line="62" selection-start-column="42" selection-end-line="62" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/abstraction/abstract_state.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="16" column="27" selection-start-line="16" selection-start-column="27" selection-end-line="16" selection-end-column="27" />
-          <folding>
-            <element signature="e#42#60#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/code/parsers/aig_parser.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="629">
@@ -1271,16 +1220,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/main.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="236" column="17" selection-start-line="236" selection-start-column="17" selection-end-line="236" selection-end-column="17" />
-          <folding>
-            <element signature="e#37#55#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/code/utils/omg_utils.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="152">
@@ -1289,13 +1228,6 @@
             <element signature="e#13#27#0" expanded="true" />
             <element signature="e#361#418#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="26" column="41" selection-start-line="26" selection-start-column="41" selection-end-line="26" selection-end-column="41" />
         </state>
       </provider>
     </entry>
@@ -1362,13 +1294,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/abstraction/abstract_state.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="14" column="54" lean-forward="true" selection-start-line="14" selection-start-column="54" selection-end-line="14" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/code/abstraction/abstraction_classifier.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="470">
@@ -1406,6 +1331,54 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
           <caret line="129" column="40" selection-start-line="129" selection-start-column="40" selection-end-line="129" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/abstraction/abstract_state.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="46">
+          <caret line="17" column="17" selection-start-line="17" selection-start-column="17" selection-end-line="17" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/abstraction/abstract_state.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="78" column="58" selection-start-line="78" selection-start-column="58" selection-end-line="78" selection-end-column="58" />
+          <folding>
+            <element signature="e#42#60#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="468">
+          <caret line="26" column="41" selection-start-line="26" selection-start-column="41" selection-end-line="26" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/prep_omg.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="8" column="32" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="28" column="167" selection-start-line="28" selection-start-column="167" selection-end-line="28" selection-end-column="167" />
+          <folding>
+            <element signature="e#37#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/formulas/sat_solver.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="76" column="40" selection-start-line="76" selection-start-column="40" selection-end-line="76" selection-end-column="40" />
         </state>
       </provider>
     </entry>

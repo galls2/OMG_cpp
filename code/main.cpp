@@ -21,12 +21,12 @@
         } \
     while(0)
 
-#define PRINT_IF_BUG(actual_res, expected_res, aig, spec) \
+#define PRINT_IF_BUG(actual_res, expected_res, aig, spec, spec_num) \
     do \
     { \
         bool passed = ((expected_res) == (actual_res)); \
-        if (passed) std::cout << "PASS! :)" << std::endl; \
-        else std::cout << "\tFAIL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Failed while checking " << aig << " with " << spec << std::endl; \
+        if (passed) std::cout << "Spec #" << spec_num << ": PASS! :)" << std::endl; \
+        else std::cout << "Spec #" << spec_num << ":\tFAIL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Failed while checking " << aig << " with " << spec << std::endl; \
     } \
     while(0)
 
@@ -39,7 +39,7 @@ std::vector<FormulaChunk> get_formula_chunks(const std::string& ctl_file_path)
 }
 
 void test_model(const std::string& file_path_no_extension) {
-    DEBUG_PRINT("Testing model: %s\n", file_path_no_extension.data());
+    std::cout << "Testing model: " << file_path_no_extension << std::endl;
     const std::string &aig_path = file_path_no_extension + ".aig";
     const std::string &ctl_file_path = file_path_no_extension + ".ctl";
 
@@ -51,6 +51,7 @@ void test_model(const std::string& file_path_no_extension) {
 
     std::vector<FormulaChunk> formula_chunks = get_formula_chunks(ctl_file_path);
 
+    uint16_t prop_count = 0;
     if (!OmgConfig::get<bool>("Properties per specification")) {
         CtlFormula::PropertySet APs;
         DEBUG_PRINT("Chunk Structure:\n");
@@ -74,7 +75,8 @@ void test_model(const std::string& file_path_no_extension) {
                 DEBUG_PRINT("Testing ## %s ## against ## %s ##... ", it2->to_string().data(), aig_path.data());
 
                 bool res = omg.check_all_initial_states(*it2);
-                PRINT_IF_BUG(res, is_pass, aig_path, it2->to_string());
+                PRINT_IF_BUG(res, is_pass, aig_path, it2->to_string(), prop_count);
+                ++prop_count;
             }
         }
     } else {
@@ -87,7 +89,8 @@ void test_model(const std::string& file_path_no_extension) {
                 OmgModelChecker omg(*kripke);
 
                 bool res = omg.check_all_initial_states(*it);
-                PRINT_IF_BUG(res, is_pass, aig_path, it->to_string());
+                PRINT_IF_BUG(res, is_pass, aig_path, it->to_string(), prop_count);
+                ++prop_count;
             }
         }
     }
@@ -230,6 +233,7 @@ void run_models(const std::string& file_path)
         test_model(model_name);
     }
 }
+
 int main()
 {
     run_models("../models_to_run.omg");

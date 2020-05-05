@@ -60,10 +60,10 @@ void Z3SatSolver::add_assignments(std::vector<SatSolverResult> &assignemnts, Sat
         std::set<size_t> undef_idxs;
         for (size_t i = 0; i < vars.size(); ++i) if (result.get_value(vars[i]) == SatResult::UNDEF) undef_idxs.insert(i);
 #ifdef DEBUG
-        size_t iter_max = (1 << undef_idxs.size());
-        assert(iter_max > 0);
+        ssize_t iter_max = (1 << undef_idxs.size());
+        assert(iter_max >= 0);
 #endif
-        for (size_t i = 0; i < (1 << undef_idxs.size()); ++i)
+        for (size_t i = 0; i < ((size_t)iter_max); ++i)
         {
             size_t undef_idx = 0;
             std::map<z3::expr, SatResult, Z3ExprComp> vals;
