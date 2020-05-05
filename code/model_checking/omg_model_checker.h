@@ -64,6 +64,7 @@ private:
     bool handle_and(Goal& goal);
     bool handle_or(Goal& goal);
     bool handle_not(Goal& goal);
+    bool handle_equiv(Goal& goal);
     bool handle_xor(Goal& goal);
     bool handle_arrow(Goal& goal);
     bool handle_ar(Goal& goal);

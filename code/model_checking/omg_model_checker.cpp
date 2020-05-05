@@ -20,7 +20,8 @@ const std::map<std::string, OmgModelChecker::handler_t> OmgModelChecker::_handle
                 {"ARROW", &OmgModelChecker::handle_arrow},
                 {"AR", &OmgModelChecker::handle_ar},
                 {"ER", &OmgModelChecker::handle_er},
-                {"EX", &OmgModelChecker::handle_ex}
+                {"EX", &OmgModelChecker::handle_ex},
+                {"EQUIV", &OmgModelChecker::handle_equiv}
         };
 
 bool OmgModelChecker::handle_and(Goal &goal)
@@ -863,6 +864,13 @@ OmgModelChecker::refine_exists_successor(UnwindingTree &src_node, const std::set
     for (const auto& it : dsts_abs)dsts_astates.emplace(&find_abs(*it));
     refine_exists_successor(src_node, dsts_astates);
 }
+
+bool OmgModelChecker::handle_equiv(Goal &goal) {
+    Goal first_subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
+    bool first_res = recur_ctl(first_subgoal);
+    Goal second_subgoal(goal.get_node(), *goal.get_spec().get_operands()[1], goal.get_properties());
+    bool second_res = recur_ctl(second_subgoal);
+    return first_res == second_res;}
 
 
 InductiveCandidate::InductiveCandidate(AbstractState *_abs_state, std::unordered_set<UnwindingTree *> _nodes)

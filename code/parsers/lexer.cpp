@@ -51,6 +51,13 @@ std::vector<Token> Lexer::lex(const std::string &input) const {
             continue;
         }
 
+        if (input.compare(index, 2, "==") == 0)
+        {
+            tokens.emplace_back("EQUIV");
+            index += 2;
+            continue;
+        }
+
         size_t count_to_delim = 0;
         while ((index + count_to_delim) < input.length() && !in_collection(input[index+count_to_delim], Token::s_terminating_signs))
         {
