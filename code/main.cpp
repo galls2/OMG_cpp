@@ -46,10 +46,6 @@ void test_parser(const std::string& file_path)
     while (std::getline(infile, line))
     {
         std::string model_name = std::string("../resources/") + line.substr(0, line.length() -4);
-        if (line == "newnim")
-        {
-            int x = 0;
-        }
         const std::string &ctl_file_path = model_name + ".ctl";
         std::cout << "Parsing " <<ctl_file_path << "... ";
         try
@@ -264,9 +260,9 @@ int main()
 {
 //    run_models("../models_to_run.omg");
   //  test_model("../resources/cp0IntEncoder");
-//    unit_tests();
+    unit_tests();
 //    TEST("../resources/spinner4.aig", "AG((~inr<3> & ~inr<2> & ~inr<1> & inr<0>) -> ~E spl U (~inr<3> & ~inr<2> & inr<1> & inr<0>))", false);
-    test_parser("../models_to_run.omg");
+//    test_parser("../models_to_run.omg");
 
 
 

@@ -19,10 +19,9 @@
     <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/model_checking/omg_model_checker.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/omg_model_checker.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/parsers/ctl_file_parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/ctl_file_parser.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/parsers/lexer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/lexer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/parsers/ctl_parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/ctl_parser.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/parsers/ctl_parser_data.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/ctl_parser_data.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/parsers/ctl_parser_data.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/ctl_parser_data.h" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <ignored path="$PROJECT_DIR$/cmake-build-release/" />
@@ -36,56 +35,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/prep_omg.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="8" column="32" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/main.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="48" column="26" selection-start-line="48" selection-start-column="26" selection-end-line="48" selection-end-column="26" />
-              <folding>
-                <element signature="e#37#55#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/parsers/lexer.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="268">
-              <caret line="55" column="38" selection-start-line="55" selection-start-column="38" selection-end-line="55" selection-end-column="38" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/idu32.ctl">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-162" />
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/newnim.ctl">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="36" column="14" lean-forward="true" selection-start-line="36" selection-start-column="14" selection-end-line="36" selection-end-column="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/parsers/ctl_file_parser.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="62" selection-start-line="62" selection-end-line="62" />
+            <state>
+              <caret line="48" column="63" lean-forward="true" selection-start-line="48" selection-start-column="63" selection-end-line="48" selection-end-column="63" />
               <folding>
                 <element signature="e#41#69#0" expanded="true" />
               </folding>
@@ -96,8 +49,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
-              <caret line="180" column="42" lean-forward="true" selection-start-line="180" selection-start-column="42" selection-end-line="180" selection-end-column="42" />
+            <state relative-caret-position="180">
+              <caret line="66" column="22" lean-forward="true" selection-start-line="66" selection-start-column="22" selection-end-line="66" selection-end-column="22" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -105,38 +58,50 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/code/main.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="290">
+              <caret line="267" lean-forward="true" selection-start-line="267" selection-end-line="267" />
+              <folding>
+                <element signature="e#37#55#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="87" column="21" selection-start-line="87" selection-start-column="15" selection-end-line="87" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/code/model_checking/omg_model_checker.h">
+        <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser_data.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="162">
-              <caret line="66" column="21" selection-start-line="66" selection-start-column="21" selection-end-line="66" selection-end-column="21" />
-              <folding>
-                <element signature="e#54#72#0" expanded="true" />
-              </folding>
+              <caret line="546" column="49" selection-start-line="546" selection-start-column="49" selection-end-line="546" selection-end-column="49" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp">
+        <entry file="file://$PROJECT_DIR$/code/parsers/lexer.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="157">
-              <caret line="867" column="31" selection-start-line="867" selection-start-column="31" selection-end-line="867" selection-end-column="31" />
-              <folding>
-                <element signature="e#42#60#0" expanded="true" />
-                <element signature="e#767#1193#0" />
-                <element signature="e#1195#1618#0" />
-                <element signature="e#1620#1832#0" />
-              </folding>
+            <state relative-caret-position="18">
+              <caret line="12" column="6" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="6" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/cp0IntEncoder.ctl">
+        <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser_data.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="36">
-              <caret line="2" column="97" selection-start-line="2" selection-start-column="97" selection-end-line="2" selection-end-column="97" />
+            <state relative-caret-position="144">
+              <caret line="9" column="7" selection-start-line="9" selection-start-column="7" selection-end-line="9" selection-end-column="7" />
             </state>
           </provider>
         </entry>
@@ -152,7 +117,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Node sat</find>
       <find>sati</find>
       <find>BUG IN IN</find>
       <find>P</find>
@@ -182,6 +146,7 @@
       <find>PASS</find>
       <find>handle_xor</find>
       <find>handle_eq</find>
+      <find>taken_out</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -209,8 +174,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/code/utils/aiger-1.9.9/aiger.h" />
-        <option value="$PROJECT_DIR$/code/utils/aiger-1.9.9/aig_to_aag.h" />
         <option value="$PROJECT_DIR$/code/utils/string_utils.cpp" />
         <option value="$PROJECT_DIR$/code/utils/string_utils.h" />
         <option value="$PROJECT_DIR$/code/utils/version_manager.h" />
@@ -239,7 +202,6 @@
         <option value="$PROJECT_DIR$/code/utils/omg_utils.h" />
         <option value="$PROJECT_DIR$/code/abstraction/abstract_structure.cpp" />
         <option value="$PROJECT_DIR$/code/parsers/ctl_file_parser.h" />
-        <option value="$PROJECT_DIR$/code/parsers/ctl_parser.cpp" />
         <option value="$PROJECT_DIR$/code/utils/aiger-1.9.9/aig_to_aag.cpp" />
         <option value="$PROJECT_DIR$/code/parsers/aig_parser.h" />
         <option value="$PROJECT_DIR$/code/parsers/aig_parser.cpp" />
@@ -256,18 +218,22 @@
         <option value="$PROJECT_DIR$/prep_omg.sh" />
         <option value="$PROJECT_DIR$/code/formulas/sat_solver.cpp" />
         <option value="$PROJECT_DIR$/code/parsers/ctl_file_parser.cpp" />
-        <option value="$PROJECT_DIR$/code/main.cpp" />
         <option value="$PROJECT_DIR$/code/parsers/lexer.cpp" />
         <option value="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" />
         <option value="$PROJECT_DIR$/code/model_checking/omg_model_checker.h" />
+        <option value="$PROJECT_DIR$/code/main.cpp" />
+        <option value="$PROJECT_DIR$/code/parsers/ctl_parser_data.h" />
+        <option value="$PROJECT_DIR$/code/parsers/ctl_parser.cpp" />
+        <option value="$PROJECT_DIR$/code/parsers/ctl_parser_data.cpp" />
       </list>
     </option>
   </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds">
-    <option name="y" value="24" />
-    <option name="width" value="1920" />
-    <option name="height" value="1004" />
+    <option name="x" value="5" />
+    <option name="y" value="29" />
+    <option name="width" value="1924" />
+    <option name="height" value="1024" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -389,14 +355,7 @@
       <workItem from="1576322596048" duration="1851000" />
       <workItem from="1580376891038" duration="55751000" />
       <workItem from="1584796046953" duration="738000" />
-      <workItem from="1587326308621" duration="79007000" />
-    </task>
-    <task id="LOCAL-00075" summary="Changed version mananger API, added idxing to astates, made astates comparison efficient">
-      <created>1586118914578</created>
-      <option name="number" value="00075" />
-      <option name="presentableId" value="LOCAL-00075" />
-      <option name="project" value="LOCAL" />
-      <updated>1586118914578</updated>
+      <workItem from="1587326308621" duration="84486000" />
     </task>
     <task id="LOCAL-00076" summary="Added typedefs &amp; refactor towards impl of EX-">
       <created>1586440727550</created>
@@ -734,11 +693,18 @@
       <option name="project" value="LOCAL" />
       <updated>1588668923536</updated>
     </task>
-    <option name="localTasksCounter" value="124" />
+    <task id="LOCAL-00124" summary="Added parser tests,&#10;Added equiv op">
+      <created>1588710023664</created>
+      <option name="number" value="00124" />
+      <option name="presentableId" value="LOCAL-00124" />
+      <option name="project" value="LOCAL" />
+      <updated>1588710023665</updated>
+    </task>
+    <option name="localTasksCounter" value="125" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="758247000" />
+    <option name="totallyTimeSpent" value="763726000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -750,22 +716,21 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="24" width="1920" height="1004" extended-state="0" />
-    <editor active="true" />
+    <frame x="5" y="29" width="1924" height="1024" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49861112" visible="true" weight="0.15541264" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49861112" visible="true" weight="0.15508021" />
       <window_info id="Structure" order="1" sideWeight="0.5013889" side_tool="true" weight="0.1511254" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32505643" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4989282" weight="0.44695258" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49839228" visible="true" weight="0.48307" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3245033" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4989282" visible="true" weight="0.4370861" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49839228" weight="0.48233995" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Database Changes" order="6" />
       <window_info anchor="bottom" id="Inspection Results" order="7" sideWeight="0.4994641" weight="0.3295711" />
       <window_info anchor="bottom" id="TODO" order="8" weight="0.32731378" />
-      <window_info anchor="bottom" id="Messages" order="9" sideWeight="0.49785638" weight="0.33747178" />
+      <window_info anchor="bottom" id="Messages" order="9" sideWeight="0.49785638" weight="0.3366446" />
       <window_info anchor="bottom" id="Terminal" order="10" weight="0.32762557" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5026795" side_tool="true" weight="0.2020316" />
       <window_info anchor="bottom" id="Version Control" order="12" weight="0.3295711" />
@@ -803,7 +768,6 @@
     <option name="version" value="1" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="-Refactor&#10;-Added EprSolver interface&amp;class&#10;-Implemented EV's inductiveness checking" />
     <MESSAGE value="Finished ER impl" />
     <MESSAGE value="Bugfixes:&#10;-ER closure formula -- added state formula &amp; quantified in0&#10;-CtlParser bug in EG parsing&#10;&#10;*Big Refactor" />
     <MESSAGE value="Bugfixes:&#10;-Abstract lasso of length 1 does not count anymore&#10;-CtlParser bug in EF parsing" />
@@ -828,7 +792,8 @@
     <MESSAGE value="Bugfix in CTL file parser" />
     <MESSAGE value="Grand refactor,&#10;bugfix in brother unif" />
     <MESSAGE value="Refactor" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor" />
+    <MESSAGE value="Added parser tests,&#10;Added equiv op" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added parser tests,&#10;Added equiv op" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -852,11 +817,6 @@
           <url>file:///usr/include/c++/5/bits/stl_algobase.h</url>
           <line>815</line>
           <option name="timeStamp" value="71" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/code/main.cpp</url>
-          <line>50</line>
-          <option name="timeStamp" value="275" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -960,30 +920,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file:///usr/include/c++/5/bits/stl_function.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
-          <caret line="891" selection-start-line="891" selection-end-line="891" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/gatedClock.ctl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="5" selection-start-line="5" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/gatedClock.aag">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file:///usr/include/c++/5/bits/stl_set.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
-          <caret line="603" selection-start-line="603" selection-end-line="603" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/run_config.omg">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
@@ -1074,13 +1010,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="72">
           <caret line="4" lean-forward="true" selection-end-line="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="16" lean-forward="true" selection-start-line="15" selection-end-line="16" />
         </state>
       </provider>
     </entry>
@@ -1299,23 +1228,10 @@
         <state relative-caret-position="-162" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/main.cpp">
+    <entry file="file://$PROJECT_DIR$/code/parsers/lexer.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="48" column="26" selection-start-line="48" selection-start-column="26" selection-end-line="48" selection-end-column="26" />
-          <folding>
-            <element signature="e#37#55#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_file_parser.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="62" selection-start-line="62" selection-end-line="62" />
-          <folding>
-            <element signature="e#41#69#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="268">
+          <caret line="55" column="38" selection-start-line="55" selection-start-column="38" selection-end-line="55" selection-end-column="38" />
         </state>
       </provider>
     </entry>
@@ -1326,27 +1242,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/parsers/lexer.cpp">
+    <entry file="file:///usr/include/c++/5/bits/stl_map.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="55" column="38" selection-start-line="55" selection-start-column="38" selection-end-line="55" selection-end-column="38" />
+        <state relative-caret-position="-9">
+          <caret line="531" selection-start-line="531" selection-end-line="531" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.cpp">
+    <entry file="file://$PROJECT_DIR$/code/model_checking/omg_model_checker.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="180" column="42" lean-forward="true" selection-start-line="180" selection-start-column="42" selection-end-line="180" selection-end-column="42" />
+        <state relative-caret-position="216">
+          <caret line="69" column="31" lean-forward="true" selection-start-line="69" selection-start-column="31" selection-end-line="69" selection-end-column="31" />
           <folding>
-            <element signature="e#0#23#0" expanded="true" />
+            <element signature="e#54#72#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="867" column="31" selection-start-line="867" selection-start-column="31" selection-end-line="867" selection-end-column="31" />
+        <state relative-caret-position="229">
+          <caret line="871" column="48" lean-forward="true" selection-start-line="871" selection-start-column="48" selection-end-line="871" selection-end-column="48" />
           <folding>
             <element signature="e#42#60#0" expanded="true" />
             <element signature="e#767#1193#0" />
@@ -1356,13 +1272,61 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/model_checking/omg_model_checker.h">
+    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="87" column="21" selection-start-line="87" selection-start-column="15" selection-end-line="87" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/parsers/lexer.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="12" column="6" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser_data.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="9" column="7" selection-start-line="9" selection-start-column="7" selection-end-line="9" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_file_parser.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="48" column="63" lean-forward="true" selection-start-line="48" selection-start-column="63" selection-end-line="48" selection-end-column="63" />
+          <folding>
+            <element signature="e#41#69#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="290">
+          <caret line="267" lean-forward="true" selection-start-line="267" selection-end-line="267" />
+          <folding>
+            <element signature="e#37#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="66" column="22" lean-forward="true" selection-start-line="66" selection-start-column="22" selection-end-line="66" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser_data.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
-          <caret line="66" column="21" selection-start-line="66" selection-start-column="21" selection-end-line="66" selection-end-column="21" />
-          <folding>
-            <element signature="e#54#72#0" expanded="true" />
-          </folding>
+          <caret line="546" column="49" selection-start-line="546" selection-start-column="49" selection-end-line="546" selection-end-column="49" />
         </state>
       </provider>
     </entry>

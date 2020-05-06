@@ -466,15 +466,16 @@ GotoTable::GotoTable_t CtlParserData::goto_table_ctl_parser = {
 
 
 LR1CtlParser::Grammar CtlParserData::grammar_ctl = {
-        std::make_pair<VarName, std::vector<GrammarRuleEntity>>('I', {'S'}),
+        std::make_pair<VarName, std::vector<GrammarRuleEntity>>('I', {VarName('S')}),
         std::make_pair<VarName, std::vector<GrammarRuleEntity>>('S', {Token("AP")}),
-        std::make_pair<VarName, std::vector<GrammarRuleEntity>>('S', {Token('S'), Token("XOR"), Token('S')}),
-        std::make_pair<VarName, std::vector<GrammarRuleEntity>>('S', {Token('S'), Token("OR"), Token('S')}),
-        std::make_pair<VarName, std::vector<GrammarRuleEntity>>('S', {Token('S'), Token("AND"), Token('S')}),
-        std::make_pair<VarName, std::vector<GrammarRuleEntity>>('S', {Token('S'), Token("ARROW"), Token('S')}),
-        std::make_pair<VarName, std::vector<GrammarRuleEntity>>('S', {Token("NOT"), Token('S')}),
-        std::make_pair<VarName, std::vector<GrammarRuleEntity>>('S', {Token('P'), Token("T"), Token('S')}),
-        std::make_pair<VarName, std::vector<GrammarRuleEntity>>('S', {Token("P"), Token("S"), Token("Y"), Token('S')}),
+        std::make_pair<VarName, std::vector<GrammarRuleEntity>>('S', {VarName ('S'), Token("XOR"), VarName('S')}),
+        std::make_pair<VarName, std::vector<GrammarRuleEntity>>('S', {VarName('S'), Token("OR"), Token('S')}),
+        std::make_pair<VarName, std::vector<GrammarRuleEntity>>('S', {VarName('S'), Token("AND"), VarName('S')}),
+        std::make_pair<VarName, std::vector<GrammarRuleEntity>>('S', {VarName('S'), Token("ARROW"), VarName('S')}),
+   //     std::make_pair<VarName, std::vector<GrammarRuleEntity>>('S', {VarName('S'), Token("EQUIV"), VarName('S')}),
+        std::make_pair<VarName, std::vector<GrammarRuleEntity>>('S', {Token("NOT"), VarName('S')}),
+        std::make_pair<VarName, std::vector<GrammarRuleEntity>>('S', {VarName('P'), VarName('T'), VarName('S')}),
+        std::make_pair<VarName, std::vector<GrammarRuleEntity>>('S', {VarName('P'), VarName('S'), VarName('Y'), VarName('S')}),
         std::make_pair<VarName, std::vector<GrammarRuleEntity>>('P', {Token('A')}),
         std::make_pair<VarName, std::vector<GrammarRuleEntity>>('P', {Token('E')}),
         std::make_pair<VarName, std::vector<GrammarRuleEntity>>('T', {Token('F')}),
@@ -483,6 +484,112 @@ LR1CtlParser::Grammar CtlParserData::grammar_ctl = {
         std::make_pair<VarName, std::vector<GrammarRuleEntity>>('Y', {Token('U')}),
         std::make_pair<VarName, std::vector<GrammarRuleEntity>>('Y', {Token('W')}),
         std::make_pair<VarName, std::vector<GrammarRuleEntity>>('Y', {Token('R')}),
-        std::make_pair<VarName, std::vector<GrammarRuleEntity>>('S', {Token("("), Token('S'), Token(")")})
+        std::make_pair<VarName, std::vector<GrammarRuleEntity>>('S', {Token("("), VarName('S'), Token(")")})
 };
 
+CtlParserData::CtlFormulaCreator empty_creator = [] (std::vector<Token>, std::vector<std::unique_ptr<CtlFormula>>)
+{
+    throw CtlParserException("Cannot use this rule to create formula!");
+    return nullptr;
+};
+
+CtlParserData::CtlFormulaCreator ap_creator = [] (std::vector<Token> tokens, std::vector<std::unique_ptr<CtlFormula>> operands)
+{
+    assert(tokens.size() == 1 && tokens[0].get_token_type().get_data() == std::string("AP"));
+    assert(tokens[0].is_ap());
+    assert(operands.empty());
+    std::string ap_text = tokens[0].get_data();
+    return std::make_unique<CtlFormula>(ap_text);
+};
+
+CtlParserData::CtlFormulaCreator logical_creator = [] (std::vector<Token> tokens, std::vector<std::unique_ptr<CtlFormula>> operands)
+{
+    assert(tokens.size() == 1 && !tokens[0].is_ap());
+    assert(operands.size() == 2);
+
+    std::string logical_operand = tokens[0].get_data();
+    return std::make_unique<CtlFormula>(logical_operand, std::move(operands));
+};
+
+CtlParserData::CtlFormulaCreator not_creator = [] (std::vector<Token> tokens, std::vector<std::unique_ptr<CtlFormula>> operands)
+{
+    assert(tokens.size() == 1 && !tokens[0].is_ap() && tokens[0].get_data() == "NOT");
+    assert(operands.size() == 1);
+
+    std::string not_op = tokens[0].get_data();
+    return std::make_unique<CtlFormula>(not_op, std::move(operands));
+};
+
+CtlParserData::CtlFormulaCreator temp_single_op_creator = [] (std::vector<Token> tokens, std::vector<std::unique_ptr<CtlFormula>> operands)
+{
+    assert(tokens.empty() && operands.size() == 3);
+
+    std::vector<std::unique_ptr<CtlFormula>> new_ops;
+
+    std::unique_ptr<CtlFormula> operand(std::move(operands.back()));
+    operands.pop_back();
+
+    std::unique_ptr<CtlFormula> temporal_operator(std::move(operands.back()));
+    operands.pop_back();
+
+    std::unique_ptr<CtlFormula> path_quantifier(std::move(operands.back()));
+    operands.pop_back();
+
+
+    new_ops.emplace_back(std::move(operand));
+
+    return std::make_unique<CtlFormula>((*path_quantifier).get_data()+(*temporal_operator).get_data(), std::move(new_ops));
+
+};
+
+CtlParserData::CtlFormulaCreator temp_two_op_creator = [] (std::vector<Token> tokens, std::vector<std::unique_ptr<CtlFormula>> operands)
+{
+    assert(tokens.empty() && operands.size() == 4);
+
+    std::vector<std::unique_ptr<CtlFormula>> new_ops;
+
+
+    std::unique_ptr<CtlFormula> second_operand(std::move(operands.back()));
+    operands.pop_back();
+
+    std::unique_ptr<CtlFormula> temporal_operator(std::move(operands.back()));
+    operands.pop_back();
+
+    std::unique_ptr<CtlFormula> first_operand(std::move(operands.back()));
+    operands.pop_back();
+
+    std::unique_ptr<CtlFormula> path_quantifier(std::move(operands.back()));
+    operands.pop_back();
+
+
+    new_ops.emplace(new_ops.begin(), std::move(second_operand));
+    new_ops.emplace(new_ops.begin(), std::move(first_operand));
+
+    return std::make_unique<CtlFormula>((*path_quantifier).get_data()+(*temporal_operator).get_data(), std::move(new_ops));
+
+};
+
+
+CtlParserData::CtlFormulaCreator token_to_formula = [] (std::vector<Token> tokens, std::vector<std::unique_ptr<CtlFormula>> operands) {
+    assert(tokens.size() == 1 && operands.empty());
+    std::string op = tokens[0].get_data();
+    return std::make_unique<CtlFormula>(op);
+};
+
+CtlParserData::CtlFormulaCreator identity = [] (std::vector<Token> tokens, std::vector<std::unique_ptr<CtlFormula>> operands) {
+    assert(tokens.size() == 2 && operands.size() == 1);
+    return std::move(operands[0]);
+};
+
+std::vector<CtlParserData::CtlFormulaCreator> CtlParserData::formula_builders =
+        {
+       empty_creator,
+       ap_creator,
+       logical_creator, logical_creator, logical_creator, logical_creator, /* logical_creator, */
+        not_creator,
+       temp_single_op_creator,
+       temp_two_op_creator,
+       token_to_formula, token_to_formula, token_to_formula, token_to_formula,
+       token_to_formula, token_to_formula, token_to_formula, token_to_formula,
+       identity
+        };

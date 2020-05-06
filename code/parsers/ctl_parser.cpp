@@ -1,4 +1,5 @@
 #include "ctl_parser.h"
+#include "ctl_parser_data.h"
 #include  <stack>
 #include <string>
 #include <iostream>
@@ -63,96 +64,25 @@ void LR1CtlParser::get_operands_from_formula_stack(size_t num_operands, std::vec
 }
 void LR1CtlParser::handle_formula_stack(size_t rule_used, const std::vector<GrammarRuleEntity> &taken_out) {
     assert(taken_out.size() == _grammar[rule_used].second.size());
-    if (rule_used <= 0)
-    {
-        assert(false);
-    }
-    else if (rule_used == 1)
-    {
-        const Token& ap_token = boost::get<Token>(taken_out[0]);
-        assert(ap_token.get_token_type().get_data() == std::string("AP"));
-        assert(ap_token.is_ap());
-        std::string ap_text = ap_token.get_data();
-        std::unique_ptr<CtlFormula> formula = std::make_unique<CtlFormula>(ap_text);
-        _formula_stack.emplace(std::move(formula));
-    }
-    else if (rule_used >= 2 && rule_used <= 5)
-    {
-        std::string logical_operand = boost::get<Token>(taken_out[1]).get_data();
+    assert(rule_used > 0 && rule_used <= _grammar.size());
 
-        std::vector<std::unique_ptr<CtlFormula>> operands;
-        get_operands_from_formula_stack(2, operands);
-
-        std::unique_ptr<CtlFormula> formula = std::make_unique<CtlFormula>(logical_operand, std::move(operands));
-        _formula_stack.emplace(std::move(formula));
-    }
-    else if (rule_used == 6)
-    {
-        std::vector<std::unique_ptr<CtlFormula>> operands;
-        get_operands_from_formula_stack(1, operands);
-
-        std::unique_ptr<CtlFormula> formula = std::make_unique<CtlFormula>("NOT", std::move(operands));
-        _formula_stack.emplace(std::move(formula));
-    }
-    else if (rule_used == 7)
-    {
-        std::vector<std::unique_ptr<CtlFormula>> operands;
-
-        std::vector<std::unique_ptr<CtlFormula>> out_formulas;
-        get_operands_from_formula_stack(3, out_formulas);
-
-        std::unique_ptr<CtlFormula> operand(std::move(out_formulas.back()));
-        out_formulas.pop_back();
-
-        std::unique_ptr<CtlFormula> temporal_operator(std::move(out_formulas.back()));
-        out_formulas.pop_back();
-
-        std::unique_ptr<CtlFormula> path_quantifier(std::move(out_formulas.back()));
-        out_formulas.pop_back();
+    std::vector<std::unique_ptr<CtlFormula>> operands;
+    std::vector<Token> tokens;
+    size_t num_operands = 0;
+     for (size_t i = 0; i < _grammar[rule_used].second.size(); ++i)
+     {
+         if (taken_out[i].which() == 0) // var
+         {
+             ++num_operands;
+         }
+         else
+             tokens.emplace_back(boost::get<Token>(taken_out[i]));
+     }
+     get_operands_from_formula_stack(num_operands, operands);
 
 
-        operands.emplace(operands.begin(), std::move(operand));
-
-        std::unique_ptr<CtlFormula> formula = std::make_unique<CtlFormula>((*path_quantifier).get_data()+(*temporal_operator).get_data(), std::move(operands));
-        _formula_stack.emplace(std::move(formula));
-    }
-    else if (rule_used == 8)
-    {
-        std::vector<std::unique_ptr<CtlFormula>> operands;
-
-        std::vector<std::unique_ptr<CtlFormula>> out_formulas;
-        get_operands_from_formula_stack(4, out_formulas);
-
-        std::unique_ptr<CtlFormula> second_operand(std::move(out_formulas.back()));
-        out_formulas.pop_back();
-
-        std::unique_ptr<CtlFormula> temporal_operator(std::move(out_formulas.back()));
-        out_formulas.pop_back();
-
-        std::unique_ptr<CtlFormula> first_operand(std::move(out_formulas.back()));
-        out_formulas.pop_back();
-
-        std::unique_ptr<CtlFormula> path_quantifier(std::move(out_formulas.back()));
-        out_formulas.pop_back();
-
-
-        operands.emplace(operands.begin(), std::move(second_operand));
-        operands.emplace(operands.begin(), std::move(first_operand));
-
-        std::unique_ptr<CtlFormula> formula = std::make_unique<CtlFormula>((*path_quantifier).get_data()+(*temporal_operator).get_data(), std::move(operands));
-        _formula_stack.emplace(std::move(formula));
-    }
-    else if (rule_used >= 9 && rule_used <= 16)
-    {
-        std::string op = boost::get<Token>(taken_out[0]).get_data();
-        std::unique_ptr<CtlFormula> formula = std::make_unique<CtlFormula>(op);
-        _formula_stack.emplace(std::move(formula));
-    }
-    else
-    {
-        assert(rule_used == 17);
-        // DO NOTHING
-    }
+     std::unique_ptr<CtlFormula> new_formula = CtlParserData::formula_builders[rule_used](std::move(tokens), std::move(operands));
+     _formula_stack.emplace(std::move(new_formula));
 }
 
 
