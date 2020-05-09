@@ -1,7 +1,7 @@
 #FAIL: (0)
 permutation -> E permutation U identity 
 #PASS: (1)
-AG(permutation -> AX permutation);
+AG(permutation -> AX permutation)
 #PASS: (2)
 identity -> permutation
 #PASS: (3)

@@ -35,102 +35,37 @@ AG AF c14.token
 AG AF c15.token
 
 #PASS: (32-47) Another version of the previous one
-AG AF (
-  c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token &
-  ~c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token &
-  ~c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token &
-  ~c15.token
-)
-AG AF (
-  ~c0.token & c1.token & ~c2.token & ~c3.token & ~c4.token &
-  ~c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token &
-  ~c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token &
-  ~c15.token
-)
-AG AF (
-  ~c0.token & ~c1.token & c2.token & ~c3.token & ~c4.token &
-  ~c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token &
-  ~c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token &
-  ~c15.token
-)
-AG AF (
-  ~c0.token & ~c1.token & ~c2.token & c3.token & ~c4.token &
-  ~c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token &
-  ~c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token &
-  ~c15.token
-)
-AG AF (
-  ~c0.token & ~c1.token & ~c2.token & ~c3.token & c4.token &
-  ~c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token &
-  ~c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token &
-  ~c15.token
-)
-AG AF (
-  ~c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token &
-  c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token &
-  ~c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token &
-  ~c15.token
-)
-AG AF (
-  ~c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token &
-  ~c5.token & c6.token & ~c7.token & ~c8.token & ~c9.token &
-  ~c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token &
-  ~c15.token
-)
-AG AF (
-  ~c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token &
-  ~c5.token & ~c6.token & c7.token & ~c8.token & ~c9.token &
-  ~c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token &
-  ~c15.token
-)
-AG AF (
-  ~c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token &
-  ~c5.token & ~c6.token & ~c7.token & c8.token & ~c9.token &
-  ~c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token &
-  ~c15.token
-)
-AG AF (
-  ~c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token &
-  ~c5.token & ~c6.token & ~c7.token & ~c8.token & c9.token &
-  ~c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token &
-  ~c15.token
-)
-AG AF (
-  ~c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token &
-  ~c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token &
-  c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token &
-  ~c15.token
-)
-AG AF (
-  ~c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token &
-  ~c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token &
-  ~c10.token & c11.token & ~c12.token & ~c13.token & ~c14.token &
-  ~c15.token
-)
-AG AF (
-  ~c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token &
-  ~c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token &
-  ~c10.token & ~c11.token & c12.token & ~c13.token & ~c14.token &
-  ~c15.token
-)
-AG AF (
-  ~c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token &
-  ~c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token &
-  ~c10.token & ~c11.token & ~c12.token & c13.token & ~c14.token &
-  ~c15.token
-)
-AG AF (
-  ~c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token &
-  ~c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token &
-  ~c10.token & ~c11.token & ~c12.token & ~c13.token & c14.token &
-  ~c15.token
-)
-AG AF (
-  ~c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token &
-  ~c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token &
-  ~c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token &
-  c15.token
-)
+AG AF ( c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token &  ~c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token & ~c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token &  ~c15.token )
+
+AG AF ( ~c0.token & c1.token & ~c2.token & ~c3.token & ~c4.token &  ~c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token & ~c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token & ~c15.token )
+
+AG AF ( ~c0.token & ~c1.token & c2.token & ~c3.token & ~c4.token &  ~c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token &  ~c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token &  ~c15.token)
+
+AG AF (  ~c0.token & ~c1.token & ~c2.token & c3.token & ~c4.token &  ~c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token &  ~c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token &  ~c15.token)
+
+AG AF (  ~c0.token & ~c1.token & ~c2.token & ~c3.token & c4.token &  ~c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token &  ~c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token &  ~c15.token)
+
+AG AF (   ~c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token &  c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token &  ~c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token &  ~c15.token)
+
+AG AF ( ~c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token & ~c5.token & c6.token & ~c7.token & ~c8.token & ~c9.token & ~c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token & ~c15.token )
+
+AG AF (  ~c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token &  ~c5.token & ~c6.token & c7.token & ~c8.token & ~c9.token &  ~c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token &  ~c15.token )
+
+AG AF (  ~c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token & ~c5.token & ~c6.token & ~c7.token & c8.token & ~c9.token &  ~c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token &  ~c15.token)
+
+AG AF (  ~c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token &  ~c5.token & ~c6.token & ~c7.token & ~c8.token & c9.token &  ~c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token &  ~c15.token )
+
+AG AF (  ~c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token &  ~c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token &  c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token &  ~c15.token)
+
+AG AF (  ~c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token & ~c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token & ~c10.token & c11.token & ~c12.token & ~c13.token & ~c14.token & ~c15.token)
+
+AG AF (  ~c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token &  ~c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token &  ~c10.token & ~c11.token & c12.token & ~c13.token & ~c14.token &  ~c15.token)
+
+AG AF (  ~c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token &  ~c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token &  ~c10.token & ~c11.token & ~c12.token & c13.token & ~c14.token &   ~c15.token)
+
+AG AF (  ~c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token &  ~c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token &  ~c10.token & ~c11.token & ~c12.token & ~c13.token & c14.token &  ~c15.token)
+
+AG AF (  ~c0.token & ~c1.token & ~c2.token & ~c3.token & ~c4.token &  ~c5.token & ~c6.token & ~c7.token & ~c8.token & ~c9.token & ~c10.token & ~c11.token & ~c12.token & ~c13.token & ~c14.token &   c15.token )
 
 #PASS: (48-63)
 AG EF (c0.waiting & c0.token)

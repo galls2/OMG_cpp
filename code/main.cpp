@@ -262,6 +262,15 @@ void run_models(const std::string& file_path)
     }
 }
 
+void test_parser_s(const std::string& s)
+{
+    Lexer lexer;
+    LR1CtlParser parser(CtlParserData::grammar_ctl, ActionTable(CtlParserData::action_table_ctl_parser), GotoTable(CtlParserData::goto_table_ctl_parser));
+    auto lex_result = lexer.lex(s);
+    auto parse_result = parser.parse(lex_result);
+    std::cout << "5";
+}
+
 int main()
 {
 //    run_models("../models_to_run.omg");
@@ -269,9 +278,8 @@ int main()
 //    unit_tests();
 //    TEST("../resources/spinner4.aig", "AG((~inr<3> & ~inr<2> & ~inr<1> & inr<0>) -> ~E spl U (~inr<3> & ~inr<2> & inr<1> & inr<0>))", false);
 
-//    test_parser("../models_to_run.omg");
-    test_parser_with_model("../resources/soap.ctl");
 
+    test_parser_s("AG (EF o & EF ~o)");
 
 
 }

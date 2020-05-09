@@ -10,7 +10,7 @@ AG EF (
 )
 
 #PASS: (1) It is always possible to write 101010101010 in the five usable
-# entries of the stack and in RE, 010101010101 in uPC, and 3 in the stack
+# entries of the stack and in re, 010101010101 in uPC, and 3 in the stack
 # pointer.
 AG EF (
   ~reg_file<*0*><11> & ~reg_file<*0*><10> &
@@ -49,9 +49,9 @@ AG EF (
   reg_file<*5*><5> & ~reg_file<*5*><4> &
   reg_file<*5*><3> & ~reg_file<*5*><2> &
   reg_file<*5*><1> & ~reg_file<*5*><0> &
-  RE<11> & ~RE<10> & RE<9> & ~RE<8> &
-  RE<7> & ~RE<6> & RE<5> & ~RE<4> &
-  RE<3> & ~RE<2> & RE<1> & ~RE<0> &
+  re<11> & ~re<10> & re<9> & ~re<8> &
+  re<7> & ~re<6> & re<5> & ~re<4> &
+  re<3> & ~re<2> & re<1> & ~re<0> &
   ~uPC<11> & uPC<10> & ~uPC<9> & uPC<8> &
   ~uPC<7> & uPC<6> & ~uPC<5> & uPC<4> &
   ~uPC<3> & uPC<2> & ~uPC<1> & uPC<0> &
@@ -70,5 +70,5 @@ AG(!(sp<2> & !sp<1> & !sp<0>) & !(sp<2> & !sp<1> & sp<0>) &
 
 #PASS: (4)
 #The antecedent is never satisfied for the reachable states.
-AG(!reg_file<*0*><11> & !reg_file<*0*><10> & !reg_file<*0*><9> & !reg_file<*0*><8> & !reg_file<*0*><7> & !reg_file<*0*><6> & !reg_file<*0*><5> & !reg_file<*0*><4> & !reg_file<*0*><3> & !reg_file<*0*><2> & reg_file<*0*><1> & !reg_file<*0*><0> -> AX(!reg_file<*0*><11> & !reg_file<*0*><10> & !reg_file<*0*><9> & !reg_file<*0*><8> & !reg_file<*0*><7> & !reg_file<*0*><6> & !reg_file<*0*><5> & !reg_file<*0*><4> & !reg_file<*0*><3> & !reg_file<*0*><2> & !reg_file<*0*><1> & reg_file<*0*><0>));
+AG(!reg_file<*0*><11> & !reg_file<*0*><10> & !reg_file<*0*><9> & !reg_file<*0*><8> & !reg_file<*0*><7> & !reg_file<*0*><6> & !reg_file<*0*><5> & !reg_file<*0*><4> & !reg_file<*0*><3> & !reg_file<*0*><2> & reg_file<*0*><1> & !reg_file<*0*><0> -> AX(!reg_file<*0*><11> & !reg_file<*0*><10> & !reg_file<*0*><9> & !reg_file<*0*><8> & !reg_file<*0*><7> & !reg_file<*0*><6> & !reg_file<*0*><5> & !reg_file<*0*><4> & !reg_file<*0*><3> & !reg_file<*0*><2> & !reg_file<*0*><1> & reg_file<*0*><0>))
 
