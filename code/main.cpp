@@ -38,6 +38,21 @@ std::vector<FormulaChunk> get_formula_chunks(const std::string& ctl_file_path)
     return formula_chunks;
 }
 
+void test_parser_with_model(const std::string& model_name)
+{
+    std::cout << "Parsing " <<model_name << "... ";
+    try
+    {
+        std::vector<FormulaChunk> formula_chunks = get_formula_chunks(model_name);
+        std::cout << "Success!" << std::endl;
+    }
+    catch(std::exception& ex)
+    {
+        std::cout << "Failed!" << std::endl;
+//        std::cout << ex.what() << std::endl;
+    }
+}
+
 void test_parser(const std::string& file_path)
 {
     std::ifstream infile(file_path.c_str());
@@ -47,16 +62,7 @@ void test_parser(const std::string& file_path)
     {
         std::string model_name = std::string("../resources/") + line.substr(0, line.length() -4);
         const std::string &ctl_file_path = model_name + ".ctl";
-        std::cout << "Parsing " <<ctl_file_path << "... ";
-        try
-        {
-            std::vector<FormulaChunk> formula_chunks = get_formula_chunks(ctl_file_path);
-            std::cout << "Success!" << std::endl;
-        }
-        catch(...)
-        {
-            std::cout << "Failed!" << std::endl;
-        }
+        test_parser_with_model(ctl_file_path);
 
     }
 }
@@ -260,10 +266,11 @@ int main()
 {
 //    run_models("../models_to_run.omg");
   //  test_model("../resources/cp0IntEncoder");
-    unit_tests();
+//    unit_tests();
 //    TEST("../resources/spinner4.aig", "AG((~inr<3> & ~inr<2> & ~inr<1> & inr<0>) -> ~E spl U (~inr<3> & ~inr<2> & inr<1> & inr<0>))", false);
-//    test_parser("../models_to_run.omg");
 
+//    test_parser("../models_to_run.omg");
+    test_parser_with_model("../resources/soap.ctl");
 
 
 

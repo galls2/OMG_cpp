@@ -28,7 +28,9 @@ public:
 
     static constexpr std::array<char, 2> s_terminating_signs{make_array(' ',')')};
     static constexpr std::array<char, 2> s_negation_signs{make_array('!', '~')};
-    static constexpr std::array<char, 10> s_signs_which_are_tokens{make_array('(', ')', 'A', 'E', 'F', 'G', 'U', 'W', 'R', 'X')};
+    static constexpr std::array<char, 2> s_brackets{make_array('(', ')')};
+    static constexpr std::array<char, 8> s_temporal{make_array('A', 'E', 'F', 'G', 'U', 'W', 'R', 'X')};
+    static constexpr std::array<char, 3> s_spaces{make_array(' ', '\t', '\n')};
 private:
     std::string _data;
     bool _is_ap;

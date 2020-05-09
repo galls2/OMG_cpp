@@ -108,7 +108,7 @@ std::unique_ptr<CtlFormula> LR1CtlParser::transform_ctl_to_omg(const CtlFormula&
     std::string main_connective = lr_parsed_formula.get_data();
     if (main_connective == "EV" || main_connective == "AV") throw CtlParserException("Release is V!!!");
     const auto stay_the_same = make_array(std::string("AND"), std::string("OR"),
-            std::string("ARROW"), std::string("XOR"), std::string("EX"), std::string("AR"), std::string("ER"));
+            std::string("ARROW"), std::string("XOR"), std::string("EX"), std::string("AR"), std::string("ER"), std::string("EQUIV"));
     // AND OR XOR OPT?
     if (std::any_of(stay_the_same.begin(), stay_the_same.end(),
             [main_connective](const std::string& op) { return op == main_connective; }))

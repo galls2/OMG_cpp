@@ -6,7 +6,9 @@
 
 constexpr std::array<char, 2> Token::s_terminating_signs;
 constexpr std::array<char, 2> Token::s_negation_signs;
-constexpr std::array<char, 10> Token::s_signs_which_are_tokens;
+constexpr std::array<char, 8> Token::s_temporal;
+constexpr std::array<char, 2> Token::s_brackets;
+constexpr std::array<char, 3> Token::s_spaces;
 
 std::vector<Token> Lexer::lex(const std::string &input) const {
     std::vector<Token> tokens;
@@ -14,7 +16,11 @@ std::vector<Token> Lexer::lex(const std::string &input) const {
     while (index < input.length())
     {
         if (input[index] == ' ') { ++index; continue; }
-        if (in_collection(input[index], Token::s_signs_which_are_tokens))
+        if (in_collection(input[index], Token::s_brackets) ||  // (in_collection(input[index], Token::s_temporal)))
+            (in_collection(input[index], Token::s_temporal) && (index + 1) < input.length() &&
+                    (in_collection(input[index+1], Token::s_spaces ) || in_collection(input[index+1], Token::s_temporal) ||
+                    in_collection(input[index+1], Token::s_negation_signs)  || in_collection(input[index+1], Token::s_brackets
+                    )  )))
         {
             tokens.emplace_back(input[index++]);
             continue;

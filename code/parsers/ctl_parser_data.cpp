@@ -287,7 +287,6 @@ LR1CtlParser::Grammar CtlParserData::grammar_ctl = {
 CtlParserData::CtlFormulaCreator empty_creator = [] (std::vector<Token>, std::vector<std::unique_ptr<CtlFormula>>)
 {
     throw CtlParserException("Cannot use this rule to create formula!");
-    return nullptr;
 };
 
 CtlParserData::CtlFormulaCreator ap_creator = [] (std::vector<Token> tokens, std::vector<std::unique_ptr<CtlFormula>> operands)
@@ -380,13 +379,13 @@ CtlParserData::CtlFormulaCreator identity = [] (std::vector<Token> tokens, std::
 
 std::vector<CtlParserData::CtlFormulaCreator> CtlParserData::formula_builders =
         {
-       empty_creator,
-       ap_creator,
-       logical_creator, logical_creator, logical_creator, logical_creator,  logical_creator,
-        not_creator,
-       temp_single_op_creator,
-       temp_two_op_creator,
-       token_to_formula, token_to_formula, token_to_formula, token_to_formula,
-       token_to_formula, token_to_formula, token_to_formula, token_to_formula,
-       identity
+                empty_creator,
+                ap_creator,
+                logical_creator, logical_creator, logical_creator, logical_creator, logical_creator,
+                not_creator,
+                temp_single_op_creator,
+                temp_two_op_creator,
+                token_to_formula, token_to_formula, token_to_formula, token_to_formula,
+                token_to_formula, token_to_formula, token_to_formula, token_to_formula,
+                identity
         };
