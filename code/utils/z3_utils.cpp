@@ -188,6 +188,74 @@ AEClosureResult FormulaInductiveUtils::is_AE_inductive(AbstractState &to_close, 
     }
 }
 
+PropFormula FormulaInductiveUtils::create_EE_inductive_formula_skeleton(AbsStateSet abs_lead, const std::set<ConstAStateRef> &close_with) {
+    const KripkeStructure& kripke = (close_with.begin()->get()).get_kripke();
+    const PropFormula& tr = kripke.get_tr();
+    z3::context& ctx = tr.get_ctx();
+
+    const z3::expr_vector ps_tr = tr.get_vars_by_tag("ps"), ns_tr = tr.get_vars_by_tag("ns"),
+            in_0 = tr.get_vars_by_tag("in0"), in_1 = tr.get_vars_by_tag("in1");
+
+
+    z3::expr_vector astates_implications(ctx);
+    for (const AbstractState* it : abs_lead)
+    {
+        PropFormula abs_formula = it->get_formula();
+        z3::expr abs_implicant = abs_formula.get_raw_formula().substitute(abs_formula.get_vars_by_tag("ps"), ps_tr)
+                .substitute(abs_formula.get_vars_by_tag("in0"), in_0);
+        z3::expr flag = ctx.bool_const((std::string("a")+std::to_string(it->get_abs_idx())).data());
+        astates_implications.push_back(z3::implies(flag, abs_implicant));
+    }
+    z3::expr src_part = z3::mk_and(astates_implications);
+
+    z3::expr_vector dsts(ctx);
+    for (const auto & closer : close_with)
+    {
+        PropFormula dst = closer.get().get_formula();
+        z3::expr dst_raw_formula =
+                dst.get_raw_formula()
+                        .substitute(dst.get_vars_by_tag("ps"), ns_tr)
+                        .substitute(dst.get_vars_by_tag("in0"), in_1);
+        dsts.push_back(dst_raw_formula);
+    }
+
+    z3::expr dst_part = !z3::mk_or(dsts);
+
+    z3::expr inductive_raw_formula = src_part && tr.get_raw_formula() && dst_part;
+    PropFormula inductive_formula(inductive_raw_formula, {{"ps", ps_tr}, {"ns", ns_tr}});
+    return inductive_formula;
+
+}
+
+EEClosureResult
+FormulaInductiveUtils::is_EE_inductive_inc(const PropFormula& skeleton, AbstractState& to_close, ISatSolver& solver){
+    const KripkeStructure& kripke = to_close.get_kripke();
+    const PropFormula& tr = kripke.get_tr();
+
+    const z3::expr_vector ps_tr = tr.get_vars_by_tag("ps"), ns_tr = tr.get_vars_by_tag("ns"),
+            in_0 = tr.get_vars_by_tag("in0"), in_1 = tr.get_vars_by_tag("in1");
+
+
+    z3::expr flag = skeleton.get_ctx().bool_const((std::string("a")+std::to_string(to_close.get_abs_idx())).data());
+    auto res = solver.inc_solve_sat(skeleton, {flag});
+
+    if (res.first == -1) // if the formula is UNSAT, there is NO cex to the inductiveness, so we have inductiveness
+    {
+        return {true, {}, {}};
+    }
+    else
+    {
+        SatSolverResult& sat_res = res.second;
+        z3::expr cstate_conj = FormulaUtils::get_conj_from_sat_result(ps_tr.ctx(), ps_tr, sat_res);
+        auto cstate_src = ConcreteState(kripke, cstate_conj);
+        z3::expr nstate_conj = FormulaUtils::get_conj_from_sat_result(ps_tr.ctx(), ns_tr, sat_res).substitute(ns_tr, ps_tr);
+        auto nstate_src = ConcreteState(kripke, nstate_conj);
+        return {false, cstate_src, nstate_src};
+    }
+
+}
+
+
 z3::expr FormulaUtils::negate(const z3::expr &expr) {
     return expr.is_not() ? expr.arg(0) : !expr;
 }

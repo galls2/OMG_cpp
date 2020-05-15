@@ -16,7 +16,7 @@
 DECLARE_OMG_EXCEPTION(OmgMcException)
 
 class UnwindingTree;
-
+class AbstractStructure;
 
 typedef std::unordered_map<AbstractState*, std::unordered_set<UnwindingTree*>> CandidateSet;
 
@@ -36,11 +36,15 @@ struct ConcretizationResult
     std::experimental::optional<ConcreteState> dst_cstate;
 };
 
+auto comp_ind_cands = [](const InductiveCandidate& a, const InductiveCandidate& b) { return a.avg_depth < b.avg_depth; };
+
 class OmgModelChecker {
 public:
     explicit OmgModelChecker(KripkeStructure& kripke);
 
     typedef bool (OmgModelChecker::*handler_t)(Goal& goal);
+
+    typedef std::priority_queue<InductiveCandidate, std::vector<InductiveCandidate>, decltype(comp_ind_cands)> InductiveCandidatePriorityQueue;
     bool model_checking(const ConcreteState& cstate, const CtlFormula& specification);
     bool check_all_initial_states(const CtlFormula& specification);
 

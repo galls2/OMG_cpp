@@ -20,6 +20,55 @@ AbstractState &AbstractStructure::create_astate_from_cstate(const ConcreteState 
     return const_cast<AbstractState&>(*res.first);
 }
 
+EEClosureResult AbstractStructure::is_EE_closure2(const PropFormula& skeleton, AbstractState &to_close,
+                                                 const std::set<ConstAStateRef> &close_with, ISatSolver& sat_solver)
+{
+    ConstAbsStateSet p_closers;
+
+    for (const ConstAStateRef& cl : close_with) {
+        p_closers.insert(&cl.get());
+    }
+
+    if (_E_may_over.find(&to_close) != _E_may_over.end())
+    {
+        const auto &possible_closers = _E_may_over[&to_close];
+        for (const auto& closer_set : possible_closers) {
+            bool is_subset = std::includes(p_closers.begin(), p_closers.end(), closer_set.begin(), closer_set.end());
+            if (is_subset) {
+                DEBUG_PRINT("Known closure found!");
+                return {true, {}, {}};
+            }
+        }
+    }
+
+    if (_NE_may_over.find(&to_close) != _NE_may_over.end())
+    {
+        const auto &known_violations = _NE_may_over[&to_close];
+        for (const auto &violation : known_violations) {
+            bool is_subset = std::includes(violation.first.begin(), violation.first.end(), p_closers.begin(),
+                                           p_closers.end());
+            if (is_subset) {
+                DEBUG_PRINT("Known violation found!");
+
+                return violation.second;
+            }
+        }
+    }
+
+    EEClosureResult closure_result = FormulaInductiveUtils::is_EE_inductive_inc(skeleton, to_close, sat_solver);
+
+    if (closure_result.is_closed)
+    {
+        _E_may_over[&to_close].emplace_back(std::move(p_closers));
+    } else
+    {
+        _NE_may_over[&to_close].emplace_back(std::move(p_closers), closure_result);
+    }
+
+    return closure_result;
+}
+
+
 EEClosureResult AbstractStructure::is_EE_closure(AbstractState &to_close,
                                                  const std::set<ConstAStateRef> &close_with)
 {
@@ -34,22 +83,26 @@ EEClosureResult AbstractStructure::is_EE_closure(AbstractState &to_close,
     if (_E_may_over.find(&to_close) != _E_may_over.end())
     {
         const auto &possible_closers = _E_may_over[&to_close];
-        for (const auto& closer_set : possible_closers)
-        {
+        for (const auto& closer_set : possible_closers) {
             bool is_subset = std::includes(p_closers.begin(), p_closers.end(), closer_set.begin(), closer_set.end());
-            if (is_subset)
+            if (is_subset) {
+                DEBUG_PRINT("Known closure found!");
                 return {true, {}, {}};
+            }
         }
     }
 
     if (_NE_may_over.find(&to_close) != _NE_may_over.end())
     {
         const auto &known_violations = _NE_may_over[&to_close];
-        for (const auto &violation : known_violations)
-        {
-            bool is_subset = std::includes(violation.first.begin(), violation.first.end(), p_closers.begin(), p_closers.end());
-            if (is_subset)
+        for (const auto &violation : known_violations) {
+            bool is_subset = std::includes(violation.first.begin(), violation.first.end(), p_closers.begin(),
+                                           p_closers.end());
+            if (is_subset) {
+                DEBUG_PRINT("Known violation found!");
+
                 return violation.second;
+            }
         }
     }
 

@@ -345,11 +345,7 @@ bool OmgModelChecker::check_inductive_ev(Goal &goal, UnwindingTree &node_to_expl
         for (const auto &it : candidates) abs_states.emplace(*it.first);
         for (const auto &it : p_astates) abs_states.emplace(it);
 
-        auto comp_ind_cands = [](const InductiveCandidate &a, const InductiveCandidate &b) {
-            return a.avg_depth < b.avg_depth;
-        };
-        std::priority_queue<InductiveCandidate, std::vector<InductiveCandidate>, decltype(comp_ind_cands)> abs_states_lead(
-                comp_ind_cands);
+        InductiveCandidatePriorityQueue  abs_states_lead(comp_ind_cands);
         for (const auto &it: candidates) {
             abs_states_lead.emplace(it.first, it.second);
         }
@@ -416,14 +412,18 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
     std::set<ConstAStateRef> abs_states;
     for (const auto& it : candidates) abs_states.emplace(*it.first);
 
-    auto comp_ind_cands = [](const InductiveCandidate& a, const InductiveCandidate& b) { return a.avg_depth < b.avg_depth; };
-    std::priority_queue<InductiveCandidate, std::vector<InductiveCandidate>, decltype(comp_ind_cands)> abs_states_lead(comp_ind_cands);
+    InductiveCandidatePriorityQueue abs_states_lead(comp_ind_cands);
+
+    AbsStateSet astates_lead_to_formula_skeleton;
     for (const auto &it: candidates) {
         if (it.first->is_neg_labeled(*goal.get_spec().get_operands()[0]))
         {
             abs_states_lead.emplace(it.first, it.second);
+            astates_lead_to_formula_skeleton.emplace(it.first); //
         }
     }
+    std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(candidates.begin()->first->get_formula().get_ctx()); //
+    PropFormula skeleton = FormulaInductiveUtils::create_EE_inductive_formula_skeleton(astates_lead_to_formula_skeleton, abs_states); //
 
     while (!abs_states_lead.empty())
     {
@@ -431,7 +431,9 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
         AbstractState* abs_lead = ind_candidate.abs_state;
         DEBUG_PRINT("Is there AV-inductiveness for abs state %s?... ", abs_lead->_debug_name.data());
 
-        EEClosureResult res = _abs_structure->is_EE_closure(*abs_lead, abs_states);
+        EEClosureResult res = _abs_structure->is_EE_closure2(skeleton, *abs_lead, abs_states, *solver); //
+
+//        EEClosureResult res = _abs_structure->is_EE_closure(*abs_lead, abs_states); //
         if (res.is_closed)
         {
             DEBUG_PRINT("Yes!\n");

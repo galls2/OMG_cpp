@@ -71,6 +71,9 @@ class FormulaInductiveUtils
 {
 public:
     static EEClosureResult is_EE_inductive(AbstractState& to_close, const ConstAbsStateSet& close_with);
+    static EEClosureResult is_EE_inductive_inc(const PropFormula& skeleton, AbstractState& to_close, ISatSolver& solver);
+
+    static PropFormula create_EE_inductive_formula_skeleton(AbsStateSet abs_lead, const std::set<ConstAStateRef> &close_with);
     static AEClosureResult is_AE_inductive(AbstractState& to_close, const ConstAbsStateSet& close_with);
 
     static ConcretizationResult concrete_transition_to_abs(const std::unordered_set<UnwindingTree*>& src_nodes, const AbstractState& astate);
