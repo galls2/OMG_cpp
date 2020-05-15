@@ -276,20 +276,20 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.OMG">
-    <configuration name="Build All" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" EXPLICIT_BUILD_TARGET_NAME="all">
+  <component name="RunManager" selected="CMake Application.Build All">
+    <configuration name="Build All" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" EXPLICIT_BUILD_TARGET_NAME="all">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="OMG" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="OMG_CPP" TARGET_NAME="OMG" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="OMG_CPP" RUN_TARGET_NAME="OMG">
+    <configuration name="OMG" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="OMG_CPP" TARGET_NAME="OMG" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="OMG_CPP" RUN_TARGET_NAME="OMG">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.Build All" />
-      <item itemvalue="Application.OMG" />
+      <item itemvalue="CMake Application.Build All" />
+      <item itemvalue="CMake Application.OMG" />
     </list>
   </component>
   <component name="SvnConfiguration">
