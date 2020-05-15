@@ -6,6 +6,9 @@ set(CMAKE_CXX_FLAGS "-O3")
 include_directories(code)
 project (OMG_CPP)
 
+find_package(Boost COMPONENTS thread REQUIRED)
+
+
 add_executable(OMG code/main.cpp
 
         code/utils/version_manager.cpp code/utils/string_utils.cpp
@@ -19,7 +22,8 @@ add_executable(OMG code/main.cpp
         code/utils/z3_utils.cpp code/abstraction/abstract_state.cpp code/abstraction/abstraction_classifier.cpp
         code/utils/omg_utils.cpp code/utils/aiger-1.9.9/aig_to_aag.cpp code/utils/aiger-1.9.9/aiger.c code/model_checking/goal.cpp code/formulas/epr_solver.cpp)
 
-target_link_libraries(OMG libz3.so)
+target_include_directories(OMG PRIVATE /usr/local/include ${Boost_INCLUDE_DIRS})
+target_link_libraries(OMG libz3.so Boost::thread boost_thread pthread ${Boost_LIBRARIES})
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
     target_compile_definitions(OMG PUBLIC DEBUG=1)

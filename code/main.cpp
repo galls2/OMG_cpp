@@ -11,13 +11,19 @@
 #include <model_checking/omg_model_checker.h>
 #include <utils/omg_utils.h>
 #include <utils/z3_utils.h>
+#include <chrono>
+//#include <boost/thread/thread.hpp>
 
 #define TEST(aig_path, raw_ctl_string, expected) \
     do \
         { \
+            auto t1 = std::chrono::high_resolution_clock::now(); \
             bool passed = ((expected) == test_formula(std::string((aig_path)), std::string((raw_ctl_string)))); \
             if (passed) std::cout << "PASS! :)" << std::endl; \
             else std::cout << "\tFAIL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl; \
+            auto t2 = std::chrono::high_resolution_clock::now(); \
+            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( t2 - t1 ).count(); \
+            std::cout << "Time: " << duration << std::endl; \
         } \
     while(0)
 
@@ -66,6 +72,10 @@ void test_parser(const std::string& file_path)
 
     }
 }
+
+
+
+
 void test_model(const std::string& file_path_no_extension) {
     std::cout << "Testing model: " << file_path_no_extension << std::endl;
     const std::string &aig_path = file_path_no_extension + ".aig";
@@ -93,17 +103,29 @@ void test_model(const std::string& file_path_no_extension) {
             DEBUG_PRINT("END CHUNK!");
         }
 
+        auto t1 = std::chrono::high_resolution_clock::now();
+
         std::unique_ptr<KripkeStructure> kripke = p.to_kripke(APs);
 
         OmgModelChecker omg(*kripke);
+        auto t2 = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( t2 - t1 ).count();
+        std::cout << "MC Time: " << duration << std::endl;
 
         for (const auto &it : formula_chunks) {
             bool is_pass = it.get_expected_result();
             for (const auto &it2 : it.get_formulas()) {
                 DEBUG_PRINT("Testing ## %s ## against ## %s ##... ", it2->to_string().data(), aig_path.data());
+                auto t11 = std::chrono::high_resolution_clock::now();
 
                 bool res = omg.check_all_initial_states(*it2);
+
+                auto t21 = std::chrono::high_resolution_clock::now();
+                auto duration1 = std::chrono::duration_cast<std::chrono::milliseconds>( t21 - t11 ).count();
+
                 PRINT_IF_BUG(res, is_pass, aig_path, it2->to_string(), prop_count);
+                std::cout << "MC Time: " << duration1 << std::endl;
+
                 ++prop_count;
             }
         }
@@ -111,13 +133,19 @@ void test_model(const std::string& file_path_no_extension) {
         for (const FormulaChunk &chunk : formula_chunks) {
             bool is_pass = chunk.get_expected_result();
             for (const auto &it : chunk.get_formulas()) {
+
                 DEBUG_PRINT("Testing ## %s ## against ## %s ##... ", it->to_string().data(), aig_path.data());
+                auto t1 = std::chrono::high_resolution_clock::now();
 
                 std::unique_ptr<KripkeStructure> kripke = p.to_kripke(it->get_aps());
                 OmgModelChecker omg(*kripke);
 
                 bool res = omg.check_all_initial_states(*it);
+                auto t2 = std::chrono::high_resolution_clock::now();
+                auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( t2 - t1 ).count();
+                std::cout << "Ctr + MC Time: " << duration << std::endl;
                 PRINT_IF_BUG(res, is_pass, aig_path, it->to_string(), prop_count);
+
                 ++prop_count;
             }
         }
@@ -270,17 +298,34 @@ void test_parser_s(const std::string& s)
     auto parse_result = parser.parse(lex_result);
     std::cout << "5";
 }
-
+//
+//
+//void test_f()
+//{
+//    int o = 0;
+//    while(true)
+//    {
+//        o++;
+//        if (o % 10000 == 0) std::cout << "I";
+//    }
+//}
+//
+//void thread_test()
+//{
+//    boost::thread t([]() { test_f(); });
+//    bool res = t.timed_join(boost::posix_time::seconds(1));
+//    std::cout << res << std::endl;
+//}
 int main()
 {
 //    run_models("../models_to_run.omg");
   //  test_model("../resources/cp0IntEncoder");
 //    unit_tests();
 //    TEST("../resources/spinner4.aig", "AG((~inr<3> & ~inr<2> & ~inr<1> & inr<0>) -> ~E spl U (~inr<3> & ~inr<2> & inr<1> & inr<0>))", false);
+    TEST("../resources/tstrst.aig", "AG (o | ~t | s)", true);
 
 
-    test_parser_s("AG (EF o & EF ~o)");
-
+//    thread_test();
 
 }
 

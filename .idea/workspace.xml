@@ -16,15 +16,10 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="-Bugfixes to CtlParser so now compiles&#10;-Bugfix in lexer&#10;-Manual change to soap -- renaming APs so that lexer doesn't die">
+    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/parsers/ctl_parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/ctl_parser.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/parsers/ctl_parser_data.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/ctl_parser_data.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/parsers/lexer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/lexer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/parsers/lexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/lexer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/soap.aig" beforeDir="false" afterPath="$PROJECT_DIR$/resources/soap.aig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/soap.ctl" beforeDir="false" afterPath="$PROJECT_DIR$/resources/soap.ctl" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <ignored path="$PROJECT_DIR$/cmake-build-release/" />
@@ -37,41 +32,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/parsers/lexer.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="368">
-              <caret line="52" column="39" selection-start-line="52" selection-start-column="39" selection-end-line="52" selection-end-column="39" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser_data.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="122">
-              <caret line="286" column="113" lean-forward="true" selection-start-line="286" selection-start-column="113" selection-end-line="286" selection-end-column="113" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/code/parsers/ctl_file_parser.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="205">
-              <caret line="87" selection-start-line="87" selection-end-line="87" />
-              <folding>
-                <element signature="e#41#69#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/code/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="50" selection-start-line="50" selection-end-line="50" />
+            <state relative-caret-position="161">
+              <caret line="326" lean-forward="true" selection-start-line="326" selection-end-line="326" />
               <folding>
                 <element signature="e#37#55#0" expanded="true" />
               </folding>
@@ -80,15 +45,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/soap.ctl">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/soap.aig">
+        <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
-              <caret line="581" lean-forward="true" selection-start-line="581" selection-end-line="581" />
+            <state relative-caret-position="304">
+              <caret line="24" column="58" selection-start-line="24" selection-start-column="58" selection-end-line="24" selection-end-column="58" />
             </state>
           </provider>
         </entry>
@@ -96,35 +56,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/syncarb.ctl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="42" column="1" lean-forward="true" selection-start-line="42" selection-start-column="1" selection-end-line="42" selection-end-column="1" />
+            <state relative-caret-position="324">
+              <caret line="47" selection-start-line="47" selection-end-line="47" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/fifteen.ctl">
+        <entry file="file://$PROJECT_DIR$/resources/syncarb.aig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="12" column="10" lean-forward="true" selection-start-line="12" selection-start-column="10" selection-end-line="12" selection-end-column="10" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/am2901.ctl">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="13" column="10" lean-forward="true" selection-start-line="13" selection-start-column="10" selection-end-line="13" selection-end-column="10" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/am2910.ctl">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="65" column="42" lean-forward="true" selection-start-line="65" selection-start-column="42" selection-end-line="65" selection-end-column="42" />
+            <state relative-caret-position="342">
+              <caret line="97" column="2" selection-start-line="97" selection-start-column="2" selection-end-line="97" selection-end-column="2" />
             </state>
           </provider>
         </entry>
@@ -140,12 +82,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>comput</find>
-      <find>get_abs</find>
-      <find>fin</find>
-      <find>candidates</find>
-      <find>Refine</find>
-      <find>LULU</find>
       <find>erase</find>
       <find>.add_label</find>
       <find>&lt;&lt;TODO&gt;&gt;</find>
@@ -168,8 +104,14 @@
       <find>Fail</find>
       <find>GA</find>
       <find>GE</find>
-      <find>GG</find>
       <find>GF</find>
+      <find>GG</find>
+      <find>RAM</find>
+      <find>RE</find>
+      <find>Fai</find>
+      <find>Fa</find>
+      <find>micro</find>
+      <find>duration</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -178,15 +120,17 @@
       <replace>OmgConfigException</replace>
       <replace>../resources</replace>
       <replace>ga</replace>
-      <replace>gg</replace>
       <replace>gf</replace>
+      <replace>gg</replace>
+      <replace>ram</replace>
+      <replace>re</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
       <list>
-        <option value="galls2 &lt;galls2@cs.technion.ac.il&gt;" />
         <option value="galls2@cs.technion.ac.il" />
+        <option value="galls2 &lt;galls2@cs.technion.ac.il&gt;" />
         <option value="galls2 &lt;galls2galls2@gmail.com&gt;" />
         <option value="Gal Sade &lt;31407570+galls2@users.noreply.github.com&gt;" />
       </list>
@@ -200,13 +144,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/code/utils/version_manager.h" />
-        <option value="$PROJECT_DIR$/code/utils/version_manager.cpp" />
-        <option value="$PROJECT_DIR$/code/formulas/prop_formula.h" />
-        <option value="$PROJECT_DIR$/code/formulas/prop_formula.cpp" />
-        <option value="$PROJECT_DIR$/code/temporal/ctl_formula.cpp" />
-        <option value="$PROJECT_DIR$/code/structures/concrete_state.h" />
-        <option value="$PROJECT_DIR$/code/temporal/ctl_formula.h" />
         <option value="$PROJECT_DIR$/code/utils/cartesian_product_generator.h" />
         <option value="$PROJECT_DIR$/code/parsers/ctl_parser.h" />
         <option value="$PROJECT_DIR$/code/formulas/epr_solver.h" />
@@ -228,7 +165,6 @@
         <option value="$PROJECT_DIR$/code/utils/aiger-1.9.9/aig_to_aag.cpp" />
         <option value="$PROJECT_DIR$/code/parsers/aig_parser.h" />
         <option value="$PROJECT_DIR$/code/parsers/aig_parser.cpp" />
-        <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/code/structures/unwinding_tree.cpp" />
         <option value="$PROJECT_DIR$/code/structures/unwinding_tree.h" />
         <option value="$PROJECT_DIR$/code/structures/concrete_state.cpp" />
@@ -247,18 +183,27 @@
         <option value="$PROJECT_DIR$/code/parsers/ctl_parser.cpp" />
         <option value="$PROJECT_DIR$/code/parsers/lexer.h" />
         <option value="$PROJECT_DIR$/code/parsers/lexer.cpp" />
-        <option value="$PROJECT_DIR$/code/main.cpp" />
         <option value="$PROJECT_DIR$/resources/soap.aig" />
         <option value="$PROJECT_DIR$/resources/soap.ctl" />
+        <option value="$PROJECT_DIR$/resources/am2901.ctl" />
+        <option value="$PROJECT_DIR$/resources/am2901.aig" />
         <option value="$PROJECT_DIR$/code/parsers/ctl_parser_data.cpp" />
+        <option value="$PROJECT_DIR$/resources/am2910.aig" />
+        <option value="$PROJECT_DIR$/resources/am2910.ctl" />
+        <option value="$PROJECT_DIR$/resources/fifteen.ctl" />
+        <option value="$PROJECT_DIR$/resources/FPMult.ctl" />
+        <option value="$PROJECT_DIR$/resources/syncarb.ctl" />
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
+        <option value="$PROJECT_DIR$/code/main.cpp" />
       </list>
     </option>
   </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds">
-    <option name="y" value="24" />
-    <option name="width" value="1920" />
-    <option name="height" value="1004" />
+    <option name="x" value="5" />
+    <option name="y" value="29" />
+    <option name="width" value="1910" />
+    <option name="height" value="994" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -294,11 +239,6 @@
               <item name="OMG_cpp" type="462c0819:PsiDirectoryNode" />
               <item name="code" type="462c0819:PsiDirectoryNode" />
               <item name="structures" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="OMG_CPP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="OMG_cpp" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -380,21 +320,7 @@
       <workItem from="1576322596048" duration="1851000" />
       <workItem from="1580376891038" duration="55751000" />
       <workItem from="1584796046953" duration="738000" />
-      <workItem from="1587326308621" duration="94694000" />
-    </task>
-    <task id="LOCAL-00078" summary="Prettified prints, Added debug string&#10;&#10;Bugfixes:&#10;- sending p now instead of q (buggy) to brother unification as an agree-upon formula&#10;- forgetting to unify next_level and unchanged during brother unification algorithm">
-      <created>1586521495811</created>
-      <option name="number" value="00078" />
-      <option name="presentableId" value="LOCAL-00078" />
-      <option name="project" value="LOCAL" />
-      <updated>1586521495812</updated>
-    </task>
-    <task id="LOCAL-00079" summary="Adde a is_tse_possible flag. Cannot be done as a template boolean argument due to an include conflict in abstract_structure.h. Settled for a regular parameter to the function, instead of auto-creating two functions">
-      <created>1586551976997</created>
-      <option name="number" value="00079" />
-      <option name="presentableId" value="LOCAL-00079" />
-      <option name="project" value="LOCAL" />
-      <updated>1586551976997</updated>
+      <workItem from="1587326308621" duration="102342000" />
     </task>
     <task id="LOCAL-00080" summary="-Implemented EX_pos formula getting! And most of the abstract structure things&#10;-Refactor and name shortening">
       <created>1586640762243</created>
@@ -725,11 +651,25 @@
       <option name="project" value="LOCAL" />
       <updated>1588940821770</updated>
     </task>
-    <option name="localTasksCounter" value="127" />
+    <task id="LOCAL-00127" summary="-Bugfixes to CtlParser so now compiles&#10;-Bugfix in lexer&#10;-Manual change to soap -- renaming APs so that lexer doesn't die">
+      <created>1589050949422</created>
+      <option name="number" value="00127" />
+      <option name="presentableId" value="LOCAL-00127" />
+      <option name="project" value="LOCAL" />
+      <updated>1589050949423</updated>
+    </task>
+    <task id="LOCAL-00128" summary="Changing AP names, removing \n from some formulas so parser won't go nuts&#10;Issue #4 solved">
+      <created>1589053791598</created>
+      <option name="number" value="00128" />
+      <option name="presentableId" value="LOCAL-00128" />
+      <option name="project" value="LOCAL" />
+      <updated>1589053791599</updated>
+    </task>
+    <option name="localTasksCounter" value="129" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="773934000" />
+    <option name="totallyTimeSpent" value="781582000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -741,21 +681,22 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="24" width="1920" height="1004" extended-state="0" />
+    <frame x="5" y="29" width="1910" height="994" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49861112" visible="true" weight="0.15541264" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49861112" visible="true" weight="0.15625" />
       <window_info id="Structure" order="1" sideWeight="0.5013889" side_tool="true" weight="0.1511254" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32392776" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4989282" weight="0.40744922" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49839228" weight="0.4819413" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4989282" visible="true" weight="0.39840183" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49839228" weight="0.4552239" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Database Changes" order="6" />
       <window_info anchor="bottom" id="Inspection Results" order="7" sideWeight="0.4994641" weight="0.3295711" />
       <window_info anchor="bottom" id="TODO" order="8" weight="0.32731378" />
-      <window_info active="true" anchor="bottom" id="Messages" order="9" sideWeight="0.49785638" visible="true" weight="0.3363431" />
+      <window_info anchor="bottom" id="Messages" order="9" sideWeight="0.49785638" weight="0.34018266" />
       <window_info anchor="bottom" id="Terminal" order="10" weight="0.32762557" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5026795" side_tool="true" weight="0.2020316" />
       <window_info anchor="bottom" id="Version Control" order="12" weight="0.3295711" />
@@ -766,20 +707,20 @@
       <window_info anchor="right" id="Database" order="3" />
     </layout>
     <layout-to-restore>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49861112" visible="true" weight="0.15326902" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49861112" visible="true" weight="0.15541264" />
       <window_info id="Structure" order="1" sideWeight="0.5013889" side_tool="true" weight="0.1511254" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3261851" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4989282" weight="0.2799097" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.49839228" visible="true" weight="0.4819413" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32392776" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4989282" visible="true" weight="0.39872068" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49839228" weight="0.4819413" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Database Changes" order="6" />
       <window_info anchor="bottom" id="Inspection Results" order="7" sideWeight="0.4994641" weight="0.3295711" />
       <window_info anchor="bottom" id="TODO" order="8" weight="0.32731378" />
-      <window_info anchor="bottom" id="Messages" order="9" sideWeight="0.49785638" weight="0.33972913" />
-      <window_info anchor="bottom" id="Terminal" order="10" weight="0.32844242" />
+      <window_info anchor="bottom" id="Messages" order="9" sideWeight="0.49785638" weight="0.3363431" />
+      <window_info anchor="bottom" id="Terminal" order="10" weight="0.32762557" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5026795" side_tool="true" weight="0.2020316" />
       <window_info anchor="bottom" id="Version Control" order="12" weight="0.3295711" />
       <window_info anchor="bottom" id="CMake" order="13" weight="0.29345372" />
@@ -793,7 +734,6 @@
     <option name="version" value="1" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Moved main to code dir,&#10;Added installation scripts" />
     <MESSAGE value="-Added boost&#10;-Moved  omg_installer&#10;-moved to cpp14 for now" />
     <MESSAGE value="-Updated prep_omg.sh" />
     <MESSAGE value="Fixed installation scripts: now installing boost &amp; using cmake properly" />
@@ -818,7 +758,8 @@
     <MESSAGE value="Refactor to CtlParser. Now using a build dictionary instead of a huge switch-case" />
     <MESSAGE value="Changed CTL parser to support EQUIVs" />
     <MESSAGE value="-Bugfixes to CtlParser so now compiles&#10;-Bugfix in lexer&#10;-Manual change to soap -- renaming APs so that lexer doesn't die" />
-    <option name="LAST_COMMIT_MESSAGE" value="-Bugfixes to CtlParser so now compiles&#10;-Bugfix in lexer&#10;-Manual change to soap -- renaming APs so that lexer doesn't die" />
+    <MESSAGE value="Changing AP names, removing \n from some formulas so parser won't go nuts&#10;Issue #4 solved" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changing AP names, removing \n from some formulas so parser won't go nuts&#10;Issue #4 solved" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -845,7 +786,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/code/main.cpp</url>
-          <line>50</line>
+          <line>56</line>
           <option name="timeStamp" value="277" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
@@ -857,6 +798,26 @@
           <url>file://$PROJECT_DIR$/code/parsers/ctl_file_parser.cpp</url>
           <line>78</line>
           <option name="timeStamp" value="279" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/code/parsers/ctl_file_parser.cpp</url>
+          <line>87</line>
+          <option name="timeStamp" value="280" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/code/main.cpp</url>
+          <line>300</line>
+          <option name="timeStamp" value="282" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/code/main.cpp</url>
+          <line>299</line>
+          <option name="timeStamp" value="283" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/code/main.cpp</url>
+          <line>298</line>
+          <option name="timeStamp" value="284" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -960,21 +921,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/resources/rrff.aag">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="10" column="5" lean-forward="true" selection-start-line="10" selection-start-column="5" selection-end-line="10" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/b07.aig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1404" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/spinner4.aag">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/code/utils/omg_exception.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="324">
@@ -1125,13 +1071,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="26" column="41" selection-start-line="26" selection-start-column="41" selection-end-line="26" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/prep_omg.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
@@ -1179,13 +1118,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="87" column="21" selection-start-line="87" selection-start-column="15" selection-end-line="87" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser_data.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="11" column="61" selection-start-line="11" selection-start-column="38" selection-end-line="11" selection-end-column="61" />
         </state>
       </provider>
     </entry>
@@ -1264,47 +1196,78 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/FPMult.ctl">
+    <entry file="file://$PROJECT_DIR$/resources/soap.ctl">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/soap.aig">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="30" lean-forward="true" selection-start-line="30" selection-end-line="30" />
+        <state relative-caret-position="653">
+          <caret line="581" lean-forward="true" selection-start-line="581" selection-end-line="581" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/syncarb.ctl">
+    <entry file="file://$PROJECT_DIR$/resources/am2901.aig">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="42" column="1" lean-forward="true" selection-start-line="42" selection-start-column="1" selection-end-line="42" selection-end-column="1" />
+        <state relative-caret-position="533">
+          <caret line="341" column="6" selection-start-line="341" selection-start-column="6" selection-end-line="341" selection-end-column="6" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/fifteen.ctl">
+    <entry file="file://$PROJECT_DIR$/resources/am2910.aig">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="12" column="10" lean-forward="true" selection-start-line="12" selection-start-column="10" selection-end-line="12" selection-end-column="10" />
+        <state relative-caret-position="1437">
+          <caret line="300" column="6" selection-start-line="300" selection-start-column="6" selection-end-line="300" selection-end-column="6" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/am2901.ctl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="13" column="10" lean-forward="true" selection-start-line="13" selection-start-column="10" selection-end-line="13" selection-end-column="10" />
+        <state relative-caret-position="342">
+          <caret line="19" column="56" selection-start-line="19" selection-start-column="56" selection-end-line="19" selection-end-column="56" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/am2910.ctl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="65" column="42" lean-forward="true" selection-start-line="65" selection-start-column="42" selection-end-line="65" selection-end-column="42" />
+        <state relative-caret-position="264">
+          <caret line="72" column="488" lean-forward="true" selection-start-line="72" selection-start-column="488" selection-end-line="72" selection-end-column="488" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/main.cpp">
+    <entry file="file://$PROJECT_DIR$/resources/fifteen.ctl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="50" selection-start-line="50" selection-end-line="50" />
+        <state relative-caret-position="54">
+          <caret line="3" column="33" lean-forward="true" selection-start-line="3" selection-start-column="33" selection-end-line="3" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/FPMult.ctl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" column="54" lean-forward="true" selection-start-line="11" selection-start-column="54" selection-end-line="11" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/syncarb.aig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="97" column="2" selection-start-line="97" selection-start-column="2" selection-end-line="97" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/syncarb.ctl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="47" selection-start-line="47" selection-end-line="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_file_parser.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="78" column="53" selection-start-line="77" selection-start-column="7" selection-end-line="78" selection-end-column="53" />
           <folding>
-            <element signature="e#37#55#0" expanded="true" />
+            <element signature="e#41#69#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1316,30 +1279,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_file_parser.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="87" selection-start-line="87" selection-end-line="87" />
-          <folding>
-            <element signature="e#41#69#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/soap.aig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="581" lean-forward="true" selection-start-line="581" selection-end-line="581" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/soap.ctl">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser_data.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="122">
-          <caret line="286" column="113" lean-forward="true" selection-start-line="286" selection-start-column="113" selection-end-line="286" selection-end-column="113" />
+        <state relative-caret-position="126">
+          <caret line="264" column="29" selection-start-line="264" selection-start-column="29" selection-end-line="264" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/parsers/ctl_parser_data.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="9" column="22" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="24" column="58" selection-start-line="24" selection-start-column="58" selection-end-line="24" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/code/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="161">
+          <caret line="326" lean-forward="true" selection-start-line="326" selection-end-line="326" />
+          <folding>
+            <element signature="e#37#55#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
