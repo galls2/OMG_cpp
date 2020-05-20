@@ -22,7 +22,7 @@ public:
     static std::vector<z3::expr> get_vars_in_formula(z3::expr const & e);
 
     static bool is_cstate_conjunct(const z3::expr& f);
-
+    static bool is_conj_contained(const z3::expr& big_conj, const z3::expr& small_conj);
     static bool is_lit_agrees_with_conj(const z3::expr& conj, const z3::expr& var);
 
 };

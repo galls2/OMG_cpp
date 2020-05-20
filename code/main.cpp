@@ -298,7 +298,7 @@ void test_parser_s(const std::string& s)
     auto parse_result = parser.parse(lex_result);
     std::cout << "5";
 }
-//
+
 //
 //void test_f()
 //{
@@ -306,7 +306,7 @@ void test_parser_s(const std::string& s)
 //    while(true)
 //    {
 //        o++;
-//        if (o % 10000 == 0) std::cout << "I";
+//        if (o % 10000 == 0) { std::cout << "I"; o = 0; }
 //    }
 //}
 //
@@ -322,7 +322,7 @@ int main()
   //  test_model("../resources/cp0IntEncoder");
 //    unit_tests();
 //    TEST("../resources/spinner4.aig", "AG((~inr<3> & ~inr<2> & ~inr<1> & inr<0>) -> ~E spl U (~inr<3> & ~inr<2> & inr<1> & inr<0>))", false);
-    TEST("../resources/tstrst.aig", "AG (o | ~t | s)", true);
+    TEST("../resources/twophase.aig", "AG ~out", false);
 
 
 //    thread_test();

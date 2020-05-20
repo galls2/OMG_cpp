@@ -307,6 +307,20 @@ bool FormulaUtils::is_lit_agrees_with_conj(const z3::expr &conj, const z3::expr 
     assert(false);
 }
 
+bool FormulaUtils::is_conj_contained(const z3::expr &big_conj, const z3::expr &small_conj) {
+    assert(big_conj.num_args() <= std::numeric_limits<uint16_t>::max() &&
+           small_conj.num_args() <= std::numeric_limits<uint16_t>::max());
+
+    // TODO optimize!!!!!!!!!!!!!!!!!!! from O(nm) to O(n+m)?
+    for (uint16_t i = 0; i < small_conj.num_args(); ++i) {
+        const z3::expr &v = small_conj.arg(i);
+        for (uint16_t j = 0; j < small_conj.num_args(); j++) {
+            if (z3::eq(big_conj.arg(j), v)) return true;
+        }
+    }
+    return false;
+}
+
 void FormulaSplitUtils::find_proving_inputs(const z3::expr& state_conj, const PropFormula& tr, z3::expr& dst, z3::expr_vector& input_values)
 {
     z3::expr raw_formula_to_solve = state_conj && tr.get_raw_formula() && dst;

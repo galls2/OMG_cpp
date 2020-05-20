@@ -36,6 +36,7 @@ public:
     const AbstractClassificationNode* get_parent() const;
     AbstractState* get_abs() const;
     AbstractState& classify(const ConcreteState& cstate) const;
+
     AbstractClassificationNode& get_successor(QueryResult query_result);
     const AbstractClassificationNode& get_successor(QueryResult query_result) const;
 

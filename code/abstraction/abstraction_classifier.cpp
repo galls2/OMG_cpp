@@ -67,7 +67,17 @@ AbstractionClassifier::split(AbstractState &astate, PropFormula &query_formula, 
         Z3ExprSet ps_vars = expr_vector_to_set(query_formula.get_vars_by_tag("ps"));
         assert(is_contained_z3_containers(cstate_vars, ps_vars));
 #endif
-        z3::expr formula_to_solver = query_formula.get_raw_formula() && cstate.get_conjunct();
+        z3::expr formula_to_solver = (query_formula.get_raw_formula() && cstate.get_conjunct()).simplify();
+        if (z3::eq(formula_to_solver, ctx.bool_val(false)))
+        {
+            return false;
+        }
+        else // checking if formula_to_solver |= cstate
+        {
+            assert(FormulaUtils::is_cstate_conjunct(formula_to_solver));
+            assert(FormulaUtils::is_cstate_conjunct(cstate.get_conjunct()));
+            if (FormulaUtils::is_conj_contained(cstate.get_conjunct(), formula_to_solver)) return true;
+        }
         return solver->is_sat(formula_to_solver);
     });
 
@@ -95,19 +105,16 @@ bool AbstractClassificationNode::is_leaf() const {
 }
 
 AbstractState &AbstractClassificationNode::classify(const ConcreteState &cstate) const {
-    if (_successors.empty())
+    const AbstractClassificationNode* current = this;
+    while (!current->_successors.empty())
     {
-        assert(_abs_state);
-        return *_abs_state;
-    }
-    else
-    {
-        assert(_query);
-        const auto& query = _query.value();
+        assert(current->_query);
+        const auto& query = current->_query.value();
         bool successor = query(cstate);
-        AbstractState& classification_result = _successors.at(successor)->classify(cstate);
-        return classification_result;
+        current = &current->get_successor(successor);
     }
+    assert(current->_abs_state);
+    return *current->_abs_state;
 }
 
 AbstractState *AbstractClassificationNode::get_abs() const {

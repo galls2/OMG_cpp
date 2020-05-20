@@ -53,6 +53,7 @@ void ConcreteState::compute_successors() {
     z3::expr_vector ns_vars = variables_map.at(std::string("ns"));
     std::vector<SatSolverResult> sat_results = sat_solver->all_sat(ns_formula, expr_vector_to_vector(ns_vars));
     std::vector<ConcreteState> successors;
+
     for (const auto& res : sat_results)
     {
         assert(res.get_is_sat());

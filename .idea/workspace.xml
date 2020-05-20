@@ -34,12 +34,12 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="">
+    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="Upgraded EE-inductiveness checking to be incremental">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/abstraction/abstract_structure.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstract_structure.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/abstraction/abstract_structure.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstract_structure.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/model_checking/omg_model_checker.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/omg_model_checker.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/abstraction/abstraction_classifier.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstraction_classifier.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/abstraction/abstraction_classifier.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstraction_classifier.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/main.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/structures/concrete_state.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/concrete_state.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/utils/z3_utils.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/z3_utils.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/utils/z3_utils.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/z3_utils.h" afterDir="false" />
@@ -151,13 +151,6 @@
       <workItem from="1580376891038" duration="55751000" />
       <workItem from="1584796046953" duration="738000" />
       <workItem from="1587326308621" duration="102342000" />
-    </task>
-    <task id="LOCAL-00080" summary="-Implemented EX_pos formula getting! And most of the abstract structure things&#10;-Refactor and name shortening">
-      <created>1586640762243</created>
-      <option name="number" value="00080" />
-      <option name="presentableId" value="LOCAL-00080" />
-      <option name="project" value="LOCAL" />
-      <updated>1586640762243</updated>
     </task>
     <task id="LOCAL-00081" summary="Finished up EX+ in abstract_structure">
       <created>1586645278660</created>
@@ -495,7 +488,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589053791599</updated>
     </task>
-    <option name="localTasksCounter" value="129" />
+    <task id="LOCAL-00129" summary="Upgraded EE-inductiveness checking to be incremental">
+      <created>1589549231981</created>
+      <option name="number" value="00129" />
+      <option name="presentableId" value="LOCAL-00129" />
+      <option name="project" value="LOCAL" />
+      <updated>1589549231981</updated>
+    </task>
+    <option name="localTasksCounter" value="130" />
     <servers />
   </component>
   <component name="TodoView">
@@ -522,7 +522,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="-Added boost&#10;-Moved  omg_installer&#10;-moved to cpp14 for now" />
     <MESSAGE value="-Updated prep_omg.sh" />
     <MESSAGE value="Fixed installation scripts: now installing boost &amp; using cmake properly" />
     <MESSAGE value="Made SAT solver configurable in practice. #7&#10;Using conj decomposition now instead of SAT solving" />
@@ -547,33 +546,66 @@
     <MESSAGE value="Changed CTL parser to support EQUIVs" />
     <MESSAGE value="-Bugfixes to CtlParser so now compiles&#10;-Bugfix in lexer&#10;-Manual change to soap -- renaming APs so that lexer doesn't die" />
     <MESSAGE value="Changing AP names, removing \n from some formulas so parser won't go nuts&#10;Issue #4 solved" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changing AP names, removing \n from some formulas so parser won't go nuts&#10;Issue #4 solved" />
+    <MESSAGE value="Upgraded EE-inductiveness checking to be incremental" />
+    <option name="LAST_COMMIT_MESSAGE" value="Upgraded EE-inductiveness checking to be incremental" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1868" height="330" key="GridCell.Tab.0.bottom" timestamp="1589549205568">
-      <screen x="0" y="0" width="3840" height="1080" />
+    <state x="660" y="344" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1589720087392">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1358" height="333" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1589539900657" />
-    <state width="1868" height="330" key="GridCell.Tab.0.bottom/0.0.3840.1080@0.0.3840.1080" timestamp="1589549205568" />
-    <state width="1868" height="330" key="GridCell.Tab.0.center" timestamp="1589549205562">
-      <screen x="0" y="0" width="3840" height="1080" />
+    <state x="660" y="344" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1080@0.0.1920.1080" timestamp="1589720087392" />
+    <state x="826" y="294" key="#xdebugger.evaluate" timestamp="1590006389809">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1358" height="333" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1589539900652" />
-    <state width="1868" height="330" key="GridCell.Tab.0.center/0.0.3840.1080@0.0.3840.1080" timestamp="1589549205562" />
-    <state width="1868" height="330" key="GridCell.Tab.0.left" timestamp="1589549205559">
-      <screen x="0" y="0" width="3840" height="1080" />
+    <state x="826" y="294" key="#xdebugger.evaluate/0.0.1920.1080@0.0.1920.1080" timestamp="1590006389809" />
+    <state width="1878" height="309" key="GridCell.Tab.0.bottom" timestamp="1590006929516">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1358" height="333" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1589539900649" />
-    <state width="1868" height="330" key="GridCell.Tab.0.left/0.0.3840.1080@0.0.3840.1080" timestamp="1589549205559" />
-    <state width="1868" height="330" key="GridCell.Tab.0.right" timestamp="1589549205565">
-      <screen x="0" y="0" width="3840" height="1080" />
+    <state width="1878" height="309" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1590006929516" />
+    <state width="1868" height="330" key="GridCell.Tab.0.bottom/0.0.3840.1080@0.0.3840.1080" timestamp="1589564406224" />
+    <state width="1878" height="309" key="GridCell.Tab.0.center" timestamp="1590006929510">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1358" height="333" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1589539900654" />
-    <state width="1868" height="330" key="GridCell.Tab.0.right/0.0.3840.1080@0.0.3840.1080" timestamp="1589549205565" />
+    <state width="1878" height="309" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1590006929510" />
+    <state width="1868" height="330" key="GridCell.Tab.0.center/0.0.3840.1080@0.0.3840.1080" timestamp="1589564406218" />
+    <state width="1878" height="309" key="GridCell.Tab.0.left" timestamp="1590006929507">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1878" height="309" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1590006929507" />
+    <state width="1868" height="330" key="GridCell.Tab.0.left/0.0.3840.1080@0.0.3840.1080" timestamp="1589564406213" />
+    <state width="1878" height="309" key="GridCell.Tab.0.right" timestamp="1590006929513">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1878" height="309" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1590006929513" />
+    <state width="1868" height="330" key="GridCell.Tab.0.right/0.0.3840.1080@0.0.3840.1080" timestamp="1589564406221" />
+    <state width="1878" height="373" key="GridCell.Tab.1.bottom" timestamp="1590006495516">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1878" height="373" key="GridCell.Tab.1.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1590006495516" />
+    <state width="1878" height="373" key="GridCell.Tab.1.center" timestamp="1590006495511">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1878" height="373" key="GridCell.Tab.1.center/0.0.1920.1080@0.0.1920.1080" timestamp="1590006495511" />
+    <state width="1878" height="373" key="GridCell.Tab.1.left" timestamp="1590006495509">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1878" height="373" key="GridCell.Tab.1.left/0.0.1920.1080@0.0.1920.1080" timestamp="1590006495509" />
+    <state width="1878" height="373" key="GridCell.Tab.1.right" timestamp="1590006495514">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1878" height="373" key="GridCell.Tab.1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1590006495514" />
+    <state width="960" height="502" key="XDebugger.FullValuePopup" timestamp="1590006495173">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="960" height="502" key="XDebugger.FullValuePopup/0.0.1920.1080@0.0.1920.1080" timestamp="1590006495173" />
     <state x="745" y="471" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1589539801210">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="745" y="471" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1080@0.0.1920.1080" timestamp="1589539801210" />
+    <state x="655" y="142" width="609" height="768" key="find.popup" timestamp="1590005662857">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="655" y="142" width="609" height="768" key="find.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1590005662857" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -618,16 +650,6 @@
           <line>87</line>
           <option name="timeStamp" value="280" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/code/main.cpp</url>
-          <line>299</line>
-          <option name="timeStamp" value="283" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/code/main.cpp</url>
-          <line>298</line>
-          <option name="timeStamp" value="284" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
@@ -635,98 +657,5 @@
         <watch expression="dst_cstate.to_bitvec()" language="ObjectiveC" />
       </configuration>
     </watches-manager>
-  </component>
-  <component name="debuggerHistoryManager">
-    <expressions id="evaluateCodeFragment">
-      <expression>
-        <expression-string>conj_vars_set == tr_ps_vars</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>std::string x;</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>_tr_formula.get()-&gt;get_vars_by_tag(&quot;ps&quot;)</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>_tr_formula.get()-&gt;get_vars_by_tag(&quot;ps&quot;).back()</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>_tr_formula.get()-&gt;get_vars_by_tag(&quot;ps&quot;).back().to_string();</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-    </expressions>
-    <expressions id="watch">
-      <expression>
-        <expression-string>dst_cstate.to_bitvec()</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>node_to_explore</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-    </expressions>
-    <expressions id="evaluateExpression">
-      <expression>
-        <expression-string>find_abs(*to_close_nodes.begin())</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>solver</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>it2-&gt;get_concrete_state().to_bitvec_str()</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>to_visit.erase(&amp;node_to_explore)</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>(*to_visit.begin())-&gt;get_concrete_state().to_bitvec_str()</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>succ.get()</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>&amp;node_to_set</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>b.get().get_concrete_state().to_bitvec_str()</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>bitand.get().get_concrete_state().to_bitvec_str()</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>a.get().get_concrete_state().to_bitvec_str()</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-    </expressions>
   </component>
 </project>
