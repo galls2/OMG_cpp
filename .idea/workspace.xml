@@ -34,15 +34,11 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="Upgraded EE-inductiveness checking to be incremental">
+    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="Optimizations">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/abstraction/abstraction_classifier.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstraction_classifier.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/abstraction/abstraction_classifier.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstraction_classifier.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/formulas/sat_solver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/formulas/sat_solver.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/structures/concrete_state.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/concrete_state.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/utils/z3_utils.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/z3_utils.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/utils/z3_utils.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/z3_utils.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,9 +67,6 @@
     </option>
     <option name="UPDATE_TYPE" value="REBASE" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="GithubDefaultAccount">
-    <option name="defaultAccountId" value="c72709d6-86b0-47d6-9812-28f2357dffdd" />
   </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectId" id="1bwORsMkAm5tDFxBPn2zy4Mi0yL" />
@@ -151,13 +144,7 @@
       <workItem from="1580376891038" duration="55751000" />
       <workItem from="1584796046953" duration="738000" />
       <workItem from="1587326308621" duration="102342000" />
-    </task>
-    <task id="LOCAL-00081" summary="Finished up EX+ in abstract_structure">
-      <created>1586645278660</created>
-      <option name="number" value="00081" />
-      <option name="presentableId" value="LOCAL-00081" />
-      <option name="project" value="LOCAL" />
-      <updated>1586645278665</updated>
+      <workItem from="1591274836892" duration="2583000" />
     </task>
     <task id="LOCAL-00082" summary="Implemented trace strengthening, made code compile with const editing">
       <created>1586695530380</created>
@@ -495,7 +482,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589549231981</updated>
     </task>
-    <option name="localTasksCounter" value="130" />
+    <task id="LOCAL-00130" summary="Optimizations">
+      <created>1590007425943</created>
+      <option name="number" value="00130" />
+      <option name="presentableId" value="LOCAL-00130" />
+      <option name="project" value="LOCAL" />
+      <updated>1590007425944</updated>
+    </task>
+    <option name="localTasksCounter" value="131" />
     <servers />
   </component>
   <component name="TodoView">
@@ -520,9 +514,9 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="-Updated prep_omg.sh" />
     <MESSAGE value="Fixed installation scripts: now installing boost &amp; using cmake properly" />
     <MESSAGE value="Made SAT solver configurable in practice. #7&#10;Using conj decomposition now instead of SAT solving" />
     <MESSAGE value="-Bugfix + Added print function to OMG_CONFIG&#10;-Bugfix in MC: now model checking all initial states, which we cache&#10;- Added runconfig&#10;-Made code for using the &quot;Properties per spec&quot; configuration" />
@@ -547,9 +541,14 @@
     <MESSAGE value="-Bugfixes to CtlParser so now compiles&#10;-Bugfix in lexer&#10;-Manual change to soap -- renaming APs so that lexer doesn't die" />
     <MESSAGE value="Changing AP names, removing \n from some formulas so parser won't go nuts&#10;Issue #4 solved" />
     <MESSAGE value="Upgraded EE-inductiveness checking to be incremental" />
-    <option name="LAST_COMMIT_MESSAGE" value="Upgraded EE-inductiveness checking to be incremental" />
+    <MESSAGE value="Optimizations" />
+    <option name="LAST_COMMIT_MESSAGE" value="Optimizations" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="638" y="256" key="#OMG" timestamp="1591275331946">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="638" y="256" key="#OMG/0.0.1920.1080@0.0.1920.1080" timestamp="1591275331946" />
     <state x="660" y="344" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1589720087392">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
@@ -558,25 +557,25 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="826" y="294" key="#xdebugger.evaluate/0.0.1920.1080@0.0.1920.1080" timestamp="1590006389809" />
-    <state width="1878" height="309" key="GridCell.Tab.0.bottom" timestamp="1590006929516">
+    <state width="1878" height="298" key="GridCell.Tab.0.bottom" timestamp="1591276928775">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1878" height="309" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1590006929516" />
+    <state width="1878" height="298" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1591276928775" />
     <state width="1868" height="330" key="GridCell.Tab.0.bottom/0.0.3840.1080@0.0.3840.1080" timestamp="1589564406224" />
-    <state width="1878" height="309" key="GridCell.Tab.0.center" timestamp="1590006929510">
+    <state width="1878" height="298" key="GridCell.Tab.0.center" timestamp="1591276928770">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1878" height="309" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1590006929510" />
+    <state width="1878" height="298" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1591276928770" />
     <state width="1868" height="330" key="GridCell.Tab.0.center/0.0.3840.1080@0.0.3840.1080" timestamp="1589564406218" />
-    <state width="1878" height="309" key="GridCell.Tab.0.left" timestamp="1590006929507">
+    <state width="1878" height="298" key="GridCell.Tab.0.left" timestamp="1591276928768">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1878" height="309" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1590006929507" />
+    <state width="1878" height="298" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1591276928768" />
     <state width="1868" height="330" key="GridCell.Tab.0.left/0.0.3840.1080@0.0.3840.1080" timestamp="1589564406213" />
-    <state width="1878" height="309" key="GridCell.Tab.0.right" timestamp="1590006929513">
+    <state width="1878" height="298" key="GridCell.Tab.0.right" timestamp="1591276928773">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1878" height="309" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1590006929513" />
+    <state width="1878" height="298" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1591276928773" />
     <state width="1868" height="330" key="GridCell.Tab.0.right/0.0.3840.1080@0.0.3840.1080" timestamp="1589564406221" />
     <state width="1878" height="373" key="GridCell.Tab.1.bottom" timestamp="1590006495516">
       <screen x="0" y="0" width="1920" height="1080" />
@@ -594,6 +593,10 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="373" key="GridCell.Tab.1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1590006495514" />
+    <state x="560" y="277" key="Vcs.Push.Dialog.v2" timestamp="1590007430626">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="560" y="277" key="Vcs.Push.Dialog.v2/0.0.1920.1080@0.0.1920.1080" timestamp="1590007430626" />
     <state width="960" height="502" key="XDebugger.FullValuePopup" timestamp="1590006495173">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
@@ -602,10 +605,10 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="745" y="471" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1080@0.0.1920.1080" timestamp="1589539801210" />
-    <state x="655" y="142" width="609" height="768" key="find.popup" timestamp="1590005662857">
+    <state x="655" y="142" width="609" height="768" key="find.popup" timestamp="1591352436732">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="655" y="142" width="609" height="768" key="find.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1590005662857" />
+    <state x="655" y="142" width="609" height="768" key="find.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1591352436732" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

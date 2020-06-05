@@ -10,7 +10,7 @@
 #include "sat_solver.h"
 
 SatSolverResult Z3SatSolver::solve_sat(const PropFormula &formula) {
-    const z3::expr& raw_formula = formula.get_raw_formula();
+    const z3::expr& raw_formula = formula.get_raw_formula(); // TODO .simplify();
     _solver.add(raw_formula);
     z3::check_result sat_res = _solver.check();
     if (sat_res == z3::unsat) return SatSolverResult();
@@ -20,7 +20,7 @@ SatSolverResult Z3SatSolver::solve_sat(const PropFormula &formula) {
 
 std::vector<SatSolverResult> Z3SatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr>& vars, bool complete_assignments = false ) {
     std::vector<SatSolverResult> assignments;
-    const z3::expr &raw_formula = formula.get_raw_formula();
+    const z3::expr &raw_formula = formula.get_raw_formula();  // TODO //.simplify();
     z3::solver solver(raw_formula.ctx());
 
     solver.add(raw_formula);
@@ -40,9 +40,10 @@ z3::expr Z3SatSolver::get_blocking_clause(const SatSolverResult& res, const std:
     z3::expr_vector literals(ctx);
     for (const z3::expr& var : var_vector)
     {
-        if (res.get_value(var) != SatResult::UNDEF)
+        auto res_value = res.get_value(var);
+        if (res_value != SatResult::UNDEF)
         {
-            literals.push_back((res.get_value(var) == SatResult::TRUE) ? (!var) : (var));
+            literals.push_back((res_value == SatResult::TRUE) ? (!var) : (var));
         }
     }
     return z3::mk_or(literals);
@@ -140,12 +141,12 @@ SatSolverResult::SatSolverResult(const std::map<z3::expr, Z3_lbool> &values) : _
 
 SatResult SatSolverResult::get_value(const z3::expr& var ) const {
     if (!_is_sat) throw SatSolverResultException("Formula is unsat");
-    if (_values.find(var) != _values.end())
-        return  _values.at(var);
-
-    else throw SatSolverResultException("Variables not in assignment");
-
-
+    auto res = _values.find(var);
+    if (res == _values.end())
+    {
+        throw SatSolverResultException("Variables not in assignment");
+    }
+    return res->second;
 }
 
 z3::expr SatSolverResult::to_conjunt(z3::context& ctx) const {

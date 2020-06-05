@@ -43,13 +43,13 @@ void ConcreteState::compute_successors() {
 
     const z3::expr& raw_tr = tr.get_raw_formula();
     z3::context& ctx = raw_tr.ctx();
-
-    const z3::expr ns_raw_formula = _conjunct && raw_tr;
+//    const z3::expr ns_raw_formula = _conjunct && raw_tr; // what if we substitute? TODO
+    const z3::expr ns_raw_formula = (_conjunct && raw_tr).simplify(); // what if we substitute? TODO
     const std::map<std::string, z3::expr_vector> & variables_map = tr.get_variables_map();
     PropFormula ns_formula = PropFormula(ns_raw_formula, variables_map);
 
 
-    std::unique_ptr<ISatSolver> sat_solver = std::make_unique<Z3SatSolver>(_kripke.get_tr().get_raw_formula().ctx()); // TODO CHANGE ME TO A CONFIGURABLE SAT SOLVER
+    std::unique_ptr<ISatSolver> sat_solver = std::make_unique<Z3SatSolver>(_kripke.get_tr().get_raw_formula().ctx());
     z3::expr_vector ns_vars = variables_map.at(std::string("ns"));
     std::vector<SatSolverResult> sat_results = sat_solver->all_sat(ns_formula, expr_vector_to_vector(ns_vars));
     std::vector<ConcreteState> successors;
@@ -59,7 +59,7 @@ void ConcreteState::compute_successors() {
         assert(res.get_is_sat());
         z3::expr conj = FormulaUtils::get_conj_from_sat_result(ctx, ns_vars, res);
         z3::expr named_conj = conj.substitute(tr.get_vars_by_tag("ns"), tr.get_vars_by_tag("ps"));
-        successors.emplace_back(_kripke, named_conj);
+        successors.emplace_back(_kripke, std::move(named_conj));
     }
     _successors.emplace(successors);
 }
