@@ -38,3 +38,5 @@ echo Finished installation
 echo In order to run OMG, run the script prep_omg.sh
 echo You may change the configuration file run_config.omg
 
+echo In order to run IIMC, please go to installation/iimc and run WITH SUDO
+

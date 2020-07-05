@@ -34,7 +34,10 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="- Refactor &#10;- Added simplify to some formulas to improve results" />
+    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="- Refactor &#10;- Added simplify to some formulas to improve results">
+      <change afterPath="$PROJECT_DIR$/installation/iimc/ProofAttachment.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/installation/omg_installer.sh" beforeDir="false" afterPath="$PROJECT_DIR$/installation/omg_installer.sh" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -140,14 +143,7 @@
       <workItem from="1584796046953" duration="738000" />
       <workItem from="1587326308621" duration="102342000" />
       <workItem from="1591274836892" duration="8805000" />
-      <workItem from="1593977054529" duration="319000" />
-    </task>
-    <task id="LOCAL-00084" summary="-Bugfix in trace strengthening">
-      <created>1586716622264</created>
-      <option name="number" value="00084" />
-      <option name="presentableId" value="LOCAL-00084" />
-      <option name="project" value="LOCAL" />
-      <updated>1586716622264</updated>
+      <workItem from="1593977054529" duration="876000" />
     </task>
     <task id="LOCAL-00085" summary="Bugfix in is_concrete_transition_to_abs">
       <created>1586722647665</created>
@@ -485,7 +481,14 @@
       <option name="project" value="LOCAL" />
       <updated>1593977346570</updated>
     </task>
-    <option name="localTasksCounter" value="133" />
+    <task id="LOCAL-00133" summary="- Refactor &#10;- Added simplify to some formulas to improve results">
+      <created>1593977442307</created>
+      <option name="number" value="00133" />
+      <option name="presentableId" value="LOCAL-00133" />
+      <option name="project" value="LOCAL" />
+      <updated>1593977442307</updated>
+    </task>
+    <option name="localTasksCounter" value="134" />
     <servers />
   </component>
   <component name="TodoView">
