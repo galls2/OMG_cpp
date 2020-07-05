@@ -34,10 +34,11 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="Optimizations">
+    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="Added optimizations &amp; possible optimizations.&#10;Will now check on a longer-running file so that differences will be clearer.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/formulas/sat_solver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/formulas/sat_solver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/formulas/sat_solver.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/formulas/sat_solver.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/main.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/structures/concrete_state.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/concrete_state.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -48,7 +49,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Release" />
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -89,7 +90,7 @@
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="CMakeSettings" />
+    <property name="settings.editor.selected.configurable" value="dynamic.analysis.tools.valgrind" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -144,14 +145,7 @@
       <workItem from="1580376891038" duration="55751000" />
       <workItem from="1584796046953" duration="738000" />
       <workItem from="1587326308621" duration="102342000" />
-      <workItem from="1591274836892" duration="2583000" />
-    </task>
-    <task id="LOCAL-00082" summary="Implemented trace strengthening, made code compile with const editing">
-      <created>1586695530380</created>
-      <option name="number" value="00082" />
-      <option name="presentableId" value="LOCAL-00082" />
-      <option name="project" value="LOCAL" />
-      <updated>1586695530381</updated>
+      <workItem from="1591274836892" duration="8805000" />
     </task>
     <task id="LOCAL-00083" summary="-Implemented TSE for refine_exists_successor&#10;-Added debug prints in AR">
       <created>1586715211035</created>
@@ -489,7 +483,14 @@
       <option name="project" value="LOCAL" />
       <updated>1590007425944</updated>
     </task>
-    <option name="localTasksCounter" value="131" />
+    <task id="LOCAL-00131" summary="Added optimizations &amp; possible optimizations.&#10;Will now check on a longer-running file so that differences will be clearer.">
+      <created>1591352567417</created>
+      <option name="number" value="00131" />
+      <option name="presentableId" value="LOCAL-00131" />
+      <option name="project" value="LOCAL" />
+      <updated>1591352567419</updated>
+    </task>
+    <option name="localTasksCounter" value="132" />
     <servers />
   </component>
   <component name="TodoView">
@@ -517,7 +518,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fixed installation scripts: now installing boost &amp; using cmake properly" />
     <MESSAGE value="Made SAT solver configurable in practice. #7&#10;Using conj decomposition now instead of SAT solving" />
     <MESSAGE value="-Bugfix + Added print function to OMG_CONFIG&#10;-Bugfix in MC: now model checking all initial states, which we cache&#10;- Added runconfig&#10;-Made code for using the &quot;Properties per spec&quot; configuration" />
     <MESSAGE value="Set up testing model list feature" />
@@ -542,61 +542,79 @@
     <MESSAGE value="Changing AP names, removing \n from some formulas so parser won't go nuts&#10;Issue #4 solved" />
     <MESSAGE value="Upgraded EE-inductiveness checking to be incremental" />
     <MESSAGE value="Optimizations" />
-    <option name="LAST_COMMIT_MESSAGE" value="Optimizations" />
+    <MESSAGE value="Added optimizations &amp; possible optimizations.&#10;Will now check on a longer-running file so that differences will be clearer." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added optimizations &amp; possible optimizations.&#10;Will now check on a longer-running file so that differences will be clearer." />
   </component>
   <component name="WindowStateProjectService">
     <state x="638" y="256" key="#OMG" timestamp="1591275331946">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="638" y="256" key="#OMG/0.0.1920.1080@0.0.1920.1080" timestamp="1591275331946" />
-    <state x="660" y="344" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1589720087392">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="2344" y="225" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1591954448257">
+      <screen x="0" y="0" width="3840" height="1080" />
+    </state>
+    <state x="2344" y="225" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.3840.1080@0.0.3840.1080" timestamp="1591954448257" />
+    <state x="1320" y="344" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1591445373284">
+      <screen x="0" y="0" width="3840" height="1080" />
     </state>
     <state x="660" y="344" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1080@0.0.1920.1080" timestamp="1589720087392" />
+    <state x="1320" y="344" key="#com.intellij.fileTypes.FileTypeChooser/0.0.3840.1080@0.0.3840.1080" timestamp="1591445373284" />
     <state x="826" y="294" key="#xdebugger.evaluate" timestamp="1590006389809">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="826" y="294" key="#xdebugger.evaluate/0.0.1920.1080@0.0.1920.1080" timestamp="1590006389809" />
-    <state width="1878" height="298" key="GridCell.Tab.0.bottom" timestamp="1591276928775">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="2668" y="325" key="FileChooserDialogImpl" timestamp="1591953111718">
+      <screen x="0" y="0" width="3840" height="1080" />
     </state>
-    <state width="1878" height="298" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1591276928775" />
-    <state width="1868" height="330" key="GridCell.Tab.0.bottom/0.0.3840.1080@0.0.3840.1080" timestamp="1589564406224" />
-    <state width="1878" height="298" key="GridCell.Tab.0.center" timestamp="1591276928770">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="2668" y="325" key="FileChooserDialogImpl/0.0.3840.1080@0.0.3840.1080" timestamp="1591953111718" />
+    <state width="1878" height="315" key="GridCell.Tab.0.bottom" timestamp="1591954374145">
+      <screen x="0" y="0" width="3840" height="1080" />
     </state>
-    <state width="1878" height="298" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1591276928770" />
-    <state width="1868" height="330" key="GridCell.Tab.0.center/0.0.3840.1080@0.0.3840.1080" timestamp="1589564406218" />
-    <state width="1878" height="298" key="GridCell.Tab.0.left" timestamp="1591276928768">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1868" height="293" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1591950055536" />
+    <state width="1878" height="315" key="GridCell.Tab.0.bottom/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374145" />
+    <state width="1878" height="315" key="GridCell.Tab.0.center" timestamp="1591954374138">
+      <screen x="0" y="0" width="3840" height="1080" />
     </state>
-    <state width="1878" height="298" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1591276928768" />
-    <state width="1868" height="330" key="GridCell.Tab.0.left/0.0.3840.1080@0.0.3840.1080" timestamp="1589564406213" />
-    <state width="1878" height="298" key="GridCell.Tab.0.right" timestamp="1591276928773">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1868" height="293" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1591950055531" />
+    <state width="1878" height="315" key="GridCell.Tab.0.center/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374138" />
+    <state width="1878" height="315" key="GridCell.Tab.0.left" timestamp="1591954374135">
+      <screen x="0" y="0" width="3840" height="1080" />
     </state>
-    <state width="1878" height="298" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1591276928773" />
-    <state width="1868" height="330" key="GridCell.Tab.0.right/0.0.3840.1080@0.0.3840.1080" timestamp="1589564406221" />
-    <state width="1878" height="373" key="GridCell.Tab.1.bottom" timestamp="1590006495516">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1868" height="293" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1591950055526" />
+    <state width="1878" height="315" key="GridCell.Tab.0.left/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374135" />
+    <state width="1878" height="315" key="GridCell.Tab.0.right" timestamp="1591954374142">
+      <screen x="0" y="0" width="3840" height="1080" />
+    </state>
+    <state width="1868" height="293" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1591950055533" />
+    <state width="1878" height="315" key="GridCell.Tab.0.right/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374142" />
+    <state width="1878" height="315" key="GridCell.Tab.1.bottom" timestamp="1591954374155">
+      <screen x="0" y="0" width="3840" height="1080" />
     </state>
     <state width="1878" height="373" key="GridCell.Tab.1.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1590006495516" />
-    <state width="1878" height="373" key="GridCell.Tab.1.center" timestamp="1590006495511">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1878" height="315" key="GridCell.Tab.1.bottom/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374155" />
+    <state width="1878" height="315" key="GridCell.Tab.1.center" timestamp="1591954374150">
+      <screen x="0" y="0" width="3840" height="1080" />
     </state>
     <state width="1878" height="373" key="GridCell.Tab.1.center/0.0.1920.1080@0.0.1920.1080" timestamp="1590006495511" />
-    <state width="1878" height="373" key="GridCell.Tab.1.left" timestamp="1590006495509">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1878" height="315" key="GridCell.Tab.1.center/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374150" />
+    <state width="1878" height="315" key="GridCell.Tab.1.left" timestamp="1591954374147">
+      <screen x="0" y="0" width="3840" height="1080" />
     </state>
     <state width="1878" height="373" key="GridCell.Tab.1.left/0.0.1920.1080@0.0.1920.1080" timestamp="1590006495509" />
-    <state width="1878" height="373" key="GridCell.Tab.1.right" timestamp="1590006495514">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1878" height="315" key="GridCell.Tab.1.left/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374147" />
+    <state width="1878" height="315" key="GridCell.Tab.1.right" timestamp="1591954374152">
+      <screen x="0" y="0" width="3840" height="1080" />
     </state>
     <state width="1878" height="373" key="GridCell.Tab.1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1590006495514" />
-    <state x="560" y="277" key="Vcs.Push.Dialog.v2" timestamp="1590007430626">
+    <state width="1878" height="315" key="GridCell.Tab.1.right/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374152" />
+    <state x="2374" y="202" key="SettingsEditor" timestamp="1591953394048">
+      <screen x="0" y="0" width="3840" height="1080" />
+    </state>
+    <state x="2374" y="202" key="SettingsEditor/0.0.3840.1080@0.0.3840.1080" timestamp="1591953394048" />
+    <state x="560" y="277" key="Vcs.Push.Dialog.v2" timestamp="1591352634088">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="560" y="277" key="Vcs.Push.Dialog.v2/0.0.1920.1080@0.0.1920.1080" timestamp="1590007430626" />
+    <state x="560" y="277" key="Vcs.Push.Dialog.v2/0.0.1920.1080@0.0.1920.1080" timestamp="1591352634088" />
     <state width="960" height="502" key="XDebugger.FullValuePopup" timestamp="1590006495173">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
@@ -605,10 +623,11 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="745" y="471" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1080@0.0.1920.1080" timestamp="1589539801210" />
-    <state x="655" y="142" width="609" height="768" key="find.popup" timestamp="1591352436732">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="2086" y="133" width="1218" height="768" key="find.popup" timestamp="1591953635675">
+      <screen x="0" y="0" width="3840" height="1080" />
     </state>
-    <state x="655" y="142" width="609" height="768" key="find.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1591352436732" />
+    <state x="655" y="142" width="609" height="768" key="find.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1591950227672" />
+    <state x="2086" y="133" width="1218" height="768" key="find.popup/0.0.3840.1080@0.0.3840.1080" timestamp="1591953635675" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

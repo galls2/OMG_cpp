@@ -322,8 +322,8 @@ int main()
   //  test_model("../resources/cp0IntEncoder");
 //    unit_tests();
 //    TEST("../resources/spinner4.aig", "AG((~inr<3> & ~inr<2> & ~inr<1> & inr<0>) -> ~E spl U (~inr<3> & ~inr<2> & inr<1> & inr<0>))", false);
-    TEST("../resources/twophase.aig", "AG ~out", false);
-
+  //  TEST("../resources/twophase.aig", "AG ~out", false);
+TEST("../resources/spinner4.aig", "AG(~(~inr<3> & ~inr<2> & ~inr<1> & ~inr<0>) -> ~E spl U (~inr<3> & ~inr<2> & ~inr<1> & ~inr<0>))",false);
 
 //    thread_test();
 
@@ -333,3 +333,5 @@ int main()
  * Bad examples:
  *  rrobin - we develop all reachable states, as a non-reachable state requires a lot of refining to exclude. TOO MANY APs matter
  */
+
+// Debug works better than release for some reason
