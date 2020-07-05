@@ -34,13 +34,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="Added optimizations &amp; possible optimizations.&#10;Will now check on a longer-running file so that differences will be clearer.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/formulas/sat_solver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/formulas/sat_solver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/formulas/sat_solver.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/formulas/sat_solver.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/structures/concrete_state.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/concrete_state.cpp" afterDir="false" />
-    </list>
+    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="- Refactor &#10;- Added simplify to some formulas to improve results" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -146,13 +140,7 @@
       <workItem from="1584796046953" duration="738000" />
       <workItem from="1587326308621" duration="102342000" />
       <workItem from="1591274836892" duration="8805000" />
-    </task>
-    <task id="LOCAL-00083" summary="-Implemented TSE for refine_exists_successor&#10;-Added debug prints in AR">
-      <created>1586715211035</created>
-      <option name="number" value="00083" />
-      <option name="presentableId" value="LOCAL-00083" />
-      <option name="project" value="LOCAL" />
-      <updated>1586715211035</updated>
+      <workItem from="1593977054529" duration="319000" />
     </task>
     <task id="LOCAL-00084" summary="-Bugfix in trace strengthening">
       <created>1586716622264</created>
@@ -490,7 +478,14 @@
       <option name="project" value="LOCAL" />
       <updated>1591352567419</updated>
     </task>
-    <option name="localTasksCounter" value="132" />
+    <task id="LOCAL-00132" summary="- Refactor &#10;- Added simplify to some formulas to improve results">
+      <created>1593977346570</created>
+      <option name="number" value="00132" />
+      <option name="presentableId" value="LOCAL-00132" />
+      <option name="project" value="LOCAL" />
+      <updated>1593977346570</updated>
+    </task>
+    <option name="localTasksCounter" value="133" />
     <servers />
   </component>
   <component name="TodoView">
@@ -518,7 +513,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Made SAT solver configurable in practice. #7&#10;Using conj decomposition now instead of SAT solving" />
     <MESSAGE value="-Bugfix + Added print function to OMG_CONFIG&#10;-Bugfix in MC: now model checking all initial states, which we cache&#10;- Added runconfig&#10;-Made code for using the &quot;Properties per spec&quot; configuration" />
     <MESSAGE value="Set up testing model list feature" />
     <MESSAGE value="Bugfix in aigparser - out literal formula in state formula was ill.  Added test as unit test" />
@@ -543,7 +537,8 @@
     <MESSAGE value="Upgraded EE-inductiveness checking to be incremental" />
     <MESSAGE value="Optimizations" />
     <MESSAGE value="Added optimizations &amp; possible optimizations.&#10;Will now check on a longer-running file so that differences will be clearer." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added optimizations &amp; possible optimizations.&#10;Will now check on a longer-running file so that differences will be clearer." />
+    <MESSAGE value="- Refactor &#10;- Added simplify to some formulas to improve results" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Refactor &#10;- Added simplify to some formulas to improve results" />
   </component>
   <component name="WindowStateProjectService">
     <state x="638" y="256" key="#OMG" timestamp="1591275331946">
