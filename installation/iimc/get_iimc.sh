@@ -16,7 +16,7 @@ apt-get install libboost-regex-dev
 autoreconf -f -i
 ./configure
 # changing the file src/mc/ProofAttachment.cpp as zyad saif
-cp ProofAttachment.cpp src/mc/ProofAttachment.cpp
+cp ~/Desktop/ProofAttachment.cpp src/mc/ProofAttachment.cpp
 make
 
 
