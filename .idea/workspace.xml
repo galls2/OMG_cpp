@@ -35,8 +35,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="- Refactor &#10;- Added simplify to some formulas to improve results">
-      <change afterPath="$PROJECT_DIR$/installation/iimc/ProofAttachment.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/installation/omg_installer.sh" beforeDir="false" afterPath="$PROJECT_DIR$/installation/omg_installer.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,7 +142,7 @@
       <workItem from="1584796046953" duration="738000" />
       <workItem from="1587326308621" duration="102342000" />
       <workItem from="1591274836892" duration="8805000" />
-      <workItem from="1593977054529" duration="876000" />
+      <workItem from="1593977054529" duration="4440000" />
     </task>
     <task id="LOCAL-00085" summary="Bugfix in is_concrete_transition_to_abs">
       <created>1586722647665</created>
@@ -561,9 +560,10 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="826" y="294" key="#xdebugger.evaluate/0.0.1920.1080@0.0.1920.1080" timestamp="1590006389809" />
-    <state x="2668" y="325" key="FileChooserDialogImpl" timestamp="1591953111718">
-      <screen x="0" y="0" width="3840" height="1080" />
+    <state x="2776" y="308" key="FileChooserDialogImpl" timestamp="1594065217095">
+      <screen x="1920" y="0" width="1280" height="1024" />
     </state>
+    <state x="2776" y="308" key="FileChooserDialogImpl/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1594065217095" />
     <state x="2668" y="325" key="FileChooserDialogImpl/0.0.3840.1080@0.0.3840.1080" timestamp="1591953111718" />
     <state width="1878" height="315" key="GridCell.Tab.0.bottom" timestamp="1591954374145">
       <screen x="0" y="0" width="3840" height="1080" />
@@ -617,9 +617,10 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="960" height="502" key="XDebugger.FullValuePopup/0.0.1920.1080@0.0.1920.1080" timestamp="1590006495173" />
-    <state x="745" y="471" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1589539801210">
+    <state x="0" y="0" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1594297535067">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
+    <state x="0" y="0" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1594297535067" />
     <state x="745" y="471" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1080@0.0.1920.1080" timestamp="1589539801210" />
     <state x="2086" y="133" width="1218" height="768" key="find.popup" timestamp="1591953635675">
       <screen x="0" y="0" width="3840" height="1080" />
