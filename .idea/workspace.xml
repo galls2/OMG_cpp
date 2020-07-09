@@ -34,8 +34,10 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="- Refactor &#10;- Added simplify to some formulas to improve results">
+    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="-fix workspace.xml">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,14 +144,7 @@
       <workItem from="1584796046953" duration="738000" />
       <workItem from="1587326308621" duration="102342000" />
       <workItem from="1591274836892" duration="8805000" />
-      <workItem from="1593977054529" duration="4440000" />
-    </task>
-    <task id="LOCAL-00085" summary="Bugfix in is_concrete_transition_to_abs">
-      <created>1586722647665</created>
-      <option name="number" value="00085" />
-      <option name="presentableId" value="LOCAL-00085" />
-      <option name="project" value="LOCAL" />
-      <updated>1586722647665</updated>
+      <workItem from="1593977054529" duration="4705000" />
     </task>
     <task id="LOCAL-00086" summary="-Default argement to CocnretizationResult&#10;-Changed CTL formulas to recognized &quot;true&quot;/&quot;false&quot; and not &quot;True&quot;/&quot;False&quot;&#10;-Minor refactor&#10;-Decided that I will not necessarily handle formulas without APs&#10;-More tests now pass">
       <created>1586724378077</created>
@@ -487,7 +482,14 @@
       <option name="project" value="LOCAL" />
       <updated>1593977442307</updated>
     </task>
-    <option name="localTasksCounter" value="134" />
+    <task id="LOCAL-00134" summary="-fix workspace.xml">
+      <created>1594299437925</created>
+      <option name="number" value="00134" />
+      <option name="presentableId" value="LOCAL-00134" />
+      <option name="project" value="LOCAL" />
+      <updated>1594299437925</updated>
+    </task>
+    <option name="localTasksCounter" value="135" />
     <servers />
   </component>
   <component name="TodoView">
@@ -515,7 +517,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="-Bugfix + Added print function to OMG_CONFIG&#10;-Bugfix in MC: now model checking all initial states, which we cache&#10;- Added runconfig&#10;-Made code for using the &quot;Properties per spec&quot; configuration" />
     <MESSAGE value="Set up testing model list feature" />
     <MESSAGE value="Bugfix in aigparser - out literal formula in state formula was ill.  Added test as unit test" />
     <MESSAGE value="Finalizing memory only at end now" />
@@ -540,7 +541,8 @@
     <MESSAGE value="Optimizations" />
     <MESSAGE value="Added optimizations &amp; possible optimizations.&#10;Will now check on a longer-running file so that differences will be clearer." />
     <MESSAGE value="- Refactor &#10;- Added simplify to some formulas to improve results" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Refactor &#10;- Added simplify to some formulas to improve results" />
+    <MESSAGE value="-fix workspace.xml" />
+    <option name="LAST_COMMIT_MESSAGE" value="-fix workspace.xml" />
   </component>
   <component name="WindowStateProjectService">
     <state x="638" y="256" key="#OMG" timestamp="1591275331946">
@@ -565,24 +567,28 @@
     </state>
     <state x="2776" y="308" key="FileChooserDialogImpl/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1594065217095" />
     <state x="2668" y="325" key="FileChooserDialogImpl/0.0.3840.1080@0.0.3840.1080" timestamp="1591953111718" />
-    <state width="1878" height="315" key="GridCell.Tab.0.bottom" timestamp="1591954374145">
-      <screen x="0" y="0" width="3840" height="1080" />
+    <state width="1878" height="296" key="GridCell.Tab.0.bottom" timestamp="1594299549026">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
+    <state width="1878" height="296" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1594299549026" />
     <state width="1868" height="293" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1591950055536" />
     <state width="1878" height="315" key="GridCell.Tab.0.bottom/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374145" />
-    <state width="1878" height="315" key="GridCell.Tab.0.center" timestamp="1591954374138">
-      <screen x="0" y="0" width="3840" height="1080" />
+    <state width="1878" height="296" key="GridCell.Tab.0.center" timestamp="1594299549026">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
+    <state width="1878" height="296" key="GridCell.Tab.0.center/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1594299549026" />
     <state width="1868" height="293" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1591950055531" />
     <state width="1878" height="315" key="GridCell.Tab.0.center/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374138" />
-    <state width="1878" height="315" key="GridCell.Tab.0.left" timestamp="1591954374135">
-      <screen x="0" y="0" width="3840" height="1080" />
+    <state width="1878" height="296" key="GridCell.Tab.0.left" timestamp="1594299549025">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
+    <state width="1878" height="296" key="GridCell.Tab.0.left/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1594299549025" />
     <state width="1868" height="293" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1591950055526" />
     <state width="1878" height="315" key="GridCell.Tab.0.left/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374135" />
-    <state width="1878" height="315" key="GridCell.Tab.0.right" timestamp="1591954374142">
-      <screen x="0" y="0" width="3840" height="1080" />
+    <state width="1878" height="296" key="GridCell.Tab.0.right" timestamp="1594299549026">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
+    <state width="1878" height="296" key="GridCell.Tab.0.right/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1594299549026" />
     <state width="1868" height="293" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1591950055533" />
     <state width="1878" height="315" key="GridCell.Tab.0.right/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374142" />
     <state width="1878" height="315" key="GridCell.Tab.1.bottom" timestamp="1591954374155">
