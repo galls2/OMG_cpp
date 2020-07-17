@@ -318,9 +318,9 @@ void test_parser_s(const std::string& s)
 //}
 int main()
 {
-//    run_models("../models_to_run.omg");
+    run_models("../models_to_run_small.omg");
   //  test_model("../resources/cp0IntEncoder");
-    unit_tests();
+//    unit_tests();
 //    TEST("../resources/spinner4.aig", "AG((~inr<3> & ~inr<2> & ~inr<1> & inr<0>) -> ~E spl U (~inr<3> & ~inr<2> & inr<1> & inr<0>))", false);
   //  TEST("../resources/twophase.aig", "AG ~out", false);
 //TEST("../resources/spinner4.aig", "AG(~(~inr<3> & ~inr<2> & ~inr<1> & ~inr<0>) -> ~E spl U (~inr<3> & ~inr<2> & ~inr<1> & ~inr<0>))",false);
