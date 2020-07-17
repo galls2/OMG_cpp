@@ -56,12 +56,17 @@ def run_with_timeout(cmd, timeout_):
 def run_iimc(path_to_iimc, aig_file, ctl_file, prop_idx, timeout):
     cmd = f"{path_to_iimc} {PATH_TO_MODELS}/{aig_file} --ctl {PATH_TO_MODELS}/{ctl_file} --pi {prop_idx}"
     run_output, time_took = run_with_timeout(cmd, timeout)
+    print(f'Time took: {time_took}')
     return run_output, time_took
 
 def run_model(timeout, aig_file, path_to_iimc, path_to_omg, res_writer):
     model_name = aig_file[:-4]
     print(f"Checking {model_name}")
     ctl_file = model_name + '.ctl'
+    ctl_loc = f"/home/galls2/Desktop/OMG_cpp/resources/{ctl_file}"
+#    print(ctl_loc)
+    if not os.path.isfile(ctl_loc):
+        return 
     prop_idx = 0
     while True:
         print(f"Prop {prop_idx}... ", end=' ')
@@ -75,7 +80,9 @@ def run_model(timeout, aig_file, path_to_iimc, path_to_omg, res_writer):
         
         res_writer.add_data(model_name, prop_idx, time_took)
         prop_idx += 1
-      
+        if prop_idx > 500:
+            print("Stopped after 500 props")
+            break
 
 
 def run_model_checkers(timeout, models_to_run, path_to_iimc, path_to_omg):
@@ -94,9 +101,11 @@ def run_model_checkers(timeout, models_to_run, path_to_iimc, path_to_omg):
     res_writer.export_data('iimc_results.txt')
 
 if __name__ == '__main__':
-    timeout = 2
-    models_to_run = sys.argv[1]
-    #path_to_iimc = '~/Desktop/iimc/iimc'
-    path_to_iimc = sys.argv[2]
-    path_to_omg = sys.argv[3]
-    run_model_checkers(timeout, models_to_run, path_to_iimc, path_to_omg)
+    if len(sys.argv) != 5:
+        print('Usage: python run_model_checkers.py <models_to_run.txt> <path_to_iimc> <path_to_omg> <timeout_in_seconds>')
+    else:
+        models_to_run = sys.argv[1]
+        path_to_iimc = sys.argv[2]
+        path_to_omg = sys.argv[3]
+        timeout = int(sys.argv[4])
+        run_model_checkers(timeout, models_to_run, path_to_iimc, path_to_omg)
