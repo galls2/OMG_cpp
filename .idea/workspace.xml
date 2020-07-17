@@ -34,7 +34,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="-fix workspace.xml">
+    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="-fixed cmake">
+      <change afterPath="$PROJECT_DIR$/aux/run_model_checker.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/main.cpp" afterDir="false" />
@@ -144,14 +145,7 @@
       <workItem from="1584796046953" duration="738000" />
       <workItem from="1587326308621" duration="102342000" />
       <workItem from="1591274836892" duration="8805000" />
-      <workItem from="1593977054529" duration="4705000" />
-    </task>
-    <task id="LOCAL-00086" summary="-Default argement to CocnretizationResult&#10;-Changed CTL formulas to recognized &quot;true&quot;/&quot;false&quot; and not &quot;True&quot;/&quot;False&quot;&#10;-Minor refactor&#10;-Decided that I will not necessarily handle formulas without APs&#10;-More tests now pass">
-      <created>1586724378077</created>
-      <option name="number" value="00086" />
-      <option name="presentableId" value="LOCAL-00086" />
-      <option name="project" value="LOCAL" />
-      <updated>1586724378079</updated>
+      <workItem from="1593977054529" duration="11403000" />
     </task>
     <task id="LOCAL-00087" summary="Added tests resources">
       <created>1586730410313</created>
@@ -489,7 +483,14 @@
       <option name="project" value="LOCAL" />
       <updated>1594299437925</updated>
     </task>
-    <option name="localTasksCounter" value="135" />
+    <task id="LOCAL-00135" summary="-fixed cmake">
+      <created>1594299765490</created>
+      <option name="number" value="00135" />
+      <option name="presentableId" value="LOCAL-00135" />
+      <option name="project" value="LOCAL" />
+      <updated>1594299765490</updated>
+    </task>
+    <option name="localTasksCounter" value="136" />
     <servers />
   </component>
   <component name="TodoView">
@@ -517,7 +518,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Set up testing model list feature" />
     <MESSAGE value="Bugfix in aigparser - out literal formula in state formula was ill.  Added test as unit test" />
     <MESSAGE value="Finalizing memory only at end now" />
     <MESSAGE value="Bugfix in CtlFileParser" />
@@ -542,7 +542,8 @@
     <MESSAGE value="Added optimizations &amp; possible optimizations.&#10;Will now check on a longer-running file so that differences will be clearer." />
     <MESSAGE value="- Refactor &#10;- Added simplify to some formulas to improve results" />
     <MESSAGE value="-fix workspace.xml" />
-    <option name="LAST_COMMIT_MESSAGE" value="-fix workspace.xml" />
+    <MESSAGE value="-fixed cmake" />
+    <option name="LAST_COMMIT_MESSAGE" value="-fixed cmake" />
   </component>
   <component name="WindowStateProjectService">
     <state x="638" y="256" key="#OMG" timestamp="1591275331946">
@@ -567,28 +568,32 @@
     </state>
     <state x="2776" y="308" key="FileChooserDialogImpl/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1594065217095" />
     <state x="2668" y="325" key="FileChooserDialogImpl/0.0.3840.1080@0.0.3840.1080" timestamp="1591953111718" />
-    <state width="1878" height="296" key="GridCell.Tab.0.bottom" timestamp="1594299549026">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1238" height="296" key="GridCell.Tab.0.bottom" timestamp="1594904384158">
+      <screen x="1920" y="0" width="1280" height="1024" />
     </state>
-    <state width="1878" height="296" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1594299549026" />
+    <state width="1878" height="296" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1594899341730" />
+    <state width="1238" height="296" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1594904384158" />
     <state width="1868" height="293" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1591950055536" />
     <state width="1878" height="315" key="GridCell.Tab.0.bottom/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374145" />
-    <state width="1878" height="296" key="GridCell.Tab.0.center" timestamp="1594299549026">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1238" height="296" key="GridCell.Tab.0.center" timestamp="1594904384158">
+      <screen x="1920" y="0" width="1280" height="1024" />
     </state>
-    <state width="1878" height="296" key="GridCell.Tab.0.center/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1594299549026" />
+    <state width="1878" height="296" key="GridCell.Tab.0.center/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1594899341730" />
+    <state width="1238" height="296" key="GridCell.Tab.0.center/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1594904384158" />
     <state width="1868" height="293" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1591950055531" />
     <state width="1878" height="315" key="GridCell.Tab.0.center/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374138" />
-    <state width="1878" height="296" key="GridCell.Tab.0.left" timestamp="1594299549025">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1238" height="296" key="GridCell.Tab.0.left" timestamp="1594904384158">
+      <screen x="1920" y="0" width="1280" height="1024" />
     </state>
-    <state width="1878" height="296" key="GridCell.Tab.0.left/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1594299549025" />
+    <state width="1878" height="296" key="GridCell.Tab.0.left/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1594899341730" />
+    <state width="1238" height="296" key="GridCell.Tab.0.left/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1594904384158" />
     <state width="1868" height="293" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1591950055526" />
     <state width="1878" height="315" key="GridCell.Tab.0.left/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374135" />
-    <state width="1878" height="296" key="GridCell.Tab.0.right" timestamp="1594299549026">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1238" height="296" key="GridCell.Tab.0.right" timestamp="1594904384158">
+      <screen x="1920" y="0" width="1280" height="1024" />
     </state>
-    <state width="1878" height="296" key="GridCell.Tab.0.right/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1594299549026" />
+    <state width="1878" height="296" key="GridCell.Tab.0.right/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1594899341730" />
+    <state width="1238" height="296" key="GridCell.Tab.0.right/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1594904384158" />
     <state width="1868" height="293" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1591950055533" />
     <state width="1878" height="315" key="GridCell.Tab.0.right/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374142" />
     <state width="1878" height="315" key="GridCell.Tab.1.bottom" timestamp="1591954374155">
@@ -628,9 +633,10 @@
     </state>
     <state x="0" y="0" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1594297535067" />
     <state x="745" y="471" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1080@0.0.1920.1080" timestamp="1589539801210" />
-    <state x="2086" y="133" width="1218" height="768" key="find.popup" timestamp="1591953635675">
-      <screen x="0" y="0" width="3840" height="1080" />
+    <state x="1043" y="133" width="609" height="768" key="find.popup" timestamp="1594839207658">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
+    <state x="1043" y="133" width="609" height="768" key="find.popup/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1594839207658" />
     <state x="655" y="142" width="609" height="768" key="find.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1591950227672" />
     <state x="2086" y="133" width="1218" height="768" key="find.popup/0.0.3840.1080@0.0.3840.1080" timestamp="1591953635675" />
   </component>

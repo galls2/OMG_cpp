@@ -2,11 +2,11 @@ cmake_minimum_required (VERSION 3.1)
 cmake_policy(SET CMP0048 NEW)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -Wall -Wextra")
-set(CMAKE_CXX_FLAGS "-O3")
+set(CMAKE_CXX_FLAGS_RELEASE  "-O3")
 include_directories(code)
 project (OMG_CPP)
 
-find_package(Boost COMPONENTS thread system REQUIRED)
+find_package(Boost COMPONENTS thread system REQUIRED) #REMOVE?
 
 
 add_executable(OMG code/main.cpp
