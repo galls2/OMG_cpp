@@ -6,8 +6,7 @@ set(CMAKE_CXX_FLAGS_RELEASE  "-O3")
 include_directories(code)
 project (OMG_CPP)
 
-find_package(Boost COMPONENTS thread system REQUIRED) #REMOVE?
-
+set( CMAKE_VERBOSE_MAKEFILE on )
 
 add_executable(OMG code/main.cpp
 
@@ -22,10 +21,8 @@ add_executable(OMG code/main.cpp
         code/abstraction/abstraction_classifier.cpp code/utils/omg_utils.cpp code/utils/aiger-1.9.9/aig_to_aag.cpp
         code/utils/aiger-1.9.9/aiger.c code/model_checking/goal.cpp code/formulas/epr_solver.cpp)
 
-#target_include_directories(OMG PRIVATE /usr/local/include ${Boost_INCLUDE_DIRS})
-#target_link_libraries(OMG libz3.so Boost::thread boost_thread boost_system ${Boost_SYSTEM_LIBRARY} pthread ${Boost_LIBRARIES})
-target_link_libraries(OMG libz3.so)
-
+target_include_directories(OMG PRIVATE ${Boost_INCLUDE_DIRS})
+target_link_libraries(OMG libz3.so boost_thread boost_chrono boost_system pthread)
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
     target_compile_definitions(OMG PUBLIC DEBUG=1)
