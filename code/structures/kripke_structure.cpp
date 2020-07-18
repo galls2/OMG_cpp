@@ -19,7 +19,7 @@ const std::vector<ConcreteState>& KripkeStructure::get_initial_states()
         std::vector<SatSolverResult> results = solver.all_sat(p, expr_vector_to_vector(ps_vars), true);
 
         for (const auto &result : results) {
-            _initial_states.emplace_back(*this, result.to_conjunt(ctx));
+            _initial_states.emplace_back(*this, result.to_conjunct());
         }
     }
     return _initial_states;

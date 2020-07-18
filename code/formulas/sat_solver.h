@@ -40,7 +40,9 @@ public:
 
     SatResult get_value(const z3::expr& var) const;
     bool get_is_sat() const { return _is_sat; }
-    z3::expr to_conjunt(z3::context& ctx) const;
+    z3::expr to_conjunct(const Z3ExprSet& to_flip = {}) const;
+
+    void generalize_assignment(const z3::expr_vector& assertions);
 private:
     bool _is_sat;
     std::map<z3::expr, SatResult, Z3ExprComp> _values;

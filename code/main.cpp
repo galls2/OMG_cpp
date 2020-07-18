@@ -12,7 +12,8 @@
 #include <utils/omg_utils.h>
 #include <utils/z3_utils.h>
 #include <chrono>
-//#include <boost/thread/thread.hpp>
+
+#include <boost/thread/thread.hpp>
 
 #define TEST(aig_path, raw_ctl_string, expected) \
     do \
@@ -300,32 +301,34 @@ void test_parser_s(const std::string& s)
 }
 
 //
-//void test_f()
-//{
-//    int o = 0;
-//    while(true)
-//    {
-//        o++;
-//        if (o % 10000 == 0) { std::cout << "I"; o = 0; }
-//    }
-//}
+void test_f()
+{
+    int o = 0;
+    uint x = 0;
+    while(true)
+    {
+        o++;
+        if (o % 10000 == 0) { std::cout << x++ << std::endl; o = 0; }
+    }
+}
 //
-//void thread_test()
-//{
-//    boost::thread t([]() { test_f(); });
-//    bool res = t.timed_join(boost::posix_time::seconds(1));
-//    std::cout << res << std::endl;
-//}
+void thread_test()
+{
+    boost::thread t([]() { test_f(); });
+     bool res = t.try_join_for(boost::chrono::milliseconds(90));
+    std::cout << res << std::endl;
+}
 int main()
 {
-    run_models("../models_to_run_small.omg");
-  //  test_model("../resources/cp0IntEncoder");
-//    unit_tests();
+    TEST("../resources/gatedClock.aig", "AG(r0 -> AX r1)", true);
+ //   run_models("../models_to_run_small.omg");
+//    test_model("../resources/pf");
+  //unit_tests();
 //    TEST("../resources/spinner4.aig", "AG((~inr<3> & ~inr<2> & ~inr<1> & inr<0>) -> ~E spl U (~inr<3> & ~inr<2> & inr<1> & inr<0>))", false);
-  //  TEST("../resources/twophase.aig", "AG ~out", false);
+   // TEST("../resources/twophase.aig", "AG ~out", false);
 //TEST("../resources/spinner4.aig", "AG(~(~inr<3> & ~inr<2> & ~inr<1> & ~inr<0>) -> ~E spl U (~inr<3> & ~inr<2> & ~inr<1> & ~inr<0>))",false);
 
-//    thread_test();
+    thread_test();
 
 }
 
@@ -335,3 +338,8 @@ int main()
  */
 
 // Debug works better than release for some reason
+
+
+// TODO:
+// * Find an example big enough in which generalize_assignments gives an improvement
+// severly worse in pf

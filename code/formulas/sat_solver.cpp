@@ -2,9 +2,7 @@
 // Created by galls2 on 05/10/19.
 //
 
-#include <z3.h>
 #include <algorithm>
-#include <cmath>
 #include <set>
 #include <utils/z3_utils.h>
 #include "sat_solver.h"
@@ -27,7 +25,11 @@ std::vector<SatSolverResult> Z3SatSolver::all_sat(const PropFormula &formula, co
     while (solver.check() == z3::sat)
     {
         z3::model m = solver.get_model();
+
         SatSolverResult res(m, vars);
+//        const auto& assertions = solver.assertions();
+//        res.generalize_assignment(assertions);
+
         add_assignments(assignments ,res, vars, complete_assignments);
         z3::expr blocking_clause = get_blocking_clause(res, vars);
         solver.add(blocking_clause);
@@ -50,9 +52,9 @@ z3::expr Z3SatSolver::get_blocking_clause(const SatSolverResult& res, const std:
 }
 
 void Z3SatSolver::add_assignments(std::vector<SatSolverResult> &assignemnts, SatSolverResult result,
-                                  const std::vector<z3::expr> &vars, bool complete_assignment) {
+                                  const std::vector<z3::expr> &vars, bool complete_assignments) {
     assert(result.get_is_sat());
-    if (!complete_assignment) {
+    if (!complete_assignments) {
         assignemnts.push_back(result);
         return;
     }
@@ -60,7 +62,7 @@ void Z3SatSolver::add_assignments(std::vector<SatSolverResult> &assignemnts, Sat
     {
         std::set<size_t> undef_idxs;
         for (size_t i = 0; i < vars.size(); ++i) if (result.get_value(vars[i]) == SatResult::UNDEF) undef_idxs.insert(i);
-        ssize_t iter_max = (1 << undef_idxs.size());
+        ssize_t iter_max = (1U << undef_idxs.size());
 #ifdef DEBUG
         assert(iter_max >= 0);
 #endif
@@ -75,7 +77,7 @@ void Z3SatSolver::add_assignments(std::vector<SatSolverResult> &assignemnts, Sat
                 }
                 else
                 {
-                    bool is_true_val = (i & (1 << undef_idx)) > 0;
+                    bool is_true_val = (i & (1U << undef_idx)) > 0;
                     undef_idx++;
                     vals.emplace(vars[j], is_true_val ? SatResult::TRUE : SatResult::FALSE);
                 }
@@ -149,17 +151,63 @@ SatResult SatSolverResult::get_value(const z3::expr& var ) const {
     return res->second;
 }
 
-z3::expr SatSolverResult::to_conjunt(z3::context& ctx) const {
+z3::expr SatSolverResult::to_conjunct(const Z3ExprSet& to_flip) const {
+    z3::context& ctx = _values.begin()->first.ctx();
     z3::expr_vector lits(ctx);
     for (const auto & value : _values) {
-        if (value.second != SatResult::UNDEF)
-            lits.push_back(value.second == SatResult::TRUE ? (value.first) : (!value.first));
+        if (value.second != SatResult::UNDEF) {
+            bool is_to_flip = to_flip.find(value.first) != to_flip.end();
+            lits.push_back((value.second == (is_to_flip ? SatResult::FALSE : SatResult::TRUE))
+                                    ? (value.first) : (!value.first));
+        }
     }
     return z3::mk_and(lits);
 }
 
 SatSolverResult::SatSolverResult(std::map<z3::expr, SatResult, Z3ExprComp> values) : _is_sat(true), _values(std::move(values)) {}
 
+void SatSolverResult::generalize_assignment(const z3::expr_vector& assertions) {
+    z3::expr united_assertions = z3::mk_and(assertions);
+    auto &ctx = assertions.ctx();
+
+#ifdef DEBUG
+    z3::solver assert_solver(ctx);
+        assert_solver.add(united_assertions);
+        assert_solver.add(to_conjunct());
+        assert(assert_solver.check() == z3::sat);
+#endif
+
+    z3::solver solver(ctx);
+   // solver.add(united_assertions);
+
+    for (auto var_it = _values.begin(); var_it != _values.end(); ++var_it) {
+        if (var_it->second == SatResult::UNDEF) continue;
+
+
+        z3::expr flipped_conj = to_conjunct({var_it->first});
+        z3::expr_vector orig(ctx), to_replace(ctx);
+        for (uint i = 0; i < flipped_conj.num_args(); ++i)
+        {
+            auto lit = flipped_conj.arg(i);
+            auto var = lit.is_not() ? lit.arg(0) : lit;
+            orig.push_back(var);
+            to_replace.push_back(ctx.bool_val(!lit.is_not()));
+        }
+
+        solver.push();
+        z3::expr subtituted_assertion = united_assertions.substitute(orig, to_replace).simplify();
+        solver.add(subtituted_assertion);
+        auto sat_res = solver.check();
+        if (sat_res == z3::sat)
+        {
+   //         std::cout << "GEN CONDUCTED" << std::endl;
+            var_it->second = SatResult::UNDEF;
+        }
+
+
+        solver.pop();
+    }
+}
 
 const std::map<std::string, SatSolverFactory> ISatSolver::s_solvers =
         {

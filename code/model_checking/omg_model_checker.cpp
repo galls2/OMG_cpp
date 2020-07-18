@@ -157,7 +157,7 @@ bool OmgModelChecker::handle_ar(Goal &goal)
             const std::vector<std::unique_ptr<UnwindingTree>> &successors = node_to_explore.unwind_further();
 
             for (const std::unique_ptr<UnwindingTree> &succ : successors) {
-      //          DEBUG_PRINT("SUCCESSOR: %s\n", succ->get_concrete_state().to_bitvec_str().data());
+                DEBUG_PRINT("SUCCESSOR: %s\n", succ->get_concrete_state().to_bitvec_str().data());
                 if (std::all_of(visited.begin(), visited.end(), [&succ](const ConcreteState *const &visitedee) {
                     return (*visitedee) != succ->get_concrete_state();
                 })) {
