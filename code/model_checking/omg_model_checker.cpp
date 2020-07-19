@@ -465,8 +465,8 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
                 UnwindingTree& node_to_set = get_concretization_successor(to_close_node, dst_cstate);
                 DEBUG_PRINT("Node to set URGENT (supposed to be explored next): %s\n", node_to_set.get_concrete_state().to_bitvec_str().data());
 
-                size_t erase_res = to_visit.erase(&node_to_set);
-                assert(erase_res == 1);
+                to_visit.erase(&node_to_set);
+         //       assert(erase_res == 1); // We don't care as node_to_set may not be here, as it was developed for a subgoal
                 node_to_set.set_urgent(true);
 #ifdef DEBUG
                 size_t prev_size = to_visit.size();

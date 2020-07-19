@@ -320,15 +320,15 @@ void thread_test()
 }
 int main()
 {
-    TEST("../resources/gatedClock.aig", "AG(r0 -> AX r1)", true);
- //   run_models("../models_to_run_small.omg");
-//    test_model("../resources/pf");
+//    TEST("../resources/gatedClock.aig", "AG(r0 -> AX r1)", true);
+    run_models("../models_to_run_small.omg");
+  //  test_model("../resources/pf");
   //unit_tests();
 //    TEST("../resources/spinner4.aig", "AG((~inr<3> & ~inr<2> & ~inr<1> & inr<0>) -> ~E spl U (~inr<3> & ~inr<2> & inr<1> & inr<0>))", false);
    // TEST("../resources/twophase.aig", "AG ~out", false);
 //TEST("../resources/spinner4.aig", "AG(~(~inr<3> & ~inr<2> & ~inr<1> & ~inr<0>) -> ~E spl U (~inr<3> & ~inr<2> & ~inr<1> & ~inr<0>))",false);
 
-    thread_test();
+ //   thread_test();
 
 }
 
