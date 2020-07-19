@@ -6,7 +6,7 @@ set(CMAKE_CXX_FLAGS_RELEASE  "-O3")
 include_directories(code)
 project (OMG_CPP)
 
-set( CMAKE_VERBOSE_MAKEFILE on )
+#set( CMAKE_VERBOSE_MAKEFILE on )
 
 add_executable(OMG code/main.cpp
 

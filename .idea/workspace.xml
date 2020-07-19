@@ -34,9 +34,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="-Adde">
-      <change beforePath="$PROJECT_DIR$/code/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" afterDir="false" />
+    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="Bugfix: removed a wrong assertion">
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -144,14 +143,7 @@
       <workItem from="1587326308621" duration="102342000" />
       <workItem from="1591274836892" duration="8805000" />
       <workItem from="1593977054529" duration="25464000" />
-      <workItem from="1595060437128" duration="6307000" />
-    </task>
-    <task id="LOCAL-00087" summary="Added tests resources">
-      <created>1586730410313</created>
-      <option name="number" value="00087" />
-      <option name="presentableId" value="LOCAL-00087" />
-      <option name="project" value="LOCAL" />
-      <updated>1586730410313</updated>
+      <workItem from="1595060437128" duration="6434000" />
     </task>
     <task id="LOCAL-00088" summary="Refactored tests to use tests from the git project">
       <created>1586731062946</created>
@@ -489,7 +481,14 @@
       <option name="project" value="LOCAL" />
       <updated>1594299765490</updated>
     </task>
-    <option name="localTasksCounter" value="136" />
+    <task id="LOCAL-00136" summary="Bugfix: removed a wrong assertion">
+      <created>1595176404417</created>
+      <option name="number" value="00136" />
+      <option name="presentableId" value="LOCAL-00136" />
+      <option name="project" value="LOCAL" />
+      <updated>1595176404417</updated>
+    </task>
+    <option name="localTasksCounter" value="137" />
     <servers />
   </component>
   <component name="TodoView">
@@ -517,7 +516,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Bugfix in aigparser - out literal formula in state formula was ill.  Added test as unit test" />
     <MESSAGE value="Finalizing memory only at end now" />
     <MESSAGE value="Bugfix in CtlFileParser" />
     <MESSAGE value="*Changed definition of NodePriorityQueue to allow correct updating and ordering.&#10;*Bugfix in AV inserting to to_visit&#10;*Added many debug checks" />
@@ -542,7 +540,8 @@
     <MESSAGE value="- Refactor &#10;- Added simplify to some formulas to improve results" />
     <MESSAGE value="-fix workspace.xml" />
     <MESSAGE value="-fixed cmake" />
-    <option name="LAST_COMMIT_MESSAGE" value="-fixed cmake" />
+    <MESSAGE value="Bugfix: removed a wrong assertion" />
+    <option name="LAST_COMMIT_MESSAGE" value="Bugfix: removed a wrong assertion" />
   </component>
   <component name="WindowStateProjectService">
     <state x="638" y="263" key="#Build_All" timestamp="1595064813741">
