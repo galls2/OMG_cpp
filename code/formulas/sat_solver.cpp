@@ -178,34 +178,34 @@ void SatSolverResult::generalize_assignment(const z3::expr_vector& assertions) {
 #endif
 
     z3::solver solver(ctx);
-   // solver.add(united_assertions);
+    solver.add(united_assertions);
 
-    for (auto var_it = _values.begin(); var_it != _values.end(); ++var_it) {
-        if (var_it->second == SatResult::UNDEF) continue;
+    for (auto& var_it : _values)
+    {
+        if (var_it.second == SatResult::UNDEF) continue;
 
+        z3::expr_vector flipped_conj_literals(ctx);
 
-        z3::expr flipped_conj = to_conjunct({var_it->first});
-        z3::expr_vector orig(ctx), to_replace(ctx);
-        for (uint i = 0; i < flipped_conj.num_args(); ++i)
+        for (const auto& var_assignment : _values)
         {
-            auto lit = flipped_conj.arg(i);
-            auto var = lit.is_not() ? lit.arg(0) : lit;
-            orig.push_back(var);
-            to_replace.push_back(ctx.bool_val(!lit.is_not()));
+            if (z3::eq(var_assignment.first, var_it.first)) {
+                flipped_conj_literals.push_back(var_assignment.second == SatResult::FALSE ? var_assignment.first : (!var_assignment.first));
+            }
+            else
+            {
+                flipped_conj_literals.push_back(var_assignment.second == SatResult::TRUE ? var_assignment.first : (!var_assignment.first));
+            }
         }
 
-        solver.push();
-        z3::expr subtituted_assertion = united_assertions.substitute(orig, to_replace).simplify();
-        solver.add(subtituted_assertion);
-        auto sat_res = solver.check();
+        auto sat_res = solver.check(flipped_conj_literals);
         if (sat_res == z3::sat)
         {
-   //         std::cout << "GEN CONDUCTED" << std::endl;
-            var_it->second = SatResult::UNDEF;
+   //        std::cout << "GEN CONDUCTED" << std::endl;
+            var_it.second = SatResult::UNDEF;
         }
 
 
-        solver.pop();
+
     }
 }
 

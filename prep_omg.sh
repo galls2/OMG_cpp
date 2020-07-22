@@ -12,5 +12,5 @@ make
 cd ../../
 
 cp run_config.omg OMG_cpp/
-echo 'Do: cd OMG; ./OMG '
+echo 'Do: cd OMG_cpp/build/; ./OMG '
 

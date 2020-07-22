@@ -45,36 +45,22 @@ std::vector<FormulaChunk> get_formula_chunks(const std::string& ctl_file_path)
     return formula_chunks;
 }
 
-void test_parser_with_model(const std::string& model_name)
+
+struct McProblemRunner
 {
-    std::cout << "Parsing " <<model_name << "... ";
-    try
+    McProblemRunner(std::unique_ptr<OmgModelChecker> omg_, CtlFormula& spec_) : omg(std::move(omg_)), spec(spec_), mc_result(false) {}
+    std::unique_ptr<OmgModelChecker> omg;
+    CtlFormula& spec;
+    bool mc_result;
+
+
+    void run()
     {
-        std::vector<FormulaChunk> formula_chunks = get_formula_chunks(model_name);
-        std::cout << "Success!" << std::endl;
+        bool mc_res = omg->check_all_initial_states(spec);
+        mc_result = mc_res;
     }
-    catch(std::exception& ex)
-    {
-        std::cout << "Failed!" << std::endl;
-//        std::cout << ex.what() << std::endl;
-    }
-}
 
-void test_parser(const std::string& file_path)
-{
-    std::ifstream infile(file_path.c_str());
-
-    std::string line;
-    while (std::getline(infile, line))
-    {
-        std::string model_name = std::string("../resources/") + line.substr(0, line.length() -4);
-        const std::string &ctl_file_path = model_name + ".ctl";
-        test_parser_with_model(ctl_file_path);
-
-    }
-}
-
-
+};
 
 
 void test_model(const std::string& file_path_no_extension) {
@@ -119,14 +105,31 @@ void test_model(const std::string& file_path_no_extension) {
                 DEBUG_PRINT("Testing ## %s ## against ## %s ##... ", it2->to_string().data(), aig_path.data());
                 auto t11 = std::chrono::high_resolution_clock::now();
 
-                bool res = omg.check_all_initial_states(*it2);
+//                std::unique_ptr<McProblemRunner> mc_runner = std::make_unique<McProblemRunner>(std::move(omg), *it2);
+//                boost::thread t([mc_runner =move(mc_runner)]() { mc_runner->run(); });
+//                bool timeout_res = t.try_join_for(boost::chrono::seconds(OmgConfig::get<int>("Timeout")));
+//
+//                t.detach();
+//                if (timeout_res) {
+//             //       bool res = mc_runner.mc_result;
+//                    auto t21 = std::chrono::high_resolution_clock::now();
+//                    auto duration1 = std::chrono::duration_cast<std::chrono::milliseconds>(t21 - t11).count();
+//
+//               //     PRINT_IF_BUG(res, is_pass, aig_path, it2->to_string(), prop_count);
+//                    std::cout << "MC Time: " << duration1 << std::endl;
+//                }
+//                else
+//                {
+//                    std::cout << "MC Time: TIMEOUT!"  << std::endl;
+//
+//                }
 
+                bool res = omg.check_all_initial_states(*it2);
                 auto t21 = std::chrono::high_resolution_clock::now();
-                auto duration1 = std::chrono::duration_cast<std::chrono::milliseconds>( t21 - t11 ).count();
+                auto duration1 = std::chrono::duration_cast<std::chrono::milliseconds>(t21 - t11).count();
 
                 PRINT_IF_BUG(res, is_pass, aig_path, it2->to_string(), prop_count);
                 std::cout << "MC Time: " << duration1 << std::endl;
-
                 ++prop_count;
             }
         }
@@ -140,13 +143,32 @@ void test_model(const std::string& file_path_no_extension) {
 
                 std::unique_ptr<KripkeStructure> kripke = p.to_kripke(it->get_aps());
                 OmgModelChecker omg(*kripke);
-
                 bool res = omg.check_all_initial_states(*it);
                 auto t2 = std::chrono::high_resolution_clock::now();
-                auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( t2 - t1 ).count();
+                auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
                 std::cout << "Ctr + MC Time: " << duration << std::endl;
                 PRINT_IF_BUG(res, is_pass, aig_path, it->to_string(), prop_count);
 
+                //                std::unique_ptr<McProblemRunner> mc_runner = std::make_unique<McProblemRunner>(std::move(omg), *it);
+//                boost::thread t([mc_runner = move(mc_runner)]() { mc_runner->run(); });
+//                int timeout = OmgConfig::get<int>("Timeout");
+//                bool timeout_res = t.try_join_for(boost::chrono::seconds(timeout));
+//
+//                t.detach();
+//
+//                if (timeout_res) {
+//
+//                   // bool res = mc_runner->mc_result;
+//                    auto t2 = std::chrono::high_resolution_clock::now();
+//                    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+//                    std::cout << "Ctr + MC Time: " << duration << std::endl;
+//               //     PRINT_IF_BUG(res, is_pass, aig_path, it->to_string(), prop_count);
+//                }
+//                else
+//                {
+//                    std::cout << "Ctr + MC Time: TIMEOUT" << std::endl;
+//
+//                }
                 ++prop_count;
             }
         }
@@ -291,45 +313,67 @@ void run_models(const std::string& file_path)
     }
 }
 
-void test_parser_s(const std::string& s)
+int model_checking_from_cmd(int argc, char** argv)
 {
-    Lexer lexer;
-    LR1CtlParser parser(CtlParserData::grammar_ctl, ActionTable(CtlParserData::action_table_ctl_parser), GotoTable(CtlParserData::goto_table_ctl_parser));
-    auto lex_result = lexer.lex(s);
-    auto parse_result = parser.parse(lex_result);
-    std::cout << "5";
+    if (argc != 4)
+    {
+        std::cout << "Usage: ./OMG <aig_file_path> <ctl_file_path> <property number>" << std::endl;
+    }
+
+    std::string aig_path(argv[1]);
+    std::string ctl_path(argv[2]);
+    uint16_t wanted_propery_num(std::stoi(argv[3]));
+
+    OmgConfigBuilder builder;
+    builder.set_config_src(ConfigurationSource::FILE).set_config_file_path("../run_config.omg").build();
+    DEBUG_PRINT("OMG Configuration:\n %s",OmgConfig::config_table_to_string().data());
+
+    ////
+
+
+    AigParser p(aig_path);
+
+    std::vector<FormulaChunk> formula_chunks = get_formula_chunks(ctl_path);
+
+    uint16_t prop_count = 0;
+    for (const auto &it : formula_chunks) {
+        bool is_pass = it.get_expected_result();
+        if (it.get_formulas().size() + prop_count < wanted_propery_num)
+        {
+            auto& spec = it.get_formulas()[wanted_propery_num - prop_count];
+
+            auto t1 = std::chrono::high_resolution_clock::now();
+
+            std::unique_ptr<KripkeStructure> kripke = p.to_kripke(spec->get_aps());
+            OmgModelChecker omg(*kripke);
+            bool res = omg.check_all_initial_states(*spec);
+            PRINT_IF_BUG(res, is_pass, aig_path, spec->to_string(), wanted_propery_num);
+
+            auto t2 = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+            std::cout << "Ctr + MC Time: " << duration << std::endl;
+
+            return 0;
+        }
+        else
+        {
+            prop_count += it.get_formulas().size();
+        }
+    }
+
+    std::cout << "Property of index " << wanted_propery_num << " does not exist in " << ctl_path << std::endl;
+    return 1;
+
 }
 
-//
-void test_f()
-{
-    int o = 0;
-    uint x = 0;
-    while(true)
-    {
-        o++;
-        if (o % 10000 == 0) { std::cout << x++ << std::endl; o = 0; }
-    }
-}
-//
-void thread_test()
-{
-    boost::thread t([]() { test_f(); });
-     bool res = t.try_join_for(boost::chrono::milliseconds(90));
-    std::cout << res << std::endl;
-}
-int main()
+
+int main(int argc, char** argv)
 {
 //    TEST("../resources/gatedClock.aig", "AG(r0 -> AX r1)", true);
-    run_models("../models_to_run_small.omg");
-  //  test_model("../resources/pf");
+   run_models("../models_to_run_small.omg");
+//    test_model("../resources/spinner4");
   //unit_tests();
-//    TEST("../resources/spinner4.aig", "AG((~inr<3> & ~inr<2> & ~inr<1> & inr<0>) -> ~E spl U (~inr<3> & ~inr<2> & inr<1> & inr<0>))", false);
-   // TEST("../resources/twophase.aig", "AG ~out", false);
-//TEST("../resources/spinner4.aig", "AG(~(~inr<3> & ~inr<2> & ~inr<1> & ~inr<0>) -> ~E spl U (~inr<3> & ~inr<2> & ~inr<1> & ~inr<0>))",false);
-
- //   thread_test();
-
+  //  return model_checking_from_cmd(argc, argv);
 }
 
 /*

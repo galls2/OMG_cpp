@@ -14,7 +14,8 @@ std::unordered_map<std::string, ValueType> OmgConfigBuilder::configuration_field
                 {"Brother Unification",          ValueType::BOOLEAN},
                 {"Trivial Split Elimination",    ValueType::BOOLEAN},
                 {"Sat Solver",                   ValueType::STRING},
-                {"Epr Solver",                   ValueType::STRING}
+                {"Epr Solver",                   ValueType::STRING},
+                {"Timeout",                   ValueType::NUMERIC}
 
         };
 
@@ -34,6 +35,7 @@ void OmgConfigBuilder::build() {
                             {"Properties per specification", true},
                             {"Brother Unification", true},
                             {"Trivial Split Elimination", true},
+                            {"Timeout", 60},
                             {"Sat Solver", std::string("z3")},
                             {"Epr Solver", std::string("z3")}
                     };

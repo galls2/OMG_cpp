@@ -1,6 +1,7 @@
-Properties per specification:False
+Properties per specification:True
 Brother Unification:True
 Trivial Split Elimination:True
+Timeout:10
 Sat Solver:z3
 Epr Solver:z3
 
