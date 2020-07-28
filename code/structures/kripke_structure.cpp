@@ -12,7 +12,7 @@ const std::vector<ConcreteState>& KripkeStructure::get_initial_states()
 {
     if (_initial_states.empty()) {
         z3::context &ctx = _transitions.get_raw_formula().ctx();
-        Z3SatSolver solver(ctx);
+        Z3SatSolver solver(ctx); // TODO changeme
         const auto &ps_vars = _transitions.get_vars_by_tag("ps");
         std::map<std::string, z3::expr_vector> mp = {{"ps", ps_vars}};
         PropFormula p(_init_formula, mp);

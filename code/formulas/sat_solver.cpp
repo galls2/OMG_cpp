@@ -27,8 +27,8 @@ std::vector<SatSolverResult> Z3SatSolver::all_sat(const PropFormula &formula, co
         z3::model m = solver.get_model();
 
         SatSolverResult res(m, vars);
-//        const auto& assertions = solver.assertions();
-//        res.generalize_assignment(assertions);
+        const auto& assertions = solver.assertions();
+        res.generalize_assignment(assertions);
 
         add_assignments(assignments ,res, vars, complete_assignments);
         z3::expr blocking_clause = get_blocking_clause(res, vars);
@@ -180,33 +180,43 @@ void SatSolverResult::generalize_assignment(const z3::expr_vector& assertions) {
     z3::solver solver(ctx);
     solver.add(united_assertions);
 
-    for (auto& var_it : _values)
-    {
+    unsigned flipped = 0;
+    for (auto& var_it : _values) {
         if (var_it.second == SatResult::UNDEF) continue;
 
         z3::expr_vector flipped_conj_literals(ctx);
 
-        for (const auto& var_assignment : _values)
-        {
+        for (const auto &var_assignment : _values) {
             if (z3::eq(var_assignment.first, var_it.first)) {
-                flipped_conj_literals.push_back(var_assignment.second == SatResult::FALSE ? var_assignment.first : (!var_assignment.first));
-            }
-            else
-            {
-                flipped_conj_literals.push_back(var_assignment.second == SatResult::TRUE ? var_assignment.first : (!var_assignment.first));
+                flipped_conj_literals.push_back(
+                        var_assignment.second == SatResult::FALSE ? var_assignment.first : (!var_assignment.first));
+            } else {
+                flipped_conj_literals.push_back(
+                        var_assignment.second == SatResult::TRUE ? var_assignment.first : (!var_assignment.first));
             }
         }
 
         auto sat_res = solver.check(flipped_conj_literals);
-        if (sat_res == z3::sat)
-        {
-   //        std::cout << "GEN CONDUCTED" << std::endl;
-            var_it.second = SatResult::UNDEF;
+        if (sat_res == z3::sat) {
+            const auto& model = solver.get_model();
+            bool can_flip = true;
+            for (const auto& it_yakir : _values)
+            {
+                if (it_yakir.second == SatResult::UNDEF && model.eval(it_yakir.first).bool_value() != Z3_L_UNDEF )
+                {
+                    can_flip = false; break;
+                }
+            }
+            if (can_flip) {
+                flipped++;
+                //        std::cout << "GEN CONDUCTED" << std::endl;
+                var_it.second = SatResult::UNDEF;
+            }
         }
 
 
-
     }
+//    if (flipped) std::cout << "Flipped: " << flipped << std::endl;
 }
 
 const std::map<std::string, SatSolverFactory> ISatSolver::s_solvers =

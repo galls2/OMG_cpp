@@ -13,7 +13,10 @@
 #include <utils/z3_utils.h>
 #include <chrono>
 
+#include "../cudd-3.0.0/cplusplus/cuddObj.hh"
+
 #include <boost/thread/thread.hpp>
+//#include "../cudd-3.0.0/cplusplus/cuddObj.hh"
 
 #define TEST(aig_path, raw_ctl_string, expected) \
     do \
@@ -365,15 +368,37 @@ int model_checking_from_cmd(int argc, char** argv)
     return 1;
 
 }
+void cudd()
+{
+    Cudd mgr(0, 2);
+  //  mgr.makeVerbose();
+    BDD x = mgr.bddVar();
+    BDD y = mgr.bddVar();
 
+    std::cout << "BEFORE" << std::endl;
+    BDD f = x * y;
+    f.print(2);
+    f.PrintTwoLiteralClauses();
+
+    f.PrintFactoredForm();
+    BDD fEx = f.ExistAbstract(x);
+    fEx.print(1);
+    fEx.PrintTwoLiteralClauses();
+    fEx.PrintFactoredForm();
+    BDD falser = x  & (!x);
+    falser.PrintFactoredForm();
+
+    std::cout << "AFTER" << std::endl;
+}
 
 int main(int argc, char** argv)
 {
 //    TEST("../resources/gatedClock.aig", "AG(r0 -> AX r1)", true);
-   run_models("../models_to_run_small.omg");
-//    test_model("../resources/spinner4");
+//   run_models("../models_to_run_small.omg");
+   // test_model("../resources/spinner4");
   //unit_tests();
   //  return model_checking_from_cmd(argc, argv);
+  cudd();
 }
 
 /*

@@ -34,13 +34,12 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="Bugfix: removed a wrong assertion">
+    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="-Fix to gen assignment&#10;-Wrote running mode from cmd&#10;-tried to integrate boost::thread. Will continue.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/configuration/omg_config.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/configuration/omg_config.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/formulas/sat_solver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/formulas/sat_solver.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/prep_omg.sh" beforeDir="false" afterPath="$PROJECT_DIR$/prep_omg.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_config.omg" beforeDir="false" afterPath="$PROJECT_DIR$/run_config.omg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/structures/kripke_structure.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/kripke_structure.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,14 +147,9 @@
       <workItem from="1587326308621" duration="102342000" />
       <workItem from="1591274836892" duration="8805000" />
       <workItem from="1593977054529" duration="25464000" />
-      <workItem from="1595060437128" duration="18791000" />
-    </task>
-    <task id="LOCAL-00088" summary="Refactored tests to use tests from the git project">
-      <created>1586731062946</created>
-      <option name="number" value="00088" />
-      <option name="presentableId" value="LOCAL-00088" />
-      <option name="project" value="LOCAL" />
-      <updated>1586731062946</updated>
+      <workItem from="1595060437128" duration="25242000" />
+      <workItem from="1595877793084" duration="4700000" />
+      <workItem from="1595964099299" duration="1068000" />
     </task>
     <task id="LOCAL-00089" summary="Added unit tests for AV. &#10;AV algo now works!">
       <created>1586770859455</created>
@@ -493,7 +487,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595176404417</updated>
     </task>
-    <option name="localTasksCounter" value="137" />
+    <task id="LOCAL-00137" summary="-Fix to gen assignment&#10;-Wrote running mode from cmd&#10;-tried to integrate boost::thread. Will continue.">
+      <created>1595418743018</created>
+      <option name="number" value="00137" />
+      <option name="presentableId" value="LOCAL-00137" />
+      <option name="project" value="LOCAL" />
+      <updated>1595418743022</updated>
+    </task>
+    <option name="localTasksCounter" value="138" />
     <servers />
   </component>
   <component name="TodoView">
@@ -521,7 +522,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Finalizing memory only at end now" />
     <MESSAGE value="Bugfix in CtlFileParser" />
     <MESSAGE value="*Changed definition of NodePriorityQueue to allow correct updating and ordering.&#10;*Bugfix in AV inserting to to_visit&#10;*Added many debug checks" />
     <MESSAGE value="Updated scripts" />
@@ -546,7 +546,8 @@
     <MESSAGE value="-fix workspace.xml" />
     <MESSAGE value="-fixed cmake" />
     <MESSAGE value="Bugfix: removed a wrong assertion" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bugfix: removed a wrong assertion" />
+    <MESSAGE value="-Fix to gen assignment&#10;-Wrote running mode from cmd&#10;-tried to integrate boost::thread. Will continue." />
+    <option name="LAST_COMMIT_MESSAGE" value="-Fix to gen assignment&#10;-Wrote running mode from cmd&#10;-tried to integrate boost::thread. Will continue." />
   </component>
   <component name="WindowStateProjectService">
     <state x="638" y="263" key="#Build_All" timestamp="1595064813741">
@@ -561,9 +562,10 @@
       <screen x="0" y="0" width="3840" height="1080" />
     </state>
     <state x="2344" y="225" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.3840.1080@0.0.3840.1080" timestamp="1591954448257" />
-    <state x="1320" y="344" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1591445373284">
-      <screen x="0" y="0" width="3840" height="1080" />
+    <state x="2360" y="326" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1595423274213">
+      <screen x="1920" y="0" width="1280" height="1024" />
     </state>
+    <state x="2360" y="326" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1595423274213" />
     <state x="660" y="344" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1080@0.0.1920.1080" timestamp="1589720087392" />
     <state x="1320" y="344" key="#com.intellij.fileTypes.FileTypeChooser/0.0.3840.1080@0.0.3840.1080" timestamp="1591445373284" />
     <state x="826" y="294" key="#xdebugger.evaluate" timestamp="1595016324164">
@@ -575,61 +577,65 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="479" height="485" key="DebuggerActiveHint/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1595176173025" />
-    <state x="2776" y="308" key="FileChooserDialogImpl" timestamp="1594065217095">
+    <state x="2776" y="308" key="FileChooserDialogImpl" timestamp="1595424121203">
       <screen x="1920" y="0" width="1280" height="1024" />
     </state>
-    <state x="2776" y="308" key="FileChooserDialogImpl/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1594065217095" />
+    <state x="2776" y="308" key="FileChooserDialogImpl/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1595424121203" />
     <state x="2668" y="325" key="FileChooserDialogImpl/0.0.3840.1080@0.0.3840.1080" timestamp="1591953111718" />
-    <state width="1868" height="291" key="GridCell.Tab.0.bottom" timestamp="1595418477120">
+    <state width="1878" height="293" key="GridCell.Tab.0.bottom" timestamp="1595970510025">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1868" height="291" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1595418477120" />
-    <state width="1238" height="296" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1594904384158" />
+    <state width="1878" height="293" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1595970510025" />
+    <state width="1238" height="325" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1595877420228" />
     <state width="1868" height="293" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1591950055536" />
     <state width="1878" height="315" key="GridCell.Tab.0.bottom/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374145" />
-    <state width="1868" height="291" key="GridCell.Tab.0.center" timestamp="1595418477120">
+    <state width="1878" height="293" key="GridCell.Tab.0.center" timestamp="1595970510025">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1868" height="291" key="GridCell.Tab.0.center/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1595418477120" />
-    <state width="1238" height="296" key="GridCell.Tab.0.center/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1594904384158" />
+    <state width="1878" height="293" key="GridCell.Tab.0.center/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1595970510025" />
+    <state width="1238" height="325" key="GridCell.Tab.0.center/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1595877420228" />
     <state width="1868" height="293" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1591950055531" />
     <state width="1878" height="315" key="GridCell.Tab.0.center/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374138" />
-    <state width="1868" height="291" key="GridCell.Tab.0.left" timestamp="1595418477120">
+    <state width="1878" height="293" key="GridCell.Tab.0.left" timestamp="1595970510025">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1868" height="291" key="GridCell.Tab.0.left/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1595418477120" />
-    <state width="1238" height="296" key="GridCell.Tab.0.left/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1594904384158" />
+    <state width="1878" height="293" key="GridCell.Tab.0.left/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1595970510025" />
+    <state width="1238" height="325" key="GridCell.Tab.0.left/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1595877420227" />
     <state width="1868" height="293" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1591950055526" />
     <state width="1878" height="315" key="GridCell.Tab.0.left/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374135" />
-    <state width="1868" height="291" key="GridCell.Tab.0.right" timestamp="1595418477120">
+    <state width="1878" height="293" key="GridCell.Tab.0.right" timestamp="1595970510025">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1868" height="291" key="GridCell.Tab.0.right/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1595418477120" />
-    <state width="1238" height="296" key="GridCell.Tab.0.right/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1594904384158" />
+    <state width="1878" height="293" key="GridCell.Tab.0.right/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1595970510025" />
+    <state width="1238" height="325" key="GridCell.Tab.0.right/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1595877420228" />
     <state width="1868" height="293" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1591950055533" />
     <state width="1878" height="315" key="GridCell.Tab.0.right/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374142" />
-    <state width="1868" height="345" key="GridCell.Tab.1.bottom" timestamp="1595417155915">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1238" height="325" key="GridCell.Tab.1.bottom" timestamp="1595877420253">
+      <screen x="1920" y="0" width="1280" height="1024" />
     </state>
     <state width="1868" height="345" key="GridCell.Tab.1.bottom/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1595417155915" />
+    <state width="1238" height="325" key="GridCell.Tab.1.bottom/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1595877420253" />
     <state width="1878" height="373" key="GridCell.Tab.1.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1590006495516" />
     <state width="1878" height="315" key="GridCell.Tab.1.bottom/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374155" />
-    <state width="1868" height="345" key="GridCell.Tab.1.center" timestamp="1595417155915">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1238" height="325" key="GridCell.Tab.1.center" timestamp="1595877420229">
+      <screen x="1920" y="0" width="1280" height="1024" />
     </state>
     <state width="1868" height="345" key="GridCell.Tab.1.center/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1595417155915" />
+    <state width="1238" height="325" key="GridCell.Tab.1.center/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1595877420229" />
     <state width="1878" height="373" key="GridCell.Tab.1.center/0.0.1920.1080@0.0.1920.1080" timestamp="1590006495511" />
     <state width="1878" height="315" key="GridCell.Tab.1.center/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374150" />
-    <state width="1868" height="345" key="GridCell.Tab.1.left" timestamp="1595417155915">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1238" height="325" key="GridCell.Tab.1.left" timestamp="1595877420228">
+      <screen x="1920" y="0" width="1280" height="1024" />
     </state>
     <state width="1868" height="345" key="GridCell.Tab.1.left/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1595417155915" />
+    <state width="1238" height="325" key="GridCell.Tab.1.left/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1595877420228" />
     <state width="1878" height="373" key="GridCell.Tab.1.left/0.0.1920.1080@0.0.1920.1080" timestamp="1590006495509" />
     <state width="1878" height="315" key="GridCell.Tab.1.left/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374147" />
-    <state width="1868" height="345" key="GridCell.Tab.1.right" timestamp="1595417155915">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1238" height="325" key="GridCell.Tab.1.right" timestamp="1595877420253">
+      <screen x="1920" y="0" width="1280" height="1024" />
     </state>
     <state width="1868" height="345" key="GridCell.Tab.1.right/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1595417155915" />
+    <state width="1238" height="325" key="GridCell.Tab.1.right/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1595877420253" />
     <state width="1878" height="373" key="GridCell.Tab.1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1590006495514" />
     <state width="1878" height="315" key="GridCell.Tab.1.right/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374152" />
     <state x="2374" y="202" key="SettingsEditor" timestamp="1591953394048">
@@ -649,10 +655,10 @@
     </state>
     <state x="0" y="0" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1594297535067" />
     <state x="745" y="471" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1080@0.0.1920.1080" timestamp="1589539801210" />
-    <state x="1043" y="133" width="609" height="768" key="find.popup" timestamp="1594839207658">
+    <state x="1049" y="129" width="609" height="768" key="find.popup" timestamp="1595419594896">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="1043" y="133" width="609" height="768" key="find.popup/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1594839207658" />
+    <state x="1049" y="129" width="609" height="768" key="find.popup/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1595419594896" />
     <state x="655" y="142" width="609" height="768" key="find.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1591950227672" />
     <state x="2086" y="133" width="1218" height="768" key="find.popup/0.0.3840.1080@0.0.3840.1080" timestamp="1591953635675" />
   </component>
@@ -678,6 +684,26 @@
           <url>file:///usr/include/c++/5/bits/stl_algobase.h</url>
           <line>815</line>
           <option name="timeStamp" value="71" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/code/formulas/sat_solver.cpp</url>
+          <line>200</line>
+          <option name="timeStamp" value="285" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/code/formulas/sat_solver.cpp</url>
+          <line>201</line>
+          <option name="timeStamp" value="286" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/code/formulas/sat_solver.cpp</url>
+          <line>203</line>
+          <option name="timeStamp" value="287" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/code/formulas/sat_solver.cpp</url>
+          <line>202</line>
+          <option name="timeStamp" value="288" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
