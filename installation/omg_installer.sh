@@ -1,6 +1,7 @@
 #!/bin/sh
 
 cp boost_1_68_0.tar.bz2 ~/Desktop
+cp cudd-3.0.0 -r ~/Desktop
 cd ~/Desktop
 
 echo Initiating OMG installer.
@@ -11,6 +12,7 @@ echo Installing Basic Programs
 apt-get update
 apt install git -y
 apt install cmake -y
+apt install graphviz -y
 
 echo Installing boost 1.68
 tar -xvf boost_1_68_0.tar.bz2

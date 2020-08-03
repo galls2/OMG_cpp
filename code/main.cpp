@@ -16,6 +16,7 @@
 #include "../cudd-3.0.0/cplusplus/cuddObj.hh"
 
 #include <boost/thread/thread.hpp>
+#include <utils/bdd_utils.h>
 //#include "../cudd-3.0.0/cplusplus/cuddObj.hh"
 
 #define TEST(aig_path, raw_ctl_string, expected) \
@@ -368,27 +369,38 @@ int model_checking_from_cmd(int argc, char** argv)
     return 1;
 
 }
+
+
 void cudd()
 {
     Cudd mgr(0, 2);
-  //  mgr.makeVerbose();
-    BDD x = mgr.bddVar();
-    BDD y = mgr.bddVar();
 
-    std::cout << "BEFORE" << std::endl;
-    BDD f = x * y;
-    f.print(2);
-    f.PrintTwoLiteralClauses();
+    z3::context ctx;
+    z3::expr x1 = ctx.bool_const("x1");
+    z3::expr x2 = ctx.bool_const("x2");
+    z3::expr x3 = ctx.bool_const("x3");
+    z3::expr x4 = ctx.bool_const("x4");
 
-    f.PrintFactoredForm();
-    BDD fEx = f.ExistAbstract(x);
-    fEx.print(1);
-    fEx.PrintTwoLiteralClauses();
-    fEx.PrintFactoredForm();
-    BDD falser = x  & (!x);
-    falser.PrintFactoredForm();
-
+    z3::expr f =  ( !x1 || x2) && (x3 || !x4);
+    std::cout << "Converting: " << f.to_string() << std::endl;
+    std::map<z3::expr, size_t, Z3ExprComp> vars = { {x1, 1}, {x2, 2}, {x3, 3}, {x4, 4}};
+    auto res = BddUtils::expr_to_bdd(mgr, f, vars);
+// bad BDD ?
+// bad translation as no dotted archs considered
     std::cout << "AFTER" << std::endl;
+  //  Cudd_FirstNode()
+
+  char* names[4] = {"x1", "x2", "x3", "x4"};
+    BddUtils::bdd_to_dot(mgr, res, "bdd.dot", 1, ((char**)(names)));
+
+    auto paths = BddUtils::all_sat(mgr, res);
+    for (const auto& it : paths) {
+        for (const auto& it2 : it)
+        {
+            std::cout << it2 << " ";
+        }
+        std::cout << std::endl;
+    }
 }
 
 int main(int argc, char** argv)
