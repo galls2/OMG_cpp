@@ -386,14 +386,13 @@ void cudd()
     std::map<z3::expr, size_t, Z3ExprComp> vars = { {x1, 1}, {x2, 2}, {x3, 3}, {x4, 4}};
     auto res = BddUtils::expr_to_bdd(mgr, f, vars);
 // bad BDD ?
-// bad translation as no dotted archs considered
-    std::cout << "AFTER" << std::endl;
-  //  Cudd_FirstNode()
 
   char* names[4] = {"x1", "x2", "x3", "x4"};
     BddUtils::bdd_to_dot(mgr, res, "bdd.dot", 1, ((char**)(names)));
 
     auto paths = BddUtils::all_sat(mgr, res);
+
+    std::cout << "ALL PATHS: " << std::endl;
     for (const auto& it : paths) {
         for (const auto& it2 : it)
         {

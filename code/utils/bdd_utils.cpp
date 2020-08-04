@@ -75,16 +75,12 @@ std::string BddUtils::bdd_to_string(DdNode *root, Cudd &mgr, size_t init_num_tab
 
 std::vector<BddUtils::CubeRep> BddUtils::all_sat(Cudd &mgr, const BDD &bdd) {
     std::map<DdNode *, std::vector<CubeRep>> node_cube_reps;
-    // change TODO change defs so that is_negate will consier the node's complementativity.
-    // then in the recursion change it accordingly
 
     bool is_initially_complemented = Cudd_IsComplement(bdd.getNode());
     return all_sat(mgr, bdd, node_cube_reps, is_initially_complemented);
-
-
 }
 
-std::vector<BddUtils::CubeRep>&&
+std::vector<BddUtils::CubeRep>
 BddUtils::all_sat(Cudd &mgr, const BDD &bdd, std::map<DdNode *, std::vector<CubeRep>> & node_cube_reps, bool is_negate)
 {
     if ((bdd.IsOne() && !is_negate) || (bdd.IsZero() && is_negate))
@@ -96,16 +92,17 @@ BddUtils::all_sat(Cudd &mgr, const BDD &bdd, std::map<DdNode *, std::vector<Cube
     {
         return {};
     }
-
-
-    std::cout << "NOT BDD leaf" << std::endl;
+    // eliminate ret value and
+    // make_______cup_repppp an array
+    // correctify
+   std::cout << "NOT BDD leaf" << std::endl;
 
     DdNode* current_node = bdd.getRegularNode();
     size_t idx = Cudd_NodeReadIndex(current_node);
     std::cout << idx << std::endl;
 
 
-    if (node_cube_reps.find(current_node) != node_cube_reps.end()) 
+    if (node_cube_reps.find(current_node) != node_cube_reps.end())
     {
         return node_cube_reps[current_node];
     }
@@ -140,7 +137,7 @@ BddUtils::all_sat(Cudd &mgr, const BDD &bdd, std::map<DdNode *, std::vector<Cube
         cube_rep.insert(cube_rep.begin(), -1*idx);
         to_return.emplace_back(std::move(cube_rep));
     }
+
+    node_cube_reps[current_node] = to_return;
     return to_return;
-
-
 }
