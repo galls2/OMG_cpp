@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <set>
 #include <utils/z3_utils.h>
+#include <utils/bdd_utils.h>
 #include "sat_solver.h"
 
 SatSolverResult Z3SatSolver::solve_sat(const PropFormula &formula) {
@@ -222,5 +223,60 @@ void SatSolverResult::generalize_assignment(const z3::expr_vector& assertions) {
 const std::map<std::string, SatSolverFactory> ISatSolver::s_solvers =
         {
                 {"z3", [](z3::context& ctx) { return std::make_unique<Z3SatSolver>(ctx); }}
+
         };
 
+SatSolverResult BddSatSolver::solve_sat(const PropFormula &formula) {
+    return Z3SatSolver(formula.get_ctx()).solve_sat(formula);
+
+}
+
+bool BddSatSolver::is_sat(const z3::expr &formula) {
+    return Z3SatSolver(formula.ctx()).is_sat(formula);
+}
+
+std::pair<int, SatSolverResult>
+BddSatSolver::inc_solve_sat(const PropFormula &formula, const std::vector<z3::expr> &flags) {
+    return Z3SatSolver(formula.get_ctx()).inc_solve_sat(formula, flags);
+
+}
+
+z3::expr_vector BddSatSolver::get_unsat_core(const PropFormula &formula, z3::expr_vector &assumptions) {
+    return Z3SatSolver(formula.get_ctx()).get_unsat_core(formula, assumptions);
+
+}
+
+std::vector<SatSolverResult>
+BddSatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr> &vars, bool complete_assignments) {
+    std::vector<SatSolverResult> to_return;
+
+    std::map<z3::expr, size_t, Z3ExprComp> var_index_mapping;
+
+    for (size_t i = 0; i < vars.size(); ++i)
+    {
+        const auto& var = vars[i];
+        var_index_mapping[var] = i+1;
+    }
+
+    auto res_bdd = BddUtils::expr_to_bdd(_mgr, formula.get_raw_formula(), var_index_mapping);
+
+    auto paths = BddUtils::all_sat(_mgr, res_bdd);
+
+    for (const auto& path : paths)
+    {
+        std::map<z3::expr, SatResult, Z3ExprComp > values;
+        for (const auto& v : vars) values[v] = SatResult::UNDEF;
+
+        for (int16_t literal : path)
+        {
+            const auto& var = vars[std::abs(literal) - 1];
+            values[var] = literal > 0 ? SatResult::TRUE : SatResult::FALSE;
+        }
+
+        to_return.emplace_back(std::move(values));
+    }
+
+    return to_return;
+}
+
+BddSatSolver::BddSatSolver() : _mgr(0, 2) { }

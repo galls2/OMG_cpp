@@ -9,6 +9,7 @@
 #include <functional>
 #include <map>
 #include <z3++.h>
+#include "../../cudd-3.0.0/cplusplus/cuddObj.hh"
 
 class PropFormula;
 
@@ -84,4 +85,18 @@ private:
 
     void add_assignments(std::vector<SatSolverResult> &assignments, SatSolverResult result, const std::vector<z3::expr> &vars, bool complete_assignments);
 
+};
+
+class BddSatSolver : public ISatSolver
+{
+public:
+    BddSatSolver();
+    virtual SatSolverResult solve_sat(const PropFormula& formula) override;
+    virtual bool is_sat(const z3::expr& formula) override;
+
+    virtual std::pair<int, SatSolverResult> inc_solve_sat(const PropFormula& formula, const std::vector<z3::expr>& flags) override;
+    virtual std::vector<SatSolverResult> all_sat(const PropFormula& formula, const std::vector<z3::expr> &vars, bool complete_assignments=false) override;
+    virtual z3::expr_vector get_unsat_core(const PropFormula& formula, z3::expr_vector& assumptions) override;
+private:
+    Cudd _mgr;
 };
