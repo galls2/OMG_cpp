@@ -84,33 +84,37 @@ std::vector<BddUtils::CubeRep> BddUtils::all_sat(Cudd &mgr, const BDD &bdd) {
 void
 BddUtils::all_sat(Cudd &mgr, const BDD &bdd, std::map<DdNode *, std::vector<CubeRep>> & node_cube_reps, bool is_negate)
 {
-    if ((bdd.IsOne() && !is_negate) || (bdd.IsZero() && is_negate))
-    {
-        std::cout << "BDD leaf" << std::endl;
-        node_cube_reps[bdd.getRegularNode()] = {{}};
-        return;
-    }
-    else if (((bdd.IsOne() && is_negate) || (bdd.IsZero() && !is_negate)))
-    {
-//        node_cube_reps[bdd.getRegularNode()] = {};
-        return;
-
-    }
-    // eliminate ret value and
-    // make_______cup_repppp an array
-    // correctify
-   std::cout << "-------NOT BDD leaf" << std::endl;
-
     DdNode* current_node = bdd.getRegularNode();
-    size_t idx = Cudd_NodeReadIndex(current_node);
-    std::cout << "INDEX: "<<idx << std::endl;
+    DdNode* current_with_complementation = Cudd_NotCond(current_node, (is_negate ? 1 : 0)); //
 
-
-    if (node_cube_reps.find(current_node) != node_cube_reps.end())
+    if (node_cube_reps.find(current_with_complementation) != node_cube_reps.end())
+//    if (node_cube_reps.find(current_node) != node_cube_reps.end())
     {
         std::cout << "YASA" << std::endl;
         return; // node_cube_reps[current_node];
     }
+
+
+    if ((bdd.IsOne() && !is_negate) || (bdd.IsZero() && is_negate))
+    {
+        std::cout << "BDD leaf" << std::endl;
+        node_cube_reps[current_with_complementation] = {{}};
+//        node_cube_reps[current_node] = {{}};
+
+        return;
+    }
+    else if (((bdd.IsOne() && is_negate) || (bdd.IsZero() && !is_negate)))
+    {
+        return;
+
+    }
+    // should cup_repppp be an array??
+    // correctify
+   std::cout << "-------NOT BDD leaf" << std::endl;
+
+    size_t idx = Cudd_NodeReadIndex(current_node);
+    std::cout << "INDEX: "<<idx << std::endl;
+
 
     std::vector<BddUtils::CubeRep> to_return;
 
@@ -122,9 +126,8 @@ BddUtils::all_sat(Cudd &mgr, const BDD &bdd, std::map<DdNode *, std::vector<Cube
     std::cout<<"GOIND TO THE LEFT OF " << idx<<std::endl;
     all_sat(mgr, then_bdd, node_cube_reps, is_negate ^ is_then_node_complemented);
 
-    for (auto& it : node_cube_reps[then_node])
+    for (auto& it : node_cube_reps[Cudd_NotCond(then_node, is_then_node_complemented?1:0)])
     {
-        // move?
         CubeRep cube_rep = it;
         cube_rep.insert(cube_rep.begin(), idx);
 
@@ -141,17 +144,18 @@ BddUtils::all_sat(Cudd &mgr, const BDD &bdd, std::map<DdNode *, std::vector<Cube
     std::cout<<"GOIND TO THE RIGHT OF " << idx<<std::endl;
 
     all_sat(mgr, else_bdd, node_cube_reps, is_negate ^ is_else_node_complemented);
-    for (auto& it : node_cube_reps[else_node])
+
+    for (auto& it : node_cube_reps[Cudd_NotCond(else_node, is_else_node_complemented ? 1 : 0)])
     {
-        // move?
         CubeRep cube_rep = it;
         cube_rep.insert(cube_rep.begin(), -1*idx);
-        
+
         std::for_each(cube_rep.begin(), cube_rep.end(), [](ssize_t x) { std::cout << x << " ";});
         to_return.emplace_back(std::move(cube_rep));
         std::cout << std::endl;
     }
     std::cout<<"DONE WITH " << idx<<std::endl;
 
-    node_cube_reps[current_node] = to_return;
+    node_cube_reps[current_with_complementation] = to_return;
+//    node_cube_reps[current_node] = to_return;
 }
