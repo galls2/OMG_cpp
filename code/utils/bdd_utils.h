@@ -22,7 +22,7 @@ public:
     static std::string bdd_to_string(DdNode* root, Cudd& mgr, size_t init_num_tabs = 0);
 
 private:
-    static std::vector<CubeRep> all_sat(Cudd& mgr, const BDD& bdd, std::map<DdNode*, std::vector<CubeRep>>& node_cube_reps, bool is_negate);
+    static void all_sat(Cudd& mgr, const BDD& bdd, std::map<DdNode*, std::vector<CubeRep>>& node_cube_reps, bool is_negate);
 
 };
 
