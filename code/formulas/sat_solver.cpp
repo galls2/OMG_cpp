@@ -222,7 +222,8 @@ void SatSolverResult::generalize_assignment(const z3::expr_vector& assertions) {
 
 const std::map<std::string, SatSolverFactory> ISatSolver::s_solvers =
         {
-                {"z3", [](z3::context& ctx) { return std::make_unique<Z3SatSolver>(ctx); }}
+                {"z3", [](z3::context& ctx) { return std::make_unique<Z3SatSolver>(ctx); }},
+                {"bdd", [](z3::context& ctx) { return std::make_unique<BddSatSolver>(ctx); }}
 
         };
 
@@ -248,7 +249,8 @@ z3::expr_vector BddSatSolver::get_unsat_core(const PropFormula &formula, z3::exp
 
 std::vector<SatSolverResult>
 BddSatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr> &vars, bool complete_assignments) {
-    std::vector<SatSolverResult> to_return;
+
+    std::vector<SatSolverResult> uncompleted_assignments;
 
     std::map<z3::expr, size_t, Z3ExprComp> var_index_mapping;
 
@@ -259,7 +261,7 @@ BddSatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr> &v
     }
 
     auto res_bdd = BddUtils::expr_to_bdd(_mgr, formula.get_raw_formula(), var_index_mapping);
-
+    BddUtils::bdd_to_dot(_mgr, res_bdd, "initial_states.dot", 1, NULL);
     auto paths = BddUtils::all_sat(_mgr, res_bdd);
 
     for (const auto& path : paths)
@@ -273,10 +275,19 @@ BddSatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr> &v
             values[var] = literal > 0 ? SatResult::TRUE : SatResult::FALSE;
         }
 
-        to_return.emplace_back(std::move(values));
+        uncompleted_assignments.emplace_back(std::move(values));
     }
 
-    return to_return;
+    if (!complete_assignments) return uncompleted_assignments;
+
+    std::vector<SatSolverResult> completed_assignments;
+    for (const auto& uncompleted_assignment : uncompleted_assignments)
+    {
+        Z3SatSolver::add_assignments(completed_assignments ,uncompleted_assignment, vars, true);
+
+    }
+
+    return completed_assignments;
 }
 
-BddSatSolver::BddSatSolver() : _mgr(0, 2) { }
+BddSatSolver::BddSatSolver(z3::context&) : _mgr(0, 2) { }

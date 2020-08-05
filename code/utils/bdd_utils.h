@@ -19,7 +19,6 @@ public:
     static BDD&& expr_to_bdd(Cudd& mgr, const z3::expr& expr, const std::map<z3::expr, size_t, Z3ExprComp>& var_mapping);
     static void bdd_to_dot(Cudd& mgr, const BDD& bdd, const std::string& write_path, size_t num_vars, char** names);
     static std::vector<CubeRep> all_sat(Cudd& mgr, const BDD& bdd);
-    static std::string bdd_to_string(DdNode* root, Cudd& mgr, size_t init_num_tabs = 0);
 
 private:
     static void all_sat(Cudd& mgr, const BDD& bdd, std::map<DdNode*, std::vector<CubeRep>>& node_cube_reps, bool is_negate);

@@ -200,7 +200,7 @@ bool test_formula(const std::string& aig_path, const std::string& formula_str)
     std::cout << "Testing ##" << formula_str << "## against ##" << aig_path << "##... ";
 
     OmgConfigBuilder builder;
-    builder.set_config_src(ConfigurationSource::FILE).set_config_file_path("../run_config.omg").build();
+    builder.set_config_src(ConfigurationSource::DEFAULT).build();
 
 
     std::unique_ptr<CtlFormula> formula = get_formula(formula_str);
@@ -407,9 +407,11 @@ int main(int argc, char** argv)
 //    TEST("../resources/gatedClock.aig", "AG(r0 -> AX r1)", true);
 //   run_models("../models_to_run_small.omg");
    // test_model("../resources/spinner4");
-  //unit_tests();
-  //  return model_checking_from_cmd(argc, argv);
-  cudd();
+  unit_tests();
+//    TEST("../resources/af_ag.aig", "state<0>", false);
+
+    //  return model_checking_from_cmd(argc, argv);
+//  cudd();
 }
 
 /*

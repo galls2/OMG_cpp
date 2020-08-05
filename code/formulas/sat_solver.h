@@ -78,19 +78,20 @@ public:
     z3::expr_vector get_unsat_core(const PropFormula& formula, z3::expr_vector& assumptions) override;
     ~Z3SatSolver() override = default;
 
+    static void add_assignments(std::vector<SatSolverResult> &assignments, SatSolverResult result, const std::vector<z3::expr> &vars, bool complete_assignments);
+
 private:
     z3::solver _solver;
 
     static z3::expr get_blocking_clause(const SatSolverResult& model, const std::vector<z3::expr> &vector);
 
-    void add_assignments(std::vector<SatSolverResult> &assignments, SatSolverResult result, const std::vector<z3::expr> &vars, bool complete_assignments);
 
 };
 
 class BddSatSolver : public ISatSolver
 {
 public:
-    BddSatSolver();
+    explicit BddSatSolver(z3::context&);
     virtual SatSolverResult solve_sat(const PropFormula& formula) override;
     virtual bool is_sat(const z3::expr& formula) override;
 

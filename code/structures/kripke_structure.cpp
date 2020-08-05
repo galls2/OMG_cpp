@@ -4,6 +4,7 @@
 
 #include <utils/z3_utils.h>
 #include <formulas/sat_solver.h>
+#include <configuration/omg_config.h>
 #include "kripke_structure.h"
 
 
@@ -12,11 +13,11 @@ const std::vector<ConcreteState>& KripkeStructure::get_initial_states()
 {
     if (_initial_states.empty()) {
         z3::context &ctx = _transitions.get_raw_formula().ctx();
-        Z3SatSolver solver(ctx); // TODO changeme
+        std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(ctx);
         const auto &ps_vars = _transitions.get_vars_by_tag("ps");
         std::map<std::string, z3::expr_vector> mp = {{"ps", ps_vars}};
         PropFormula p(_init_formula, mp);
-        std::vector<SatSolverResult> results = solver.all_sat(p, expr_vector_to_vector(ps_vars), true);
+        std::vector<SatSolverResult> results = solver->all_sat(p, expr_vector_to_vector(ps_vars), true);
 
         for (const auto &result : results) {
             _initial_states.emplace_back(*this, result.to_conjunct());

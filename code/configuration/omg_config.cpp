@@ -36,7 +36,7 @@ void OmgConfigBuilder::build() {
                             {"Brother Unification", true},
                             {"Trivial Split Elimination", true},
                             {"Timeout", 60},
-                            {"Sat Solver", std::string("z3")},
+                            {"Sat Solver", std::string("bdd")},
                             {"Epr Solver", std::string("z3")}
                     };
             OmgConfig::load_config_table(config_table);
