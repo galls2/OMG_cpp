@@ -34,16 +34,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="-Fix to gen assignment&#10;-Wrote running mode from cmd&#10;-tried to integrate boost::thread. Will continue.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/formulas/sat_solver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/formulas/sat_solver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/formulas/sat_solver.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/formulas/sat_solver.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/structures/concrete_state.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/concrete_state.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/structures/kripke_structure.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/kripke_structure.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/utils/bdd_utils.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/bdd_utils.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/utils/bdd_utils.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/bdd_utils.h" afterDir="false" />
-    </list>
+    <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="- made bdd moves" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -166,13 +157,6 @@
       <workItem from="1595964099299" duration="5437000" />
       <workItem from="1596027316422" duration="15832000" />
       <workItem from="1596494701720" duration="4226000" />
-    </task>
-    <task id="LOCAL-00089" summary="Added unit tests for AV. &#10;AV algo now works!">
-      <created>1586770859455</created>
-      <option name="number" value="00089" />
-      <option name="presentableId" value="LOCAL-00089" />
-      <option name="project" value="LOCAL" />
-      <updated>1586770859455</updated>
     </task>
     <task id="LOCAL-00090" summary="-Wrote most of EV algorithm, EXCLUDING check_inductive_ev&#10;-Refactor">
       <created>1586797851275</created>
@@ -510,7 +494,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595418743022</updated>
     </task>
-    <option name="localTasksCounter" value="138" />
+    <task id="LOCAL-00138" summary="- made bdd moves">
+      <created>1596792592754</created>
+      <option name="number" value="00138" />
+      <option name="presentableId" value="LOCAL-00138" />
+      <option name="project" value="LOCAL" />
+      <updated>1596792592755</updated>
+    </task>
+    <option name="localTasksCounter" value="139" />
     <servers />
   </component>
   <component name="TodoView">
@@ -538,7 +529,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Bugfix in CtlFileParser" />
     <MESSAGE value="*Changed definition of NodePriorityQueue to allow correct updating and ordering.&#10;*Bugfix in AV inserting to to_visit&#10;*Added many debug checks" />
     <MESSAGE value="Updated scripts" />
     <MESSAGE value="Updated scripts more" />
@@ -563,7 +553,8 @@
     <MESSAGE value="-fixed cmake" />
     <MESSAGE value="Bugfix: removed a wrong assertion" />
     <MESSAGE value="-Fix to gen assignment&#10;-Wrote running mode from cmd&#10;-tried to integrate boost::thread. Will continue." />
-    <option name="LAST_COMMIT_MESSAGE" value="-Fix to gen assignment&#10;-Wrote running mode from cmd&#10;-tried to integrate boost::thread. Will continue." />
+    <MESSAGE value="- made bdd moves" />
+    <option name="LAST_COMMIT_MESSAGE" value="- made bdd moves" />
   </component>
   <component name="WindowStateProjectService">
     <state x="638" y="263" key="#Build_All" timestamp="1595064813741">
@@ -658,10 +649,10 @@
       <screen x="0" y="0" width="3840" height="1080" />
     </state>
     <state x="2374" y="202" key="SettingsEditor/0.0.3840.1080@0.0.3840.1080" timestamp="1591953394048" />
-    <state x="560" y="277" key="Vcs.Push.Dialog.v2" timestamp="1596560080246">
+    <state x="560" y="277" key="Vcs.Push.Dialog.v2" timestamp="1596792605384">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="560" y="277" key="Vcs.Push.Dialog.v2/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1596560080246" />
+    <state x="560" y="277" key="Vcs.Push.Dialog.v2/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1596792605384" />
     <state x="560" y="277" key="Vcs.Push.Dialog.v2/0.0.1920.1080@0.0.1920.1080" timestamp="1591352634088" />
     <state width="960" height="502" key="XDebugger.FullValuePopup" timestamp="1596663969419">
       <screen x="0" y="0" width="1920" height="1080" />
