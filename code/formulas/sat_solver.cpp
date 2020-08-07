@@ -214,8 +214,6 @@ void SatSolverResult::generalize_assignment(const z3::expr_vector& assertions) {
                 var_it.second = SatResult::UNDEF;
             }
         }
-
-
     }
 //    if (flipped) std::cout << "Flipped: " << flipped << std::endl;
 }
@@ -228,40 +226,45 @@ const std::map<std::string, SatSolverFactory> ISatSolver::s_solvers =
         };
 
 SatSolverResult BddSatSolver::solve_sat(const PropFormula &formula) {
-    return Z3SatSolver(formula.get_ctx()).solve_sat(formula);
+    return _z3_solver.solve_sat(formula);
 
 }
 
 bool BddSatSolver::is_sat(const z3::expr &formula) {
-    return Z3SatSolver(formula.ctx()).is_sat(formula);
+    return _z3_solver.is_sat(formula);
 }
 
 std::pair<int, SatSolverResult>
 BddSatSolver::inc_solve_sat(const PropFormula &formula, const std::vector<z3::expr> &flags) {
-    return Z3SatSolver(formula.get_ctx()).inc_solve_sat(formula, flags);
+    return _z3_solver.inc_solve_sat(formula, flags);
 
 }
 
 z3::expr_vector BddSatSolver::get_unsat_core(const PropFormula &formula, z3::expr_vector &assumptions) {
-    return Z3SatSolver(formula.get_ctx()).get_unsat_core(formula, assumptions);
+    return _z3_solver.get_unsat_core(formula, assumptions);
 
 }
 
 std::vector<SatSolverResult>
 BddSatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr> &vars, bool complete_assignments) {
 
+    std::cout << "ALL SAT" << std::endl;
     std::vector<SatSolverResult> uncompleted_assignments;
 
     std::map<z3::expr, size_t, Z3ExprComp> var_index_mapping;
 
+ //   const auto& all_vars = formula.get_all_variables();
+//    std::vector<size_t> important_var_indices;
+//    important_var_indices.resize(vars.size());
     for (size_t i = 0; i < vars.size(); ++i)
     {
         const auto& var = vars[i];
+//        if (vars.(var) != vars.end())
         var_index_mapping[var] = i+1;
     }
 
     auto res_bdd = BddUtils::expr_to_bdd(_mgr, formula.get_raw_formula(), var_index_mapping);
-    BddUtils::bdd_to_dot(_mgr, res_bdd, "initial_states.dot", 1, NULL);
+ //   BddUtils::bdd_to_dot(_mgr, res_bdd, "initial_states.dot", 1, NULL);
     auto paths = BddUtils::all_sat(_mgr, res_bdd);
 
     for (const auto& path : paths)
@@ -272,6 +275,7 @@ BddSatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr> &v
         for (int16_t literal : path)
         {
             const auto& var = vars[std::abs(literal) - 1];
+            assert(values.find(var) != values.end());
             values[var] = literal > 0 ? SatResult::TRUE : SatResult::FALSE;
         }
 
@@ -280,7 +284,7 @@ BddSatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr> &v
 
     if (!complete_assignments) return uncompleted_assignments;
 
-    std::vector<SatSolverResult> completed_assignments;
+    std::vector<SatSolverResult> completed_assignments; // TODO w.r.t vars CHECK..................................
     for (const auto& uncompleted_assignment : uncompleted_assignments)
     {
         Z3SatSolver::add_assignments(completed_assignments ,uncompleted_assignment, vars, true);
@@ -290,4 +294,4 @@ BddSatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr> &v
     return completed_assignments;
 }
 
-BddSatSolver::BddSatSolver(z3::context&) : _mgr(0, 2) { }
+

@@ -371,47 +371,17 @@ int model_checking_from_cmd(int argc, char** argv)
 }
 
 
-void cudd()
-{
-    Cudd mgr(0, 2);
-
-    z3::context ctx;
-    z3::expr x1 = ctx.bool_const("x1");
-    z3::expr x2 = ctx.bool_const("x2");
-    z3::expr x3 = ctx.bool_const("x3");
-    z3::expr x4 = ctx.bool_const("x4");
-
-    z3::expr f =  ( !x1 || x2) && (x3 || !x4);
-    std::cout << "Converting: " << f.to_string() << std::endl;
-    std::map<z3::expr, size_t, Z3ExprComp> vars = { {x1, 1}, {x2, 2}, {x3, 3}, {x4, 4}};
-    auto res = BddUtils::expr_to_bdd(mgr, f, vars);
-// bad BDD ?
-
-  char* names[4] = {"x1", "x2", "x3", "x4"};
-    BddUtils::bdd_to_dot(mgr, res, "bdd.dot", 1, ((char**)(names)));
-
-    auto paths = BddUtils::all_sat(mgr, res);
-
-    std::cout << "ALL PATHS: " << std::endl;
-    for (const auto& it : paths) {
-        for (const auto& it2 : it)
-        {
-            std::cout << it2 << " ";
-        }
-        std::cout << std::endl;
-    }
-}
-
 int main(int argc, char** argv)
 {
-//    TEST("../resources/gatedClock.aig", "AG(r0 -> AX r1)", true);
+    //////////////// BRNACH STATS FROM AVY
+
 //   run_models("../models_to_run_small.omg");
-   // test_model("../resources/spinner4");
-  unit_tests();
-//    TEST("../resources/af_ag.aig", "state<0>", false);
+//    test_model("../resources/spinner4");
+
+  //unit_tests();
+    //TEST("../resources/af_ag.aig", "EX (state<0> & ~state<1>)", true);
 
     //  return model_checking_from_cmd(argc, argv);
-//  cudd();
 }
 
 /*

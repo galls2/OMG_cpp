@@ -13,6 +13,8 @@ const std::vector<ConcreteState>& KripkeStructure::get_initial_states()
 {
     if (_initial_states.empty()) {
         z3::context &ctx = _transitions.get_raw_formula().ctx();
+
+//        BddSatSolver solver(ctx);
         std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(ctx);
         const auto &ps_vars = _transitions.get_vars_by_tag("ps");
         std::map<std::string, z3::expr_vector> mp = {{"ps", ps_vars}};

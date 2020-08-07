@@ -8,6 +8,7 @@
 #include <memory>
 #include "concrete_state.h"
 #include <algorithm>
+#include <configuration/omg_config.h>
 
 
 ConcreteState::ConcreteState(const KripkeStructure& kripke, z3::expr conjunct)  : _kripke(kripke), _conjunct(conjunct)
@@ -49,7 +50,7 @@ void ConcreteState::compute_successors() {
     PropFormula ns_formula = PropFormula(ns_raw_formula, variables_map);
 
 
-    std::unique_ptr<ISatSolver> sat_solver = std::make_unique<Z3SatSolver>(_kripke.get_tr().get_ctx());
+    std::unique_ptr<ISatSolver> sat_solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(ctx);
     z3::expr_vector ns_vars = variables_map.at(std::string("ns"));
     std::vector<SatSolverResult> sat_results = sat_solver->all_sat(ns_formula, expr_vector_to_vector(ns_vars), true);
     std::vector<ConcreteState> successors;

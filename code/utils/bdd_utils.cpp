@@ -4,12 +4,12 @@
 
 #include "bdd_utils.h"
 
-BDD&& BddUtils::expr_to_bdd(Cudd& mgr, const z3::expr &expr,  const std::map<z3::expr, size_t, Z3ExprComp>& var_mapping)
+BDD BddUtils::expr_to_bdd(Cudd& mgr, const z3::expr &expr,  const std::map<z3::expr, size_t, Z3ExprComp>& var_mapping)
 {
     z3::context& ctx = expr.ctx();
 
-    if (z3::eq(expr, ctx.bool_val(true))) return std::move(mgr.bddOne());
-    if (z3::eq(expr, ctx.bool_val(false))) return std::move(mgr.bddZero());
+    if (z3::eq(expr, ctx.bool_val(true))) return mgr.bddOne();
+    if (z3::eq(expr, ctx.bool_val(false))) return mgr.bddZero();
 
     if (expr.is_const())
     {
@@ -17,14 +17,14 @@ BDD&& BddUtils::expr_to_bdd(Cudd& mgr, const z3::expr &expr,  const std::map<z3:
         assert(var_mapping.find(expr) != var_mapping.end());
         size_t var_num = var_mapping.at(expr);
         BDD var_bdd = mgr.bddVar(var_num);
-        return std::move(var_bdd);
+        return var_bdd;
     }
 
     if (expr.is_not())
     {
         assert(expr.num_args() == 1);
         BDD inner = expr_to_bdd(mgr, expr.arg(0), var_mapping);
-        return std::move(!inner);
+        return !inner;
     }
 
     if (expr.is_and())
@@ -35,7 +35,7 @@ BDD&& BddUtils::expr_to_bdd(Cudd& mgr, const z3::expr &expr,  const std::map<z3:
             BDD and_part_bdd = expr_to_bdd(mgr, expr.arg(i), var_mapping);
             and_result_bdd &= and_part_bdd;
         }
-        return std::move(and_result_bdd);
+        return and_result_bdd;
     }
 
     if (expr.is_or())
@@ -46,7 +46,7 @@ BDD&& BddUtils::expr_to_bdd(Cudd& mgr, const z3::expr &expr,  const std::map<z3:
             BDD or_part_bdd = expr_to_bdd(mgr, expr.arg(i), var_mapping);
             or_result_bdd |= or_part_bdd;
         }
-        return std::move(or_result_bdd);
+        return or_result_bdd;
     }
 
     if (expr.is_eq())
@@ -55,7 +55,7 @@ BDD&& BddUtils::expr_to_bdd(Cudd& mgr, const z3::expr &expr,  const std::map<z3:
         BDD left_part = expr_to_bdd(mgr, expr.arg(0), var_mapping);
         BDD right_part = expr_to_bdd(mgr, expr.arg(1), var_mapping);
         BDD res = left_part.Xnor(right_part);
-        return std::move(res);
+        return res;
     }
     std::cout << expr.to_string() << std::endl;
     assert(false);
@@ -80,8 +80,12 @@ std::vector<BddUtils::CubeRep> BddUtils::all_sat(Cudd &mgr, const BDD &bdd) {
 
     bool is_initially_complemented = Cudd_IsComplement(bdd.getNode());
     all_sat(mgr, bdd, node_cube_reps, is_initially_complemented);
-    return node_cube_reps[Cudd_NotCond(bdd.getRegularNode(), is_initially_complemented)];
+    auto all_paths = node_cube_reps[Cudd_NotCond(bdd.getRegularNode(), is_initially_complemented)];
+
+    // revise_paths
+    return all_paths;
 }
+
 
 void
 BddUtils::all_sat(Cudd &mgr, const BDD &bdd, std::map<DdNode *, std::vector<CubeRep>> & node_cube_reps, bool is_negate)
