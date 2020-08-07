@@ -253,15 +253,22 @@ BddSatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr> &v
 
     std::map<z3::expr, size_t, Z3ExprComp> var_index_mapping;
 
- //   const auto& all_vars = formula.get_all_variables();
-//    std::vector<size_t> important_var_indices;
-//    important_var_indices.resize(vars.size());
-    for (size_t i = 0; i < vars.size(); ++i)
+    const auto& all_vars = formula.get_all_variables();
+
+    for (size_t i = 0; i < all_vars.size(); ++i)
     {
-        const auto& var = vars[i];
-//        if (vars.(var) != vars.end())
+        const auto& var = all_vars[i];
         var_index_mapping[var] = i+1;
     }
+
+    std::vector<size_t> important_var_indices;
+    important_var_indices.reserve(vars.size());
+
+    for (const auto& important_var : vars)
+    {
+        important_var_indices.push_back(var_index_mapping[important_var]);
+    }
+
 
     auto res_bdd = BddUtils::expr_to_bdd(_mgr, formula.get_raw_formula(), var_index_mapping);
  //   BddUtils::bdd_to_dot(_mgr, res_bdd, "initial_states.dot", 1, NULL);
@@ -274,8 +281,13 @@ BddSatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr> &v
 
         for (int16_t literal : path)
         {
-            const auto& var = vars[std::abs(literal) - 1];
-            assert(values.find(var) != values.end());
+            size_t abs_literal = std::abs(literal);
+
+            auto literal_it = std::find(important_var_indices.begin(), important_var_indices.end(), abs_literal);
+            if (literal_it == important_var_indices.end()) continue;
+
+            const auto& var = all_vars[abs_literal - 1];
+         //   std::cout << var.to_string() << std::endl;
             values[var] = literal > 0 ? SatResult::TRUE : SatResult::FALSE;
         }
 
