@@ -248,7 +248,7 @@ z3::expr_vector BddSatSolver::get_unsat_core(const PropFormula &formula, z3::exp
 std::vector<SatSolverResult>
 BddSatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr> &vars, bool complete_assignments) {
 
-    std::cout << "ALL SAT" << std::endl;
+//    std::cout << "ALL SAT" << std::endl;
     std::vector<SatSolverResult> uncompleted_assignments;
 
     std::map<z3::expr, size_t, Z3ExprComp> var_index_mapping;
@@ -287,7 +287,6 @@ BddSatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr> &v
             if (literal_it == important_var_indices.end()) continue;
 
             const auto& var = all_vars[abs_literal - 1];
-         //   std::cout << var.to_string() << std::endl;
             values[var] = literal > 0 ? SatResult::TRUE : SatResult::FALSE;
         }
 
@@ -296,7 +295,7 @@ BddSatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr> &v
 
     if (!complete_assignments) return uncompleted_assignments;
 
-    std::vector<SatSolverResult> completed_assignments; // TODO w.r.t vars CHECK..................................
+    std::vector<SatSolverResult> completed_assignments;
     for (const auto& uncompleted_assignment : uncompleted_assignments)
     {
         Z3SatSolver::add_assignments(completed_assignments ,uncompleted_assignment, vars, true);

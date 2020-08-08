@@ -374,10 +374,10 @@ int model_checking_from_cmd(int argc, char** argv)
 int main(int argc, char** argv)
 {
 //   run_models("../models_to_run_small.omg");
-    test_model("../resources/spinner4");
+//    test_model("../resources/spinner4");
 //    TEST("../resources/af_ag.aig", "!state<0>", true);
 
-//  unit_tests();
+  unit_tests();
     //TEST("../resources/af_ag.aig", "EX (state<0> & ~state<1>)", true);
 
     //  return model_checking_from_cmd(argc, argv);

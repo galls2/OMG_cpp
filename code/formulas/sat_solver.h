@@ -24,7 +24,7 @@ struct Z3ExprComp
 {
     bool operator()(const z3::expr& a, const z3::expr& b) const
     {
-        return a.to_string() < b.to_string(); // TODO
+        return a.id() < b.id(); // TODO
     }
 
 };
