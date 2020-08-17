@@ -112,7 +112,8 @@ FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<Unwin
     std::vector<z3::expr> flags;
 
     size_t count_flags = 0;
-    for (const UnwindingTree *src_node : src_nodes) {
+    for (const UnwindingTree* src_node : src_nodes)
+    {
         const z3::expr &src_formula = src_node->get_concrete_state().get_conjunct();
         z3::expr flag = ctx.bool_const(std::to_string(count_flags++).data());
         z3::expr flagged_src = z3::implies(flag, src_formula);
@@ -126,7 +127,7 @@ FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<Unwin
 
     std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(ctx);
 
-    std::pair<int, SatSolverResult> res = solver->inc_solve_sat(is_tr_formula, flags);
+    std::pair<int, SatSolverResult> res = solver->inc_solve_sat(is_tr_formula, flags, {});
     if (res.first < 0) {
         return ConcretizationResult();
     } else {
@@ -237,7 +238,7 @@ FormulaInductiveUtils::is_EE_inductive_inc(const PropFormula& skeleton, Abstract
 
 
     z3::expr flag = skeleton.get_ctx().bool_const((std::string("a")+std::to_string(to_close.get_abs_idx())).data());
-    auto res = solver.inc_solve_sat(skeleton, {flag});
+    auto res = solver.inc_solve_sat(skeleton, {flag}, {}); // TODO why is there a flag here?
 
     if (res.first == -1) // if the formula is UNSAT, there is NO cex to the inductiveness, so we have inductiveness
     {
@@ -319,6 +320,23 @@ bool FormulaUtils::is_conj_contained(const z3::expr &big_conj, const z3::expr &s
         }
     }
     return false;
+}
+
+z3::expr_vector FormulaUtils::conjunct_to_literals(const z3::expr &expr)
+{
+    z3::context& ctx = expr.ctx();
+
+    z3::expr_vector to_return(ctx);
+
+    assert(is_cstate_conjunct(expr));
+
+    for (unsigned i = 0; i < expr.num_args(); ++i)
+    {
+        z3::expr to_insert = expr.arg(i).is_not() ? ctx.bool_val(false) : ctx.bool_val(true);
+        to_return.push_back(to_insert);
+    }
+
+    return to_return;
 }
 
 void FormulaSplitUtils::find_proving_inputs(const z3::expr& state_conj, const PropFormula& tr, z3::expr& dst, z3::expr_vector& input_values)

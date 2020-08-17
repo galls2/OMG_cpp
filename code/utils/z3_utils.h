@@ -24,7 +24,7 @@ public:
     static bool is_cstate_conjunct(const z3::expr& f);
     static bool is_conj_contained(const z3::expr& big_conj, const z3::expr& small_conj);
     static bool is_lit_agrees_with_conj(const z3::expr& conj, const z3::expr& var);
-
+    static z3::expr_vector conjunct_to_literals(const z3::expr& expr);
 };
 
 z3::expr to_var(z3::context& ctx, size_t val);

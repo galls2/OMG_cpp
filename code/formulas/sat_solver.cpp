@@ -92,18 +92,21 @@ void Z3SatSolver::add_assignments(std::vector<SatSolverResult> &assignemnts, con
     }
 }
 
-std::pair<int, SatSolverResult> Z3SatSolver::inc_solve_sat(const PropFormula& formula, const std::vector<z3::expr>& flags) {
+std::pair<int, SatSolverResult> Z3SatSolver::inc_solve_sat(const PropFormula& formula, const std::vector<z3::expr>& may_flags, const std::vector<z3::expr>& must_flags) {
     const z3::expr &raw_formula = formula.get_raw_formula();
     _solver.add(raw_formula);
 
     z3::expr_vector assumptions(raw_formula.ctx());
+    for (const auto& must_flag : must_flags) assumptions.push_back(must_flag);
 
-    for (size_t i = 0; i < flags.size(); ++i) {
-        assumptions.push_back(flags[i]);
-        if (_solver.check(assumptions))
+    for (size_t i = 0; i < may_flags.size(); ++i) {
+        assumptions.push_back(may_flags[i]);
+        auto sat_res = _solver.check(assumptions);
+        if (sat_res == z3::sat)
             return {i, SatSolverResult(_solver.get_model(), formula.get_all_variables())};
         assumptions.pop_back();
     }
+
     return {-1, SatSolverResult()};
 }
 
@@ -239,8 +242,8 @@ bool BddSatSolver::is_sat(const z3::expr &formula) {
 }
 
 std::pair<int, SatSolverResult>
-BddSatSolver::inc_solve_sat(const PropFormula &formula, const std::vector<z3::expr> &flags) {
-    return _z3_solver.inc_solve_sat(formula, flags);
+BddSatSolver::inc_solve_sat(const PropFormula &formula, const std::vector<z3::expr> &may_flags, const std::vector<z3::expr>& must_flags) {
+    return _z3_solver.inc_solve_sat(formula, may_flags, must_flags);
 
 }
 

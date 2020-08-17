@@ -43,10 +43,15 @@ void ConcreteState::compute_successors() {
 
     const z3::expr& raw_tr = tr.get_raw_formula();
     z3::context& ctx = raw_tr.ctx();
-    const z3::expr ns_raw_formula = _conjunct && raw_tr;
+//    const z3::expr ns_raw_formula = _conjunct && raw_tr;
 //    const z3::expr ns_raw_formula = (_conjunct && raw_tr).simplify();
 
-  const std::map<std::string, z3::expr_vector> & variables_map = tr.get_variables_map();
+    auto& raw_tr_deconst = const_cast<z3::expr&>(raw_tr);
+    z3::expr_vector conjunt_literals = FormulaUtils::conjunct_to_literals(_conjunct);
+    const z3::expr ns_raw_formula = raw_tr_deconst.substitute(tr.get_vars_by_tag("ps"), conjunt_literals).simplify();
+
+    const std::map<std::string, z3::expr_vector> & variables_map = tr.get_variables_map();
+
     PropFormula ns_formula = PropFormula(ns_raw_formula, variables_map);
 
 
