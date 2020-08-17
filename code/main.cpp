@@ -1,5 +1,3 @@
-//
-// Created by galls2 on 30/08/19.
 #include <fstream>
 #include <iostream>
 #include <parsers/aig_parser.h>
@@ -10,14 +8,10 @@
 #include <unordered_set>
 #include <model_checking/omg_model_checker.h>
 #include <utils/omg_utils.h>
-#include <utils/z3_utils.h>
 #include <chrono>
 
-#include "../cudd-3.0.0/cplusplus/cuddObj.hh"
-
 #include <boost/thread/thread.hpp>
-#include <utils/bdd_utils.h>
-//#include "../cudd-3.0.0/cplusplus/cuddObj.hh"
+#include <utils/Stats.h>
 
 #define TEST(aig_path, raw_ctl_string, expected) \
     do \
@@ -50,24 +44,8 @@ std::vector<FormulaChunk> get_formula_chunks(const std::string& ctl_file_path)
 }
 
 
-struct McProblemRunner
+void test_model(const std::string& file_path_no_extension)
 {
-    McProblemRunner(std::unique_ptr<OmgModelChecker> omg_, CtlFormula& spec_) : omg(std::move(omg_)), spec(spec_), mc_result(false) {}
-    std::unique_ptr<OmgModelChecker> omg;
-    CtlFormula& spec;
-    bool mc_result;
-
-
-    void run()
-    {
-        bool mc_res = omg->check_all_initial_states(spec);
-        mc_result = mc_res;
-    }
-
-};
-
-
-void test_model(const std::string& file_path_no_extension) {
     std::cout << "Testing model: " << file_path_no_extension << std::endl;
     const std::string &aig_path = file_path_no_extension + ".aig";
     const std::string &ctl_file_path = file_path_no_extension + ".ctl";
@@ -153,6 +131,7 @@ void test_model(const std::string& file_path_no_extension) {
                 std::cout << "Ctr + MC Time: " << duration << std::endl;
                 PRINT_IF_BUG(res, is_pass, aig_path, it->to_string(), prop_count);
 
+                avy::Stats::PrintBrunch(std::cout);
                 //                std::unique_ptr<McProblemRunner> mc_runner = std::make_unique<McProblemRunner>(std::move(omg), *it);
 //                boost::thread t([mc_runner = move(mc_runner)]() { mc_runner->run(); });
 //                int timeout = OmgConfig::get<int>("Timeout");
@@ -316,6 +295,7 @@ void run_models(const std::string& file_path)
         test_model(model_name);
     }
 }
+int conduct_timed_mc(std::string aig_path, std::string ctl_path, uint16_t wanted_property_num);
 
 int model_checking_from_cmd(int argc, char** argv)
 {
@@ -332,9 +312,32 @@ int model_checking_from_cmd(int argc, char** argv)
     builder.set_config_src(ConfigurationSource::FILE).set_config_file_path("../run_config.omg").build();
     DEBUG_PRINT("OMG Configuration:\n %s",OmgConfig::config_table_to_string().data());
 
-    ////
+    boost::thread mc_runner_thread([aig_path, ctl_path, wanted_propery_num]
+                                   {
+                                        return conduct_timed_mc(aig_path, ctl_path, wanted_propery_num);
+                                   });
+
+    int timeout = OmgConfig::get<int>("Timeout");
+    bool timeout_res = mc_runner_thread.try_join_for(boost::chrono::seconds(timeout));
+
+    mc_runner_thread.detach();
+
+    if (timeout_res)
+    {
+        std::cout << "No timeout!" << std::endl;
+        return 0;
+    }
+    else
+    {
+        std::cout << "TIMEOUT!!!" << std::endl;
+        return 1;
+    }
 
 
+}
+
+int conduct_timed_mc(std::string aig_path, std::string ctl_path, uint16_t wanted_property_num)
+{
     AigParser p(aig_path);
 
     std::vector<FormulaChunk> formula_chunks = get_formula_chunks(ctl_path);
@@ -342,16 +345,16 @@ int model_checking_from_cmd(int argc, char** argv)
     uint16_t prop_count = 0;
     for (const auto &it : formula_chunks) {
         bool is_pass = it.get_expected_result();
-        if (it.get_formulas().size() + prop_count < wanted_propery_num)
+        if (it.get_formulas().size() + prop_count > wanted_property_num)
         {
-            auto& spec = it.get_formulas()[wanted_propery_num - prop_count];
+            auto& spec = it.get_formulas()[wanted_property_num - prop_count];
 
             auto t1 = std::chrono::high_resolution_clock::now();
 
             std::unique_ptr<KripkeStructure> kripke = p.to_kripke(spec->get_aps());
             OmgModelChecker omg(*kripke);
             bool res = omg.check_all_initial_states(*spec);
-            PRINT_IF_BUG(res, is_pass, aig_path, spec->to_string(), wanted_propery_num);
+            PRINT_IF_BUG(res, is_pass, aig_path, spec->to_string(), wanted_property_num);
 
             auto t2 = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
@@ -365,11 +368,10 @@ int model_checking_from_cmd(int argc, char** argv)
         }
     }
 
-    std::cout << "Property of index " << wanted_propery_num << " does not exist in " << ctl_path << std::endl;
+    std::cerr << "Property of index " << wanted_property_num << " does not exist in " << ctl_path << std::endl;
     return 1;
 
 }
-
 
 int main(int argc, char** argv)
 {
