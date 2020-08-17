@@ -54,7 +54,7 @@ private:
     std::unique_ptr<AbstractStructure> _abs_structure;
     std::unique_ptr<AbstractionClassifier> _abs_classifier;
    // std::map_subtree<std::unique_ptr<UnwindingTree>> _unwinding_trees;
-
+    std::unique_ptr<ISatSolver> _tr_sat_solver;
 
 
     /*

@@ -32,7 +32,7 @@ void OmgConfigBuilder::build() {
         }
         case ConfigurationSource::DEFAULT: {
                     ConfigTable config_table = {
-                            {"Properties per specification", true},
+                            {"Properties per specification", false},
                             {"Brother Unification", true},
                             {"Trivial Split Elimination", true},
                             {"Timeout", 60},

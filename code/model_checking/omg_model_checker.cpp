@@ -10,6 +10,9 @@
 #include "omg_model_checker.h"
 #include <utils/omg_utils.h>
 #include <model_checking/goal.h>
+#include <utils/Stats.h>
+
+using namespace avy;
 
 const std::map<std::string, OmgModelChecker::handler_t> OmgModelChecker::_handlers =
         {
@@ -311,6 +314,8 @@ void OmgModelChecker::strengthen_subtree(Goal& goal, const std::function<bool(co
 
 UnwindingTree& get_concretization_successor(UnwindingTree* to_close_node, const ConcreteState& dst_cstate)
 {
+    AVY_MEASURE_FN;
+
     if (to_close_node->exist_successors())
     {
         const auto& successors = to_close_node->get_successors();
@@ -407,6 +412,8 @@ bool OmgModelChecker::check_inductive_ev(Goal &goal, UnwindingTree &node_to_expl
 
 bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit)
 {
+    AVY_MEASURE_FN;
+
     CandidateSet candidates = compute_candidate_set_av(goal);
 
     std::set<ConstAStateRef> abs_states;
@@ -517,6 +524,8 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
 
 CandidateSet OmgModelChecker::compute_candidate_set_av(Goal &goal)
 {
+    AVY_MEASURE_FN;
+
     CandidateSet cands;
     UnwindingTree& root = goal.get_node();
     auto inserter = [this, &cands] (UnwindingTree& node)
@@ -794,6 +803,7 @@ ConcretizationResult
 OmgModelChecker::is_concrete_violation(const std::unordered_set<UnwindingTree *> &to_close_nodes,
                                        AbstractState &abs_witness)
 {
+    AVY_MEASURE_FN;
     return FormulaInductiveUtils::concrete_transition_to_abs(to_close_nodes, abs_witness);
 }
 
@@ -833,6 +843,8 @@ void OmgModelChecker::update_classifier(RefinementResult& refine_result, Abstrac
 void OmgModelChecker::refine_no_successor(UnwindingTree &to_close_node, AbstractState &abs_src_witness,
                                           AbstractState &abs_dst)
 {
+    AVY_MEASURE_FN;
+
     /*
      * One might have thought that we can use here EX+ refinement with the state that we found that does have a transition to
      * absssss_dst in order to conduct the split, instead of this EX- refinement that we conduct.

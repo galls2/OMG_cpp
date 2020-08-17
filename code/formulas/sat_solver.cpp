@@ -7,9 +7,12 @@
 #include <utils/z3_utils.h>
 #include <utils/bdd_utils.h>
 #include "sat_solver.h"
+#include <utils/Stats.h>
+
+using namespace avy;
 
 SatSolverResult Z3SatSolver::solve_sat(const PropFormula &formula) {
-    const z3::expr& raw_formula = formula.get_raw_formula().simplify(); // TODO .simplify();
+    const z3::expr& raw_formula = formula.get_raw_formula().simplify();
     _solver.add(raw_formula);
     z3::check_result sat_res = _solver.check();
     if (sat_res == z3::unsat) return SatSolverResult();
@@ -49,10 +52,11 @@ z3::expr Z3SatSolver::get_blocking_clause(const SatSolverResult& res, const std:
             literals.push_back((res_value == SatResult::TRUE) ? (!var) : (var));
         }
     }
+
     return z3::mk_or(literals);
 }
 
-void Z3SatSolver::add_assignments(std::vector<SatSolverResult> &assignemnts, SatSolverResult result,
+void Z3SatSolver::add_assignments(std::vector<SatSolverResult> &assignemnts, const SatSolverResult& result,
                                   const std::vector<z3::expr> &vars, bool complete_assignments) {
     assert(result.get_is_sat());
     if (!complete_assignments) {
@@ -248,6 +252,7 @@ z3::expr_vector BddSatSolver::get_unsat_core(const PropFormula &formula, z3::exp
 std::vector<SatSolverResult>
 BddSatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr> &vars, bool complete_assignments) {
 
+    AVY_MEASURE_FN;
 //    std::cout << "ALL SAT" << std::endl;
     std::vector<SatSolverResult> uncompleted_assignments;
 

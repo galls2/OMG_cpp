@@ -6,6 +6,9 @@
 #include <utils/z3_utils.h>
 #include <model_checking/omg_model_checker.h>
 #include <utils/omg_utils.h>
+#include <utils/Stats.h>
+
+using namespace avy;
 
 AbstractStructure::AbstractStructure(const KripkeStructure &kripke, const OmgModelChecker* omg) : _kripke(kripke), _omg(omg)
 {}
@@ -23,6 +26,7 @@ AbstractState &AbstractStructure::create_astate_from_cstate(const ConcreteState 
 EEClosureResult AbstractStructure::is_EE_closure2(const PropFormula& skeleton, AbstractState &to_close,
                                                  const std::set<ConstAStateRef> &close_with, ISatSolver& sat_solver)
 {
+    AVY_MEASURE_FN;
     ConstAbsStateSet p_closers;
 
     for (const ConstAStateRef& cl : close_with) {
@@ -125,6 +129,8 @@ const OmgModelChecker *AbstractStructure::get_omg() const{
 
 RefinementResult AbstractStructure::refine_exists_successor(const ConcreteState &src_cstate, AbstractState &src_abs,
                                                 const ConstAbsStateSet &dsts_abs, bool is_tse_possible) {
+    AVY_MEASURE_FN;
+
     if (_E_must.find(&src_abs) != _E_must.end())
     {
         auto& must_options = _E_must[&src_abs];
@@ -181,6 +187,8 @@ void inherit_values_in_dict(std::map<T, S>& dict, T& old_key, const std::set<T>&
 RefinementResult AbstractStructure::refine_no_successor(const UnwindingTree &to_close_node, AbstractState &abs_src_witness,
                                             const ConstAbsStateSet &dsts_abs, bool is_tse_possible /* =true */)
 {
+    AVY_MEASURE_FN;
+
     if (_NE_may.find(&abs_src_witness) != _NE_may.end() &&
         std::all_of(dsts_abs.begin(), dsts_abs.end(),
                 [this, &abs_src_witness](const AbstractState* astate)
@@ -301,6 +309,8 @@ AbstractState &AbstractStructure::create_astate_from_astate_split(const Abstract
 RefinementResult
 AbstractStructure::refine_all_successors(const UnwindingTree &to_close_node, AbstractState &abs_src_witness,
                                          const ConstAbsStateSet &dsts_abs, bool is_tse_possible) {
+    AVY_MEASURE_FN;
+
     if (_E_may_over.find(&abs_src_witness) != _E_may_over.end() &&
         std::any_of(_E_may_over[&abs_src_witness].begin(), _E_may_over[&abs_src_witness].end(),
                     [&dsts_abs](const ConstAbsStateSet& astate_set)

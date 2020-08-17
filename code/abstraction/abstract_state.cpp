@@ -11,6 +11,7 @@
 #include <abstraction/abstraction_classifier.h>
 #include <utils/version_manager.h>
 
+
 AbstractState::AbstractState(const KripkeStructure &kripke, CtlFormula::PropertySet pos_labels, CtlFormula::PropertySet neg_labels,
                              CtlFormula::PropertySet atomic_labels, PropFormula sym_rep)
                              : _abs_idx(VersionManager::next_version_number("Abs")), _kripke(kripke), _pos_labels(std::move(pos_labels)), _neg_labels(std::move(neg_labels)),

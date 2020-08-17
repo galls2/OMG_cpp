@@ -24,7 +24,7 @@ struct Z3ExprComp
 {
     bool operator()(const z3::expr& a, const z3::expr& b) const
     {
-        return a.id() < b.id(); // TODO
+        return a.id() < b.id();
     }
 
 };
@@ -78,7 +78,7 @@ public:
     z3::expr_vector get_unsat_core(const PropFormula& formula, z3::expr_vector& assumptions) override;
     virtual ~Z3SatSolver() override = default;
 
-    static void add_assignments(std::vector<SatSolverResult> &assignments, SatSolverResult result, const std::vector<z3::expr> &vars, bool complete_assignments);
+    static void add_assignments(std::vector<SatSolverResult> &assignments, const SatSolverResult& result, const std::vector<z3::expr> &vars, bool complete_assignments);
 
 private:
     z3::solver _solver;
