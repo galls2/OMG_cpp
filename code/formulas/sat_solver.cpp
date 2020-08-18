@@ -130,6 +130,11 @@ bool Z3SatSolver::is_sat(const z3::expr &raw_formula) {
     else { assert(sat_res == z3::unknown); throw SatSolverResultException("SAT result is unknown"); }
 }
 
+void Z3SatSolver::add(const z3::expr &expr)
+{
+    _solver.add(expr);
+}
+
 
 SatSolverResult::SatSolverResult() : _is_sat(false) { }
 
@@ -311,6 +316,11 @@ BddSatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr> &v
     }
 
     return completed_assignments;
+}
+
+void BddSatSolver::add(const z3::expr &expr)
+{
+    _z3_solver.add(expr);
 }
 
 

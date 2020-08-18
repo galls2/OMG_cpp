@@ -170,9 +170,13 @@ namespace avy
   };
 }
 
+#if true
 #define AVY_MEASURE_FN ScoppedStats __stats__(__FUNCTION__)
 #define AVY_MEASURE_FN_LAST ScoppedStats __stats_last__(__FUNCTION__, true)
-
+#else
+#define AVY_MEASURE_FN
+#define AVY_MEASURE_FN_LAST
+#endif
   
 
 #endif

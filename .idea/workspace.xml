@@ -38,7 +38,8 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/formulas/sat_solver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/formulas/sat_solver.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/formulas/sat_solver.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/formulas/sat_solver.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/structures/concrete_state.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/concrete_state.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/utils/Stats.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/Stats.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/utils/z3_utils.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/z3_utils.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/utils/z3_utils.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/z3_utils.h" afterDir="false" />
     </list>
@@ -600,37 +601,37 @@
     </state>
     <state x="2776" y="308" key="FileChooserDialogImpl/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1595424121203" />
     <state x="2668" y="325" key="FileChooserDialogImpl/0.0.3840.1080@0.0.3840.1080" timestamp="1591953111718" />
-    <state width="1238" height="353" key="GridCell.Tab.0.bottom" timestamp="1597694697551">
-      <screen x="0" y="0" width="3200" height="1080" />
+    <state width="1878" height="353" key="GridCell.Tab.0.bottom" timestamp="1597772697981">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="330" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1596901167922" />
     <state width="1238" height="293" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1596024013753" />
-    <state width="1868" height="293" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1591950055536" />
-    <state width="1238" height="353" key="GridCell.Tab.0.bottom/0.0.3200.1080@0.0.3200.1080" timestamp="1597694697551" />
+    <state width="1878" height="353" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1597772697981" />
+    <state width="1238" height="353" key="GridCell.Tab.0.bottom/0.0.3200.1080@0.0.3200.1080" timestamp="1597694949778" />
     <state width="1878" height="315" key="GridCell.Tab.0.bottom/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374145" />
-    <state width="1238" height="353" key="GridCell.Tab.0.center" timestamp="1597694697546">
-      <screen x="0" y="0" width="3200" height="1080" />
+    <state width="1878" height="353" key="GridCell.Tab.0.center" timestamp="1597772697975">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="330" key="GridCell.Tab.0.center/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1596901167922" />
     <state width="1238" height="293" key="GridCell.Tab.0.center/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1596024013752" />
-    <state width="1868" height="293" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1591950055531" />
-    <state width="1238" height="353" key="GridCell.Tab.0.center/0.0.3200.1080@0.0.3200.1080" timestamp="1597694697546" />
+    <state width="1878" height="353" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1597772697975" />
+    <state width="1238" height="353" key="GridCell.Tab.0.center/0.0.3200.1080@0.0.3200.1080" timestamp="1597694949773" />
     <state width="1878" height="315" key="GridCell.Tab.0.center/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374138" />
-    <state width="1238" height="353" key="GridCell.Tab.0.left" timestamp="1597694697544">
-      <screen x="0" y="0" width="3200" height="1080" />
+    <state width="1878" height="353" key="GridCell.Tab.0.left" timestamp="1597772697971">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="330" key="GridCell.Tab.0.left/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1596901167922" />
     <state width="1238" height="293" key="GridCell.Tab.0.left/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1596024013752" />
-    <state width="1868" height="293" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1591950055526" />
-    <state width="1238" height="353" key="GridCell.Tab.0.left/0.0.3200.1080@0.0.3200.1080" timestamp="1597694697544" />
+    <state width="1878" height="353" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1597772697971" />
+    <state width="1238" height="353" key="GridCell.Tab.0.left/0.0.3200.1080@0.0.3200.1080" timestamp="1597694949770" />
     <state width="1878" height="315" key="GridCell.Tab.0.left/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374135" />
-    <state width="1238" height="353" key="GridCell.Tab.0.right" timestamp="1597694697548">
-      <screen x="0" y="0" width="3200" height="1080" />
+    <state width="1878" height="353" key="GridCell.Tab.0.right" timestamp="1597772697978">
+      <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1878" height="330" key="GridCell.Tab.0.right/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1596901167922" />
     <state width="1238" height="293" key="GridCell.Tab.0.right/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1596024013752" />
-    <state width="1868" height="293" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1591950055533" />
-    <state width="1238" height="353" key="GridCell.Tab.0.right/0.0.3200.1080@0.0.3200.1080" timestamp="1597694697548" />
+    <state width="1878" height="353" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1597772697978" />
+    <state width="1238" height="353" key="GridCell.Tab.0.right/0.0.3200.1080@0.0.3200.1080" timestamp="1597694949775" />
     <state width="1878" height="315" key="GridCell.Tab.0.right/0.0.3840.1080@0.0.3840.1080" timestamp="1591954374142" />
     <state width="1878" height="347" key="GridCell.Tab.1.bottom" timestamp="1596796393246">
       <screen x="0" y="0" width="1920" height="1080" />
@@ -709,11 +710,6 @@
           <url>file:///usr/include/c++/5/bits/stl_algobase.h</url>
           <line>815</line>
           <option name="timeStamp" value="71" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp</url>
-          <line>681</line>
-          <option name="timeStamp" value="325" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/code/structures/kripke_structure.cpp</url>

@@ -94,7 +94,7 @@ FormulaInductiveUtils::is_EE_inductive(AbstractState &to_close, const ConstAbsSt
 
 ConcretizationResult
 FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<UnwindingTree *> &src_nodes,
-                                                  const AbstractState &astate) {
+                                                  const AbstractState &astate, ISatSolver& sat_solver) {
     const KripkeStructure &kripke = astate.get_kripke();
     const PropFormula &tr = kripke.get_tr();
     z3::context &ctx = tr.get_ctx();
@@ -125,9 +125,8 @@ FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<Unwin
     z3::expr raw_formula = src && tr.get_raw_formula() && dst_part;
     PropFormula is_tr_formula = PropFormula(raw_formula, {{"ps", ps_tr}, {"ns", ns_tr}});
 
-    std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(ctx);
 
-    std::pair<int, SatSolverResult> res = solver->inc_solve_sat(is_tr_formula, flags, {});
+    std::pair<int, SatSolverResult> res = sat_solver.inc_solve_sat(is_tr_formula, flags, {});
     if (res.first < 0) {
         return ConcretizationResult();
     } else {
