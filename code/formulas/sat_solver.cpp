@@ -99,15 +99,32 @@ std::pair<int, SatSolverResult> Z3SatSolver::inc_solve_sat(const PropFormula& fo
     z3::expr_vector assumptions(raw_formula.ctx());
     for (const auto& must_flag : must_flags) assumptions.push_back(must_flag);
 
-    for (size_t i = 0; i < may_flags.size(); ++i) {
-        assumptions.push_back(may_flags[i]);
+    size_t may_flag_number =0;
+    bool found = false;
+    SatSolverResult sat_solver_result;
+
+    auto all_vars = formula.get_all_variables();
+    while (may_flag_number < may_flags.size())
+    {
+        assumptions.push_back(may_flags[may_flag_number]);
         auto sat_res = _solver.check(assumptions);
-        if (sat_res == z3::sat)
-            return {i, SatSolverResult(_solver.get_model(), formula.get_all_variables())};
         assumptions.pop_back();
+        if (sat_res == z3::sat)
+        {
+            sat_solver_result = SatSolverResult(_solver.get_model(), all_vars);
+            found = true;
+            break;
+        }
+        else
+            {
+            ++may_flag_number;
+        }
     }
 
-    return {-1, SatSolverResult()};
+    for (const auto& may_flag : may_flags) _solver.add(!may_flag);
+    for (const auto& must_flag : must_flags)  _solver.add(!must_flag);
+
+    return {(found ? may_flag_number : -1), sat_solver_result};
 }
 
 z3::expr_vector Z3SatSolver::get_unsat_core(const PropFormula& formula, z3::expr_vector& assumptions)

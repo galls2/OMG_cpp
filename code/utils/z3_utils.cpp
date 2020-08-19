@@ -111,22 +111,28 @@ FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<Unwin
     z3::expr_vector src_parts(ctx);
     std::vector<z3::expr> flags;
 
-    size_t count_flags = 0;
+    const std::string SRC_NODE_KEY = "SRCNODE";
+    const std::string DST_KEY = "DST";
+
     for (const UnwindingTree* src_node : src_nodes)
     {
         const z3::expr &src_formula = src_node->get_concrete_state().get_conjunct();
-        z3::expr flag = ctx.bool_const(std::to_string(count_flags++).data());
+
+        z3::expr flag = ctx.bool_const(VersionManager::next_version(SRC_NODE_KEY).data());
         z3::expr flagged_src = z3::implies(flag, src_formula);
         flags.push_back(flag);
         src_parts.push_back(flagged_src);
     }
+
+    z3::expr dst_flag = ctx.bool_const(VersionManager::next_version(DST_KEY).data());
+    src_parts.push_back(z3::implies(dst_flag, dst_part));
     z3::expr src = z3::mk_and(src_parts);
 
-    z3::expr raw_formula = src && tr.get_raw_formula() && dst_part;
+    const z3::expr& raw_formula = src;
     PropFormula is_tr_formula = PropFormula(raw_formula, {{"ps", ps_tr}, {"ns", ns_tr}});
 
 
-    std::pair<int, SatSolverResult> res = sat_solver.inc_solve_sat(is_tr_formula, flags, {});
+    std::pair<int, SatSolverResult> res = sat_solver.inc_solve_sat(is_tr_formula, flags, {dst_flag});
     if (res.first < 0) {
         return ConcretizationResult();
     } else {
