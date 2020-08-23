@@ -5,9 +5,12 @@
 #include <unordered_set>
 #include "z3_utils.h"
 #include "version_manager.h"
+#include "Stats.h"
 #include <formulas/epr_solver.h>
 #include <model_checking/omg_model_checker.h>
 #include <structures/kripke_structure.h>
+
+using namespace avy;
 
 z3::expr to_var(z3::context& ctx, size_t val)
 {
@@ -111,22 +114,25 @@ FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<Unwin
     z3::expr_vector src_parts(ctx);
     std::vector<z3::expr> flags;
 
-    size_t count_flags = 0;
+    const std::string SRC_KEY = "SRC_KEY";
+    const std::string DST_KEY = "DST_KEY";
     for (const UnwindingTree* src_node : src_nodes)
     {
         const z3::expr &src_formula = src_node->get_concrete_state().get_conjunct();
-        z3::expr flag = ctx.bool_const(std::to_string(count_flags++).data());
+        z3::expr flag = ctx.bool_const(VersionManager::next_version(SRC_KEY).data());
         z3::expr flagged_src = z3::implies(flag, src_formula);
         flags.push_back(flag);
         src_parts.push_back(flagged_src);
     }
+    z3::expr dst_flag = ctx.bool_const(VersionManager::next_version(DST_KEY).data());
+    src_parts.push_back(z3::implies(dst_flag, dst_part));
     z3::expr src = z3::mk_and(src_parts);
 
-    z3::expr raw_formula = src && tr.get_raw_formula() && dst_part;
+    const z3::expr& raw_formula = src;
     PropFormula is_tr_formula = PropFormula(raw_formula, {{"ps", ps_tr}, {"ns", ns_tr}});
 
 
-    std::pair<int, SatSolverResult> res = sat_solver.inc_solve_sat(is_tr_formula, flags, {});
+    std::pair<int, SatSolverResult> res = sat_solver.inc_solve_sat(is_tr_formula, flags, {dst_flag});
     if (res.first < 0) {
         return ConcretizationResult();
     } else {
@@ -188,7 +194,10 @@ AEClosureResult FormulaInductiveUtils::is_AE_inductive(AbstractState &to_close, 
     }
 }
 
-PropFormula FormulaInductiveUtils::create_EE_inductive_formula_skeleton(AbsStateSet abs_lead, const std::set<ConstAStateRef> &close_with) {
+PropFormula FormulaInductiveUtils::create_EE_inductive_formula_skeleton(AbsStateSet abs_lead, const std::set<ConstAStateRef> &close_with)
+{
+    AVY_MEASURE_FN;
+
     const KripkeStructure& kripke = (close_with.begin()->get()).get_kripke();
     const PropFormula& tr = kripke.get_tr();
     z3::context& ctx = tr.get_ctx();

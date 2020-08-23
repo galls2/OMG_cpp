@@ -76,6 +76,8 @@ public:
 
     std::vector<SatSolverResult> all_sat(const PropFormula& formula, const std::vector<z3::expr> &vars, bool complete_assignments) override;
     std::pair<int, SatSolverResult> inc_solve_sat(const PropFormula& formula, const std::vector<z3::expr>& may_flags, const std::vector<z3::expr>& must_flags) override;
+    std::pair<int, SatSolverResult> inc_solve_sat_flagged(const PropFormula& formula, const std::vector<z3::expr>& may_flags, const std::vector<z3::expr>& must_flags);
+
     z3::expr_vector get_unsat_core(const PropFormula& formula, z3::expr_vector& assumptions) override;
     virtual ~Z3SatSolver() override = default;
     virtual void add(const z3::expr& expr) override;

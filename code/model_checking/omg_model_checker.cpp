@@ -668,7 +668,7 @@ OmgModelChecker::OmgModelChecker(KripkeStructure &kripke) : _kripke(kripke)
 {
         initialize_abstraction();
         _tr_sat_solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(kripke.get_tr().get_ctx());
-//        _tr_sat_solver->add(_kripke.get_tr().get_raw_formula());
+        _tr_sat_solver->add(_kripke.get_tr().get_raw_formula());
 }
 
 void OmgModelChecker::initialize_abstraction()
@@ -736,6 +736,8 @@ bool OmgModelChecker::recur_ctl(Goal &g)
 
 AbstractState &OmgModelChecker::find_abs(UnwindingTree &node)
 {
+    AVY_MEASURE_FN;
+
     const ConcreteState& cstate = node.get_concrete_state();
     if (node.get_abs())
     {
@@ -761,6 +763,8 @@ AbstractState &OmgModelChecker::find_abs(UnwindingTree &node)
 
 AbstractState &OmgModelChecker::find_abs(const ConcreteState &cstate)
 {
+    AVY_MEASURE_FN;
+
     if (!_abs_classifier->exists_classification(cstate))
     {
         AbstractState &astate = _abs_structure->create_astate_from_cstate(cstate);
@@ -806,8 +810,8 @@ OmgModelChecker::is_concrete_violation(const std::unordered_set<UnwindingTree *>
                                        AbstractState &abs_witness)
 {
     AVY_MEASURE_FN;
-    auto sat_solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(abs_witness.get_formula().get_ctx());
-
+//    auto sat_solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(abs_witness.get_formula().get_ctx());
+    auto& sat_solver = _tr_sat_solver;
     return FormulaInductiveUtils::concrete_transition_to_abs(to_close_nodes, abs_witness, *sat_solver);
 }
 

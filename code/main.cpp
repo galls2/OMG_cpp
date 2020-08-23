@@ -13,6 +13,8 @@
 #include <boost/thread/thread.hpp>
 #include <utils/Stats.h>
 
+using namespace avy;
+
 #define TEST(aig_path, raw_ctl_string, expected) \
     do \
         { \
@@ -22,7 +24,8 @@
             else std::cout << "\tFAIL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl; \
             auto t2 = std::chrono::high_resolution_clock::now(); \
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( t2 - t1 ).count(); \
-            std::cout << "Time: " << duration << std::endl; \
+            std::cout << "Time: " << duration << std::endl;      \
+            Stats::PrintBrunch(std::cout); \
         } \
     while(0)
 
@@ -46,6 +49,8 @@ std::vector<FormulaChunk> get_formula_chunks(const std::string& ctl_file_path)
 
 void test_model(const std::string& file_path_no_extension)
 {
+    AVY_MEASURE_FN;
+
     std::cout << "Testing model: " << file_path_no_extension << std::endl;
     const std::string &aig_path = file_path_no_extension + ".aig";
     const std::string &ctl_file_path = file_path_no_extension + ".ctl";
@@ -380,7 +385,7 @@ int main(int argc, char** argv)
 //    TEST("../resources/af_ag.aig", "!state<0>", true);
 
   unit_tests();
-    //TEST("../resources/af_ag.aig", "EX (state<0> & ~state<1>)", true);
+//    TEST("../resources/spinner4.aig", "EF(E spl U (~inr<3> & ~inr<2> & inr<1> & inr<0>))", true);
 
     //  return model_checking_from_cmd(argc, argv);
 }
