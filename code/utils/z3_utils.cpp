@@ -120,10 +120,12 @@ FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<Unwin
     {
         const z3::expr &src_formula = src_node->get_concrete_state().get_conjunct();
         z3::expr flag = ctx.bool_const(VersionManager::next_version(SRC_KEY).data());
+
         z3::expr flagged_src = z3::implies(flag, src_formula);
         flags.push_back(flag);
         src_parts.push_back(flagged_src);
     }
+
     z3::expr dst_flag = ctx.bool_const(VersionManager::next_version(DST_KEY).data());
     src_parts.push_back(z3::implies(dst_flag, dst_part));
     z3::expr src = z3::mk_and(src_parts);
