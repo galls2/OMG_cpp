@@ -429,8 +429,9 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
             astates_lead_to_formula_skeleton.emplace(it.first); //
         }
     }
-    std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(candidates.begin()->first->get_formula().get_ctx()); //
-    PropFormula skeleton = FormulaInductiveUtils::create_EE_inductive_formula_skeleton(astates_lead_to_formula_skeleton, abs_states); //
+    std::map<const AbstractState*, z3::expr> astate_flags;
+//      std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(candidates.begin()->first->get_formula().get_ctx()); //
+    PropFormula skeleton = FormulaInductiveUtils::create_EE_inductive_formula_skeleton(astates_lead_to_formula_skeleton, abs_states, astate_flags); //
 
     while (!abs_states_lead.empty())
     {
@@ -438,7 +439,7 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
         AbstractState* abs_lead = ind_candidate.abs_state;
         DEBUG_PRINT("Is there AV-inductiveness for abs state %s?... ", abs_lead->_debug_name.data());
 
-        EEClosureResult res = _abs_structure->is_EE_closure2(skeleton, *abs_lead, abs_states, *solver); //
+        EEClosureResult res = _abs_structure->is_EE_closure2(skeleton, *abs_lead, abs_states, *_tr_sat_solver, astate_flags); //
 
 //        EEClosureResult res = _abs_structure->is_EE_closure(*abs_lead, abs_states); //
         if (res.is_closed)

@@ -25,7 +25,7 @@ using namespace avy;
             auto t2 = std::chrono::high_resolution_clock::now(); \
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( t2 - t1 ).count(); \
             std::cout << "Time: " << duration << std::endl;      \
-            Stats::PrintBrunch(std::cout); \
+            Stats::PrintBrunch(std::cout);       \
         } \
     while(0)
 
@@ -380,11 +380,11 @@ int conduct_timed_mc(std::string aig_path, std::string ctl_path, uint16_t wanted
 
 int main(int argc, char** argv)
 {
-//   run_models("../models_to_run_small.omg");
+   run_models("../models_to_run_small.omg");
 //    test_model("../resources/spinner4");
 //    TEST("../resources/af_ag.aig", "!state<0>", true);
 
-  unit_tests();
+//  unit_tests();
 //    TEST("../resources/spinner4.aig", "EF(E spl U (~inr<3> & ~inr<2> & inr<1> & inr<0>))", true);
 
     //  return model_checking_from_cmd(argc, argv);

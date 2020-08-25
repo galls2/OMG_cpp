@@ -24,7 +24,7 @@ AbstractState &AbstractStructure::create_astate_from_cstate(const ConcreteState 
 }
 
 EEClosureResult AbstractStructure::is_EE_closure2(const PropFormula& skeleton, AbstractState &to_close,
-                                                 const std::set<ConstAStateRef> &close_with, ISatSolver& sat_solver)
+                                                 const std::set<ConstAStateRef> &close_with, ISatSolver& sat_solver, const std::map<const AbstractState*, z3::expr>& astate_flags)
 {
     AVY_MEASURE_FN;
     ConstAbsStateSet p_closers;
@@ -59,7 +59,7 @@ EEClosureResult AbstractStructure::is_EE_closure2(const PropFormula& skeleton, A
         }
     }
 
-    EEClosureResult closure_result = FormulaInductiveUtils::is_EE_inductive_inc(skeleton, to_close, sat_solver);
+    EEClosureResult closure_result = FormulaInductiveUtils::is_EE_inductive_inc(skeleton, to_close, sat_solver, astate_flags);
 
     if (closure_result.is_closed)
     {

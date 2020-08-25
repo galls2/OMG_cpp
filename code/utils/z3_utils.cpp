@@ -196,7 +196,7 @@ AEClosureResult FormulaInductiveUtils::is_AE_inductive(AbstractState &to_close, 
     }
 }
 
-PropFormula FormulaInductiveUtils::create_EE_inductive_formula_skeleton(AbsStateSet abs_lead, const std::set<ConstAStateRef> &close_with)
+PropFormula FormulaInductiveUtils::create_EE_inductive_formula_skeleton(AbsStateSet abs_lead, const std::set<ConstAStateRef> &close_with, std::map<const AbstractState*, z3::expr>& astate_flags) // TODO why not constref
 {
     AVY_MEASURE_FN;
 
@@ -214,7 +214,10 @@ PropFormula FormulaInductiveUtils::create_EE_inductive_formula_skeleton(AbsState
         PropFormula abs_formula = it->get_formula();
         z3::expr abs_implicant = abs_formula.get_raw_formula().substitute(abs_formula.get_vars_by_tag("ps"), ps_tr)
                 .substitute(abs_formula.get_vars_by_tag("in0"), in_0);
-        z3::expr flag = ctx.bool_const((std::string("a")+std::to_string(it->get_abs_idx())).data());
+
+        const std::string ABS_FLAG_FOR_EE = std::string("ABS_EE") + std::to_string(it->get_abs_idx());
+        z3::expr flag = ctx.bool_const(VersionManager::next_version(ABS_FLAG_FOR_EE).data());
+        astate_flags.emplace(it, flag);
         astates_implications.push_back(z3::implies(flag, abs_implicant));
     }
     z3::expr src_part = z3::mk_and(astates_implications);
@@ -232,23 +235,33 @@ PropFormula FormulaInductiveUtils::create_EE_inductive_formula_skeleton(AbsState
 
     z3::expr dst_part = !z3::mk_or(dsts);
 
-    z3::expr inductive_raw_formula = src_part && tr.get_raw_formula() && dst_part;
+    z3::expr inductive_raw_formula = src_part && dst_part; // && tr.get_raw_formula(); // && TR
     PropFormula inductive_formula(inductive_raw_formula, {{"ps", ps_tr}, {"ns", ns_tr}});
     return inductive_formula;
 
 }
 
 EEClosureResult
-FormulaInductiveUtils::is_EE_inductive_inc(const PropFormula& skeleton, AbstractState& to_close, ISatSolver& solver){
+FormulaInductiveUtils::is_EE_inductive_inc(const PropFormula& skeleton, AbstractState& to_close, ISatSolver& solver, const std::map<const AbstractState*, z3::expr>& astate_flags){
     const KripkeStructure& kripke = to_close.get_kripke();
     const PropFormula& tr = kripke.get_tr();
+
+    z3::context& ctx = skeleton.get_ctx();
 
     const z3::expr_vector ps_tr = tr.get_vars_by_tag("ps"), ns_tr = tr.get_vars_by_tag("ns"),
             in_0 = tr.get_vars_by_tag("in0"), in_1 = tr.get_vars_by_tag("in1");
 
 
-    z3::expr flag = skeleton.get_ctx().bool_const((std::string("a")+std::to_string(to_close.get_abs_idx())).data());
-    auto res = solver.inc_solve_sat(skeleton, {flag}, {}); // TODO why is there a flag here?
+    const AbstractState* astate_ptr = &const_cast<AbstractState&>(to_close);
+    const z3::expr& astate_flag = astate_flags.at(astate_ptr);
+
+    // create skeleton flag and send the solver the expressions SKELELTON_FLAG -> FLAG with a must flag of SKELETON_FLAG
+    const std::string skeleton_flag_unique_name = VersionManager::next_version("EE_SKELETON_FLAG"); // TODO static constexpr
+    z3::expr skeleton_flag = ctx.bool_const(skeleton_flag_unique_name.data());
+    z3::expr raw_formula_to_solver = z3::implies(skeleton_flag, skeleton.get_raw_formula());
+
+    PropFormula formula_to_solver(raw_formula_to_solver, skeleton.get_variables_map());
+    auto res = solver.inc_solve_sat(formula_to_solver, {astate_flag}, {skeleton_flag});
 
     if (res.first == -1) // if the formula is UNSAT, there is NO cex to the inductiveness, so we have inductiveness
     {

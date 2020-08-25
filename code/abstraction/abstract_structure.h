@@ -43,7 +43,7 @@ public:
     AbstractState& create_astate_from_astate_split(const AbstractState& astate, PropFormula sym_rep);
 
     EEClosureResult is_EE_closure(AbstractState& to_close , const std::set<ConstAStateRef>& close_with);
-    EEClosureResult is_EE_closure2(const PropFormula& skeleton, AbstractState& to_close , const std::set<ConstAStateRef>& close_with, ISatSolver& sat_solver);
+    EEClosureResult is_EE_closure2(const PropFormula& skeleton, AbstractState& to_close , const std::set<ConstAStateRef>& close_with, ISatSolver& sat_solver, const std::map<const AbstractState*, z3::expr>& astate_flags);
 
     AEClosureResult is_AE_closure(AbstractState& to_close , const std::set<ConstAStateRef>& close_with);
 
