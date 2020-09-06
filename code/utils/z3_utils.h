@@ -11,6 +11,9 @@ class AbstractState;
 class UnwindingTree;
 class ConcretizationResult;
 
+
+DECLARE_OMG_EXCEPTION(Z3UtilException)
+
 class FormulaUtils
 {
 public:
@@ -25,6 +28,7 @@ public:
     static bool is_conj_contained(const z3::expr& big_conj, const z3::expr& small_conj);
     static bool is_lit_agrees_with_conj(const z3::expr& conj, const z3::expr& var);
     static z3::expr_vector conjunct_to_literals(const z3::expr& expr);
+    static bool are_two_conj_sat(const z3::expr& small_conj, const z3::expr& big_conj);
 };
 
 z3::expr to_var(z3::context& ctx, size_t val);
@@ -60,6 +64,8 @@ Z3ExprSet expr_vector_to_set(const VectorType& expr_vec)
 }
 
 std::vector<z3::expr> expr_vector_to_vector(const z3::expr_vector& expr_vec);
+
+std::string expr_vector_to_string(const z3::expr_vector& expr_vec);
 
 SatResult Z3_val_to_sat_result(Z3_lbool v);
 

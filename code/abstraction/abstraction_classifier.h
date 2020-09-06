@@ -16,7 +16,7 @@ public:
 
     bool exists_classification(const ConcreteState& cstate) const;
     AbstractClassificationNode& add_classification_tree(const ConcreteState& cstate, AbstractState& astate);
-    AbstractState& classify(const ConcreteState &cstate);
+    AbstractState& classify_cstate(const ConcreteState &cstate);
     const KripkeStructure& get_kripke() const;
     AbstractState& update_classification(const AbstractState& astate, const ConcreteState& cstate);
     AbstractClassificationNode* split(AbstractState& astate, PropFormula& query_formula, AbstractState& astate_pos, AbstractState& astate_neg);

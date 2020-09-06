@@ -7,7 +7,11 @@
 #include <configuration/omg_config.h>
 #include <formulas/sat_solver.h>
 #include <utils/z3_utils.h>
+#include <utils/Stats.h>
 #include "abstract_state.h"
+
+using namespace avy;
+
 AbstractionClassifier::AbstractionClassifier(const KripkeStructure &kripke) : _kripke(kripke) {}
 
 const KripkeStructure &AbstractionClassifier::get_kripke() const {
@@ -22,15 +26,28 @@ bool AbstractionClassifier::exists_classification(const ConcreteState &cstate) c
     return found;
 }
 
-AbstractState &AbstractionClassifier::classify(const ConcreteState &cstate) {
+AbstractState &AbstractionClassifier::classify_cstate(const ConcreteState &cstate) {
+    AVY_MEASURE_FN;
+
     std::set<std::string> ap_strings = cstate.string_sat_aps();
+#ifdef DEBUG
     assert(exists_classification(cstate));
+#endif
+
     const AbstractClassificationNode& cl_tree_root = *_classification_trees.at(ap_strings);
     AbstractState& abs_state = cl_tree_root.classify(cstate);
+
+    #ifdef DEBUG
+    assert(Z3SatSolver(cstate.get_conjunct().ctx()).is_sat(cstate.get_conjunct() && abs_state.get_formula().get_raw_formula()));
+#endif
+
     return abs_state;
 }
 
-AbstractClassificationNode &AbstractionClassifier::add_classification_tree(const ConcreteState &cstate, AbstractState& astate) {
+AbstractClassificationNode &AbstractionClassifier::add_classification_tree(const ConcreteState &cstate, AbstractState& astate)
+{
+    AVY_MEASURE_FN;
+
     std::set<std::string> ap_strings = cstate.string_sat_aps();
 
     std::unique_ptr<AbstractClassificationNode> cl = std::make_unique<AbstractClassificationNode>(*this, &astate);
@@ -40,7 +57,10 @@ AbstractClassificationNode &AbstractionClassifier::add_classification_tree(const
     return *((res.first)->second);
 }
 
-AbstractState &AbstractionClassifier::update_classification(const AbstractState &astate, const ConcreteState &cstate) {
+AbstractState &AbstractionClassifier::update_classification(const AbstractState &astate, const ConcreteState &cstate)
+{
+    AVY_MEASURE_FN;
+
     AbstractClassificationNode* cl = astate.get_cl_node();
     return cl->classify(cstate);
 }
@@ -48,6 +68,9 @@ AbstractState &AbstractionClassifier::update_classification(const AbstractState 
 AbstractClassificationNode *
 AbstractionClassifier::split(AbstractState &astate, PropFormula &query_formula, AbstractState &astate_pos,
                              AbstractState &astate_neg) {
+
+    AVY_MEASURE_FN;
+
     AbstractClassificationNode* cl_node = astate.get_cl_node();
     assert(cl_node->is_leaf());
 
@@ -61,24 +84,15 @@ AbstractionClassifier::split(AbstractState &astate, PropFormula &query_formula, 
     z3::context& ctx = query_formula.get_ctx();
     cl_node->_query.emplace([query_formula, &ctx] (const ConcreteState& cstate)
     {
-        std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(ctx);
 #ifdef DEBUG
         Z3ExprSet cstate_vars = expr_vector_to_set(FormulaUtils::get_vars_in_formula(cstate.get_conjunct()));
         Z3ExprSet ps_vars = expr_vector_to_set(query_formula.get_vars_by_tag("ps"));
         assert(is_contained_z3_containers(cstate_vars, ps_vars));
+        assert(FormulaUtils::is_cstate_conjunct(query_formula.get_raw_formula()));
 #endif
-        z3::expr formula_to_solver = (query_formula.get_raw_formula() && cstate.get_conjunct()).simplify();
-        if (z3::eq(formula_to_solver, ctx.bool_val(false)))
-        {
-            return false;
-        }
-        else // checking if formula_to_solver |= cstate
-        {
-            assert(FormulaUtils::is_cstate_conjunct(formula_to_solver));
-            assert(FormulaUtils::is_cstate_conjunct(cstate.get_conjunct()));
-            if (FormulaUtils::is_conj_contained(cstate.get_conjunct(), formula_to_solver)) return true;
-        }
-        return solver->is_sat(formula_to_solver);
+
+        bool is_sat = FormulaUtils::are_two_conj_sat(query_formula.get_raw_formula(), cstate.get_conjunct());
+        return is_sat;
     });
 
     return cl_node;
@@ -105,6 +119,7 @@ bool AbstractClassificationNode::is_leaf() const {
 }
 
 AbstractState &AbstractClassificationNode::classify(const ConcreteState &cstate) const {
+
     const AbstractClassificationNode* current = this;
     while (!current->_successors.empty())
     {

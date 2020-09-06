@@ -15,6 +15,13 @@
 
 using namespace avy;
 
+#if true
+#define PRINT_BRUNCH  Stats::PrintBrunch(std::cout);
+#else
+#define PRINT_BRUNCH
+#endif
+
+
 #define TEST(aig_path, raw_ctl_string, expected) \
     do \
         { \
@@ -25,7 +32,7 @@ using namespace avy;
             auto t2 = std::chrono::high_resolution_clock::now(); \
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( t2 - t1 ).count(); \
             std::cout << "Time: " << duration << std::endl;      \
-            Stats::PrintBrunch(std::cout);       \
+            PRINT_BRUNCH      \
         } \
     while(0)
 
@@ -136,8 +143,8 @@ void test_model(const std::string& file_path_no_extension)
                 std::cout << "Ctr + MC Time: " << duration << std::endl;
                 PRINT_IF_BUG(res, is_pass, aig_path, it->to_string(), prop_count);
 
-                avy::Stats::PrintBrunch(std::cout);
-                //                std::unique_ptr<McProblemRunner> mc_runner = std::make_unique<McProblemRunner>(std::move(omg), *it);
+                PRINT_BRUNCH
+                //std::unique_ptr<McProblemRunner> mc_runner = std::make_unique<McProblemRunner>(std::move(omg), *it);
 //                boost::thread t([mc_runner = move(mc_runner)]() { mc_runner->run(); });
 //                int timeout = OmgConfig::get<int>("Timeout");
 //                bool timeout_res = t.try_join_for(boost::chrono::seconds(timeout));
@@ -380,11 +387,12 @@ int conduct_timed_mc(std::string aig_path, std::string ctl_path, uint16_t wanted
 
 int main(int argc, char** argv)
 {
-   run_models("../models_to_run_small.omg");
-//    test_model("../resources/spinner4");
 //    TEST("../resources/af_ag.aig", "!state<0>", true);
 
-//  unit_tests();
+  unit_tests();
+    test_model("../resources/spinner4");
+//   run_models("../models_to_run_small.omg");
+
 //    TEST("../resources/spinner4.aig", "EF(E spl U (~inr<3> & ~inr<2> & inr<1> & inr<0>))", true);
 
     //  return model_checking_from_cmd(argc, argv);

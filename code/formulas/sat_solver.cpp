@@ -129,13 +129,16 @@ std::pair<int, SatSolverResult> Z3SatSolver::inc_solve_sat(const PropFormula& fo
 
 z3::expr_vector Z3SatSolver::get_unsat_core(const PropFormula& formula, z3::expr_vector& assumptions)
 {
+    AVY_MEASURE_FN;
+
     const z3::expr& raw_formula = formula.get_raw_formula();
     _solver.add(raw_formula);
     z3::check_result sat_res = _solver.check(assumptions);
     assert(sat_res == z3::check_result::unsat);
 
     //   std::cout << _solver.check(assumptions) << std::endl;
-    z3::expr_vector unsat_core = _solver.unsat_core();
+    z3::expr_vector unsat_core = _solver.unsat_core(); // TODO go over literals and see what we can kick out
+    // TODO check if it acutally removes somethings
     return unsat_core;
 }
 

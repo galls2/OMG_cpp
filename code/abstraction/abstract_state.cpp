@@ -23,6 +23,8 @@ AbstractState::AbstractState(const KripkeStructure &kripke, CtlFormula::Property
     CtlFormula::PropertySet diff;
     std::set_intersection(_pos_labels.begin(), _pos_labels.end(), _neg_labels.begin(), _neg_labels.end(), std::inserter(diff, diff.begin()));
     assert(diff.size() == 0);
+
+    assert(sym_rep.is_sat());
 #endif
 }
 

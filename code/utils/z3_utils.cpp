@@ -25,6 +25,18 @@ z3::expr_vector iterable_to_expr_vec(z3::context& ctx, const T& iterable)
     return expr_vector;
 }
 
+
+std::string expr_vector_to_string(const z3::expr_vector& expr_vec)
+{
+    std::string res;
+    for (unsigned i = 0; i < expr_vec.size(); ++i)
+    {
+    res += expr_vec[i].to_string() +"  ";
+    }
+
+    return res;
+}
+
 z3::expr_vector vec_to_expr_vec(z3::context& ctx, const std::vector<z3::expr>& vec)
 {
     return iterable_to_expr_vec<std::vector<z3::expr>>(ctx, vec);
@@ -331,7 +343,10 @@ bool FormulaUtils::is_lit_agrees_with_conj(const z3::expr &conj, const z3::expr 
     assert(false);
 }
 
-bool FormulaUtils::is_conj_contained(const z3::expr &big_conj, const z3::expr &small_conj) {
+bool FormulaUtils::is_conj_contained(const z3::expr &big_conj, const z3::expr &small_conj)
+{
+    AVY_MEASURE_FN;
+
     assert(big_conj.num_args() <= std::numeric_limits<uint16_t>::max() &&
            small_conj.num_args() <= std::numeric_limits<uint16_t>::max());
 
@@ -360,6 +375,29 @@ z3::expr_vector FormulaUtils::conjunct_to_literals(const z3::expr &expr)
     }
 
     return to_return;
+}
+
+bool FormulaUtils::are_two_conj_sat(const z3::expr & small_conj, const z3::expr& big_conj)
+{
+    AVY_MEASURE_FN;
+
+    for (unsigned i = 0; i < small_conj.num_args(); ++i) {
+        const z3::expr& small_lit = small_conj.arg(i);
+        bool is_small_var_not = small_lit.is_not();
+        const z3::expr& small_var = is_small_var_not ? small_lit.arg(0) : small_lit;
+        for (unsigned j = 0; j < big_conj.num_args(); j++)
+        {
+            const z3::expr& big_lit = big_conj.arg(j);
+            bool is_big_var_not = big_lit.is_not();
+            const z3::expr& big_var = is_big_var_not ? big_lit.arg(0) : big_lit;
+            if (z3::eq(small_var, big_var) && (is_small_var_not != is_big_var_not))
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 void FormulaSplitUtils::find_proving_inputs(const z3::expr& state_conj, const PropFormula& tr, z3::expr& dst, z3::expr_vector& input_values)
@@ -426,7 +464,10 @@ FormulaSplitUtils::ex_pos(const z3::expr &state_conj, const PropFormula &src_ast
 
 SplitFormulas
 FormulaSplitUtils::ex_neg(const z3::expr &state_conj, const PropFormula &src_astate_f,
-                          const std::set<const PropFormula *> &dsts_astates_f, const KripkeStructure &kripke, bool is_negate_dsts) {
+                          const std::set<const PropFormula *> &dsts_astates_f, const KripkeStructure &kripke, bool is_negate_dsts)
+{
+    AVY_MEASURE_FN;
+
     assert(FormulaUtils::is_cstate_conjunct(state_conj));
 
     const PropFormula &tr = kripke.get_tr();
@@ -445,8 +486,21 @@ FormulaSplitUtils::ex_neg(const z3::expr &state_conj, const PropFormula &src_ast
     add_flags_to_conj(state_conj, ctx, assumptions, assertions, assumptions_map, std::string("a"));
 
     z3::expr dst_formula_full = merge_dst_astate_formulas(dsts_astates_f, tr, ctx);
-    if (is_negate_dsts) dst_formula_full = !dst_formula_full;
-    z3::expr rest_of_formula = tr.get_raw_formula() && dst_formula_full;
+    if (is_negate_dsts)
+    {
+        dst_formula_full = !dst_formula_full;
+    }
+
+#ifdef DEBUG
+    assert(Z3SatSolver(ctx).is_sat(dst_formula_full));
+#endif
+
+    z3::expr rest_of_formula = (tr.get_raw_formula() && dst_formula_full).simplify(); // TODO maybe substitute?
+
+#ifdef DEBUG
+    assert(Z3SatSolver(ctx).is_sat(rest_of_formula));
+#endif
+
     z3::expr final_assumption = ctx.bool_const("a_fin");
     assumptions.push_back(final_assumption);
     assertions.push_back(z3::implies(final_assumption, rest_of_formula));
@@ -457,6 +511,13 @@ FormulaSplitUtils::ex_neg(const z3::expr &state_conj, const PropFormula &src_ast
                                            final_assumption,
                                            formula_to_check);
 
+//#ifdef DEBUG
+//    Z3SatSolver solver(ctx);
+//    assert(solver.is_sat(res.remainder_formula.get_raw_formula()));
+//    assert(res.query.get_raw_formula().num_args() > 0);
+//#endif
+
+
     return res;
 }
 
@@ -465,7 +526,10 @@ SplitFormulas FormulaSplitUtils::get_split_formulas(const z3::expr &state_conj, 
                                                     z3::expr_vector &assumptions,
                                                     std::map<z3::expr, unsigned int, Z3ExprComp> &assumptions_map,
                                                     const z3::expr &final_assumption,
-                                                    const PropFormula &formula_to_check) {
+                                                    const PropFormula &formula_to_check)
+{
+    AVY_MEASURE_FN;
+
     std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(
             ctx);
     z3::expr_vector unsat_core = solver->get_unsat_core(formula_to_check, assumptions);
@@ -486,6 +550,9 @@ SplitFormulas FormulaSplitUtils::get_split_formulas(const z3::expr &state_conj, 
     z3::expr_vector pos_assertions = get_assertions_from_unsat_core(state_conj, ctx, assumptions_map, unsat_core);
     z3::expr no_successor_part = mk_and(pos_assertions);
 
+    assert(no_successor_part.is_and() && no_successor_part.num_args() > 0);
+
+    // TODO change to A \cap C and A \cap (neg C) [[now it's A \cap C and A minus (A \cap C)
     z3::expr pos_split_part = (no_successor_part && src_astate_formula.get_raw_formula()).simplify();
     z3::expr neg_split_part = (src_astate_formula.get_raw_formula() && (!pos_split_part));
 
@@ -494,7 +561,9 @@ SplitFormulas FormulaSplitUtils::get_split_formulas(const z3::expr &state_conj, 
             {"in0", tr.get_vars_by_tag("in0")}
     };
     auto create_prop = [&abs_var_map](const z3::expr &raw_f) { return PropFormula(raw_f, abs_var_map); };
-    SplitFormulas res = {create_prop(no_successor_part), create_prop(pos_split_part), create_prop(neg_split_part)};
+    SplitFormulas res = {PropFormula(no_successor_part, abs_var_map), PropFormula(pos_split_part, abs_var_map),
+                         PropFormula(neg_split_part, abs_var_map)};
+
     return res;
 }
 
@@ -520,20 +589,26 @@ void
 FormulaSplitUtils::add_flags_to_conj(const z3::expr &conj, z3::context &ctx, z3::expr_vector &assumptions,
                                      z3::expr_vector &assertions,
                                      std::map<z3::expr, unsigned int, Z3ExprComp> &assumptions_map,
-                                     const std::string &assumption_prefix) {
+                                     const std::string &assumption_prefix)
+ {
+    AVY_MEASURE_FN;
+
     for (unsigned int i = 0; i < conj.num_args(); ++i)
     {
         const z3::expr &lit = conj.arg(i);
         z3::expr lit_assumption = ctx.bool_const((assumption_prefix + std::to_string(i)).data());
         assumptions.push_back(lit_assumption);
-        assertions.push_back(implies(lit_assumption, lit));
+        assertions.push_back(z3::implies(lit_assumption, lit));
         assumptions_map.emplace(lit_assumption, i);
     }
 }
 
 
+// TODO instead of tr just get the relevant expression vectors
 z3::expr FormulaSplitUtils::merge_dst_astate_formulas(const std::set<const PropFormula *> &dsts_astates_f, const PropFormula& tr, z3::context& ctx)
 {
+    AVY_MEASURE_FN;
+
     z3::expr_vector dsts(ctx);
     for (const PropFormula* const dst_formula : dsts_astates_f)
     {

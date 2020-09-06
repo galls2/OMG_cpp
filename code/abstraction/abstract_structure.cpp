@@ -13,7 +13,10 @@ using namespace avy;
 AbstractStructure::AbstractStructure(const KripkeStructure &kripke, const OmgModelChecker* omg) : _kripke(kripke), _omg(omg)
 {}
 
-AbstractState &AbstractStructure::create_astate_from_cstate(const ConcreteState &cstate) {
+AbstractState &AbstractStructure::create_astate_from_cstate(const ConcreteState &cstate)
+{
+    AVY_MEASURE_FN;
+
     CtlFormula::PropertySet pos, neg;
     cstate.aps_by_sat(pos, neg);
 
@@ -155,6 +158,7 @@ RefinementResult AbstractStructure::refine_exists_successor(const ConcreteState 
 
     if (is_tse_possible && OmgConfig::get<bool>("Trivial Split Elimination") && !split_formulas.remainder_formula.is_sat())
     {
+        DEBUG_PRINT("TSE (REFINE EXISTS SUCCESSOR)\n");
         _E_must[&src_abs].emplace_back(dsts_abs);
         return {false, nullptr, nullptr, {}};
     }
@@ -208,10 +212,25 @@ RefinementResult AbstractStructure::refine_no_successor(const UnwindingTree &to_
             FormulaSplitUtils::ex_neg(to_close_node.get_concrete_state().get_conjunct(),
                                       abs_src_witness.get_formula(), dst_abs_formulas, _kripke, false);
 
+#ifdef DEBUG
+    Z3SatSolver solver(abs_src_witness.get_formula().get_ctx());
+    assert(solver.is_sat(split_formulas.generalized_formula.get_raw_formula()));
+    assert(true);
+    Z3SatSolver solver2(abs_src_witness.get_formula().get_ctx()); //
+    if (!(solver2.is_sat(split_formulas.remainder_formula.get_raw_formula())))
+    {
+        FormulaSplitUtils::ex_neg(to_close_node.get_concrete_state().get_conjunct(),
+                                  abs_src_witness.get_formula(), dst_abs_formulas, _kripke, false);
+
+  //      assert(false);
+    }
+#endif
+
     if (is_tse_possible && OmgConfig::get<bool>("Trivial Split Elimination") && !split_formulas.remainder_formula.is_sat())
     {
-        DEBUG_PRINT("IMPLEMENT TSE in refine no successors:)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-        throw "IEEE";
+        // Code should never get here.
+        assert(false);
+        throw OmgException("Illegal TSE conducted");
     }
 
     std::pair<AbstractState*, AbstractState*> res = create_new_astates_and_update(abs_src_witness, split_formulas);
@@ -238,6 +257,7 @@ RefinementResult AbstractStructure::refine_no_successor(const UnwindingTree &to_
     remove_redundant(_E_must);
     remove_redundant(_E_may_over);
 
+    assert(split_formulas.query.get_raw_formula().num_args() > 0);
     return { true, res.first, res.second, {split_formulas.query} };
 }
 
@@ -332,6 +352,7 @@ AbstractStructure::refine_all_successors(const UnwindingTree &to_close_node, Abs
 
     if (is_tse_possible && OmgConfig::get<bool>("Trivial Split Elimination") && !split_formulas.remainder_formula.is_sat())
     {
+        DEBUG_PRINT("TSE (REFINE ALL SUCCESSORS)\n");
         _E_must[&abs_src_witness].emplace_back(dsts_abs);
         _E_may_over[&abs_src_witness].emplace_back(dsts_abs);
         return {false, nullptr, nullptr, {}};

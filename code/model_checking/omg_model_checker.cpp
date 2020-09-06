@@ -774,7 +774,7 @@ AbstractState &OmgModelChecker::find_abs(const ConcreteState &cstate)
     }
     else
     {
-        AbstractState& abs = _abs_classifier->classify(cstate);
+        AbstractState& abs = _abs_classifier->classify_cstate(cstate);
         return abs;
     }
 }
@@ -842,6 +842,8 @@ void OmgModelChecker::refine_exists_successor(UnwindingTree& src_node,
 
 void OmgModelChecker::update_classifier(RefinementResult& refine_result, AbstractState& abs_src_witness) {
     if (!refine_result.is_split) return;
+
+    assert(refine_result.split_query->get_raw_formula().num_args() > 0);
 
     _abs_classifier->split(abs_src_witness, *refine_result.split_query, *refine_result.astate_generalized, *refine_result.astate_remainder);
 
