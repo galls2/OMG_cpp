@@ -14,6 +14,15 @@ apt install git -y
 apt install cmake -y
 apt install graphviz -y
 
+echo Now Installing CUDD
+#sudo apt install autoconf
+#./autoreconf
+#sudo ./configure --enable-*
+#sudo make
+#sudo make install
+#  sudo cp OMG_cpp/cudd-3.0.0/cplusplus/cuddObj.hh OMG_cpp/cudd-3.0.0/cudd/cudd.h /usr/local/include/
+
+
 echo Installing boost 1.68
 tar -xvf boost_1_68_0.tar.bz2
 cd boost_1_68_0

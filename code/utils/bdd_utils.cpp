@@ -88,14 +88,13 @@ std::vector<BddUtils::CubeRep> BddUtils::all_sat(Cudd &mgr, const BDD &bdd) {
 
 
 void
-BddUtils::all_sat(Cudd &mgr, const BDD &bdd, std::map<DdNode *, std::vector<CubeRep>> & node_cube_reps, bool is_negate)
+BddUtils::all_sat(Cudd &mgr, const BDD &bdd, std::map<DdNode *, std::vector<CubeRep>> & node_cube_reps, const bool is_negate)
 {
     DdNode* current_node = bdd.getRegularNode();
     DdNode* current_with_complementation = Cudd_NotCond(current_node, (is_negate ? 1 : 0));
 
     if (node_cube_reps.find(current_with_complementation) != node_cube_reps.end())
     {
-//        std::cout << "YASA" << std::endl;
         return;
     }
 
@@ -112,20 +111,20 @@ BddUtils::all_sat(Cudd &mgr, const BDD &bdd, std::map<DdNode *, std::vector<Cube
     }
     // should cup_repppp be an array??
 
-    size_t idx = Cudd_NodeReadIndex(current_node);
+    const size_t idx = Cudd_NodeReadIndex(current_node);
 //    std::cout << "INDEX: "<<idx << std::endl;
 
 
     std::vector<BddUtils::CubeRep> to_return;
 
     DdNode* then_node = Cudd_T(current_node);
-    bool is_then_node_complemented = Cudd_IsComplement(then_node);
+    const bool is_then_node_complemented = Cudd_IsComplement(then_node);
 
     then_node = Cudd_Regular(then_node);
     BDD then_bdd(mgr, then_node);
 //    std::cout<<"GOIND TO THE LEFT OF " << idx<<std::endl;
 
-    bool is_negate_then = is_negate ^ is_then_node_complemented;
+    const bool is_negate_then = is_negate ^ is_then_node_complemented;
     all_sat(mgr, then_bdd, node_cube_reps, is_negate_then); // this xor or the cond in the next line?
 
     auto then_with_complementation = Cudd_NotCond(then_node, (is_negate_then?1:0));
@@ -142,13 +141,13 @@ BddUtils::all_sat(Cudd &mgr, const BDD &bdd, std::map<DdNode *, std::vector<Cube
     }
 
     DdNode* else_node = Cudd_E(current_node);
-    bool is_else_node_complemented = Cudd_IsComplement(else_node);
+    const bool is_else_node_complemented = Cudd_IsComplement(else_node);
 
     else_node = Cudd_Regular(else_node);;
     BDD else_bdd(mgr, else_node);
 //    std::cout<<"GOIND TO THE RIGHT OF " << idx<<std::endl;
 
-    bool is_negate_else = is_negate ^ is_else_node_complemented;
+    const bool is_negate_else = is_negate ^ is_else_node_complemented;
     all_sat(mgr, else_bdd, node_cube_reps, is_negate_else);
 
     auto else_with_complementation = Cudd_NotCond(else_node, (is_negate_else ? 1 : 0));

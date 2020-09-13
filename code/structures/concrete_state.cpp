@@ -17,10 +17,6 @@ ConcreteState::ConcreteState(const KripkeStructure& kripke, z3::expr conjunct)  
     std::vector<z3::expr> conj_vars = FormulaUtils::get_vars_in_formula(_conjunct);
     Z3ExprSet conj_vars_set(conj_vars.begin(), conj_vars.end());
     Z3ExprSet tr_ps_vars = expr_vector_to_set(_kripke.get_tr().get_vars_by_tag("ps"));
-//    for (const auto & it : conj_vars_set) std::cout << it << std::endl;
-//    std::cout << "^^^^^^^^^" << std::endl;
-//    for (const auto & it : tr_ps_vars) std::cout << it << std::endl;
-//    std::cout << "^^^^^^^^^" << std::endl;
 
     assert(conj_vars_set.size()  == tr_ps_vars.size());
     for (const auto & it : conj_vars_set) {
@@ -32,7 +28,7 @@ ConcreteState::ConcreteState(const KripkeStructure& kripke, z3::expr conjunct)  
 #endif
 }
 
-std::vector<ConcreteState> ConcreteState::get_successors() {
+std::vector<ConcreteState>& ConcreteState::get_successors() {
     if (!_successors) compute_successors();
     return _successors.value();
 }
@@ -52,7 +48,7 @@ void ConcreteState::compute_successors() {
 
     const std::map<std::string, z3::expr_vector> & variables_map = tr.get_variables_map();
 
-    PropFormula ns_formula = PropFormula(ns_raw_formula, variables_map);
+    PropFormula ns_formula(ns_raw_formula, variables_map);
 
 
     std::unique_ptr<ISatSolver> sat_solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(ctx);
@@ -86,11 +82,6 @@ std::vector<bool> ConcreteState::to_bitvec() const
     for (size_t i = 0; i < vars.size(); ++i)
     {
         bool res = FormulaUtils::is_lit_agrees_with_conj(_conjunct, vars[i]);
-
-//        solver.reset();
-//        solver.add(_conjunct && vars[i]);
-//        bool res = solver.check() == z3::sat;
-//
         bits.push_back(res);
     }
     return bits;
@@ -100,14 +91,7 @@ std::vector<bool> ConcreteState::to_bitvec() const
 
 void ConcreteState::aps_by_sat(CtlFormula::PropertySet& pos, CtlFormula::PropertySet& neg) const
 {
-//    z3::context& ctx = _kripke.get_tr().get_raw_formula().ctx();
-//    z3::solver solver(ctx);
-//
-//    solver.add(_conjunct);
-//    assert(solver.check() == z3::sat);
-//    z3::model m = solver.get_model();
-
-    z3::expr_vector ps_vars = _kripke.get_tr().get_vars_by_tag("ps");
+    const z3::expr_vector& ps_vars = _kripke.get_tr().get_vars_by_tag("ps");
     const auto& aps = _kripke.get_aps();
     for (const CtlFormula* ap : aps)
     {
@@ -121,14 +105,14 @@ void ConcreteState::aps_by_sat(CtlFormula::PropertySet& pos, CtlFormula::Propert
 
 PropFormula ConcreteState::get_bis0_formula() const {
     z3::context& ctx = _kripke.get_tr().get_raw_formula().ctx();
-    z3::expr_vector ps_vars = _kripke.get_tr().get_vars_by_tag("ps");
+    const z3::expr_vector& ps_vars = _kripke.get_tr().get_vars_by_tag("ps");
     if (_kripke.get_aps().size() > 1) {
         z3::expr_vector bis0_parts(ctx);
         for (const CtlFormula *ap : _kripke.get_aps())
         {
-            size_t var_idx = _kripke.get_var_num_by_ap(ap->get_data());
-            const z3::expr var = ps_vars[var_idx];
-            bool is_pos_value = FormulaUtils::is_lit_agrees_with_conj(_conjunct, var);
+            const size_t var_idx = _kripke.get_var_num_by_ap(ap->get_data());
+            const z3::expr& var = ps_vars[var_idx];
+            const bool is_pos_value = FormulaUtils::is_lit_agrees_with_conj(_conjunct, var);
             bis0_parts.push_back(is_pos_value ? var : (!var));
         }
         z3::expr raw_bis0 = z3::mk_and(bis0_parts);
@@ -141,10 +125,10 @@ PropFormula ConcreteState::get_bis0_formula() const {
     {
         assert(!_kripke.get_aps().empty());
         const CtlFormula* ap = *_kripke.get_aps().begin();
-        size_t var_idx = _kripke.get_var_num_by_ap(ap->get_data());
-        const z3::expr var = ps_vars[var_idx];
+        const size_t var_idx = _kripke.get_var_num_by_ap(ap->get_data());
+        const z3::expr& var = ps_vars[var_idx];
 //        bool is_pos_value = z3::eq(m.eval(var), ctx.bool_val(true));
-        bool is_pos_value = FormulaUtils::is_lit_agrees_with_conj(_conjunct, var);
+        const bool is_pos_value = FormulaUtils::is_lit_agrees_with_conj(_conjunct, var);
 
         PropFormula bis0(is_pos_value ? var : (!var), {{"ps",  ps_vars},
                                     {"in0", _kripke.get_tr().get_vars_by_tag("in0")}});
@@ -155,12 +139,12 @@ PropFormula ConcreteState::get_bis0_formula() const {
 std::set<std::string> ConcreteState::string_sat_aps() const {
     std::set<std::string> sat_strs;
 
-    z3::expr_vector ps_vars = _kripke.get_tr().get_vars_by_tag("ps");
+    const z3::expr_vector& ps_vars = _kripke.get_tr().get_vars_by_tag("ps");
     for (const CtlFormula* ap : _kripke.get_aps())
     {
-        size_t var_idx = _kripke.get_var_num_by_ap(ap->get_data());
-        const z3::expr var = ps_vars[var_idx];
-        bool res = FormulaUtils::is_lit_agrees_with_conj(_conjunct, var);
+        const size_t var_idx = _kripke.get_var_num_by_ap(ap->get_data());
+        const z3::expr& var = ps_vars[var_idx];
+        const bool res = FormulaUtils::is_lit_agrees_with_conj(_conjunct, var);
         if (res)
             sat_strs.insert(ap->get_data());
     }

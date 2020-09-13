@@ -682,7 +682,7 @@ bool OmgModelChecker::check_all_initial_states(const CtlFormula& specification)
 {
     std::vector<ConcreteState> inits = _kripke.get_initial_states();
 
-    for (const ConcreteState& it : inits)
+    for (ConcreteState& it : inits)
     {
         DEBUG_PRINT("Checking initial state: %s\n", it.to_bitvec_str().data());
         bool result = model_checking(it, specification);
@@ -692,7 +692,7 @@ bool OmgModelChecker::check_all_initial_states(const CtlFormula& specification)
     return true;
 }
 
-bool OmgModelChecker::model_checking(const ConcreteState &cstate, const CtlFormula &specification)
+bool OmgModelChecker::model_checking(ConcreteState &cstate, const CtlFormula &specification)
 {
 //    std::cout << specification.to_string() << std::endl;
     // In the future - unwinding tree cache is to be used here

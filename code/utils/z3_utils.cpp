@@ -69,7 +69,7 @@ FormulaInductiveUtils::is_EE_inductive(AbstractState &to_close, const ConstAbsSt
     const KripkeStructure& kripke = to_close.get_kripke();
     const PropFormula& tr = kripke.get_tr();
 
-    const z3::expr_vector ps_tr = tr.get_vars_by_tag("ps"), ns_tr = tr.get_vars_by_tag("ns"),
+    const z3::expr_vector& ps_tr = tr.get_vars_by_tag("ps"), ns_tr = tr.get_vars_by_tag("ns"),
         in_0 = tr.get_vars_by_tag("in0"), in_1 = tr.get_vars_by_tag("in1");
 
     PropFormula src_formula = to_close.get_formula();
@@ -114,7 +114,7 @@ FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<Unwin
     const PropFormula &tr = kripke.get_tr();
     z3::context &ctx = tr.get_ctx();
 
-    const z3::expr_vector ps_tr = tr.get_vars_by_tag("ps"), ns_tr = tr.get_vars_by_tag("ns"),
+    const z3::expr_vector& ps_tr = tr.get_vars_by_tag("ps"), ns_tr = tr.get_vars_by_tag("ns"),
             in_0 = tr.get_vars_by_tag("in0"), in_1 = tr.get_vars_by_tag("in1");
 
     PropFormula astate_formula = astate.get_formula();
@@ -162,7 +162,7 @@ AEClosureResult FormulaInductiveUtils::is_AE_inductive(AbstractState &to_close, 
     const PropFormula& tr = kripke.get_tr();
     z3::context& ctx = tr.get_ctx();
 
-    const z3::expr_vector ps_tr = tr.get_vars_by_tag("ps"), ns_tr = tr.get_vars_by_tag("ns"),
+    const z3::expr_vector& ps_tr = tr.get_vars_by_tag("ps"), ns_tr = tr.get_vars_by_tag("ns"),
             in_0 = tr.get_vars_by_tag("in0"), in_1 = tr.get_vars_by_tag("in1");
 
     PropFormula src_formula = to_close.get_formula();
@@ -216,7 +216,7 @@ PropFormula FormulaInductiveUtils::create_EE_inductive_formula_skeleton(AbsState
     const PropFormula& tr = kripke.get_tr();
     z3::context& ctx = tr.get_ctx();
 
-    const z3::expr_vector ps_tr = tr.get_vars_by_tag("ps"), ns_tr = tr.get_vars_by_tag("ns"),
+    const z3::expr_vector& ps_tr = tr.get_vars_by_tag("ps"), ns_tr = tr.get_vars_by_tag("ns"),
             in_0 = tr.get_vars_by_tag("in0"), in_1 = tr.get_vars_by_tag("in1");
 
 
@@ -254,13 +254,16 @@ PropFormula FormulaInductiveUtils::create_EE_inductive_formula_skeleton(AbsState
 }
 
 EEClosureResult
-FormulaInductiveUtils::is_EE_inductive_inc(const PropFormula& skeleton, AbstractState& to_close, ISatSolver& solver, const std::map<const AbstractState*, z3::expr>& astate_flags){
+FormulaInductiveUtils::is_EE_inductive_inc(const PropFormula& skeleton, AbstractState& to_close, ISatSolver& solver, const std::map<const AbstractState*, z3::expr>& astate_flags)
+{
+    AVY_MEASURE_FN;
+
     const KripkeStructure& kripke = to_close.get_kripke();
     const PropFormula& tr = kripke.get_tr();
 
     z3::context& ctx = skeleton.get_ctx();
 
-    const z3::expr_vector ps_tr = tr.get_vars_by_tag("ps"), ns_tr = tr.get_vars_by_tag("ns"),
+    const z3::expr_vector& ps_tr = tr.get_vars_by_tag("ps"), ns_tr = tr.get_vars_by_tag("ns"),
             in_0 = tr.get_vars_by_tag("in0"), in_1 = tr.get_vars_by_tag("in1");
 
 
@@ -510,14 +513,6 @@ FormulaSplitUtils::ex_neg(const z3::expr &state_conj, const PropFormula &src_ast
     SplitFormulas res = get_split_formulas(state_conj, src_astate_f, tr, ctx, assumptions, assumptions_map,
                                            final_assumption,
                                            formula_to_check);
-
-//#ifdef DEBUG
-//    Z3SatSolver solver(ctx);
-//    assert(solver.is_sat(res.remainder_formula.get_raw_formula()));
-//    assert(res.query.get_raw_formula().num_args() > 0);
-//#endif
-
-
     return res;
 }
 

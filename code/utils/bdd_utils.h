@@ -26,7 +26,7 @@ public:
     static std::vector<CubeRep> all_sat(Cudd& mgr, const BDD& bdd);
 
 private:
-    static void all_sat(Cudd& mgr, const BDD& bdd, std::map<DdNode*, std::vector<CubeRep>>& node_cube_reps, bool is_negate);
+    static void all_sat(Cudd& mgr, const BDD& bdd, std::map<DdNode*, std::vector<CubeRep>>& node_cube_reps, const bool is_negate);
 
 };
 

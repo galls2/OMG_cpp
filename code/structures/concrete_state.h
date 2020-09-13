@@ -17,7 +17,7 @@ class ConcreteState {
 public:
     ConcreteState(const KripkeStructure& kripke, z3::expr conjunct);
 
-    std::vector<ConcreteState> get_successors();
+    std::vector<ConcreteState>& get_successors();
 
     void aps_by_sat(CtlFormula::PropertySet& pos, CtlFormula::PropertySet& neg) const;
     std::set<std::string> string_sat_aps() const;
@@ -38,7 +38,7 @@ private:
     std::experimental::optional<std::vector<ConcreteState>> _successors;
 
 
-    void compute_successors();
+    void compute_successors() ;
 
 };
 

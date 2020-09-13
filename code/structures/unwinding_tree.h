@@ -21,7 +21,7 @@ typedef std::unordered_map<AbstractState*, std::unordered_set<UnwindingTree*>> C
 
 class UnwindingTree {
 public:
-    UnwindingTree(const KripkeStructure& kripke, ConcreteState concrete_state, UnwindingTree * parent);
+    UnwindingTree(const KripkeStructure& kripke, ConcreteState& concrete_state, UnwindingTree * parent);
     size_t get_depth() const;
     const ConcreteState& get_concrete_state() const;
     const std::vector<std::unique_ptr<UnwindingTree>>& unwind_further();
@@ -51,7 +51,7 @@ public:
 #endif
 private:
     const KripkeStructure& _kripke;
-    ConcreteState _cstate;
+    ConcreteState& _cstate;
     std::experimental::optional<AStateRef> _astate;
     UnwindingTree * const _parent;
     size_t _depth;

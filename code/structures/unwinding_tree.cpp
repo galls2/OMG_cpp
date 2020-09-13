@@ -19,10 +19,10 @@ const std::vector<std::unique_ptr<UnwindingTree>> &UnwindingTree::unwind_further
         return _successors;
     }
 
-    std::vector<ConcreteState> csuccessors = _cstate.get_successors();
+    auto& csuccessors = _cstate.get_successors();
     for (ConcreteState& cstate : csuccessors)
     {
-        _successors.emplace_back(std::make_unique<UnwindingTree>(_kripke, std::move(cstate), this));
+        _successors.emplace_back(std::make_unique<UnwindingTree>(_kripke, cstate, this));
     }
 
     return _successors;
@@ -41,10 +41,11 @@ size_t UnwindingTree::get_depth() const {
     return _depth;
 }
 
-UnwindingTree::UnwindingTree(const KripkeStructure &kripke, ConcreteState concrete_state,
+UnwindingTree::UnwindingTree(const KripkeStructure &kripke, ConcreteState& concrete_state,
                              UnwindingTree * parent): _kripke(kripke),
-                             _cstate(std::move(concrete_state)), _parent(parent), _URGENT(false)
+                             _cstate(concrete_state), _parent(parent), _URGENT(false)
 {
+
     _depth = (_parent) ? _parent->get_depth() + 1 : 0;
 }
 

@@ -45,7 +45,7 @@ public:
     typedef bool (OmgModelChecker::*handler_t)(Goal& goal);
 
     typedef std::priority_queue<InductiveCandidate, std::vector<InductiveCandidate>, decltype(comp_ind_cands)> InductiveCandidatePriorityQueue;
-    bool model_checking(const ConcreteState& cstate, const CtlFormula& specification);
+    bool model_checking(ConcreteState& cstate, const CtlFormula& specification);
     bool check_all_initial_states(const CtlFormula& specification);
 
 

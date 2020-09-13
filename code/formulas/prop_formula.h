@@ -27,7 +27,7 @@ public:
 
 private:
     const z3::expr _formula;
-    std::map<std::string, z3::expr_vector> _variables;
+    std::map<std::string, z3::expr_vector> _variables; // TODO remove this, keep this map somewhere and just use the z3::expr
 
 };
 
