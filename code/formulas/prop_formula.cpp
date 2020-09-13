@@ -12,7 +12,7 @@ std::vector<z3::expr> PropFormula::get_all_variables() const {
         const z3::expr_vector &vars = vars_entry.second;
         for (size_t i = 0; i < vars.size(); ++i)
         {
-            z3::expr var = vars[i];
+            const z3::expr& var = vars[i];
             all_vars.push_back(var);
         }
     }

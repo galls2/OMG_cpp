@@ -9,9 +9,11 @@
 #include "concrete_state.h"
 #include <algorithm>
 #include <configuration/omg_config.h>
+#include <utils/Stats.h>
 
+using namespace avy;
 
-ConcreteState::ConcreteState(const KripkeStructure& kripke, z3::expr conjunct)  : _kripke(kripke), _conjunct(conjunct)
+ConcreteState::ConcreteState(const KripkeStructure& kripke, const z3::expr& conjunct)  : _kripke(kripke), _conjunct(conjunct)
 {
 #ifdef DEBUG
     std::vector<z3::expr> conj_vars = FormulaUtils::get_vars_in_formula(_conjunct);
@@ -33,7 +35,9 @@ std::vector<ConcreteState>& ConcreteState::get_successors() {
     return _successors.value();
 }
 
-void ConcreteState::compute_successors() {
+void ConcreteState::compute_successors()
+{
+    AVY_MEASURE_FN;
 
     const PropFormula& tr = _kripke.get_tr();
 

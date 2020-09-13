@@ -20,7 +20,7 @@ AbstractState &AbstractStructure::create_astate_from_cstate(const ConcreteState 
     CtlFormula::PropertySet pos, neg;
     cstate.aps_by_sat(pos, neg);
 
-    auto res =_abs_states.emplace(_kripke, pos, neg, _kripke.get_aps(), cstate.get_bis0_formula());
+    const auto res =_abs_states.emplace(_kripke, pos, neg, _kripke.get_aps(), cstate.get_bis0_formula());
     assert(res.second);
 
     return const_cast<AbstractState&>(*res.first);
@@ -40,7 +40,7 @@ EEClosureResult AbstractStructure::is_EE_closure2(const PropFormula& skeleton, A
     {
         const auto &possible_closers = _E_may_over[&to_close];
         for (const auto& closer_set : possible_closers) {
-            bool is_subset = std::includes(p_closers.begin(), p_closers.end(), closer_set.begin(), closer_set.end());
+            const bool is_subset = std::includes(p_closers.begin(), p_closers.end(), closer_set.begin(), closer_set.end());
             if (is_subset) {
                 DEBUG_PRINT("Known closure found!");
                 return {true, {}, {}};
@@ -52,7 +52,7 @@ EEClosureResult AbstractStructure::is_EE_closure2(const PropFormula& skeleton, A
     {
         const auto &known_violations = _NE_may_over[&to_close];
         for (const auto &violation : known_violations) {
-            bool is_subset = std::includes(violation.first.begin(), violation.first.end(), p_closers.begin(),
+            const bool is_subset = std::includes(violation.first.begin(), violation.first.end(), p_closers.begin(),
                                            p_closers.end());
             if (is_subset) {
                 DEBUG_PRINT("Known violation found!");
@@ -91,7 +91,7 @@ EEClosureResult AbstractStructure::is_EE_closure(AbstractState &to_close,
     {
         const auto &possible_closers = _E_may_over[&to_close];
         for (const auto& closer_set : possible_closers) {
-            bool is_subset = std::includes(p_closers.begin(), p_closers.end(), closer_set.begin(), closer_set.end());
+            const bool is_subset = std::includes(p_closers.begin(), p_closers.end(), closer_set.begin(), closer_set.end());
             if (is_subset) {
                 DEBUG_PRINT("Known closure found!");
                 return {true, {}, {}};
@@ -103,7 +103,7 @@ EEClosureResult AbstractStructure::is_EE_closure(AbstractState &to_close,
     {
         const auto &known_violations = _NE_may_over[&to_close];
         for (const auto &violation : known_violations) {
-            bool is_subset = std::includes(violation.first.begin(), violation.first.end(), p_closers.begin(),
+            const bool is_subset = std::includes(violation.first.begin(), violation.first.end(), p_closers.begin(),
                                            p_closers.end());
             if (is_subset) {
                 DEBUG_PRINT("Known violation found!");
@@ -113,7 +113,7 @@ EEClosureResult AbstractStructure::is_EE_closure(AbstractState &to_close,
         }
     }
 
-    EEClosureResult closure_result = FormulaInductiveUtils::is_EE_inductive(to_close, p_closers);
+    const EEClosureResult closure_result = FormulaInductiveUtils::is_EE_inductive(to_close, p_closers);
 
     if (closure_result.is_closed)
     {
@@ -163,14 +163,14 @@ RefinementResult AbstractStructure::refine_exists_successor(const ConcreteState 
         return {false, nullptr, nullptr, {}};
     }
 
-    std::pair<AbstractState*, AbstractState*> res = create_new_astates_and_update(src_abs, split_formulas);
+    const std::pair<AbstractState*, AbstractState*> res = create_new_astates_and_update(src_abs, split_formulas);
 
-    bool is_src_in_dsts = std::any_of(dsts_abs.begin(), dsts_abs.end(), [&src_abs] (const AbstractState* abs_dst) {return (*abs_dst) == src_abs; });
+    const bool is_src_in_dsts = std::any_of(dsts_abs.begin(), dsts_abs.end(), [&src_abs] (const AbstractState* abs_dst) {return (*abs_dst) == src_abs; });
 
     if (is_src_in_dsts)
     {
         ConstAbsStateSet updated = dsts_abs;
-        size_t erase_res = updated.erase(&src_abs);
+        const size_t erase_res = updated.erase(&src_abs);
         assert(erase_res == 1);
         updated.insert({res.first, res.second});
         _E_must[res.first].emplace_back(std::move(updated));
@@ -233,13 +233,13 @@ RefinementResult AbstractStructure::refine_no_successor(const UnwindingTree &to_
         throw OmgException("Illegal TSE conducted");
     }
 
-    std::pair<AbstractState*, AbstractState*> res = create_new_astates_and_update(abs_src_witness, split_formulas);
+    const std::pair<AbstractState*, AbstractState*> res = create_new_astates_and_update(abs_src_witness, split_formulas);
 
-    bool is_src_in_dsts = std::any_of(dsts_abs.begin(), dsts_abs.end(), [&abs_src_witness] (const AbstractState* abs_dst) {return (*abs_dst) == abs_src_witness; });
+    const bool is_src_in_dsts = std::any_of(dsts_abs.begin(), dsts_abs.end(), [&abs_src_witness] (const AbstractState* abs_dst) {return (*abs_dst) == abs_src_witness; });
     for (const AbstractState* abs_dst : dsts_abs) {_NE_may[res.first].insert(abs_dst); }
     if (is_src_in_dsts) { _NE_may[res.first].insert({res.first, res.second}); }
 
-    auto remove_redundant =
+    const auto remove_redundant =
             [&res, &dsts_abs, is_src_in_dsts] (std::map<AbstractState*, std::vector<ConstAbsStateSet>>& dict)
             {
                 if (dict.find(res.first) == dict.end()) return;
@@ -272,7 +272,7 @@ std::pair<AbstractState*, AbstractState*> AbstractStructure::create_new_astates_
     inherit_values_in_dict<AbstractState*, std::vector<ConstAbsStateSet>>(_E_must, abs_src_witness_ptr, new_keys);
     inherit_values_in_dict<AbstractState*, std::vector<ConstAbsStateSet>>(_E_may_over, abs_src_witness_ptr, new_keys);
 
-    auto abs_state_set_updater = [&abs_src_witness_ptr, &new_keys] (std::pair<AbstractState*, std::vector<ConstAbsStateSet>> entry)
+    const auto abs_state_set_updater = [&abs_src_witness_ptr, &new_keys] (std::pair<AbstractState*, std::vector<ConstAbsStateSet>> entry)
     {
         auto& entry_values = entry.second;
         for (auto& astate_set : entry_values)
@@ -320,7 +320,7 @@ std::pair<AbstractState*, AbstractState*> AbstractStructure::create_new_astates_
 
 AbstractState &AbstractStructure::create_astate_from_astate_split(const AbstractState &astate, PropFormula sym_rep)
 {
-    auto res =_abs_states.emplace(_kripke, astate.get_pos_labels(), astate.get_neg_labels(), _kripke.get_aps(), std::move(sym_rep));
+    const auto res =_abs_states.emplace(_kripke, astate.get_pos_labels(), astate.get_neg_labels(), _kripke.get_aps(), std::move(sym_rep));
     assert(res.second);
 
     return const_cast<AbstractState&>(*res.first);
@@ -358,14 +358,14 @@ AbstractStructure::refine_all_successors(const UnwindingTree &to_close_node, Abs
         return {false, nullptr, nullptr, {}};
     }
 
-    std::pair<AbstractState*, AbstractState*> res = create_new_astates_and_update(abs_src_witness, split_formulas);
+    const std::pair<AbstractState*, AbstractState*> res = create_new_astates_and_update(abs_src_witness, split_formulas);
 
-    bool is_src_in_dsts = std::any_of(dsts_abs.begin(), dsts_abs.end(), [&abs_src_witness] (const AbstractState* abs_dst) {return (*abs_dst) == abs_src_witness; });
+    const bool is_src_in_dsts = std::any_of(dsts_abs.begin(), dsts_abs.end(), [&abs_src_witness] (const AbstractState* abs_dst) {return (*abs_dst) == abs_src_witness; });
 
     if (is_src_in_dsts)
     {
         ConstAbsStateSet updated = dsts_abs;
-        size_t erase_res = updated.erase(&abs_src_witness);
+        const size_t erase_res = updated.erase(&abs_src_witness);
         assert(erase_res == 1);
         updated.insert({res.first, res.second});
         _E_must[res.first].emplace_back(updated);
@@ -400,7 +400,7 @@ AEClosureResult AbstractStructure::is_AE_closure(AbstractState &to_close, const 
         if (p_non_closers.find(&cl.get()) == p_non_closers.end()) p_closers.insert(&cl.get());
     }
 
-    auto is_superset = [&to_close, &p_closers] (std::map<AbstractState*, std::vector<ConstAbsStateSet>>& dict) {
+    const auto is_superset = [&to_close, &p_closers] (std::map<AbstractState*, std::vector<ConstAbsStateSet>>& dict) {
         if (dict.find(&to_close) != dict.end()) {
             for (const auto &closer_set : dict[&to_close]) {
                 bool is_subset = std::includes(p_closers.begin(), p_closers.end(), closer_set.begin(),
@@ -415,7 +415,7 @@ AEClosureResult AbstractStructure::is_AE_closure(AbstractState &to_close, const 
     if (is_superset(_E_must) || is_superset(_E_may_over)) return {true, {}};
 
 
-    AEClosureResult closure_result = FormulaInductiveUtils::is_AE_inductive(to_close, p_closers);
+    const AEClosureResult closure_result = FormulaInductiveUtils::is_AE_inductive(to_close, p_closers);
 
     if (closure_result.is_closed)
     {

@@ -35,22 +35,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="- made bdd moves">
-      <change afterPath="$PROJECT_DIR$/log.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/text.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/formulas/prop_formula.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/formulas/prop_formula.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/abstraction/abstract_state.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstract_state.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/abstraction/abstract_state.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstract_state.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/abstraction/abstract_structure.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstract_structure.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/formulas/prop_formula.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/formulas/prop_formula.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/formulas/sat_solver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/formulas/sat_solver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/model_checking/omg_model_checker.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/omg_model_checker.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/structures/concrete_state.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/concrete_state.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/structures/concrete_state.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/concrete_state.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/structures/unwinding_tree.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/unwinding_tree.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/structures/unwinding_tree.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/unwinding_tree.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/utils/bdd_utils.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/bdd_utils.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/utils/bdd_utils.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/bdd_utils.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/utils/z3_utils.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/z3_utils.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/installation/omg_installer.sh" beforeDir="false" afterPath="$PROJECT_DIR$/installation/omg_installer.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -613,34 +606,34 @@
     </state>
     <state x="2776" y="308" key="FileChooserDialogImpl/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1595424121203" />
     <state x="2668" y="325" key="FileChooserDialogImpl/0.0.3840.1080@0.0.3840.1080" timestamp="1591953111718" />
-    <state width="1876" height="248" key="GridCell.Tab.0.bottom" timestamp="1600023429705">
+    <state width="1876" height="248" key="GridCell.Tab.0.bottom" timestamp="1600025085577">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1876" height="248" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1600023429705" />
+    <state width="1876" height="248" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1600025085577" />
     <state width="1238" height="293" key="GridCell.Tab.0.bottom/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1596024013753" />
     <state width="934" height="326" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1599300754592" />
     <state width="1878" height="252" key="GridCell.Tab.0.bottom/0.0.3200.1080@0.0.3200.1080" timestamp="1599421974732" />
     <state width="1878" height="327" key="GridCell.Tab.0.bottom/0.0.3840.1080@0.0.3840.1080" timestamp="1598192373629" />
-    <state width="1876" height="248" key="GridCell.Tab.0.center" timestamp="1600023429705">
+    <state width="1876" height="248" key="GridCell.Tab.0.center" timestamp="1600025085577">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1876" height="248" key="GridCell.Tab.0.center/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1600023429705" />
+    <state width="1876" height="248" key="GridCell.Tab.0.center/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1600025085577" />
     <state width="1238" height="293" key="GridCell.Tab.0.center/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1596024013752" />
     <state width="934" height="326" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1599300754587" />
     <state width="1878" height="252" key="GridCell.Tab.0.center/0.0.3200.1080@0.0.3200.1080" timestamp="1599421974726" />
     <state width="1878" height="327" key="GridCell.Tab.0.center/0.0.3840.1080@0.0.3840.1080" timestamp="1598192373623" />
-    <state width="1876" height="248" key="GridCell.Tab.0.left" timestamp="1600023429705">
+    <state width="1876" height="248" key="GridCell.Tab.0.left" timestamp="1600025085577">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1876" height="248" key="GridCell.Tab.0.left/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1600023429705" />
+    <state width="1876" height="248" key="GridCell.Tab.0.left/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1600025085577" />
     <state width="1238" height="293" key="GridCell.Tab.0.left/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1596024013752" />
     <state width="934" height="326" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1599300754584" />
     <state width="1878" height="252" key="GridCell.Tab.0.left/0.0.3200.1080@0.0.3200.1080" timestamp="1599421974720" />
     <state width="1878" height="327" key="GridCell.Tab.0.left/0.0.3840.1080@0.0.3840.1080" timestamp="1598192373620" />
-    <state width="1876" height="248" key="GridCell.Tab.0.right" timestamp="1600023429705">
+    <state width="1876" height="248" key="GridCell.Tab.0.right" timestamp="1600025085577">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1876" height="248" key="GridCell.Tab.0.right/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1600023429705" />
+    <state width="1876" height="248" key="GridCell.Tab.0.right/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1600025085577" />
     <state width="1238" height="293" key="GridCell.Tab.0.right/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1596024013752" />
     <state width="934" height="326" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1599300754590" />
     <state width="1878" height="252" key="GridCell.Tab.0.right/0.0.3200.1080@0.0.3200.1080" timestamp="1599421974729" />
@@ -697,10 +690,10 @@
     </state>
     <state x="0" y="0" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1594297535067" />
     <state x="9" y="38" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1080@0.0.1920.1080" timestamp="1599300669758" />
-    <state x="1049" y="129" width="609" height="768" key="find.popup" timestamp="1600023683477">
+    <state x="1049" y="129" width="609" height="768" key="find.popup" timestamp="1600024631518">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="1049" y="129" width="609" height="768" key="find.popup/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1600023683477" />
+    <state x="1049" y="129" width="609" height="768" key="find.popup/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1600024631518" />
     <state x="655" y="142" width="609" height="768" key="find.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1591950227672" />
     <state x="1268" y="210" width="595" height="512" key="find.popup/0.0.3200.1080@0.0.3200.1080" timestamp="1599415037389" />
     <state x="2086" y="133" width="1218" height="768" key="find.popup/0.0.3840.1080@0.0.3840.1080" timestamp="1591953635675" />
@@ -736,11 +729,6 @@
           <url>file://$PROJECT_DIR$/code/abstraction/abstract_structure.cpp</url>
           <line>221</line>
           <option name="timeStamp" value="353" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/code/abstraction/abstraction_classifier.cpp</url>
-          <line>93</line>
-          <option name="timeStamp" value="359" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

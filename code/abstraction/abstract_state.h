@@ -13,7 +13,7 @@ public:
     AbstractState(const KripkeStructure& kripke, CtlFormula::PropertySet pos_labels, CtlFormula::PropertySet neg_labels, CtlFormula::PropertySet atomic_labels, PropFormula sym_rep);
     bool is_pos_labeled(const CtlFormula& spec) const;
     bool is_neg_labeled(const CtlFormula& spec) const;
-    void add_label(bool positivity, const CtlFormula& spec);
+    void add_label(const bool positivity, const CtlFormula& spec);
     bool is_final_classification() const;
     void set_cl_node(AbstractClassificationNode* cl_node);
     AbstractClassificationNode* get_cl_node() const;

@@ -14,7 +14,7 @@ using namespace avy;
 SatSolverResult Z3SatSolver::solve_sat(const PropFormula &formula) {
     const z3::expr& raw_formula = formula.get_raw_formula().simplify();
     _solver.add(raw_formula);
-    z3::check_result sat_res = _solver.check();
+    const z3::check_result sat_res = _solver.check();
     if (sat_res == z3::unsat) return SatSolverResult();
     else if (sat_res == z3::sat) return SatSolverResult(_solver.get_model(), formula.get_all_variables());
     else { assert(sat_res == z3::unknown); throw SatSolverResultException("SAT result is unknown"); }
@@ -46,7 +46,7 @@ z3::expr Z3SatSolver::get_blocking_clause(const SatSolverResult& res, const std:
     z3::expr_vector literals(ctx);
     for (const z3::expr& var : var_vector)
     {
-        auto res_value = res.get_value(var);
+        const auto res_value = res.get_value(var);
         if (res_value != SatResult::UNDEF)
         {
             literals.push_back((res_value == SatResult::TRUE) ? (!var) : (var));
@@ -67,7 +67,7 @@ void Z3SatSolver::add_assignments(std::vector<SatSolverResult> &assignemnts, con
     {
         std::set<size_t> undef_idxs;
         for (size_t i = 0; i < vars.size(); ++i) if (result.get_value(vars[i]) == SatResult::UNDEF) undef_idxs.insert(i);
-        ssize_t iter_max = (1U << undef_idxs.size());
+        const ssize_t iter_max = (1U << undef_idxs.size());
 #ifdef DEBUG
         assert(iter_max >= 0);
 #endif
@@ -82,7 +82,7 @@ void Z3SatSolver::add_assignments(std::vector<SatSolverResult> &assignemnts, con
                 }
                 else
                 {
-                    bool is_true_val = (i & (1U << undef_idx)) > 0;
+                    const bool is_true_val = (i & (1U << undef_idx)) > 0;
                     undef_idx++;
                     vals.emplace(vars[j], is_true_val ? SatResult::TRUE : SatResult::FALSE);
                 }
@@ -101,11 +101,11 @@ std::pair<int, SatSolverResult> Z3SatSolver::inc_solve_sat(const PropFormula& fo
     z3::expr_vector assumptions(raw_formula.ctx());
     for (const auto& must_flag : must_flags) assumptions.push_back(must_flag);
 
-    size_t may_flag_number =0;
+    size_t may_flag_number = 0;
     bool found = false;
     SatSolverResult sat_solver_result;
 
-    auto all_vars = formula.get_all_variables();
+    const auto all_vars = formula.get_all_variables();
     while (may_flag_number < may_flags.size())
     {
         assumptions.push_back(may_flags[may_flag_number]);
@@ -135,7 +135,7 @@ z3::expr_vector Z3SatSolver::get_unsat_core(const PropFormula& formula, z3::expr
 
     const z3::expr& raw_formula = formula.get_raw_formula();
     _solver.add(raw_formula);
-    z3::check_result sat_res = _solver.check(assumptions);
+    const z3::check_result sat_res = _solver.check(assumptions);
     assert(sat_res == z3::check_result::unsat);
 
     //   std::cout << _solver.check(assumptions) << std::endl;
@@ -146,7 +146,7 @@ z3::expr_vector Z3SatSolver::get_unsat_core(const PropFormula& formula, z3::expr
 
 bool Z3SatSolver::is_sat(const z3::expr &raw_formula) {
     _solver.add(raw_formula);
-    z3::check_result sat_res = _solver.check();
+    const z3::check_result sat_res = _solver.check();
     if (sat_res == z3::unsat) return false;
     else if (sat_res == z3::sat) return true;
     else { assert(sat_res == z3::unknown); throw SatSolverResultException("SAT result is unknown"); }
@@ -161,21 +161,22 @@ std::pair<int, SatSolverResult>
 Z3SatSolver::inc_solve_sat_flagged(const PropFormula &formula, const std::vector<z3::expr> &may_flags,
                                    const std::vector<z3::expr> &must_flags)
 {
+    // TODO remove this function after making sure it's identical to the prev one
     const z3::expr &raw_formula = formula.get_raw_formula();
     _solver.add(raw_formula);
 
     z3::expr_vector assumptions(raw_formula.ctx());
     for (const auto& must_flag : must_flags) assumptions.push_back(must_flag);
 
-    size_t may_flag_number =0;
+    size_t may_flag_number = 0;
     bool found = false;
     SatSolverResult sat_solver_result;
 
-    auto all_vars = formula.get_all_variables();
+    const auto all_vars = formula.get_all_variables();
     while (may_flag_number < may_flags.size())
     {
         assumptions.push_back(may_flags[may_flag_number]);
-        auto sat_res = _solver.check(assumptions);
+        const auto sat_res = _solver.check(assumptions);
         assumptions.pop_back();
         if (sat_res == z3::sat)
         {
@@ -216,7 +217,7 @@ SatSolverResult::SatSolverResult(const std::map<z3::expr, Z3_lbool> &values) : _
 
 SatResult SatSolverResult::get_value(const z3::expr& var ) const {
     if (!_is_sat) throw SatSolverResultException("Formula is unsat");
-    auto res = _values.find(var);
+    const auto res = _values.find(var);
     if (res == _values.end())
     {
         throw SatSolverResultException("Variables not in assignment");
@@ -229,7 +230,7 @@ z3::expr SatSolverResult::to_conjunct(const Z3ExprSet& to_flip) const {
     z3::expr_vector lits(ctx);
     for (const auto & value : _values) {
         if (value.second != SatResult::UNDEF) {
-            bool is_to_flip = to_flip.find(value.first) != to_flip.end();
+            const bool is_to_flip = to_flip.find(value.first) != to_flip.end();
             lits.push_back((value.second == (is_to_flip ? SatResult::FALSE : SatResult::TRUE))
                                     ? (value.first) : (!value.first));
         }
@@ -269,7 +270,7 @@ void SatSolverResult::generalize_assignment(const z3::expr_vector& assertions) {
             }
         }
 
-        auto sat_res = solver.check(flipped_conj_literals);
+        const auto sat_res = solver.check(flipped_conj_literals);
         if (sat_res == z3::sat) {
             const auto& model = solver.get_model();
             bool can_flip = true;
@@ -321,7 +322,7 @@ std::vector<SatSolverResult>
 BddSatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr> &vars, bool complete_assignments) {
 
     AVY_MEASURE_FN;
-//    std::cout << "ALL SAT" << std::endl;
+
     std::vector<SatSolverResult> uncompleted_assignments;
 
     std::map<z3::expr, size_t, Z3ExprComp> var_index_mapping;
@@ -343,9 +344,9 @@ BddSatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr> &v
     }
 
 
-    auto res_bdd = BddUtils::expr_to_bdd(_mgr, formula.get_raw_formula(), var_index_mapping);
+    const auto res_bdd = BddUtils::expr_to_bdd(_mgr, formula.get_raw_formula(), var_index_mapping);
  //   BddUtils::bdd_to_dot(_mgr, res_bdd, "initial_states.dot", 1, NULL);
-    auto paths = BddUtils::all_sat(_mgr, res_bdd);
+    const auto paths = BddUtils::all_sat(_mgr, res_bdd);
 
     for (const auto& path : paths)
     {
@@ -354,9 +355,9 @@ BddSatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr> &v
 
         for (int16_t literal : path)
         {
-            size_t abs_literal = std::abs(literal);
+            const size_t abs_literal = std::abs(literal);
 
-            auto literal_it = std::find(important_var_indices.begin(), important_var_indices.end(), abs_literal);
+            const auto literal_it = std::find(important_var_indices.begin(), important_var_indices.end(), abs_literal);
             if (literal_it == important_var_indices.end()) continue;
 
             const auto& var = all_vars[abs_literal - 1];
@@ -372,7 +373,6 @@ BddSatSolver::all_sat(const PropFormula &formula, const std::vector<z3::expr> &v
     for (const auto& uncompleted_assignment : uncompleted_assignments)
     {
         Z3SatSolver::add_assignments(completed_assignments ,uncompleted_assignment, vars, true);
-
     }
 
     return completed_assignments;

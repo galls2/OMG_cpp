@@ -42,7 +42,7 @@ bool AbstractState::is_pos_labeled(const CtlFormula &spec) const {
     return spec.is_boolean() ? spec.get_boolean_value() : _pos_labels.find(&spec) != _pos_labels.end();
 }
 
-void AbstractState::add_label(bool positivity, const CtlFormula &spec)
+void AbstractState::add_label(const bool positivity, const CtlFormula &spec)
 {
     if (positivity)
     {

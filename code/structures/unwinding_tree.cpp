@@ -45,6 +45,7 @@ UnwindingTree::UnwindingTree(const KripkeStructure &kripke, ConcreteState& concr
                              UnwindingTree * parent): _kripke(kripke),
                              _cstate(concrete_state), _parent(parent), _URGENT(false)
 {
+    AVY_MEASURE_FN;
 
     _depth = (_parent) ? _parent->get_depth() + 1 : 0;
 }

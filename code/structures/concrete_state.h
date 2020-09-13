@@ -15,7 +15,7 @@ class KripkeStructure;
 
 class ConcreteState {
 public:
-    ConcreteState(const KripkeStructure& kripke, z3::expr conjunct);
+    ConcreteState(const KripkeStructure& kripke, const z3::expr& conjunct);
 
     std::vector<ConcreteState>& get_successors();
 
@@ -37,8 +37,6 @@ private:
     const z3::expr _conjunct;
     std::experimental::optional<std::vector<ConcreteState>> _successors;
 
-
     void compute_successors() ;
-
 };
 
