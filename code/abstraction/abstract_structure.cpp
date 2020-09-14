@@ -32,7 +32,8 @@ EEClosureResult AbstractStructure::is_EE_closure2(const PropFormula& skeleton, A
     AVY_MEASURE_FN;
     ConstAbsStateSet p_closers;
 
-    for (const ConstAStateRef& cl : close_with) {
+    for (const ConstAStateRef& cl : close_with)
+    {
         p_closers.insert(&cl.get());
     }
 
@@ -113,7 +114,7 @@ EEClosureResult AbstractStructure::is_EE_closure(AbstractState &to_close,
         }
     }
 
-    const EEClosureResult closure_result = FormulaInductiveUtils::is_EE_inductive(to_close, p_closers);
+    EEClosureResult closure_result = FormulaInductiveUtils::is_EE_inductive(to_close, p_closers);
 
     if (closure_result.is_closed)
     {
@@ -297,8 +298,8 @@ std::pair<AbstractState*, AbstractState*> AbstractStructure::create_new_astates_
               }
           });
 
-    for_each(_NE_may_over.begin(), _NE_may_over.end(), [&abs_src_witness_ptr, &new_keys] (
-            std::pair<AbstractState*, std::vector<std::pair<ConstAbsStateSet, EEClosureResult>>> entry)
+    for_each(_NE_may_over.begin(), _NE_may_over.end(), [&abs_src_witness_ptr, &new_keys]
+    (std::pair<AbstractState*, std::vector<std::pair<ConstAbsStateSet, EEClosureResult>>> entry)
     {
         auto& entry_values = entry.second;
         for (auto& entry_value : entry_values)
@@ -415,7 +416,7 @@ AEClosureResult AbstractStructure::is_AE_closure(AbstractState &to_close, const 
     if (is_superset(_E_must) || is_superset(_E_may_over)) return {true, {}};
 
 
-    const AEClosureResult closure_result = FormulaInductiveUtils::is_AE_inductive(to_close, p_closers);
+    AEClosureResult closure_result = FormulaInductiveUtils::is_AE_inductive(to_close, p_closers);
 
     if (closure_result.is_closed)
     {
