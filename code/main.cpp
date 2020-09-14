@@ -389,7 +389,7 @@ int main(int argc, char** argv)
 {
 //    TEST("../resources/af_ag.aig", "!state<0>", true);
 
-//  unit_tests();
+  unit_tests();
     test_model("../resources/spinner4");
 //   run_models("../models_to_run_small.omg");
 //    TEST("../resources/rrff.aig", "A (~req0<0> | ~req1<0> | ack0 | ack1) W (req0<0> & req1<0> & ~ack0 & ~ack1 & AX(ack0))", true);

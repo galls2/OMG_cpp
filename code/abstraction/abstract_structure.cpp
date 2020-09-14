@@ -132,7 +132,7 @@ const OmgModelChecker *AbstractStructure::get_omg() const{
 }
 
 RefinementResult AbstractStructure::refine_exists_successor(const ConcreteState &src_cstate, AbstractState &src_abs,
-                                                const ConstAbsStateSet &dsts_abs, bool is_tse_possible) {
+                                                const ConstAbsStateSet &dsts_abs, bool is_tse_possible, ISatSolver& sat_solver) {
     AVY_MEASURE_FN;
 
     if (_E_must.find(&src_abs) != _E_must.end())
@@ -155,7 +155,7 @@ RefinementResult AbstractStructure::refine_exists_successor(const ConcreteState 
 
     SplitFormulas split_formulas =
             FormulaSplitUtils::ex_pos(src_cstate.get_conjunct(),
-                                      src_abs.get_formula(), dst_abs_formulas, _kripke);
+                                      src_abs.get_formula(), dst_abs_formulas, _kripke, sat_solver);
 
     if (is_tse_possible && OmgConfig::get<bool>("Trivial Split Elimination") && !split_formulas.remainder_formula.is_sat())
     {
@@ -190,7 +190,7 @@ void inherit_values_in_dict(std::map<T, S>& dict, T& old_key, const std::set<T>&
 
 
 RefinementResult AbstractStructure::refine_no_successor(const UnwindingTree &to_close_node, AbstractState &abs_src_witness,
-                                            const ConstAbsStateSet &dsts_abs, bool is_tse_possible /* =true */)
+                                            const ConstAbsStateSet &dsts_abs, const bool is_tse_possible, ISatSolver& sat_solver/* =true */)
 {
     AVY_MEASURE_FN;
 
@@ -211,20 +211,11 @@ RefinementResult AbstractStructure::refine_no_successor(const UnwindingTree &to_
 
     SplitFormulas split_formulas =
             FormulaSplitUtils::ex_neg(to_close_node.get_concrete_state().get_conjunct(),
-                                      abs_src_witness.get_formula(), dst_abs_formulas, _kripke, false);
+                                      abs_src_witness.get_formula(), dst_abs_formulas, _kripke, false, sat_solver);
 
 #ifdef DEBUG
     Z3SatSolver solver(abs_src_witness.get_formula().get_ctx());
     assert(solver.is_sat(split_formulas.generalized_formula.get_raw_formula()));
-    assert(true);
-    Z3SatSolver solver2(abs_src_witness.get_formula().get_ctx()); //
-    if (!(solver2.is_sat(split_formulas.remainder_formula.get_raw_formula())))
-    {
-        FormulaSplitUtils::ex_neg(to_close_node.get_concrete_state().get_conjunct(),
-                                  abs_src_witness.get_formula(), dst_abs_formulas, _kripke, false);
-
-  //      assert(false);
-    }
 #endif
 
     if (is_tse_possible && OmgConfig::get<bool>("Trivial Split Elimination") && !split_formulas.remainder_formula.is_sat())
@@ -329,7 +320,7 @@ AbstractState &AbstractStructure::create_astate_from_astate_split(const Abstract
 
 RefinementResult
 AbstractStructure::refine_all_successors(const UnwindingTree &to_close_node, AbstractState &abs_src_witness,
-                                         const ConstAbsStateSet &dsts_abs, bool is_tse_possible) {
+                                         const ConstAbsStateSet &dsts_abs, const bool is_tse_possible, ISatSolver& sat_solver) {
     AVY_MEASURE_FN;
 
     if (_E_may_over.find(&abs_src_witness) != _E_may_over.end() &&
@@ -349,7 +340,7 @@ AbstractStructure::refine_all_successors(const UnwindingTree &to_close_node, Abs
 
     SplitFormulas split_formulas =
             FormulaSplitUtils::ex_neg(to_close_node.get_concrete_state().get_conjunct(),
-                                      abs_src_witness.get_formula(), dst_abs_formulas, _kripke, true);
+                                      abs_src_witness.get_formula(), dst_abs_formulas, _kripke, true, sat_solver);
 
     if (is_tse_possible && OmgConfig::get<bool>("Trivial Split Elimination") && !split_formulas.remainder_formula.is_sat())
     {

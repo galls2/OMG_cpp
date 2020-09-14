@@ -49,13 +49,13 @@ public:
 
     const OmgModelChecker* get_omg() const;
     RefinementResult refine_exists_successor(const ConcreteState &src_cstate, AbstractState &src_abs,
-                                 const ConstAbsStateSet &dsts_abs, bool is_tse_possible);
+                                 const ConstAbsStateSet &dsts_abs, const bool is_tse_possible, ISatSolver& sat_solver);
 
     RefinementResult refine_no_successor(const UnwindingTree& to_close_node, AbstractState& abs_src_witness,
-            const ConstAbsStateSet &dsts_abs, bool is_tse_possible);
+            const ConstAbsStateSet &dsts_abs, const bool is_tse_possible, ISatSolver& sat_solver);
 
     RefinementResult refine_all_successors(const UnwindingTree& to_close_node, AbstractState& abs_src_witness,
-            const ConstAbsStateSet &dsts_abs, bool is_tse_possible);
+            const ConstAbsStateSet &dsts_abs, const bool is_tse_possible, ISatSolver& sat_solver);
 
     std::set<ConstAStateRef> get_astates_by_property(const CtlFormula &prop);
 

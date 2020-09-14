@@ -427,7 +427,7 @@ void FormulaSplitUtils::find_proving_inputs(const z3::expr& state_conj, const Pr
 
 SplitFormulas
 FormulaSplitUtils::ex_pos(const z3::expr &state_conj, const PropFormula &src_astate_f,
-                          const std::set<const PropFormula *> &dsts_astates_f, const KripkeStructure& kripke) {
+                          const std::set<const PropFormula *> &dsts_astates_f, const KripkeStructure& kripke, ISatSolver& sat_solver) {
     assert(FormulaUtils::is_cstate_conjunct(state_conj));
 
     const PropFormula &tr = kripke.get_tr();
@@ -458,16 +458,16 @@ FormulaSplitUtils::ex_pos(const z3::expr &state_conj, const PropFormula &src_ast
 
     PropFormula formula_to_check(z3::mk_and(assertions), tr.get_variables_map());
 
-    SplitFormulas res = get_split_formulas(state_conj, src_astate_f, tr, ctx, assumptions, assumptions_map,
+    SplitFormulas res = get_split_formulas(state_conj, src_astate_f, tr, assumptions, assumptions_map,
                                            final_assumption,
-                                           formula_to_check);
+                                           formula_to_check, sat_solver);
 
     return res;
 }
 
 SplitFormulas
 FormulaSplitUtils::ex_neg(const z3::expr &state_conj, const PropFormula &src_astate_f,
-                          const std::set<const PropFormula *> &dsts_astates_f, const KripkeStructure &kripke, bool is_negate_dsts)
+                          const std::set<const PropFormula *> &dsts_astates_f, const KripkeStructure &kripke, const bool is_negate_dsts, ISatSolver& sat_solver)
 {
     AVY_MEASURE_FN;
 
@@ -510,24 +510,24 @@ FormulaSplitUtils::ex_neg(const z3::expr &state_conj, const PropFormula &src_ast
 
     PropFormula formula_to_check(z3::mk_and(assertions), tr.get_variables_map());
 
-    SplitFormulas res = get_split_formulas(state_conj, src_astate_f, tr, ctx, assumptions, assumptions_map,
+    SplitFormulas res = get_split_formulas(state_conj, src_astate_f, tr, assumptions, assumptions_map,
                                            final_assumption,
-                                           formula_to_check);
+                                           formula_to_check, sat_solver);
     return res;
 }
 
 SplitFormulas FormulaSplitUtils::get_split_formulas(const z3::expr &state_conj, const PropFormula &src_astate_formula,
-                                                    const PropFormula &tr, z3::context &ctx,
+                                                    const PropFormula &tr,
                                                     z3::expr_vector &assumptions,
                                                     std::map<z3::expr, unsigned int, Z3ExprComp> &assumptions_map,
                                                     const z3::expr &final_assumption,
-                                                    const PropFormula &formula_to_check)
+                                                    const PropFormula &formula_to_check, ISatSolver& sat_solver)
 {
     AVY_MEASURE_FN;
+    z3::context& ctx = state_conj.ctx();
 
-    std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(
-            ctx);
-    z3::expr_vector unsat_core = solver->get_unsat_core(formula_to_check, assumptions);
+
+    z3::expr_vector unsat_core = sat_solver.get_unsat_core(formula_to_check, assumptions);
 
     z3::expr_vector assertions_selected(ctx);
 

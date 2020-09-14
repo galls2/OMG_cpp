@@ -833,8 +833,10 @@ void OmgModelChecker::refine_exists_successor(UnwindingTree& src_node,
 {
     AbstractState& src_abs = find_abs(src_node.get_concrete_state());
 
+    z3::context& ctx = src_abs.get_formula().get_ctx();
 
-    RefinementResult refinement_res = _abs_structure->refine_exists_successor(src_node.get_concrete_state(), src_abs, dsts_abs, true);
+    std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(ctx); // TODO
+    RefinementResult refinement_res = _abs_structure->refine_exists_successor(src_node.get_concrete_state(), src_abs, dsts_abs, true, *solver);
 
     update_classifier(refinement_res, src_abs);
     find_abs(src_node); // redundant?
@@ -862,7 +864,10 @@ void OmgModelChecker::refine_no_successor(UnwindingTree &to_close_node, Abstract
      * However, this is not ture. he reason is that we want to split AWAY the part of abs_src_witness that includes the reacehable
      * node in the unwinding tree, which is not necessarily done in EX+.
      */
-    RefinementResult refine_res = _abs_structure->refine_no_successor(to_close_node, abs_src_witness, {&abs_dst}, false);
+    z3::context& ctx = abs_src_witness.get_formula().get_ctx();
+    std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(ctx); // TODO
+
+    RefinementResult refine_res = _abs_structure->refine_no_successor(to_close_node, abs_src_witness, {&abs_dst}, false, *solver);
     update_classifier(refine_res, abs_src_witness);
     find_abs(to_close_node); // redundant?
 }
@@ -874,8 +879,10 @@ void OmgModelChecker::refine_all_successors(UnwindingTree& to_close_node, const 
 
     AbstractState& abs_src_witness = find_abs(to_close_node);
 
+    z3::context& ctx = abs_src_witness.get_formula().get_ctx();
+    std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(ctx); // TODO
 
-    RefinementResult refine_res = _abs_structure->refine_all_successors(to_close_node, abs_src_witness, dsts_abs, true);
+    RefinementResult refine_res = _abs_structure->refine_all_successors(to_close_node, abs_src_witness, dsts_abs, true, *solver);
     update_classifier(refine_res, abs_src_witness);
     find_abs(to_close_node); // redundant?
 }

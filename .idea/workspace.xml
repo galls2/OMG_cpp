@@ -37,7 +37,10 @@
     <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="- made bdd moves">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/abstraction/abstract_structure.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstract_structure.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/structures/concrete_state.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/concrete_state.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/abstraction/abstract_structure.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/abstraction/abstract_structure.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/utils/z3_utils.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/z3_utils.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/utils/z3_utils.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/z3_utils.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -164,7 +167,7 @@
       <workItem from="1595964099299" duration="5437000" />
       <workItem from="1596027316422" duration="15832000" />
       <workItem from="1596494701720" duration="4226000" />
-      <workItem from="1600108026887" duration="903000" />
+      <workItem from="1600108026887" duration="2296000" />
     </task>
     <task id="LOCAL-00090" summary="-Wrote most of EV algorithm, EXCLUDING check_inductive_ev&#10;-Refactor">
       <created>1586797851275</created>
@@ -679,10 +682,10 @@
     </state>
     <state x="0" y="0" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1594297535067" />
     <state x="9" y="38" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1080@0.0.1920.1080" timestamp="1599300669758" />
-    <state x="1049" y="129" width="609" height="768" key="find.popup" timestamp="1600024631518">
+    <state x="1049" y="129" width="609" height="768" key="find.popup" timestamp="1600112888276">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="1049" y="129" width="609" height="768" key="find.popup/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1600024631518" />
+    <state x="1049" y="129" width="609" height="768" key="find.popup/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1600112888276" />
     <state x="655" y="142" width="609" height="768" key="find.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1591950227672" />
     <state x="1268" y="210" width="595" height="512" key="find.popup/0.0.3200.1080@0.0.3200.1080" timestamp="1599415037389" />
     <state x="2086" y="133" width="1218" height="768" key="find.popup/0.0.3840.1080@0.0.3840.1080" timestamp="1591953635675" />

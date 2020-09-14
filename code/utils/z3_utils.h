@@ -96,9 +96,9 @@ class FormulaSplitUtils
 {
 public:
     static SplitFormulas ex_pos(const z3::expr& state_conj, const PropFormula& src_astate_f,
-            const std::set<const PropFormula*>& dsts_astates_f, const KripkeStructure& kripke);
+            const std::set<const PropFormula*>& dsts_astates_f, const KripkeStructure& kripke, ISatSolver& sat_solver);
     static SplitFormulas ex_neg(const z3::expr& state_conj, const PropFormula& src_astate_f,
-          const std::set<const PropFormula*>& dsts_astates_f, const KripkeStructure& kripke, bool is_negate_dsts);
+          const std::set<const PropFormula*>& dsts_astates_f, const KripkeStructure& kripke, const bool is_negate_dsts, ISatSolver& sat_solver);
 private:
     static void add_flags_to_conj(const z3::expr &conj, z3::context &ctx, z3::expr_vector &assumptions,
                       z3::expr_vector &assertions,
@@ -114,7 +114,7 @@ private:
 
     static SplitFormulas
     get_split_formulas(const z3::expr &state_conj, const PropFormula &src_astate_formula, const PropFormula &tr,
-                       z3::context &ctx, z3::expr_vector &assumptions,
+                       z3::expr_vector &assumptions,
                        std::map<z3::expr, unsigned int, Z3ExprComp> &assumptions_map, const z3::expr &final_assumption,
-                       const PropFormula &formula_to_check);
+                       const PropFormula &formula_to_check, ISatSolver& sat_solver);
 };
