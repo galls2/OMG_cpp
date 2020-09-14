@@ -439,20 +439,19 @@ FormulaSplitUtils::ex_pos(const z3::expr &state_conj, const PropFormula &src_ast
     assert(is_contained_z3_containers(ps_vars_actual, ps_vars) && is_contained_z3_containers(ps_vars, ps_vars_actual));
 #endif
 
-
     z3::expr_vector assumptions(ctx), assertions(ctx);
     std::map<z3::expr, unsigned int, Z3ExprComp> assumptions_map;
 
-    add_flags_to_conj(state_conj, ctx, assumptions, assertions, assumptions_map, std::string("a"));
-    z3::expr dst_formula_full = merge_dst_astate_formulas(dsts_astates_f, tr, ctx);
+    add_flags_to_conj(state_conj, assumptions, assertions, assumptions_map, s_ex_pos_state_conj_str);
+    z3::expr dst_formula_full = merge_dst_astate_formulas(dsts_astates_f, tr);
 
     z3::expr_vector input_values(ctx);
     FormulaSplitUtils::find_proving_inputs(state_conj, tr, dst_formula_full, input_values);
     z3::expr input_formula = z3::mk_and(input_values);
-    add_flags_to_conj(input_formula, ctx, assumptions, assertions, assumptions_map, std::string("b"));
+    add_flags_to_conj(input_formula, assumptions, assertions, assumptions_map, s_ex_pos_input_conj_str);
 
     z3::expr rest_of_formula = tr.get_raw_formula() && (!dst_formula_full);
-    z3::expr final_assumption = ctx.bool_const("a_fin");
+    z3::expr final_assumption = ctx.bool_const(s_ex_pos_fin_flag_str);
     assumptions.push_back(final_assumption);
     assertions.push_back(z3::implies(final_assumption, rest_of_formula));
 
@@ -486,9 +485,9 @@ FormulaSplitUtils::ex_neg(const z3::expr &state_conj, const PropFormula &src_ast
     z3::expr_vector assumptions(ctx), assertions(ctx);
     std::map<z3::expr, unsigned int, Z3ExprComp> assumptions_map;
 
-    add_flags_to_conj(state_conj, ctx, assumptions, assertions, assumptions_map, std::string("a"));
+    add_flags_to_conj(state_conj, assumptions, assertions, assumptions_map, s_ex_neg_state_conj_str);
 
-    z3::expr dst_formula_full = merge_dst_astate_formulas(dsts_astates_f, tr, ctx);
+    z3::expr dst_formula_full = merge_dst_astate_formulas(dsts_astates_f, tr);
     if (is_negate_dsts)
     {
         dst_formula_full = !dst_formula_full;
@@ -504,7 +503,7 @@ FormulaSplitUtils::ex_neg(const z3::expr &state_conj, const PropFormula &src_ast
     assert(Z3SatSolver(ctx).is_sat(rest_of_formula));
 #endif
 
-    z3::expr final_assumption = ctx.bool_const("a_fin");
+    z3::expr final_assumption = ctx.bool_const(s_ex_neg_fin_flag_str);
     assumptions.push_back(final_assumption);
     assertions.push_back(z3::implies(final_assumption, rest_of_formula));
 
@@ -581,17 +580,19 @@ z3::expr_vector FormulaSplitUtils::get_assertions_from_unsat_core(const z3::expr
 
 
 void
-FormulaSplitUtils::add_flags_to_conj(const z3::expr &conj, z3::context &ctx, z3::expr_vector &assumptions,
+FormulaSplitUtils::add_flags_to_conj(const z3::expr &conj, z3::expr_vector &assumptions,
                                      z3::expr_vector &assertions,
                                      std::map<z3::expr, unsigned int, Z3ExprComp> &assumptions_map,
                                      const std::string &assumption_prefix)
  {
     AVY_MEASURE_FN;
 
-    for (unsigned int i = 0; i < conj.num_args(); ++i)
+     z3::context &ctx = conj.ctx();
+
+     for (unsigned int i = 0; i < conj.num_args(); ++i)
     {
         const z3::expr &lit = conj.arg(i);
-        z3::expr lit_assumption = ctx.bool_const((assumption_prefix + std::to_string(i)).data());
+        z3::expr lit_assumption = ctx.bool_const(VersionManager::next_version(assumption_prefix).data());
         assumptions.push_back(lit_assumption);
         assertions.push_back(z3::implies(lit_assumption, lit));
         assumptions_map.emplace(lit_assumption, i);
@@ -600,9 +601,11 @@ FormulaSplitUtils::add_flags_to_conj(const z3::expr &conj, z3::context &ctx, z3:
 
 
 // TODO instead of tr just get the relevant expression vectors
-z3::expr FormulaSplitUtils::merge_dst_astate_formulas(const std::set<const PropFormula *> &dsts_astates_f, const PropFormula& tr, z3::context& ctx)
+z3::expr FormulaSplitUtils::merge_dst_astate_formulas(const std::set<const PropFormula *> &dsts_astates_f, const PropFormula& tr)
 {
     AVY_MEASURE_FN;
+
+    z3::context& ctx = tr.get_ctx();
 
     z3::expr_vector dsts(ctx);
     for (const PropFormula* const dst_formula : dsts_astates_f)
@@ -620,3 +623,8 @@ z3::expr FormulaSplitUtils::merge_dst_astate_formulas(const std::set<const PropF
     return dst_formula_full;
 }
 
+constexpr char FormulaSplitUtils::s_ex_neg_state_conj_str[];
+constexpr char FormulaSplitUtils::s_ex_neg_fin_flag_str[];
+constexpr char FormulaSplitUtils::s_ex_pos_state_conj_str[];
+constexpr char FormulaSplitUtils::s_ex_pos_input_conj_str[];
+constexpr char FormulaSplitUtils::s_ex_pos_fin_flag_str[];

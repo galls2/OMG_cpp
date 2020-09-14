@@ -100,7 +100,7 @@ public:
     static SplitFormulas ex_neg(const z3::expr& state_conj, const PropFormula& src_astate_f,
           const std::set<const PropFormula*>& dsts_astates_f, const KripkeStructure& kripke, const bool is_negate_dsts, ISatSolver& sat_solver);
 private:
-    static void add_flags_to_conj(const z3::expr &conj, z3::context &ctx, z3::expr_vector &assumptions,
+    static void add_flags_to_conj(const z3::expr &conj, z3::expr_vector &assumptions,
                       z3::expr_vector &assertions,
                       std::map<z3::expr, unsigned int, Z3ExprComp> &assumptions_map,
                       const std::string &assumption_prefix);
@@ -109,7 +109,7 @@ private:
                                                           std::map<z3::expr, unsigned int, Z3ExprComp> &assumptions_map,
                                                           const z3::expr_vector &unsat_core);
 
-    static z3::expr merge_dst_astate_formulas(const std::set<const PropFormula *> &dsts_astates_f, const PropFormula& tr, z3::context& ctx);
+    static z3::expr merge_dst_astate_formulas(const std::set<const PropFormula *> &dsts_astates_f, const PropFormula& tr);
     static void find_proving_inputs(const z3::expr& state_conj, const PropFormula& tr, z3::expr& dst, z3::expr_vector& input_values);
 
     static SplitFormulas
@@ -117,4 +117,13 @@ private:
                        z3::expr_vector &assumptions,
                        std::map<z3::expr, unsigned int, Z3ExprComp> &assumptions_map, const z3::expr &final_assumption,
                        const PropFormula &formula_to_check, ISatSolver& sat_solver);
+
+
+    static constexpr char s_ex_neg_state_conj_str[] = "EX_NEG_STATE_CONJ";
+    static constexpr char s_ex_neg_fin_flag_str[] = "EX_NEG_FIN";
+    static constexpr char s_ex_pos_state_conj_str[] = "EX_POS_STATE_CONJ";
+    static constexpr char s_ex_pos_input_conj_str[] = "EX_POS_INPUT_CONJ";
+    static constexpr char s_ex_pos_fin_flag_str[] = "EX_POS_FIN";
+
+
 };
