@@ -48,14 +48,14 @@ public:
     bool model_checking(ConcreteState& cstate, const CtlFormula& specification);
     bool check_all_initial_states(const CtlFormula& specification);
 
-
+    const z3::expr& get_tr_flag() const;
 private:
     KripkeStructure& _kripke;
     std::unique_ptr<AbstractStructure> _abs_structure;
     std::unique_ptr<AbstractionClassifier> _abs_classifier;
    // std::map_subtree<std::unique_ptr<UnwindingTree>> _unwinding_trees;
     std::unique_ptr<ISatSolver> _tr_sat_solver;
-
+    z3::expr _tr_flag;
 
     /*
      * Model Checking

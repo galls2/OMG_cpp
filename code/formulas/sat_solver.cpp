@@ -134,13 +134,34 @@ z3::expr_vector Z3SatSolver::get_unsat_core(const PropFormula& formula, z3::expr
     AVY_MEASURE_FN;
 
     const z3::expr& raw_formula = formula.get_raw_formula();
+
+    // TODO remove me
+    std::cout << std::endl << "X" << std::endl;
+    std::cout << expr_vector_to_string(_solver.assertions()) << std::endl;
+    std::cout << "XX" << std::endl;
+
+
     _solver.add(raw_formula);
+
+    // TODO remove me
+    std::cout << "XXX" << std::endl;
+    std::cout << expr_vector_to_string(_solver.assertions()) << std::endl;
+    std::cout << "XXXX" << std::endl;
+
+
     const z3::check_result sat_res = _solver.check(assumptions);
     assert(sat_res == z3::check_result::unsat);
 
     //   std::cout << _solver.check(assumptions) << std::endl;
     z3::expr_vector unsat_core = _solver.unsat_core(); // TODO go over literals and see what we can kick out
     // TODO check if it acutally removes somethings
+
+    assert(!unsat_core.empty());
+    for (size_t assumption_index = 0; assumption_index < assumptions.size(); ++assumption_index)
+    {
+        _solver.add(assumptions[assumption_index]);
+    }
+
     return unsat_core;
 }
 

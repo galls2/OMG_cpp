@@ -43,19 +43,20 @@ public:
     AbstractState& create_astate_from_astate_split(const AbstractState& astate, PropFormula sym_rep);
 
     EEClosureResult is_EE_closure(AbstractState& to_close , const std::set<ConstAStateRef>& close_with);
-    EEClosureResult is_EE_closure2(const PropFormula& skeleton, AbstractState& to_close , const std::set<ConstAStateRef>& close_with, ISatSolver& sat_solver, const std::map<const AbstractState*, z3::expr>& astate_flags);
+    EEClosureResult is_EE_closure2(const PropFormula& skeleton, AbstractState& to_close , const std::set<ConstAStateRef>& close_with, ISatSolver& sat_solver,
+                                   const std::map<const AbstractState*, z3::expr>& astate_flags, const z3::expr& tr_flag);
 
     AEClosureResult is_AE_closure(AbstractState& to_close , const std::set<ConstAStateRef>& close_with);
 
     const OmgModelChecker* get_omg() const;
     RefinementResult refine_exists_successor(const ConcreteState &src_cstate, AbstractState &src_abs,
-                                 const ConstAbsStateSet &dsts_abs, const bool is_tse_possible, ISatSolver& sat_solver);
+                                 const ConstAbsStateSet &dsts_abs, const bool is_tse_possible, ISatSolver& sat_solver, const z3::expr& tr_flag);
 
     RefinementResult refine_no_successor(const UnwindingTree& to_close_node, AbstractState& abs_src_witness,
-            const ConstAbsStateSet &dsts_abs, const bool is_tse_possible, ISatSolver& sat_solver);
+            const ConstAbsStateSet &dsts_abs, const bool is_tse_possible, ISatSolver& sat_solver, const z3::expr& tr_flag);
 
     RefinementResult refine_all_successors(const UnwindingTree& to_close_node, AbstractState& abs_src_witness,
-            const ConstAbsStateSet &dsts_abs, const bool is_tse_possible, ISatSolver& sat_solver);
+            const ConstAbsStateSet &dsts_abs, const bool is_tse_possible, ISatSolver& sat_solver, const z3::expr& tr_flag);
 
     std::set<ConstAStateRef> get_astates_by_property(const CtlFormula &prop);
 

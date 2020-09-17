@@ -109,7 +109,7 @@ FormulaInductiveUtils::is_EE_inductive(AbstractState &to_close, const ConstAbsSt
 
 ConcretizationResult
 FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<UnwindingTree *> &src_nodes,
-                                                  const AbstractState &astate, ISatSolver& sat_solver) {
+                                                  const AbstractState &astate, ISatSolver& sat_solver, const z3::expr& tr_flag) {
     const KripkeStructure &kripke = astate.get_kripke();
     const PropFormula &tr = kripke.get_tr();
     z3::context &ctx = tr.get_ctx();
@@ -146,7 +146,7 @@ FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<Unwin
     PropFormula is_tr_formula = PropFormula(raw_formula, {{"ps", ps_tr}, {"ns", ns_tr}});
 
 
-    std::pair<int, SatSolverResult> res = sat_solver.inc_solve_sat(is_tr_formula, flags, {dst_flag});
+    std::pair<int, SatSolverResult> res = sat_solver.inc_solve_sat(is_tr_formula, flags, {dst_flag, tr_flag});
     if (res.first < 0) {
         return ConcretizationResult();
     } else {
@@ -254,7 +254,7 @@ PropFormula FormulaInductiveUtils::create_EE_inductive_formula_skeleton(AbsState
 }
 
 EEClosureResult
-FormulaInductiveUtils::is_EE_inductive_inc(const PropFormula& skeleton, AbstractState& to_close, ISatSolver& solver, const std::map<const AbstractState*, z3::expr>& astate_flags)
+FormulaInductiveUtils::is_EE_inductive_inc(const PropFormula& skeleton, AbstractState& to_close, ISatSolver& solver, const std::map<const AbstractState*, z3::expr>& astate_flags, const z3::expr& tr_flag)
 {
     AVY_MEASURE_FN;
 
@@ -276,7 +276,7 @@ FormulaInductiveUtils::is_EE_inductive_inc(const PropFormula& skeleton, Abstract
     z3::expr raw_formula_to_solver = z3::implies(skeleton_flag, skeleton.get_raw_formula());
 
     PropFormula formula_to_solver(raw_formula_to_solver, skeleton.get_variables_map());
-    auto res = solver.inc_solve_sat(formula_to_solver, {astate_flag}, {skeleton_flag});
+    auto res = solver.inc_solve_sat(formula_to_solver, {astate_flag}, {skeleton_flag, tr_flag});
 
     if (res.first == -1) // if the formula is UNSAT, there is NO cex to the inductiveness, so we have inductiveness
     {
@@ -427,7 +427,7 @@ void FormulaSplitUtils::find_proving_inputs(const z3::expr& state_conj, const Pr
 
 SplitFormulas
 FormulaSplitUtils::ex_pos(const z3::expr &state_conj, const PropFormula &src_astate_f,
-                          const std::set<const PropFormula *> &dsts_astates_f, const KripkeStructure& kripke, ISatSolver& sat_solver) {
+                          const std::set<const PropFormula *> &dsts_astates_f, const KripkeStructure& kripke, ISatSolver& sat_solver, const z3::expr& tr_flag) {
     assert(FormulaUtils::is_cstate_conjunct(state_conj));
 
     const PropFormula &tr = kripke.get_tr();
@@ -450,8 +450,10 @@ FormulaSplitUtils::ex_pos(const z3::expr &state_conj, const PropFormula &src_ast
     z3::expr input_formula = z3::mk_and(input_values);
     add_flags_to_conj(input_formula, assumptions, assertions, assumptions_map, s_ex_pos_input_conj_str);
 
-    z3::expr rest_of_formula = tr.get_raw_formula() && (!dst_formula_full);
-    z3::expr final_assumption = ctx.bool_const(s_ex_pos_fin_flag_str);
+//    z3::expr rest_of_formula = tr.get_raw_formula() && (!dst_formula_full); // TODO remove me
+    z3::expr rest_of_formula = !dst_formula_full;
+
+    z3::expr final_assumption = ctx.bool_const(VersionManager::next_version(s_ex_pos_fin_flag_str).data());
     assumptions.push_back(final_assumption);
     assertions.push_back(z3::implies(final_assumption, rest_of_formula));
 
@@ -459,14 +461,14 @@ FormulaSplitUtils::ex_pos(const z3::expr &state_conj, const PropFormula &src_ast
 
     SplitFormulas res = get_split_formulas(state_conj, src_astate_f, tr, assumptions, assumptions_map,
                                            final_assumption,
-                                           formula_to_check, sat_solver);
+                                           formula_to_check, sat_solver, tr_flag);
 
     return res;
 }
 
 SplitFormulas
 FormulaSplitUtils::ex_neg(const z3::expr &state_conj, const PropFormula &src_astate_f,
-                          const std::set<const PropFormula *> &dsts_astates_f, const KripkeStructure &kripke, const bool is_negate_dsts, ISatSolver& sat_solver)
+                          const std::set<const PropFormula *> &dsts_astates_f, const KripkeStructure &kripke, const bool is_negate_dsts, ISatSolver& sat_solver, const z3::expr& tr_flag)
 {
     AVY_MEASURE_FN;
 
@@ -497,13 +499,14 @@ FormulaSplitUtils::ex_neg(const z3::expr &state_conj, const PropFormula &src_ast
     assert(Z3SatSolver(ctx).is_sat(dst_formula_full));
 #endif
 
-    z3::expr rest_of_formula = (tr.get_raw_formula() && dst_formula_full).simplify(); // TODO maybe substitute?
+//    z3::expr rest_of_formula = (tr.get_raw_formula() && dst_formula_full).simplify(); // TODO maybe substitute?
+    z3::expr rest_of_formula = dst_formula_full.simplify();
 
 #ifdef DEBUG
     assert(Z3SatSolver(ctx).is_sat(rest_of_formula));
 #endif
 
-    z3::expr final_assumption = ctx.bool_const(s_ex_neg_fin_flag_str);
+    z3::expr final_assumption = ctx.bool_const(VersionManager::next_version(s_ex_neg_fin_flag_str).data());
     assumptions.push_back(final_assumption);
     assertions.push_back(z3::implies(final_assumption, rest_of_formula));
 
@@ -511,7 +514,7 @@ FormulaSplitUtils::ex_neg(const z3::expr &state_conj, const PropFormula &src_ast
 
     SplitFormulas res = get_split_formulas(state_conj, src_astate_f, tr, assumptions, assumptions_map,
                                            final_assumption,
-                                           formula_to_check, sat_solver);
+                                           formula_to_check, sat_solver, tr_flag);
     return res;
 }
 
@@ -520,19 +523,33 @@ SplitFormulas FormulaSplitUtils::get_split_formulas(const z3::expr &state_conj, 
                                                     z3::expr_vector &assumptions,
                                                     std::map<z3::expr, unsigned int, Z3ExprComp> &assumptions_map,
                                                     const z3::expr &final_assumption,
-                                                    const PropFormula &formula_to_check, ISatSolver& sat_solver)
+                                                    const PropFormula &formula_to_check, ISatSolver& sat_solver, const z3::expr& tr_flag)
 {
     AVY_MEASURE_FN;
     z3::context& ctx = state_conj.ctx();
 
-
+    assumptions.push_back(tr_flag); //Trtritjritjeritjierjteij
     z3::expr_vector unsat_core = sat_solver.get_unsat_core(formula_to_check, assumptions);
 
     z3::expr_vector assertions_selected(ctx);
 
 #ifdef DEBUG
+    if (unsat_core.empty()) {
+      //  std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(ctx);
+    //    solver->add(tr.get_raw_formula());
+
+//        auto new_unsat_core = solver->get_unsat_core(formula_to_check, assumptions);
+//        size_t ss = new_unsat_core.size();
+//        ss+=0;
+//        std::cout << ss << std::endl;
+//        sat_solver.add(tr.get_raw_formula());
+        sat_solver.get_unsat_core(formula_to_check, assumptions);
+    }
+    assert(!unsat_core.empty());
+
+
     bool exists_final_assumption = false;
-    for (unsigned int i = 0; i < unsat_core.size(); ++i)
+    for (size_t i = 0; i < unsat_core.size(); ++i)
         if (eq(unsat_core[i], final_assumption)) {
             exists_final_assumption = true;
             break;

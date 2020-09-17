@@ -77,12 +77,12 @@ class FormulaInductiveUtils
 {
 public:
     static EEClosureResult is_EE_inductive(AbstractState& to_close, const ConstAbsStateSet& close_with);
-    static EEClosureResult is_EE_inductive_inc(const PropFormula& skeleton, AbstractState& to_close, ISatSolver& solver, const std::map<const AbstractState*, z3::expr>& astate_flags);
+    static EEClosureResult is_EE_inductive_inc(const PropFormula& skeleton, AbstractState& to_close, ISatSolver& solver, const std::map<const AbstractState*, z3::expr>& astate_flags, const z3::expr& tr_flag);
 
     static PropFormula create_EE_inductive_formula_skeleton(AbsStateSet abs_lead, const std::set<ConstAStateRef> &close_with, std::map<const AbstractState*, z3::expr>& astate_flags);
     static AEClosureResult is_AE_inductive(AbstractState& to_close, const ConstAbsStateSet& close_with);
 
-    static ConcretizationResult concrete_transition_to_abs(const std::unordered_set<UnwindingTree*>& src_nodes, const AbstractState& astate, ISatSolver& sat_solver);
+    static ConcretizationResult concrete_transition_to_abs(const std::unordered_set<UnwindingTree*>& src_nodes, const AbstractState& astate, ISatSolver& sat_solver, const z3::expr& tr_flag);
 };
 
 struct SplitFormulas
@@ -96,9 +96,9 @@ class FormulaSplitUtils
 {
 public:
     static SplitFormulas ex_pos(const z3::expr& state_conj, const PropFormula& src_astate_f,
-            const std::set<const PropFormula*>& dsts_astates_f, const KripkeStructure& kripke, ISatSolver& sat_solver);
+            const std::set<const PropFormula*>& dsts_astates_f, const KripkeStructure& kripke, ISatSolver& sat_solver, const z3::expr& tr_flag);
     static SplitFormulas ex_neg(const z3::expr& state_conj, const PropFormula& src_astate_f,
-          const std::set<const PropFormula*>& dsts_astates_f, const KripkeStructure& kripke, const bool is_negate_dsts, ISatSolver& sat_solver);
+          const std::set<const PropFormula*>& dsts_astates_f, const KripkeStructure& kripke, const bool is_negate_dsts, ISatSolver& sat_solver, const z3::expr& tr_flag);
 private:
     static void add_flags_to_conj(const z3::expr &conj, z3::expr_vector &assumptions,
                       z3::expr_vector &assertions,
@@ -116,7 +116,7 @@ private:
     get_split_formulas(const z3::expr &state_conj, const PropFormula &src_astate_formula, const PropFormula &tr,
                        z3::expr_vector &assumptions,
                        std::map<z3::expr, unsigned int, Z3ExprComp> &assumptions_map, const z3::expr &final_assumption,
-                       const PropFormula &formula_to_check, ISatSolver& sat_solver);
+                       const PropFormula &formula_to_check, ISatSolver& sat_solver, const z3::expr& tr_flag);
 
 
     static constexpr char s_ex_neg_state_conj_str[] = "EX_NEG_STATE_CONJ";

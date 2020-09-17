@@ -45,7 +45,7 @@ public:
     void add_label(bool positivity, const CtlFormula& spec);
 
     UnwindingTree* get_parent() const;
-
+    const KripkeStructure& get_kripke() const;
 #ifdef DEBUG
     std::string to_string() const;
 #endif

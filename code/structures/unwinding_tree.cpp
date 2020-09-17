@@ -174,6 +174,11 @@ std::pair<CandidateSet, UnwindingTree*> UnwindingTree::find_abstract_lasso(const
 std::string UnwindingTree::to_string() const {
     return _cstate.to_bitvec_str() + std::string(", depth: ")+std::to_string(_depth);
 }
+
+const KripkeStructure &UnwindingTree::get_kripke() const {
+    return _kripke;
+}
+
 #endif
 
 

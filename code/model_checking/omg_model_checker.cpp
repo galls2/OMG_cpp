@@ -11,6 +11,7 @@
 #include <utils/omg_utils.h>
 #include <model_checking/goal.h>
 #include <utils/Stats.h>
+#include <utils/version_manager.h>
 
 using namespace avy;
 
@@ -439,7 +440,7 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
         AbstractState* abs_lead = ind_candidate.abs_state;
         DEBUG_PRINT("Is there AV-inductiveness for abs state %s?... ", abs_lead->_debug_name.data());
 
-        EEClosureResult res = _abs_structure->is_EE_closure2(skeleton, *abs_lead, abs_states, *_tr_sat_solver, astate_flags); //
+        EEClosureResult res = _abs_structure->is_EE_closure2(skeleton, *abs_lead, abs_states, *_tr_sat_solver, astate_flags, _tr_flag); //
 
 //        EEClosureResult res = _abs_structure->is_EE_closure(*abs_lead, abs_states); //
         if (res.is_closed)
@@ -665,11 +666,13 @@ bool OmgModelChecker::handle_ex(Goal &goal)
 
 }
 
-OmgModelChecker::OmgModelChecker(KripkeStructure &kripke) : _kripke(kripke)
+OmgModelChecker::OmgModelChecker(KripkeStructure &kripke) : _kripke(kripke), _tr_flag(kripke.get_tr().get_ctx())
 {
         initialize_abstraction();
         _tr_sat_solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(kripke.get_tr().get_ctx());
-        _tr_sat_solver->add(_kripke.get_tr().get_raw_formula());
+        _tr_flag = kripke.get_tr().get_ctx().bool_const(VersionManager::next_version("TR_FLAG").data());
+        const z3::expr tr_implication = z3::implies(_tr_flag, _kripke.get_tr().get_raw_formula());
+        _tr_sat_solver->add(tr_implication);
 }
 
 void OmgModelChecker::initialize_abstraction()
@@ -813,7 +816,7 @@ OmgModelChecker::is_concrete_violation(const std::unordered_set<UnwindingTree *>
     AVY_MEASURE_FN;
 //    auto sat_solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(abs_witness.get_formula().get_ctx());
     auto& sat_solver = _tr_sat_solver;
-    return FormulaInductiveUtils::concrete_transition_to_abs(to_close_nodes, abs_witness, *sat_solver);
+    return FormulaInductiveUtils::concrete_transition_to_abs(to_close_nodes, abs_witness, *sat_solver, _tr_flag);
 }
 
 void OmgModelChecker::strengthen_trace(UnwindingTree &start, UnwindingTree &end)
@@ -833,10 +836,10 @@ void OmgModelChecker::refine_exists_successor(UnwindingTree& src_node,
 {
     AbstractState& src_abs = find_abs(src_node.get_concrete_state());
 
-    z3::context& ctx = src_abs.get_formula().get_ctx();
+   // z3::context& ctx = src_abs.get_formula().get_ctx();
+   // std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(ctx); // TODO
 
-    std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(ctx); // TODO
-    RefinementResult refinement_res = _abs_structure->refine_exists_successor(src_node.get_concrete_state(), src_abs, dsts_abs, true, *solver);
+    RefinementResult refinement_res = _abs_structure->refine_exists_successor(src_node.get_concrete_state(), src_abs, dsts_abs, true, *_tr_sat_solver, _tr_flag);
 
     update_classifier(refinement_res, src_abs);
     find_abs(src_node); // redundant?
@@ -864,10 +867,10 @@ void OmgModelChecker::refine_no_successor(UnwindingTree &to_close_node, Abstract
      * However, this is not ture. he reason is that we want to split AWAY the part of abs_src_witness that includes the reacehable
      * node in the unwinding tree, which is not necessarily done in EX+.
      */
-    z3::context& ctx = abs_src_witness.get_formula().get_ctx();
-    std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(ctx); // TODO
+//    z3::context& ctx = abs_src_witness.get_formula().get_ctx();
+//    std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(ctx); // TODO
 
-    RefinementResult refine_res = _abs_structure->refine_no_successor(to_close_node, abs_src_witness, {&abs_dst}, false, *solver);
+    RefinementResult refine_res = _abs_structure->refine_no_successor(to_close_node, abs_src_witness, {&abs_dst}, false, *_tr_sat_solver, _tr_flag);
     update_classifier(refine_res, abs_src_witness);
     find_abs(to_close_node); // redundant?
 }
@@ -879,10 +882,10 @@ void OmgModelChecker::refine_all_successors(UnwindingTree& to_close_node, const 
 
     AbstractState& abs_src_witness = find_abs(to_close_node);
 
-    z3::context& ctx = abs_src_witness.get_formula().get_ctx();
-    std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(ctx); // TODO
+//    z3::context& ctx = abs_src_witness.get_formula().get_ctx();
+//    std::unique_ptr<ISatSolver> solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(ctx); // TODO
 
-    RefinementResult refine_res = _abs_structure->refine_all_successors(to_close_node, abs_src_witness, dsts_abs, true, *solver);
+    RefinementResult refine_res = _abs_structure->refine_all_successors(to_close_node, abs_src_witness, dsts_abs, true, *_tr_sat_solver, _tr_flag);
     update_classifier(refine_res, abs_src_witness);
     find_abs(to_close_node); // redundant?
 }
@@ -900,6 +903,10 @@ bool OmgModelChecker::handle_equiv(Goal &goal) {
     Goal second_subgoal(goal.get_node(), *goal.get_spec().get_operands()[1], goal.get_properties());
     bool second_res = recur_ctl(second_subgoal);
     return first_res == second_res;}
+
+const z3::expr &OmgModelChecker::get_tr_flag() const {
+    return _tr_flag;
+}
 
 
 InductiveCandidate::InductiveCandidate(AbstractState *_abs_state, std::unordered_set<UnwindingTree *> _nodes)
