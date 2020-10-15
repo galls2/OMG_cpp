@@ -35,7 +35,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c6332eee-dff5-4b37-b2c1-ffd1bd1f4166" name="Default Changelist" comment="- made bdd moves">
+      <change afterPath="$PROJECT_DIR$/code/structures/concrete_set.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/code/structures/concrete_set.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/model_checking/omg_model_checker.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/model_checking/omg_model_checker.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/parsers/aig_parser.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/aig_parser.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/parsers/aig_parser.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/parsers/aig_parser.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/structures/concrete_state.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/concrete_state.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/structures/kripke_structure.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/kripke_structure.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/structures/kripke_structure.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/kripke_structure.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/structures/unwinding_tree.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/unwinding_tree.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/structures/unwinding_tree.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/structures/unwinding_tree.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/utils/bdd_utils.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/bdd_utils.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/utils/z3_utils.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/z3_utils.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/utils/z3_utils.h" beforeDir="false" afterPath="$PROJECT_DIR$/code/utils/z3_utils.h" afterDir="false" />
     </list>
@@ -102,17 +116,17 @@
     </key>
   </component>
   <component name="RunManager" selected="CMake Application.OMG">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Build All" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" EXPLICIT_BUILD_TARGET_NAME="all">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
     <configuration name="OMG" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="OMG_CPP" TARGET_NAME="OMG" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="OMG_CPP" RUN_TARGET_NAME="OMG">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -165,6 +179,7 @@
       <workItem from="1596027316422" duration="15832000" />
       <workItem from="1596494701720" duration="4226000" />
       <workItem from="1600108026887" duration="4222000" />
+      <workItem from="1600525240945" duration="7530000" />
     </task>
     <task id="LOCAL-00090" summary="-Wrote most of EV algorithm, EXCLUDING check_inductive_ev&#10;-Refactor">
       <created>1586797851275</created>
@@ -570,10 +585,6 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="638" y="263" key="#Build_All/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1595064813741" />
-    <state x="2344" y="225" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1591954448257">
-      <screen x="0" y="0" width="3840" height="1080" />
-    </state>
-    <state x="2344" y="225" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.3840.1080@0.0.3840.1080" timestamp="1591954448257" />
     <state x="2360" y="326" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1595423274213">
       <screen x="1920" y="0" width="1280" height="1024" />
     </state>
@@ -595,7 +606,6 @@
       <screen x="1920" y="0" width="1280" height="1024" />
     </state>
     <state x="2776" y="308" key="FileChooserDialogImpl/0.0.1920.1080/1920.0.1280.1024@1920.0.1280.1024" timestamp="1595424121203" />
-    <state x="2668" y="325" key="FileChooserDialogImpl/0.0.3840.1080@0.0.3840.1080" timestamp="1591953111718" />
     <state width="1878" height="251" key="GridCell.Tab.0.bottom" timestamp="1600114794966">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
@@ -660,10 +670,6 @@
     <state width="934" height="326" key="GridCell.Tab.1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1599300754600" />
     <state width="1878" height="326" key="GridCell.Tab.1.right/0.0.3200.1080@0.0.3200.1080" timestamp="1599414539269" />
     <state width="1878" height="327" key="GridCell.Tab.1.right/0.0.3840.1080@0.0.3840.1080" timestamp="1598192373637" />
-    <state x="2374" y="202" key="SettingsEditor" timestamp="1591953394048">
-      <screen x="0" y="0" width="3840" height="1080" />
-    </state>
-    <state x="2374" y="202" key="SettingsEditor/0.0.3840.1080@0.0.3840.1080" timestamp="1591953394048" />
     <state x="560" y="277" key="Vcs.Push.Dialog.v2" timestamp="1596792605384">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
@@ -679,13 +685,16 @@
     </state>
     <state x="9" y="38" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1600114696814" />
     <state x="9" y="38" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1080@0.0.1920.1080" timestamp="1599300669758" />
-    <state x="1049" y="129" width="609" height="768" key="find.popup" timestamp="1600112888276">
+    <state x="1049" y="129" width="609" height="768" key="find.popup" timestamp="1602762127521">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="1049" y="129" width="609" height="768" key="find.popup/0.0.1920.1080/1920.0.1280.1024@0.0.1920.1080" timestamp="1600112888276" />
-    <state x="655" y="142" width="609" height="768" key="find.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1591950227672" />
+    <state x="1049" y="129" width="609" height="768" key="find.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1602762127521" />
     <state x="1268" y="210" width="595" height="512" key="find.popup/0.0.3200.1080@0.0.3200.1080" timestamp="1599415037389" />
-    <state x="2086" y="133" width="1218" height="768" key="find.popup/0.0.3840.1080@0.0.3840.1080" timestamp="1591953635675" />
+    <state x="743" y="336" width="432" height="392" key="refactoring.ChangeSignatureDialog" timestamp="1602761732745">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="743" y="336" width="432" height="392" key="refactoring.ChangeSignatureDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1602761732745" />
     <state x="623" y="248" width="672" height="678" key="search.everywhere.popup" timestamp="1598532837248">
       <screen x="0" y="0" width="3200" height="1080" />
     </state>
@@ -713,6 +722,11 @@
           <url>file:///usr/include/c++/5/bits/stl_algobase.h</url>
           <line>815</line>
           <option name="timeStamp" value="71" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/code/model_checking/omg_model_checker.cpp</url>
+          <line>693</line>
+          <option name="timeStamp" value="72" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
