@@ -20,7 +20,7 @@ add_executable(OMG code/main.cpp
         code/formulas/sat_solver.cpp code/utils/z3_utils.cpp code/abstraction/abstract_state.cpp
         code/abstraction/abstraction_classifier.cpp code/utils/omg_utils.cpp code/utils/aiger-1.9.9/aig_to_aag.cpp
         code/utils/aiger-1.9.9/aiger.c code/model_checking/goal.cpp code/formulas/epr_solver.cpp
-        code/utils/bdd_utils.cpp code/utils/Stats.cc)
+        code/utils/bdd_utils.cpp code/utils/Stats.cc code/structures/concrete_set.cpp code/structures/concrete_set.h)
 
 target_include_directories(OMG PRIVATE ${Boost_INCLUDE_DIRS})
 target_link_libraries(OMG libz3.so libcudd.a boost_thread boost_chrono boost_system pthread)

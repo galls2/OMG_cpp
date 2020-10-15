@@ -77,21 +77,6 @@ std::ostream& operator<< (std::ostream& stream, const ConcreteState& concrete_st
 }
 
 
-#ifdef DEBUG
-std::vector<bool> ConcreteState::to_bitvec() const
-{
-    z3::expr_vector vars = _kripke.get_tr().get_vars_by_tag("ps");
-//    z3::solver solver(_kripke.get_tr().get_raw_formula().ctx());
-    std::vector<bool> bits; bits.reserve(vars.size());
-    for (size_t i = 0; i < vars.size(); ++i)
-    {
-        bool res = FormulaUtils::is_lit_agrees_with_conj(_conjunct, vars[i]);
-        bits.push_back(res);
-    }
-    return bits;
-
-}
-#endif
 
 void ConcreteState::aps_by_sat(CtlFormula::PropertySet& pos, CtlFormula::PropertySet& neg) const
 {
@@ -168,10 +153,26 @@ const z3::expr &ConcreteState::get_conjunct() const {
 }
 
 #ifdef DEBUG
+
+std::vector<bool> ConcreteState::to_bitvec() const
+{
+    z3::expr_vector vars = _kripke.get_tr().get_vars_by_tag("ps");
+//    z3::solver solver(_kripke.get_tr().get_raw_formula().ctx());
+    std::vector<bool> bits; bits.reserve(vars.size());
+    for (size_t i = 0; i < vars.size(); ++i)
+    {
+        bool res = FormulaUtils::is_lit_agrees_with_conj(_conjunct, vars[i]);
+        bits.push_back(res);
+    }
+    return bits;
+
+}
+
 std::string ConcreteState::to_bitvec_str() const {
     const auto bitvec = to_bitvec();
     std::string res;
     for (bool b : bitvec) res += (b ? "1 " : "0 ");
     return res;
 }
+
 #endif

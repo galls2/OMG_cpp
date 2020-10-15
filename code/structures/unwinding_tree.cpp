@@ -12,6 +12,9 @@ using namespace avy;
 
 const std::vector<std::unique_ptr<UnwindingTree>> &UnwindingTree::unwind_further()
 {
+    throw 'f';
+
+    /*
     AVY_MEASURE_FN;
 
     if (!_successors.empty()) // Works as the Kripke structure is total
@@ -24,7 +27,7 @@ const std::vector<std::unique_ptr<UnwindingTree>> &UnwindingTree::unwind_further
     {
         _successors.emplace_back(std::make_unique<UnwindingTree>(_kripke, cstate, this));
     }
-
+    */
     return _successors;
 }
 
@@ -33,17 +36,17 @@ void UnwindingTree::reset_developed_in_tree()
     map_subtree([](UnwindingTree &node) { node._developed.clear(); }, [](const UnwindingTree &) { return true; });
 }
 
-const ConcreteState &UnwindingTree::get_concrete_state() const {
-    return _cstate;
+const ConcreteSet &UnwindingTree::get_concrete_set() const {
+    return _cset;
 }
 
 size_t UnwindingTree::get_depth() const {
     return _depth;
 }
 
-UnwindingTree::UnwindingTree(const KripkeStructure &kripke, ConcreteState& concrete_state,
+UnwindingTree::UnwindingTree(const KripkeStructure &kripke, ConcreteSet& concrete_set,
                              UnwindingTree * parent): _kripke(kripke),
-                             _cstate(concrete_state), _parent(parent), _URGENT(false)
+                             _cset(concrete_set), _parent(parent), _URGENT(false)
 {
     AVY_MEASURE_FN;
 
@@ -137,7 +140,7 @@ bool UnwindingTree::any_of_upwards(const std::function<bool(const UnwindingTree 
 
 bool UnwindingTree::is_concrete_lasso(const UnwindingTree &last_node) const {
     return any_of_upwards(
-            [this](const UnwindingTree& n) {return this->get_concrete_state() == n.get_concrete_state();},
+            [this](const UnwindingTree& n) {return get_concrete_set() == n.get_concrete_set();},
             [&last_node] (const UnwindingTree& n) { return &last_node == &n; }
             );
 }
@@ -172,7 +175,7 @@ std::pair<CandidateSet, UnwindingTree*> UnwindingTree::find_abstract_lasso(const
 
 #ifdef DEBUG
 std::string UnwindingTree::to_string() const {
-    return _cstate.to_bitvec_str() + std::string(", depth: ")+std::to_string(_depth);
+    return _cset.to_bitvec_str() + std::string(", depth: ")+std::to_string(_depth);
 }
 #endif
 

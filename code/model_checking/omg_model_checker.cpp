@@ -75,7 +75,8 @@ bool OmgModelChecker::handle_arrow(Goal &goal)
 
 bool OmgModelChecker::handle_ar(Goal &goal)
 {
-
+    throw 'x';
+    /*
     DEBUG_PRINT("AR: checking %s\n",goal.to_string().data());
     NodePriorityQueue to_visit(cmp_nodes);
 #ifdef DEBUG
@@ -184,11 +185,12 @@ bool OmgModelChecker::handle_ar(Goal &goal)
         label_subtree(goal, true);
     }
     return true;
-
+*/
 }
 
 bool OmgModelChecker::handle_er(Goal &goal) {
-
+    throw 'b';
+    /*
     NodePriorityQueue to_visit(cmp_nodes);
 #ifdef DEBUG
     size_t prev_size = to_visit.size();
@@ -234,7 +236,7 @@ bool OmgModelChecker::handle_er(Goal &goal) {
 
         (void) find_abs(node_to_explore);
 
-        bool was_visited = std::any_of(visited.begin(), visited.end(), [&](const ConcreteState *const &visitedee) {
+        const bool was_visited = std::any_of(visited.begin(), visited.end(), [&](const ConcreteState *const &visitedee) {
             return node_to_explore.get_concrete_state() == *visitedee;
         });
 
@@ -294,10 +296,13 @@ bool OmgModelChecker::handle_er(Goal &goal) {
         label_subtree(goal, false);
     }
     return false;
-}
+*/
+     }
 
 void OmgModelChecker::strengthen_subtree(Goal& goal, const std::function<bool(const UnwindingTree&)>& stop_condition)
 {
+    throw 'x';
+    /*
     UnwindingTree& node = goal.get_node();
 
     auto strengthener =
@@ -309,11 +314,13 @@ void OmgModelChecker::strengthen_subtree(Goal& goal, const std::function<bool(co
             };
 
     node.map_subtree(strengthener, stop_condition);
+     */
 }
 
 
 UnwindingTree& get_concretization_successor(UnwindingTree* to_close_node, const ConcreteState& dst_cstate)
 {
+    /*
     AVY_MEASURE_FN;
 
     if (to_close_node->exist_successors())
@@ -330,6 +337,7 @@ UnwindingTree& get_concretization_successor(UnwindingTree* to_close_node, const 
         {
         return *to_close_node;
     }
+     */
 }
 
 
@@ -412,6 +420,7 @@ bool OmgModelChecker::check_inductive_ev(Goal &goal, UnwindingTree &node_to_expl
 
 bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit)
 {
+    /*
     AVY_MEASURE_FN;
 
     CandidateSet candidates = compute_candidate_set_av(goal);
@@ -521,6 +530,7 @@ bool OmgModelChecker::check_inductive_av(Goal& goal, NodePriorityQueue& to_visit
     }
     DEBUG_PRINT("Found EE-inductiveness!\n");
     return true;
+     */
 }
 
 CandidateSet OmgModelChecker::compute_candidate_set_av(Goal &goal)
@@ -636,6 +646,7 @@ CandidateSet OmgModelChecker::brother_unification(const CandidateSet &cands, con
 
 bool OmgModelChecker::handle_ex(Goal &goal)
 {
+    /*
     CtlFormula& subformula = *goal.get_spec().get_operands()[0];
     const std::vector<std::unique_ptr<UnwindingTree>> &successors = goal.get_node().unwind_further();
     for (auto& successor : successors)
@@ -661,11 +672,11 @@ bool OmgModelChecker::handle_ex(Goal &goal)
         refine_all_successors(goal.get_node(), dst_nodes);
     }
     return false;
-
+*/
 
 }
 
-OmgModelChecker::OmgModelChecker(KripkeStructure &kripke) : _kripke(kripke)
+OmgModelChecker::OmgModelChecker(KripkeStructure &kripke, Cudd& mgr) : _kripke(kripke), _mgr(mgr)
 {
         initialize_abstraction();
         _tr_sat_solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(kripke.get_tr().get_ctx());
@@ -680,20 +691,22 @@ void OmgModelChecker::initialize_abstraction()
 
 bool OmgModelChecker::check_all_initial_states(const CtlFormula& specification)
 {
-    std::vector<ConcreteState> inits = _kripke.get_initial_states();
-
+    ConcreteSet initial_cset = _kripke.get_initial_states();
+    throw 'iinititt';
+    /*
     for (ConcreteState& it : inits)
     {
         DEBUG_PRINT("Checking initial state: %s\n", it.to_bitvec_str().data());
         bool result = model_checking(it, specification);
         if (!result) return false;
     }
-
+*/
     return true;
 }
 
 bool OmgModelChecker::model_checking(ConcreteState &cstate, const CtlFormula &specification)
 {
+    /*
 //    std::cout << specification.to_string() << std::endl;
     // In the future - unwinding tree cache is to be used here
     std::unique_ptr<UnwindingTree> root = std::make_unique<UnwindingTree>(_kripke, cstate, nullptr);
@@ -703,6 +716,7 @@ bool OmgModelChecker::model_checking(ConcreteState &cstate, const CtlFormula &sp
     Goal goal(*root, specification, {{"strengthen", true}});
     bool result = recur_ctl(goal);
     return result;
+     */
 }
 
 
@@ -737,6 +751,7 @@ bool OmgModelChecker::recur_ctl(Goal &g)
 
 AbstractState &OmgModelChecker::find_abs(UnwindingTree &node)
 {
+    /*
     AVY_MEASURE_FN;
 
     const ConcreteState& cstate = node.get_concrete_state();
@@ -760,6 +775,7 @@ AbstractState &OmgModelChecker::find_abs(UnwindingTree &node)
         node.set_abs(astate);
         return astate;
     }
+     */
 }
 
 AbstractState &OmgModelChecker::find_abs(const ConcreteState &cstate)
@@ -818,6 +834,7 @@ OmgModelChecker::is_concrete_violation(const std::unordered_set<UnwindingTree *>
 
 void OmgModelChecker::strengthen_trace(UnwindingTree &start, UnwindingTree &end)
 {
+    /*
     UnwindingTree* current = &end;
     std::set<const ConcreteState*> dsts;
     while (current != &start)
@@ -826,11 +843,13 @@ void OmgModelChecker::strengthen_trace(UnwindingTree &start, UnwindingTree &end)
         refine_exists_successor(*current->get_parent(), dsts);
         current = current->get_parent();
     }
+     */
 }
 
 void OmgModelChecker::refine_exists_successor(UnwindingTree& src_node,
                                               const ConstAbsStateSet &dsts_abs)
 {
+    /*
     AbstractState& src_abs = find_abs(src_node.get_concrete_state());
 
     z3::context& ctx = src_abs.get_formula().get_ctx();
@@ -840,6 +859,7 @@ void OmgModelChecker::refine_exists_successor(UnwindingTree& src_node,
 
     update_classifier(refinement_res, src_abs);
     find_abs(src_node); // redundant?
+     */
 }
 
 void OmgModelChecker::update_classifier(RefinementResult& refine_result, AbstractState& abs_src_witness) {
@@ -874,6 +894,7 @@ void OmgModelChecker::refine_no_successor(UnwindingTree &to_close_node, Abstract
 
 void OmgModelChecker::refine_all_successors(UnwindingTree& to_close_node, const std::set<const UnwindingTree*>& dsts_nodes)
 {
+    /*
     ConstAbsStateSet dsts_abs;
     for (const UnwindingTree* dst_node : dsts_nodes) dsts_abs.insert(&find_abs(dst_node->get_concrete_state()));
 
@@ -885,6 +906,7 @@ void OmgModelChecker::refine_all_successors(UnwindingTree& to_close_node, const 
     RefinementResult refine_res = _abs_structure->refine_all_successors(to_close_node, abs_src_witness, dsts_abs, true, *solver);
     update_classifier(refine_res, abs_src_witness);
     find_abs(to_close_node); // redundant?
+     */
 }
 
 void

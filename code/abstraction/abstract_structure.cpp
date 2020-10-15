@@ -192,6 +192,7 @@ void inherit_values_in_dict(std::map<T, S>& dict, T& old_key, const std::set<T>&
 RefinementResult AbstractStructure::refine_no_successor(const UnwindingTree &to_close_node, AbstractState &abs_src_witness,
                                             const ConstAbsStateSet &dsts_abs, const bool is_tse_possible, ISatSolver& sat_solver/* =true */)
 {
+    /*
     AVY_MEASURE_FN;
 
     if (_NE_may.find(&abs_src_witness) != _NE_may.end() &&
@@ -251,6 +252,8 @@ RefinementResult AbstractStructure::refine_no_successor(const UnwindingTree &to_
 
     assert(split_formulas.query.get_raw_formula().num_args() > 0);
     return { true, res.first, res.second, {split_formulas.query} };
+     */
+    throw 44;
 }
 
 std::pair<AbstractState*, AbstractState*> AbstractStructure::create_new_astates_and_update(AbstractState &abs_src_witness,
@@ -322,7 +325,7 @@ RefinementResult
 AbstractStructure::refine_all_successors(const UnwindingTree &to_close_node, AbstractState &abs_src_witness,
                                          const ConstAbsStateSet &dsts_abs, const bool is_tse_possible, ISatSolver& sat_solver) {
     AVY_MEASURE_FN;
-
+/*
     if (_E_may_over.find(&abs_src_witness) != _E_may_over.end() &&
         std::any_of(_E_may_over[&abs_src_witness].begin(), _E_may_over[&abs_src_witness].end(),
                     [&dsts_abs](const ConstAbsStateSet& astate_set)
@@ -371,6 +374,8 @@ AbstractStructure::refine_all_successors(const UnwindingTree &to_close_node, Abs
     }
 
     return { true, res.first, res.second, {split_formulas.query} };
+    */
+throw 4;
 }
 
 std::set<ConstAStateRef> AbstractStructure::get_astates_by_property(const CtlFormula &prop) {

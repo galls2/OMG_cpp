@@ -11,6 +11,7 @@
 #include <abstraction/abstract_state.h>
 #include <utils/omg_utils.h>
 #include "concrete_state.h"
+#include "concrete_set.h"
 
 class UnwindingTree;
 class KripkeStructure;
@@ -21,9 +22,9 @@ typedef std::unordered_map<AbstractState*, std::unordered_set<UnwindingTree*>> C
 
 class UnwindingTree {
 public:
-    UnwindingTree(const KripkeStructure& kripke, ConcreteState& concrete_state, UnwindingTree * parent);
+    UnwindingTree(const KripkeStructure& kripke, ConcreteSet& concrete_state, UnwindingTree * parent);
     size_t get_depth() const;
-    const ConcreteState& get_concrete_state() const;
+    const ConcreteSet& get_concrete_set() const;
     const std::vector<std::unique_ptr<UnwindingTree>>& unwind_further();
     void reset_developed_in_tree();
     void set_developed(const Goal& goal);
@@ -51,8 +52,8 @@ public:
 #endif
 private:
     const KripkeStructure& _kripke;
-    ConcreteState& _cstate;
-    std::experimental::optional<AStateRef> _astate;
+    ConcreteSet& _cset;
+    std::experimental::optional<AStateRef> _astate; // TODO
     UnwindingTree * const _parent;
     size_t _depth;
     bool _URGENT;

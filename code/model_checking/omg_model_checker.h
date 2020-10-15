@@ -40,7 +40,7 @@ auto comp_ind_cands = [](const InductiveCandidate& a, const InductiveCandidate& 
 
 class OmgModelChecker {
 public:
-    explicit OmgModelChecker(KripkeStructure& kripke);
+    OmgModelChecker(KripkeStructure& kripke, Cudd& _mgr);
 
     typedef bool (OmgModelChecker::*handler_t)(Goal& goal);
 
@@ -55,7 +55,7 @@ private:
     std::unique_ptr<AbstractionClassifier> _abs_classifier;
    // std::map_subtree<std::unique_ptr<UnwindingTree>> _unwinding_trees;
     std::unique_ptr<ISatSolver> _tr_sat_solver;
-
+    Cudd _mgr;
 
     /*
      * Model Checking

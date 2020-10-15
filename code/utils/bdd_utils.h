@@ -22,6 +22,7 @@ class BddUtils {
 public:
     typedef std::vector<int16_t> CubeRep;
     static BDD expr_to_bdd(Cudd& mgr, const z3::expr& expr, const std::map<z3::expr, size_t, Z3ExprComp>& var_mapping);
+
     static void bdd_to_dot(Cudd& mgr, const BDD& bdd, const std::string& write_path, size_t num_vars, char** names);
     static std::vector<CubeRep> all_sat(Cudd& mgr, const BDD& bdd);
 

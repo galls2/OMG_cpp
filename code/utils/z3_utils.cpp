@@ -110,6 +110,7 @@ FormulaInductiveUtils::is_EE_inductive(AbstractState &to_close, const ConstAbsSt
 ConcretizationResult
 FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<UnwindingTree *> &src_nodes,
                                                   const AbstractState &astate, ISatSolver& sat_solver) {
+    /*
     const KripkeStructure &kripke = astate.get_kripke();
     const PropFormula &tr = kripke.get_tr();
     z3::context &ctx = tr.get_ctx();
@@ -155,6 +156,9 @@ FormulaInductiveUtils::concrete_transition_to_abs(const std::unordered_set<Unwin
         z3::expr nstate_conj = FormulaUtils::get_conj_from_sat_result(ps_tr.ctx(), ns_tr, res.second).substitute(ns_tr, ps_tr);
         return ConcretizationResult(*first_node_it , ConcreteState(kripke, nstate_conj));
     }
+
+     */
+    throw 6565;
 }
 
 AEClosureResult FormulaInductiveUtils::is_AE_inductive(AbstractState &to_close, const ConstAbsStateSet &close_with) {
@@ -401,6 +405,22 @@ bool FormulaUtils::are_two_conj_sat(const z3::expr & small_conj, const z3::expr&
     }
 
     return true;
+}
+
+std::map<z3::expr, size_t, Z3ExprComp> FormulaUtils::create_var_to_index_mapping(const z3::expr &formula) {
+    {
+        std::map<z3::expr, size_t, Z3ExprComp> var_index_mapping;
+
+        const auto& all_vars = get_vars_in_formula(formula);
+
+        for (size_t i = 0; i < all_vars.size(); ++i)
+        {
+            const auto& var = all_vars[i];
+            var_index_mapping[var] = i+1;
+        }
+
+        return var_index_mapping;
+    }
 }
 
 void FormulaSplitUtils::find_proving_inputs(const z3::expr& state_conj, const PropFormula& tr, z3::expr& dst, z3::expr_vector& input_values)

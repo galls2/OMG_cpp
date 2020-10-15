@@ -29,6 +29,8 @@ public:
     static bool is_lit_agrees_with_conj(const z3::expr& conj, const z3::expr& var);
     static z3::expr_vector conjunct_to_literals(const z3::expr& expr);
     static bool are_two_conj_sat(const z3::expr& small_conj, const z3::expr& big_conj);
+
+    static std::map<z3::expr, size_t, Z3ExprComp> create_var_to_index_mapping(const z3::expr& formula);
 };
 
 z3::expr to_var(z3::context& ctx, size_t val);

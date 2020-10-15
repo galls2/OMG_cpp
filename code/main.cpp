@@ -58,6 +58,8 @@ void test_model(const std::string& file_path_no_extension)
 {
     AVY_MEASURE_FN;
 
+    Cudd mgr;
+
     std::cout << "Testing model: " << file_path_no_extension << std::endl;
     const std::string &aig_path = file_path_no_extension + ".aig";
     const std::string &ctl_file_path = file_path_no_extension + ".ctl";
@@ -86,9 +88,9 @@ void test_model(const std::string& file_path_no_extension)
 
         auto t1 = std::chrono::high_resolution_clock::now();
 
-        std::unique_ptr<KripkeStructure> kripke = p.to_kripke(APs);
+        std::unique_ptr<KripkeStructure> kripke = p.to_kripke(APs, mgr);
 
-        OmgModelChecker omg(*kripke);
+        OmgModelChecker omg(*kripke, mgr);
         auto t2 = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( t2 - t1 ).count();
         std::cout << "MC Time: " << duration << std::endl;
@@ -135,8 +137,8 @@ void test_model(const std::string& file_path_no_extension)
                 DEBUG_PRINT("Testing ## %s ## against ## %s ##... ", it->to_string().data(), aig_path.data());
                 auto t1 = std::chrono::high_resolution_clock::now();
 
-                std::unique_ptr<KripkeStructure> kripke = p.to_kripke(it->get_aps());
-                OmgModelChecker omg(*kripke);
+                std::unique_ptr<KripkeStructure> kripke = p.to_kripke(it->get_aps(), mgr);
+                OmgModelChecker omg(*kripke, mgr);
                 bool res = omg.check_all_initial_states(*it);
                 auto t2 = std::chrono::high_resolution_clock::now();
                 auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
@@ -193,14 +195,15 @@ bool test_formula(const std::string& aig_path, const std::string& formula_str)
     OmgConfigBuilder builder;
     builder.set_config_src(ConfigurationSource::DEFAULT).build();
 
+    Cudd mgr;
 
     std::unique_ptr<CtlFormula> formula = get_formula(formula_str);
     auto aps = formula->get_aps();
 
     AigParser p(aig_path);
-    std::unique_ptr<KripkeStructure> kripke = p.to_kripke(aps);
+    std::unique_ptr<KripkeStructure> kripke = p.to_kripke(aps, mgr);
 
-    OmgModelChecker omg(*kripke);
+    OmgModelChecker omg(*kripke, mgr);
     bool res = omg.check_all_initial_states(*formula);
 
     std::cout << "Done. ";
@@ -352,6 +355,8 @@ int conduct_timed_mc(std::string aig_path, std::string ctl_path, uint16_t wanted
 {
     AigParser p(aig_path);
 
+    Cudd mgr;
+
     std::vector<FormulaChunk> formula_chunks = get_formula_chunks(ctl_path);
 
     uint16_t prop_count = 0;
@@ -363,8 +368,8 @@ int conduct_timed_mc(std::string aig_path, std::string ctl_path, uint16_t wanted
 
             auto t1 = std::chrono::high_resolution_clock::now();
 
-            std::unique_ptr<KripkeStructure> kripke = p.to_kripke(spec->get_aps());
-            OmgModelChecker omg(*kripke);
+            std::unique_ptr<KripkeStructure> kripke = p.to_kripke(spec->get_aps(), mgr);
+            OmgModelChecker omg(*kripke, mgr);
             bool res = omg.check_all_initial_states(*spec);
             PRINT_IF_BUG(res, is_pass, aig_path, spec->to_string(), wanted_property_num);
 
@@ -387,10 +392,10 @@ int conduct_timed_mc(std::string aig_path, std::string ctl_path, uint16_t wanted
 
 int main(int argc, char** argv)
 {
-//    TEST("../resources/af_ag.aig", "!state<0>", true);
+    TEST("../resources/af_ag.aig", "!state<0>", true);
 
-  unit_tests();
-    test_model("../resources/spinner4");
+//  unit_tests();
+//    test_model("../resources/spinner4");
 //   run_models("../models_to_run_small.omg");
 //    TEST("../resources/rrff.aig", "A (~req0<0> | ~req1<0> | ack0 | ack1) W (req0<0> & req1<0> & ~ack0 & ~ack1 & AX(ack0))", true);
 //    TEST("../resources/spinner4.aig", "EF(E spl U (~inr<3> & ~inr<2> & inr<1> & inr<0>))", true);
