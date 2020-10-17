@@ -2,6 +2,10 @@
 // Created by galls2 on 29.7.2020.
 //
 
+#include <sstream>
+#include <string>
+#include <iostream>
+
 #include "bdd_utils.h"
 
 BDD BddUtils::expr_to_bdd(Cudd& mgr, const z3::expr &expr,  const std::map<z3::expr, size_t, Z3ExprComp>& var_mapping)
@@ -69,7 +73,7 @@ void BddUtils::bdd_to_dot(Cudd &mgr, const BDD &bdd, const std::string& write_pa
     DdNode **ddnodearray = (DdNode**)malloc(sizeof(DdNode*)); // initialize the function array
     ddnodearray[0] = bdd.getNode();
 //    Cudd_DumpDot(mgr.getManager(), num_vars, ddnodearray, names, names, outfile);
-    Cudd_DumpDot(mgr.getManager(), num_vars, ddnodearray, names, NULL, outfile);
+    Cudd_DumpDot(mgr.getManager(), num_vars, ddnodearray, NULL, names, outfile);
     free(ddnodearray);
     fclose(outfile);
 }
@@ -166,4 +170,33 @@ BddUtils::all_sat(Cudd &mgr, const BDD &bdd, std::map<DdNode *, std::vector<Cube
 //    std::cout<<"DONE WITH " << idx<<std::endl;
 
     node_cube_reps[current_with_complementation] = to_return;
+}
+
+void BddUtils::draw_bdd(Cudd &mgr, const BDD &bdd, const std::string &write_path,
+                        const std::map<z3::expr, size_t, Z3ExprComp> &bdd_var_mapping)
+{
+    char* names[bdd_var_mapping.size()];
+
+    size_t i = 0;
+    for (const auto& var_mapping : bdd_var_mapping)
+    {
+        const auto var_str = var_mapping.first.to_string();
+        names[i] = (char*) malloc(var_str.size() + 1);
+        std::memcpy(names[i], var_str.data(), var_str.size());
+        names[i][var_str.size()] = '\0';
+        ++i;
+    }
+
+    system("rm *.jpg *.dot");
+    const std::string dot_path = write_path.substr(0, write_path.size() - 3) + "dot";
+    BddUtils::bdd_to_dot(mgr, bdd, dot_path, 1, names);
+
+    std::ostringstream os;
+    os << "dot -Tjpg " << dot_path << " -o " << write_path;
+    system(os.str().data());
+
+    for (size_t j = 0; j < bdd_var_mapping.size(); ++j)
+    {
+        free(names[j]);
+    }
 }

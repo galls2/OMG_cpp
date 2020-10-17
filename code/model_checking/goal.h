@@ -7,6 +7,7 @@
 
 #include <string>
 #include <map>
+#include <structures/concrete_set.h>
 
 class UnwindingTree;
 class CtlFormula;
@@ -27,5 +28,10 @@ private:
     const std::map<std::string, bool> _properties;
 };
 
+struct OmgMcResult
+{
+    const ConcreteSet sat_cset;
+    const ConcreteSet unsat_cset;
+};
 
 #endif //OMG_CPP_GOAL_H

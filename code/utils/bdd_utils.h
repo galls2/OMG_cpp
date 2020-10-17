@@ -24,6 +24,8 @@ public:
     static BDD expr_to_bdd(Cudd& mgr, const z3::expr& expr, const std::map<z3::expr, size_t, Z3ExprComp>& var_mapping);
 
     static void bdd_to_dot(Cudd& mgr, const BDD& bdd, const std::string& write_path, size_t num_vars, char** names);
+    static void draw_bdd(Cudd& mgr, const BDD& bdd, const std::string& write_path, const std::map<z3::expr, size_t, Z3ExprComp>& bdd_var_mapping);
+
     static std::vector<CubeRep> all_sat(Cudd& mgr, const BDD& bdd);
 
 private:

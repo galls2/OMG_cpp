@@ -11,6 +11,7 @@
 #include <utils/omg_utils.h>
 #include <model_checking/goal.h>
 #include <utils/Stats.h>
+#include <utils/bdd_utils.h>
 
 using namespace avy;
 
@@ -27,53 +28,147 @@ const std::map<std::string, OmgModelChecker::handler_t> OmgModelChecker::_handle
                 {"EQUIV", &OmgModelChecker::handle_equiv}
         };
 
-bool OmgModelChecker::handle_and(Goal &goal)
+
+
+OmgModelChecker::OmgModelChecker(KripkeStructure &kripke, Cudd& mgr) : _kripke(kripke), _mgr(mgr)
 {
-        Goal first_subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
-        bool first_res = recur_ctl(first_subgoal);
-        if (!first_res) return false;
-        Goal second_subgoal(goal.get_node(), *goal.get_spec().get_operands()[1], goal.get_properties());
-        bool second_res = recur_ctl(second_subgoal);
-        return second_res;
+    initialize_abstraction();
+    _tr_sat_solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(kripke.get_tr().get_ctx());
+    _tr_sat_solver->add(_kripke.get_tr().get_raw_formula());
 }
 
-bool OmgModelChecker::handle_or(Goal &goal)
+void OmgModelChecker::initialize_abstraction()
 {
-        Goal first_subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
-        bool first_res = recur_ctl(first_subgoal);
-        if (first_res) return true;
-        Goal second_subgoal(goal.get_node(), *goal.get_spec().get_operands()[1], goal.get_properties());
-        bool second_res = recur_ctl(second_subgoal);
-        return second_res;
+    _abs_structure = std::make_unique<AbstractStructure>(_kripke, this);
+    _abs_classifier = std::make_unique<AbstractionClassifier>(_kripke);
 }
 
-bool OmgModelChecker::handle_not(Goal &goal)
+bool OmgModelChecker::check_all_initial_states(const CtlFormula& specification)
 {
-        Goal subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
-        bool result = recur_ctl(subgoal);
-        return !result;
+    const ConcreteSet& initial_cset = _kripke.get_initial_states();
+    const auto& bdd_var_mapping = _kripke.get_bdd_var_mapping();
+
+#ifdef DEBUG
+
+    assert(bdd_var_mapping.size() == _kripke.get_tr().get_vars_by_tag("ps").size());
+    const auto& ps_vars = _kripke.get_tr().get_vars_by_tag("ps");
+    for (size_t ind = 0; ind < ps_vars.size(); ++ind)
+    {
+        assert(bdd_var_mapping.find(ps_vars[ind]) != bdd_var_mapping.end());
+    }
+
+    BddUtils::draw_bdd(_mgr, initial_cset.get_bdd(), "initial_states_bdd.jpg", bdd_var_mapping);
+#endif
+
+    const OmgMcResult result = model_checking(_kripke.get_initial_states(), specification);
+
+    return result.unsat_cset.is_empty();
 }
 
-bool OmgModelChecker::handle_xor(Goal &goal)
+OmgMcResult OmgModelChecker::model_checking(const ConcreteSet& cset, const CtlFormula &specification)
 {
-        Goal first_subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
-        bool first_res = recur_ctl(first_subgoal);
-        Goal second_subgoal(goal.get_node(), *goal.get_spec().get_operands()[1], goal.get_properties());
-        bool second_res = recur_ctl(second_subgoal);
-        return first_res ^ second_res;
+    std::unique_ptr<UnwindingTree> root = std::make_unique<UnwindingTree>(_kripke, cset, nullptr);
+
+    root->reset_developed_in_tree();
+
+    Goal goal(*root, specification, {{"strengthen", true}});
+    OmgMcResult result = recur_ctl(goal);
+    return result;
+
 }
 
-bool OmgModelChecker::handle_arrow(Goal &goal)
+
+
+OmgMcResult OmgModelChecker::recur_ctl(Goal &g)
 {
-        Goal first_subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
-        bool first_res = recur_ctl(first_subgoal);
-        if (!first_res) return true;
-        Goal second_subgoal(goal.get_node(), *goal.get_spec().get_operands()[1], goal.get_properties());
-        bool second_res = recur_ctl(second_subgoal);
-        return second_res;
+    const CtlFormula& spec = g.get_spec();
+
+    if (spec.is_boolean())
+    {
+        throw 4;
+    }
+
+    AbstractState& astate = find_abs(g.get_node());
+
+    if (astate.is_pos_labeled(spec))  throw 101;// return true;
+    if (astate.is_neg_labeled(spec)) throw 192; //return false;
+
+    assert(!spec.get_operands().empty());
+    std::string main_connective = spec.get_data();
+    handler_t handler = _handlers.at(main_connective);
+    OmgMcResult result = (this->*handler)(g);
+
+    if (g.get_properties().at("strengthen"))
+    {
+        throw 454354343;
+        //astate.add_label(result, spec);
+    }
+
+    return result;
 }
 
-bool OmgModelChecker::handle_ar(Goal &goal)
+
+
+OmgMcResult OmgModelChecker::handle_and(Goal &goal)
+{ throw 4433;
+//        Goal first_subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
+//        bool first_res = recur_ctl(first_subgoal);
+//        if (!first_res) return false;
+//        Goal second_subgoal(goal.get_node(), *goal.get_spec().get_operands()[1], goal.get_properties());
+//        bool second_res = recur_ctl(second_subgoal);
+//        return second_res;
+}
+
+OmgMcResult OmgModelChecker::handle_or(Goal &goal)
+{
+    throw 5;
+//        Goal first_subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
+//        bool first_res = recur_ctl(first_subgoal);
+//        if (first_res) return true;
+//        Goal second_subgoal(goal.get_node(), *goal.get_spec().get_operands()[1], goal.get_properties());
+//        bool second_res = recur_ctl(second_subgoal);
+//        return second_res;
+}
+
+OmgMcResult OmgModelChecker::handle_not(Goal &goal)
+{ throw 4545;
+//        Goal subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
+//        bool result = recur_ctl(subgoal);
+//        return !result;
+}
+
+OmgMcResult OmgModelChecker::handle_xor(Goal &goal)
+{
+//        Goal first_subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
+//        bool first_res = recur_ctl(first_subgoal);
+//        Goal second_subgoal(goal.get_node(), *goal.get_spec().get_operands()[1], goal.get_properties());
+//        bool second_res = recur_ctl(second_subgoal);
+//        return first_res ^ second_res;
+throw 8;
+}
+
+OmgMcResult OmgModelChecker::handle_arrow(Goal &goal)
+{
+    throw 9;
+//        Goal first_subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
+//        bool first_res = recur_ctl(first_subgoal);
+//        if (!first_res) return true;
+//        Goal second_subgoal(goal.get_node(), *goal.get_spec().get_operands()[1], goal.get_properties());
+//        bool second_res = recur_ctl(second_subgoal);
+//        return second_res;
+}
+
+OmgMcResult OmgModelChecker::handle_equiv(Goal &goal) {
+    throw 454;
+}
+//    Goal first_subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
+//    bool first_res = recur_ctl(first_subgoal);
+//    Goal second_subgoal(goal.get_node(), *goal.get_spec().get_operands()[1], goal.get_properties());
+//    bool second_res = recur_ctl(second_subgoal);
+//    return first_res == second_res;}
+
+
+OmgMcResult OmgModelChecker::handle_ar(Goal &goal)
 {
     throw 'x';
     /*
@@ -188,7 +283,7 @@ bool OmgModelChecker::handle_ar(Goal &goal)
 */
 }
 
-bool OmgModelChecker::handle_er(Goal &goal) {
+OmgMcResult OmgModelChecker::handle_er(Goal &goal) {
     throw 'b';
     /*
     NodePriorityQueue to_visit(cmp_nodes);
@@ -644,7 +739,7 @@ CandidateSet OmgModelChecker::brother_unification(const CandidateSet &cands, con
 
 
 
-bool OmgModelChecker::handle_ex(Goal &goal)
+OmgMcResult OmgModelChecker::handle_ex(Goal &goal)
 {
     /*
     CtlFormula& subformula = *goal.get_spec().get_operands()[0];
@@ -676,79 +771,6 @@ bool OmgModelChecker::handle_ex(Goal &goal)
 
 }
 
-OmgModelChecker::OmgModelChecker(KripkeStructure &kripke, Cudd& mgr) : _kripke(kripke), _mgr(mgr)
-{
-        initialize_abstraction();
-        _tr_sat_solver = ISatSolver::s_solvers.at(OmgConfig::get<std::string>("Sat Solver"))(kripke.get_tr().get_ctx());
-        _tr_sat_solver->add(_kripke.get_tr().get_raw_formula());
-}
-
-void OmgModelChecker::initialize_abstraction()
-{
-        _abs_structure = std::make_unique<AbstractStructure>(_kripke, this);
-        _abs_classifier = std::make_unique<AbstractionClassifier>(_kripke);
-}
-
-bool OmgModelChecker::check_all_initial_states(const CtlFormula& specification)
-{
-    ConcreteSet initial_cset = _kripke.get_initial_states();
-    throw 'iinititt';
-    /*
-    for (ConcreteState& it : inits)
-    {
-        DEBUG_PRINT("Checking initial state: %s\n", it.to_bitvec_str().data());
-        bool result = model_checking(it, specification);
-        if (!result) return false;
-    }
-*/
-    return true;
-}
-
-bool OmgModelChecker::model_checking(ConcreteState &cstate, const CtlFormula &specification)
-{
-    /*
-//    std::cout << specification.to_string() << std::endl;
-    // In the future - unwinding tree cache is to be used here
-    std::unique_ptr<UnwindingTree> root = std::make_unique<UnwindingTree>(_kripke, cstate, nullptr);
-
-    root->reset_developed_in_tree();
-
-    Goal goal(*root, specification, {{"strengthen", true}});
-    bool result = recur_ctl(goal);
-    return result;
-     */
-}
-
-
-
-bool OmgModelChecker::recur_ctl(Goal &g)
-{
-        const CtlFormula& spec = g.get_spec();
-
-        if (spec.is_boolean())
-        {
-            return spec.get_boolean_value();
-        }
-
-        AbstractState& astate = find_abs(g.get_node());
-
-        if (astate.is_pos_labeled(spec)) return true;
-        if (astate.is_neg_labeled(spec)) return false;
-
-        assert(!spec.get_operands().empty());
-        std::string main_connective = spec.get_data();
-        handler_t handler = _handlers.at(main_connective);
-        bool result = (this->*handler)(g);
-
-        if (g.get_properties().at("strengthen"))
-        {
-                astate.add_label(result, spec);
-        }
-
-        return result;
-}
-
-
 AbstractState &OmgModelChecker::find_abs(UnwindingTree &node)
 {
     /*
@@ -776,6 +798,7 @@ AbstractState &OmgModelChecker::find_abs(UnwindingTree &node)
         return astate;
     }
      */
+    throw 'oyoyoy';
 }
 
 AbstractState &OmgModelChecker::find_abs(const ConcreteState &cstate)
@@ -916,12 +939,6 @@ OmgModelChecker::refine_exists_successor(UnwindingTree &src_node, const std::set
     refine_exists_successor(src_node, dsts_astates);
 }
 
-bool OmgModelChecker::handle_equiv(Goal &goal) {
-    Goal first_subgoal(goal.get_node(), *goal.get_spec().get_operands()[0], goal.get_properties());
-    bool first_res = recur_ctl(first_subgoal);
-    Goal second_subgoal(goal.get_node(), *goal.get_spec().get_operands()[1], goal.get_properties());
-    bool second_res = recur_ctl(second_subgoal);
-    return first_res == second_res;}
 
 
 InductiveCandidate::InductiveCandidate(AbstractState *_abs_state, std::unordered_set<UnwindingTree *> _nodes)

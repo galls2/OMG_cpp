@@ -392,7 +392,7 @@ int conduct_timed_mc(std::string aig_path, std::string ctl_path, uint16_t wanted
 
 int main(int argc, char** argv)
 {
-    TEST("../resources/af_ag.aig", "!state<0>", true);
+    TEST("../resources/af_ag.aig", "state<0>", false);
 
 //  unit_tests();
 //    test_model("../resources/spinner4");

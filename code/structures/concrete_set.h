@@ -11,11 +11,13 @@
 
 class ConcreteSet {
 public:
-    ConcreteSet(const BDD& bdd) : _bdd(bdd) {}
+    explicit ConcreteSet(const BDD& bdd) : _bdd(bdd) {}
 
     bool operator==(const ConcreteSet& other) const;
     bool operator!=(const ConcreteSet& other) const;
 
+    const BDD& get_bdd() const;
+    const bool is_empty() const;
 #ifdef DEBUG
     std::vector<bool> to_bitvec() const;
     std::string to_bitvec_str() const;

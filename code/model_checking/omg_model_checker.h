@@ -42,10 +42,10 @@ class OmgModelChecker {
 public:
     OmgModelChecker(KripkeStructure& kripke, Cudd& _mgr);
 
-    typedef bool (OmgModelChecker::*handler_t)(Goal& goal);
+    typedef OmgMcResult (OmgModelChecker::*handler_t)(Goal& goal);
 
     typedef std::priority_queue<InductiveCandidate, std::vector<InductiveCandidate>, decltype(comp_ind_cands)> InductiveCandidatePriorityQueue;
-    bool model_checking(ConcreteState& cstate, const CtlFormula& specification);
+    OmgMcResult model_checking(const ConcreteSet& cstate, const CtlFormula& specification);
     bool check_all_initial_states(const CtlFormula& specification);
 
 
@@ -60,20 +60,20 @@ private:
     /*
      * Model Checking
      */
-    bool recur_ctl(Goal& g);
+    OmgMcResult recur_ctl(Goal& g);
 
     /*
      * Handlers
      */
-    bool handle_and(Goal& goal);
-    bool handle_or(Goal& goal);
-    bool handle_not(Goal& goal);
-    bool handle_equiv(Goal& goal);
-    bool handle_xor(Goal& goal);
-    bool handle_arrow(Goal& goal);
-    bool handle_ar(Goal& goal);
-    bool handle_er(Goal& goal);
-    bool handle_ex(Goal& goal);
+    OmgMcResult handle_and(Goal& goal);
+    OmgMcResult handle_or(Goal& goal);
+    OmgMcResult handle_not(Goal& goal);
+    OmgMcResult handle_equiv(Goal& goal);
+    OmgMcResult handle_xor(Goal& goal);
+    OmgMcResult handle_arrow(Goal& goal);
+    OmgMcResult handle_ar(Goal& goal);
+    OmgMcResult handle_er(Goal& goal);
+    OmgMcResult handle_ex(Goal& goal);
 
     void initialize_abstraction();
 

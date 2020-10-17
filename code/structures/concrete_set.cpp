@@ -27,4 +27,13 @@ std::string ConcreteSet::to_bitvec_str() const {
  throw 9;
 }
 
+const BDD& ConcreteSet::get_bdd() const
+{
+    return _bdd;
+}
+
+const bool ConcreteSet::is_empty() const {
+    throw 5;
+}
+
 #endif

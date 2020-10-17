@@ -44,9 +44,9 @@ size_t UnwindingTree::get_depth() const {
     return _depth;
 }
 
-UnwindingTree::UnwindingTree(const KripkeStructure &kripke, ConcreteSet& concrete_set,
+UnwindingTree::UnwindingTree(const KripkeStructure &kripke, ConcreteSet concrete_set,
                              UnwindingTree * parent): _kripke(kripke),
-                             _cset(concrete_set), _parent(parent), _URGENT(false)
+                             _cset(std::move(concrete_set)), _parent(parent), _URGENT(false)
 {
     AVY_MEASURE_FN;
 

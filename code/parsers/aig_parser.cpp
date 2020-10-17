@@ -156,7 +156,6 @@ std::unique_ptr<KripkeStructure> AigParser::to_kripke(const CtlFormula::Property
         ap_to_var_idx.emplace(it.first, idx);
     }
 
-
     return std::make_unique<KripkeStructure>(*_tr_formula, aps, *_state_formula, *_init_formula, ap_to_var_idx, FormulaUtils::create_var_to_index_mapping(*_init_formula), mgr);
 }
 
