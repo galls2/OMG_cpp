@@ -10,7 +10,7 @@
 #include <utils/omg_utils.h>
 #include <chrono>
 
-#include <boost/thread/thread.hpp>
+//#include <boost/thread/thread.hpp>
 #include <utils/Stats.h>
 
 using namespace avy;
@@ -312,7 +312,7 @@ int conduct_timed_mc(std::string aig_path, std::string ctl_path, uint16_t wanted
 
 int model_checking_from_cmd(int argc, char** argv)
 {
-    if (argc != 4)
+/*    if (argc != 4)
     {
         std::cout << "Usage: ./OMG <aig_file_path> <ctl_file_path> <property number>" << std::endl;
     }
@@ -346,7 +346,7 @@ int model_checking_from_cmd(int argc, char** argv)
         return 1;
     }
 
-
+*/
 }
 
 int conduct_timed_mc(std::string aig_path, std::string ctl_path, uint16_t wanted_property_num)
@@ -390,9 +390,9 @@ int main(int argc, char** argv)
 {
 //    TEST("../resources/af_ag.aig", "!state<0>", true);
 
-  unit_tests();
-    test_model("../resources/spinner4");
-//   run_models("../models_to_run_small.omg");
+//  unit_tests();
+  //  test_model("../resources/spinner4");
+   run_models("../models_to_run_small.omg");
 //    TEST("../resources/rrff.aig", "A (~req0<0> | ~req1<0> | ack0 | ack1) W (req0<0> & req1<0> & ~ack0 & ~ack1 & AX(ack0))", true);
 //    TEST("../resources/spinner4.aig", "EF(E spl U (~inr<3> & ~inr<2> & inr<1> & inr<0>))", true);
 
