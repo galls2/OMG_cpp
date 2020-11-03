@@ -10,7 +10,7 @@
 #include <utils/omg_utils.h>
 #include <chrono>
 
-#include <boost/thread/thread.hpp>
+//#include <boost/thread/thread.hpp>
 #include <utils/Stats.h>
 
 using namespace avy;
@@ -312,7 +312,7 @@ int conduct_timed_mc(std::string aig_path, std::string ctl_path, uint16_t wanted
 
 int model_checking_from_cmd(int argc, char** argv)
 {
-    if (argc != 4)
+/*    if (argc != 4)
     {
         std::cout << "Usage: ./OMG <aig_file_path> <ctl_file_path> <property number>" << std::endl;
     }
@@ -346,7 +346,7 @@ int model_checking_from_cmd(int argc, char** argv)
         return 1;
     }
 
-
+*/
 }
 
 int conduct_timed_mc(std::string aig_path, std::string ctl_path, uint16_t wanted_property_num)
