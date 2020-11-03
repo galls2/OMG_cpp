@@ -6,6 +6,7 @@
 
 
 #include <structures/kripke_structure.h>
+#include <utils/omg_utils.h>
 
 class AbstractState;
 class AbstractClassificationNode;
@@ -18,7 +19,7 @@ public:
     AbstractClassificationNode& add_classification_tree(const ConcreteState& cstate, AbstractState& astate);
     AbstractState& classify_cstate(const ConcreteState &cstate);
     const KripkeStructure& get_kripke() const;
-    AbstractState& update_classification(const AbstractState& astate, const ConcreteState& cstate);
+    AbstractState& update_classification(const AbstractState& astate, const ConcreteSet& cstate);
     AbstractClassificationNode* split(AbstractState& astate, PropFormula& query_formula, AbstractState& astate_pos, AbstractState& astate_neg);
 private:
     const KripkeStructure& _kripke;
@@ -35,7 +36,7 @@ public:
     bool is_leaf() const;
     const AbstractClassificationNode* get_parent() const;
     AbstractState* get_abs() const;
-    AbstractState& classify(const ConcreteState& cstate) const;
+    AbsStateSet classify(const ConcreteSet& cstate) const;
 
     AbstractClassificationNode& get_successor(QueryResult query_result);
     const AbstractClassificationNode& get_successor(QueryResult query_result) const;
@@ -46,7 +47,7 @@ public:
 #endif
 private:
     const AbstractionClassifier& _classifier;
-    std::experimental::optional<std::function<QueryResult(const ConcreteState&)>> _query;
+    std::experimental::optional<std::function<QueryResult(const ConcreteSet&)>> _query;
     std::map<QueryResult, std::unique_ptr<AbstractClassificationNode>> _successors;
     AbstractState* const _abs_state;
     const AbstractClassificationNode* _parent;

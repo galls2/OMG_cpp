@@ -66,15 +66,16 @@ void UnwindingTree::set_developed(const Goal &goal)
     _developed.emplace(&goal);
 }
 
-void UnwindingTree::set_abs(AbstractState& astate)
+void UnwindingTree::set_abs(AbsStateSet astate_set)
 {
-    _astate.emplace(std::ref(astate));
+    _astates = std::move(astate_set);
 }
 
-std::experimental::optional<AStateRef> UnwindingTree::get_abs() const
+const AbsStateSet& UnwindingTree::get_abs() const
 {
-    return _astate;
+    return _astates;
 }
+
 
 bool UnwindingTree::is_developed(const Goal &goal) const {
     bool exists = _developed.find(&goal) != _developed.end();

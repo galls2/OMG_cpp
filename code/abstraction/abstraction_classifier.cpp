@@ -57,12 +57,12 @@ AbstractClassificationNode &AbstractionClassifier::add_classification_tree(const
     return *((res.first)->second);
 }
 
-AbstractState &AbstractionClassifier::update_classification(const AbstractState &astate, const ConcreteState &cstate)
+AbstractState &AbstractionClassifier::update_classification(const AbstractState &astate, const ConcreteSet &cset)
 {
     AVY_MEASURE_FN;
 
     AbstractClassificationNode* cl = astate.get_cl_node();
-    return cl->classify(cstate);
+    return cl->classify(cset);
 }
 
 AbstractClassificationNode *
@@ -118,14 +118,15 @@ bool AbstractClassificationNode::is_leaf() const {
     return _successors.empty();
 }
 
-AbstractState &AbstractClassificationNode::classify(const ConcreteState &cstate) const {
-
+AbsStateSet AbstractClassificationNode::classify(const ConcreteSet& cset) const
+{
+    HERE DO BFS AND CHANGE THE SIG OF QUERT ST IT RETURNS EITHER ONE OR BOTH YO
     const AbstractClassificationNode* current = this;
     while (!current->_successors.empty())
     {
         assert(current->_query);
         const auto& query = current->_query.value();
-        bool successor = query(cstate);
+        bool successor = query(cset);
         current = &current->get_successor(successor);
     }
     assert(current->_abs_state);

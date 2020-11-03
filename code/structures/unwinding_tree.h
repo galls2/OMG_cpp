@@ -30,8 +30,9 @@ public:
     void set_developed(const Goal& goal);
     bool is_developed(const Goal& goal) const;
     void set_urgent(bool to_set);
-    std::experimental::optional<AStateRef>  get_abs() const;
-    void set_abs(AbstractState& astate);
+    const AbsStateSet& get_abs() const;
+
+    void set_abs(AbsStateSet astate_set);
     bool is_urgent() const;
     const std::vector<std::unique_ptr<UnwindingTree>>& get_successors() const;
     bool exist_successors() const;
@@ -53,8 +54,8 @@ public:
 private:
     const KripkeStructure& _kripke;
     const ConcreteSet _cset;
-    std::experimental::optional<AStateRef> _astate; // TODO
-    UnwindingTree * const _parent;
+    AbsStateSet _astates;
+    UnwindingTree* const _parent;
     size_t _depth;
     bool _URGENT;
     std::vector<std::unique_ptr<UnwindingTree>> _successors;

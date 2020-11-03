@@ -771,38 +771,48 @@ OmgMcResult OmgModelChecker::handle_ex(Goal &goal)
 
 }
 
-AbstractState &OmgModelChecker::find_abs(UnwindingTree &node)
+AbsStateSet OmgModelChecker::find_abs(UnwindingTree &node)
 {
-    /*
     AVY_MEASURE_FN;
 
-    const ConcreteState& cstate = node.get_concrete_state();
-    if (node.get_abs())
+    const ConcreteSet& cset = node.get_concrete_set();
+    if (!node.get_abs().empty())
     {
-        AbstractState &astate = *node.get_abs();
-        if (astate.is_final_classification())
+        const auto& orig_astate_set = node.get_abs();
+
+        if (std::all_of(orig_astate_set.begin(), orig_astate_set.end(), [](AbstractState* astate) { return astate->is_final_classification(); }))
         {
-            return astate;
+            return orig_astate_set;
         }
         else
         {
-            AbstractState &updated_abs = _abs_classifier->update_classification(astate, cstate);
-            node.set_abs(updated_abs);
-            return updated_abs;
+            AbsStateSet new_astates_set;
+            for (const auto& astate : orig_astate_set)
+            {
+                if (astate->is_final_classification()) new_astates_set.insert(astate);
+                else
+                {
+                    auto updated_astate_set = _abs_classifier->update_classification(astate, cset);
+                    new_astates_set.insert(std::move(updated_astate_set));
+                }
+            }
+            node.set_abs(new_astates_set);
+            return new_astates_set;
         }
     }
     else
     {
-        AbstractState &astate = find_abs(cstate);
+        AbsStateSet astate = find_abs(cset);
         node.set_abs(astate);
         return astate;
     }
-     */
-    throw 'oyoyoy';
+
+
 }
 
-AbstractState &OmgModelChecker::find_abs(const ConcreteState &cstate)
+AbsStateSet OmgModelChecker::find_abs(const ConcreteSet& cset)
 {
+    throw 'oyoyoy';
     AVY_MEASURE_FN;
 
     if (!_abs_classifier->exists_classification(cstate))

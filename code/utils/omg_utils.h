@@ -35,7 +35,7 @@ void print_vec(const std::vector<T>& vec)
 }
 
 class AbstractState;
-typedef std::set<AbstractState*> AbsStateSet;
+using AbsStateSet = std::set<AbstractState*>;
 typedef std::reference_wrapper<AbstractState> AStateRef;
 typedef std::reference_wrapper<const AbstractState> ConstAStateRef;
 typedef std::set<const AbstractState*> ConstAbsStateSet;

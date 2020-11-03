@@ -77,8 +77,8 @@ private:
 
     void initialize_abstraction();
 
-    AbstractState& find_abs(UnwindingTree& node);
-    AbstractState& find_abs(const ConcreteState& node);
+    AbsStateSet find_abs(UnwindingTree& node);
+    AbsStateSet find_abs(const ConcreteSet& node);
     static const std::map<std::string, handler_t> _handlers;
 
     bool check_inductive_av(Goal& goal, NodePriorityQueue& to_visit);
