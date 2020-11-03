@@ -390,8 +390,14 @@ int main(int argc, char** argv)
 {
 //    TEST("../resources/af_ag.aig", "!state<0>", true);
 
-  unit_tests();
-    test_model("../resources/spinner4");
+ // unit_tests();
+   test_model("../resources/palu");
+//
+//
+//    TEST("../resources/palu.aig", "AG(~opcodeEx<2> & opcodeEx<1> & ~opcodeEx<0> & ~(destEx<1> | destEx<0>) & ~bubbleEx -> AF(~regFile<*0*><3> & ~regFile<*0*><2> & ~regFile<*0*><1> & regFile<*0*><0>))", true);
+//    TEST("../resources/palu.aig", "AG(~(opcodeEx<2> | opcodeEx<1> | opcodeEx<0>) & ~(destEx<1> | destEx<0>) & ~bubbleEx -> AF(~regFile<*0*><3> & ~regFile<*0*><2> & ~regFile<*0*><1> & regFile<*0*><0>))", false);
+  //  TEST("../resources/palu.aig", "AG(~opcodeEx<2> & ~opcodeEx<1> & opcodeEx<0> & ~(destEx<1> | destEx<0>) & ~bubbleEx ->  AF(~regFile<*0*><3> & ~regFile<*0*><2> & ~regFile<*0*><1> & regFile<*0*><0>))", false);
+
 //   run_models("../models_to_run_small.omg");
 //    TEST("../resources/rrff.aig", "A (~req0<0> | ~req1<0> | ack0 | ack1) W (req0<0> & req1<0> & ~ack0 & ~ack1 & AX(ack0))", true);
 //    TEST("../resources/spinner4.aig", "EF(E spl U (~inr<3> & ~inr<2> & inr<1> & inr<0>))", true);

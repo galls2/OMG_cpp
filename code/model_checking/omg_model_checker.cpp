@@ -160,7 +160,7 @@ bool OmgModelChecker::handle_ar(Goal &goal)
             const std::vector<std::unique_ptr<UnwindingTree>> &successors = node_to_explore.unwind_further();
 
             for (const std::unique_ptr<UnwindingTree> &succ : successors) {
-                DEBUG_PRINT("SUCCESSOR: %s\n", succ->get_concrete_state().to_bitvec_str().data());
+        //        DEBUG_PRINT("SUCCESSOR: %s\n", succ->get_concrete_state().to_bitvec_str().data());
                 if (std::all_of(visited.begin(), visited.end(), [&succ](const ConcreteState *const &visitedee) {
                     return (*visitedee) != succ->get_concrete_state();
                 })) {
@@ -241,7 +241,7 @@ bool OmgModelChecker::handle_er(Goal &goal) {
         if (was_visited) {
             if (node_to_explore.is_concrete_lasso(goal.get_node())) {
             DEBUG_PRINT("ER: Found CONCRETE lasso with the base %s!\n", node_to_explore.get_concrete_state().to_bitvec_str().data());
-
+                node_to_explore.is_concrete_lasso(goal.get_node());
             if (goal.get_properties().at("strengthen")) {
                     handle_proving_trace(goal, node_to_explore, true);
                 }
