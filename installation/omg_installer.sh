@@ -16,7 +16,7 @@ apt install graphviz -y
 
 echo Now Installing CUDD
 #sudo apt install autoconf
-#./autoreconf
+#./autoreconf -f -i
 #sudo ./configure --enable-*
 #sudo make
 #sudo make install
