@@ -202,7 +202,7 @@ bool OmgModelChecker::handle_er(Goal &goal) {
     const CtlFormula &q = *goal.get_spec().get_operands()[1];
     const CtlFormula &p = *goal.get_spec().get_operands()[0];
 
-    std::set<ConstAStateRef> p_satisfying_astates = _abs_structure->get_astates_by_property(p);;
+ //   std::set<ConstAStateRef> p_satisfying_astates = _abs_structure->get_astates_by_property(p);;
 
     while (!to_visit.empty()) {
 #ifdef DEBUG
@@ -232,7 +232,7 @@ bool OmgModelChecker::handle_er(Goal &goal) {
         node_to_explore.set_urgent(false);
         assert(std::none_of(to_visit.begin(), to_visit.end(), [] (const UnwindingTree* n) { return n->is_urgent();}));
 
-        (void) find_abs(node_to_explore);
+  //      (void) find_abs(node_to_explore);
 
         bool was_visited = std::any_of(visited.begin(), visited.end(), [&](const ConcreteState *const &visitedee) {
             return node_to_explore.get_concrete_state() == *visitedee;
@@ -246,7 +246,7 @@ bool OmgModelChecker::handle_er(Goal &goal) {
 //            {
 //                    handle_proving_trace(goal, node_to_explore, true);
 //                }
-//                return true;
+            return true;
             } else continue;
         }
 
