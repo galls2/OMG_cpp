@@ -390,8 +390,8 @@ int main(int argc, char** argv)
 {
 //    TEST("../resources/af_ag.aig", "!state<0>", true);
 
- // unit_tests();
-   test_model("../resources/palu");
+  unit_tests();
+//   test_model("../resources/palu");
 //
 //
 //    TEST("../resources/palu.aig", "AG(~opcodeEx<2> & opcodeEx<1> & ~opcodeEx<0> & ~(destEx<1> | destEx<0>) & ~bubbleEx -> AF(~regFile<*0*><3> & ~regFile<*0*><2> & ~regFile<*0*><1> & regFile<*0*><0>))", true);

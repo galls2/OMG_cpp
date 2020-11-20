@@ -135,7 +135,6 @@ bool OmgModelChecker::handle_ar(Goal &goal)
 
         visited.emplace(&node_to_explore.get_concrete_state());
 
-        (void) find_abs(node_to_explore);
         node_to_explore.set_developed(goal);
 
         Goal subgoal_q(node_to_explore, q, goal.get_properties());
@@ -143,10 +142,10 @@ bool OmgModelChecker::handle_ar(Goal &goal)
         if (!res_q) // nte |/= q. This is the case of a refuting path!
         {
             DEBUG_PRINT("AR: Returning false due to a BUG state!\n");
-            if (goal.get_properties().at("strengthen"))
-            {
-                handle_proving_trace(goal, node_to_explore, false);
-            }
+//            if (goal.get_properties().at("strengthen"))
+//            {
+//                handle_proving_trace(goal, node_to_explore, false);
+//            }
             return false;
         }
 
@@ -154,8 +153,8 @@ bool OmgModelChecker::handle_ar(Goal &goal)
         bool res_p = recur_ctl(subgoal_p);
         if (res_p) {
             DEBUG_PRINT("Node satisfies p - not developing successors!\n");
-            AbstractState &astate = find_abs(node_to_explore);
-            astate.add_label(true, goal.get_spec());
+//            AbstractState &astate = find_abs(node_to_explore);
+//            astate.add_label(true, goal.get_spec());
         } else {
             DEBUG_PRINT("AR: Unwinding successors of node: CSTATE %s depth %zu:\n", node_to_explore.get_concrete_state().to_bitvec_str().data(), node_to_explore.get_depth());
             const std::vector<std::unique_ptr<UnwindingTree>> &successors = node_to_explore.unwind_further();
@@ -171,19 +170,19 @@ bool OmgModelChecker::handle_ar(Goal &goal)
         }
 
 
-        bool inductive_res = check_inductive_av(goal, to_visit);
-        if (inductive_res) {
-            label_subtree(goal, true);
-            return true;
-        }
+//        bool inductive_res = check_inductive_av(goal, to_visit);
+//        if (inductive_res) {
+//            label_subtree(goal, true);
+//            return true;
+//        }
     }
 
     DEBUG_PRINT("AR: unwinding tree completely trimmed - returning TRUE!\n");
 
-    if (goal.get_properties().at("strengthen")) {
-        strengthen_subtree(goal, [goal](const UnwindingTree &n) { return n.is_developed(goal); });
-        label_subtree(goal, true);
-    }
+//    if (goal.get_properties().at("strengthen")) {
+//        strengthen_subtree(goal, [goal](const UnwindingTree &n) { return n.is_developed(goal); });
+//        label_subtree(goal, true);
+//    }
     return true;
 
 }
@@ -243,10 +242,11 @@ bool OmgModelChecker::handle_er(Goal &goal) {
             if (node_to_explore.is_concrete_lasso(goal.get_node())) {
             DEBUG_PRINT("ER: Found CONCRETE lasso with the base %s!\n", node_to_explore.get_concrete_state().to_bitvec_str().data());
                 node_to_explore.is_concrete_lasso(goal.get_node());
-            if (goal.get_properties().at("strengthen")) {
-                    handle_proving_trace(goal, node_to_explore, true);
-                }
-                return true;
+//            if (goal.get_properties().at("strengthen"))
+//            {
+//                    handle_proving_trace(goal, node_to_explore, true);
+//                }
+//                return true;
             } else continue;
         }
 
@@ -267,9 +267,10 @@ bool OmgModelChecker::handle_er(Goal &goal) {
         bool res_p = recur_ctl(subgoal_p);
         if (res_p) {
             DEBUG_PRINT("ER: Returning true due to a proving trace!\n");
-            if (goal.get_properties().at("strengthen")) {
-                handle_proving_trace(goal, node_to_explore, true);
-            }
+//            if (goal.get_properties().at("strengthen"))
+//            {
+//                handle_proving_trace(goal, node_to_explore, true);
+//            }
             return true;
         } else {
             DEBUG_PRINT("ER: Unwinding successors of node: CSTATE %s depth %zu:\n",
@@ -282,18 +283,19 @@ bool OmgModelChecker::handle_er(Goal &goal) {
             }
         }
 
-        bool inductive_res = check_inductive_ev(goal, node_to_explore, p_satisfying_astates);
-        if (inductive_res) {
-            return true;
-        }
+//        bool inductive_res = check_inductive_ev(goal, node_to_explore, p_satisfying_astates);
+//        if (inductive_res)
+//        {
+//            return true;
+//        }
     }
 
     DEBUG_PRINT("ER: unwinding tree completely trimmed - returning FALSE!\n");
-    if (goal.get_properties().at("strengthen"))
-    {
-        strengthen_subtree(goal, [goal](const UnwindingTree &n) { return n.is_developed(goal); });
-        label_subtree(goal, false);
-    }
+//    if (goal.get_properties().at("strengthen"))
+//    {
+//        strengthen_subtree(goal, [goal](const UnwindingTree &n) { return n.is_developed(goal); });
+//        label_subtree(goal, false);
+//    }
     return false;
 }
 
@@ -646,21 +648,21 @@ bool OmgModelChecker::handle_ex(Goal &goal)
         bool res = recur_ctl(subgoal);
         if (res) {
             DEBUG_PRINT("EX: found a satisfying successor %s - returning TRUE\n", successor->get_concrete_state().to_bitvec_str().data());
-            if (goal.get_properties().at("strengthen"))
-            {
-                strengthen_trace(goal.get_node(), *successor);
-            }
+//            if (goal.get_properties().at("strengthen"))
+//            {
+//                strengthen_trace(goal.get_node(), *successor);
+//            }
             return true;
         }
     }
 
     DEBUG_PRINT("EX: no satisfying successor found! -- returning FALSE\n");
-    if (goal.get_properties().at("strengthen"))
-    {
-        std::set<const UnwindingTree*> dst_nodes;
-        for (const auto& succ : successors) dst_nodes.insert(&*succ);
-        refine_all_successors(goal.get_node(), dst_nodes);
-    }
+//    if (goal.get_properties().at("strengthen"))
+//    {
+//        std::set<const UnwindingTree*> dst_nodes;
+//        for (const auto& succ : successors) dst_nodes.insert(&*succ);
+//        refine_all_successors(goal.get_node(), dst_nodes);
+//    }
     return false;
 
 
@@ -675,8 +677,8 @@ OmgModelChecker::OmgModelChecker(KripkeStructure &kripke) : _kripke(kripke)
 
 void OmgModelChecker::initialize_abstraction()
 {
-        _abs_structure = std::make_unique<AbstractStructure>(_kripke, this);
-        _abs_classifier = std::make_unique<AbstractionClassifier>(_kripke);
+//        _abs_structure = std::make_unique<AbstractStructure>(_kripke, this);
+//        _abs_classifier = std::make_unique<AbstractionClassifier>(_kripke);
 }
 
 bool OmgModelChecker::check_all_initial_states(const CtlFormula& specification)
@@ -717,20 +719,33 @@ bool OmgModelChecker::recur_ctl(Goal &g)
             return spec.get_boolean_value();
         }
 
-        AbstractState& astate = find_abs(g.get_node());
+//        AbstractState& astate = find_abs(g.get_node());
 
-        if (astate.is_pos_labeled(spec)) return true;
-        if (astate.is_neg_labeled(spec)) return false;
+
+//        if (astate.is_pos_labeled(spec)) return true;
+//        if (astate.is_neg_labeled(spec)) return false;
+        if (spec.get_operands().empty())
+        {
+            CtlFormula::PropertySet pos, neg;
+
+            g.get_node().get_concrete_state().aps_by_sat(pos, neg);
+            if (pos.find(&spec) != pos.end()) return true;
+            else
+            {
+                return false;
+                assert(neg.find(&spec) != neg.end());
+            }
+        }
 
         assert(!spec.get_operands().empty());
         std::string main_connective = spec.get_data();
         handler_t handler = _handlers.at(main_connective);
         bool result = (this->*handler)(g);
 
-        if (g.get_properties().at("strengthen"))
-        {
-                astate.add_label(result, spec);
-        }
+//        if (g.get_properties().at("strengthen"))
+//        {
+//                astate.add_label(result, spec);
+//        }
 
         return result;
 }
@@ -738,6 +753,7 @@ bool OmgModelChecker::recur_ctl(Goal &g)
 
 AbstractState &OmgModelChecker::find_abs(UnwindingTree &node)
 {
+    assert(false);
     AVY_MEASURE_FN;
 
     const ConcreteState& cstate = node.get_concrete_state();
@@ -765,6 +781,7 @@ AbstractState &OmgModelChecker::find_abs(UnwindingTree &node)
 
 AbstractState &OmgModelChecker::find_abs(const ConcreteState &cstate)
 {
+    assert(false);
     AVY_MEASURE_FN;
 
     if (!_abs_classifier->exists_classification(cstate))
@@ -782,6 +799,7 @@ AbstractState &OmgModelChecker::find_abs(const ConcreteState &cstate)
 
 void OmgModelChecker::handle_proving_trace(Goal &goal, UnwindingTree &node, bool positivity)
 {
+    assert(false);
     const CtlFormula &spec = goal.get_spec();
     strengthen_trace(goal.get_node(), node);
     node.map_upwards(
@@ -794,6 +812,7 @@ void OmgModelChecker::handle_proving_trace(Goal &goal, UnwindingTree &node, bool
 }
 
 void OmgModelChecker::label_subtree(Goal &goal, bool positivity) {
+    assert(false);
     UnwindingTree& node = goal.get_node();
     const CtlFormula& spec = goal.get_spec();
 
@@ -819,6 +838,7 @@ OmgModelChecker::is_concrete_violation(const std::unordered_set<UnwindingTree *>
 
 void OmgModelChecker::strengthen_trace(UnwindingTree &start, UnwindingTree &end)
 {
+    assert(false);
     UnwindingTree* current = &end;
     std::set<const ConcreteState*> dsts;
     while (current != &start)
@@ -832,6 +852,7 @@ void OmgModelChecker::strengthen_trace(UnwindingTree &start, UnwindingTree &end)
 void OmgModelChecker::refine_exists_successor(UnwindingTree& src_node,
                                               const ConstAbsStateSet &dsts_abs)
 {
+    assert(false);
     AbstractState& src_abs = find_abs(src_node.get_concrete_state());
 
     z3::context& ctx = src_abs.get_formula().get_ctx();
@@ -843,7 +864,9 @@ void OmgModelChecker::refine_exists_successor(UnwindingTree& src_node,
     find_abs(src_node); // redundant?
 }
 
-void OmgModelChecker::update_classifier(RefinementResult& refine_result, AbstractState& abs_src_witness) {
+void OmgModelChecker::update_classifier(RefinementResult& refine_result, AbstractState& abs_src_witness)
+{
+    assert(false);
     if (!refine_result.is_split) return;
 
     assert(refine_result.split_query->get_raw_formula().num_args() > 0);
@@ -856,7 +879,7 @@ void OmgModelChecker::update_classifier(RefinementResult& refine_result, Abstrac
 
 void OmgModelChecker::refine_no_successor(UnwindingTree &to_close_node, AbstractState &abs_src_witness,
                                           AbstractState &abs_dst)
-{
+{    assert(false);
     AVY_MEASURE_FN;
 
     /*
@@ -875,6 +898,7 @@ void OmgModelChecker::refine_no_successor(UnwindingTree &to_close_node, Abstract
 
 void OmgModelChecker::refine_all_successors(UnwindingTree& to_close_node, const std::set<const UnwindingTree*>& dsts_nodes)
 {
+    assert(false);
     ConstAbsStateSet dsts_abs;
     for (const UnwindingTree* dst_node : dsts_nodes) dsts_abs.insert(&find_abs(dst_node->get_concrete_state()));
 
@@ -889,7 +913,9 @@ void OmgModelChecker::refine_all_successors(UnwindingTree& to_close_node, const 
 }
 
 void
-OmgModelChecker::refine_exists_successor(UnwindingTree &src_node, const std::set<const ConcreteState *> &dsts_abs) {
+OmgModelChecker::refine_exists_successor(UnwindingTree &src_node, const std::set<const ConcreteState *> &dsts_abs)
+{
+    assert(false);
     ConstAbsStateSet dsts_astates;
     for (const auto& it : dsts_abs)dsts_astates.emplace(&find_abs(*it));
     refine_exists_successor(src_node, dsts_astates);
